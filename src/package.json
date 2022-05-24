@@ -1,12 +1,12 @@
 {
   "name": "wd-frontend-shared",
-  "version": "0.1.12",
+  "version": "0.1.13",
   "description": "Shared components, helpers, composables and types for vue frontend SPAs",
   "files": [
     "dist"
   ],
-  "main": "dist/lib.umd.js",
-  "module": "dist/lib.es.js",
+  "main": "dist/lib.es.js",
+  "module": "dist/lib.umd.js",
   "types": "index.d.ts",
   "scripts": {
     "dev": "vite",
