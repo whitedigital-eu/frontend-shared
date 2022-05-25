@@ -1,6 +1,6 @@
 {
   "name": "wd-frontend-shared",
-  "version": "0.1.28",
+  "version": "0.1.29",
   "description": "Shared components, helpers, composables and types for vue frontend SPAs",
   "files": [
     "Axios",
