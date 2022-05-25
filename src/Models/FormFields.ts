@@ -3,25 +3,15 @@ import {
   SimpleSelectConfig,
 } from '../Types/InputFields'
 import { SelectOption } from './SelectOption'
-import { FormField as FormFieldType } from '../Types/FormData'
 import dayjs from 'dayjs'
 
-class FormField implements FormFieldType {
-  type
-  name
-  label
-  value
+class FormField {
   constructor(
-    type: string,
-    name: string,
-    label: string,
-    value: string | string[] | boolean | null = ''
-  ) {
-    this.type = type
-    this.label = label
-    this.name = name
-    this.value = value
-  }
+    public type: string,
+    public name: string,
+    public label: string,
+    public value: string | string[] | boolean | null = ''
+  ) {}
 }
 
 class TextField extends FormField {

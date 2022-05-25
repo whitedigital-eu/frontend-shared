@@ -12,10 +12,8 @@
 import { PropType, ref, watch } from 'vue'
 import BaseSelect from './BaseSelect.vue'
 
-import { createInitialAxiosInstance } from '../../../Axios/createAxiosInstance'
 import { DataFetchingSelectConfig } from '../../../Types/InputFields'
-
-const axios: any = createInitialAxiosInstance()
+import { AxiosInstance } from 'axios'
 
 const props = defineProps({
   id: {
@@ -35,13 +33,17 @@ const props = defineProps({
     required: false,
     default: '',
   },
+  axiosInstance: {
+    type: Object as PropType<AxiosInstance>,
+    required: true,
+  },
 })
 
 const settings: any = {
   shouldLoad: (query) => query.length >= 3,
   async load(searchValue, callback) {
     const requestUrl = props.config.requestUrlGenerator(searchValue)
-    const res = await axios.get(requestUrl)
+    const res = await props.axiosInstance.get(requestUrl)
     const options: { value: string; text: string }[] = res.data[
       'hydra:member'
     ].map(props.config.responseMapFunction)

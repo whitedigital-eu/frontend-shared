@@ -29,8 +29,8 @@ import Dropzone from 'dropzone'
 import { dropzoneTranslations } from '../../../Mixins/Translations'
 import FormFieldLabel from '../../FormFieldLabel.vue'
 import FilePreview from './FilePreview.vue'
-import { loadAllResources, loadResource } from '../../../Mixins/DataFetching'
 import { AxiosInstance } from 'axios'
+import getLoadResourceFunctions from '../../../Mixins/DataFetching'
 
 Dropzone.autoDiscover = false
 
@@ -52,6 +52,10 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['update:modelValue', 'remove-file'])
+
+const { loadResource, loadAllResources } = getLoadResourceFunctions(
+  props.axiosInstance
+)
 
 const fileUploadRef = ref()
 const model = ref<any>(null)

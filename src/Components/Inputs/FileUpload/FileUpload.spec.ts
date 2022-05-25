@@ -6,24 +6,6 @@ import FilePreview from './FilePreview.vue'
 const dropzoneTextForSingleFile = 'Nometiet failu šeit!'
 const dropzoneTextForMultipleFiles = 'Nometiet failus šeit!'
 
-vi.mock('../../../Axios/createAxiosInstance', () => ({
-  baseAxios: {
-    get: vi.fn(() => {
-      return Promise.resolve({
-        data: {
-          '@id': '/api/storage/1',
-          id: 1,
-          contentUrl: 'test-content-url',
-          filePath: 'test-file-path',
-        },
-      })
-    }),
-    delete: vi.fn(() => {
-      return Promise.resolve()
-    }),
-  },
-}))
-
 vi.mock('@left4code/tw-starter/dist/js/dom', () => vi.fn())
 
 const createWrapper = (modelValue: string | string[]) => {
