@@ -1,6 +1,6 @@
 {
   "name": "wd-frontend-shared",
-  "version": "0.1.20",
+  "version": "0.1.21",
   "description": "Shared components, helpers, composables and types for vue frontend SPAs",
   "files": [
     "Axios",
@@ -44,7 +44,7 @@
     "lucide-vue-next": "^0.17.3",
     "tabulator-tables": "^4.9.3",
     "toastify-js": "^1.9.3",
-    "tom-select": "^1.7.5",
+    "tom-select": "^2.0.3",
     "vue": "^3.2.25",
     "vue-flatpickr-component": "^9.0.5",
     "vue-slider-component": "^4.0.0-beta.4"
