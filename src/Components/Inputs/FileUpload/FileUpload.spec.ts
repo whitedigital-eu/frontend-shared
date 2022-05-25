@@ -1,12 +1,12 @@
 import { vi } from 'vitest'
 import { mount } from '@vue/test-utils'
 import FileUpload from './FileUpload.vue'
-import FilePreview from '../FilePreview.vue'
+import FilePreview from './FilePreview.vue'
 
 const dropzoneTextForSingleFile = 'Nometiet failu šeit!'
 const dropzoneTextForMultipleFiles = 'Nometiet failus šeit!'
 
-vi.mock('../../Axios/createAxiosInstance', () => ({
+vi.mock('../../../Axios/createAxiosInstance', () => ({
   baseAxios: {
     get: vi.fn(() => {
       return Promise.resolve({
@@ -23,6 +23,8 @@ vi.mock('../../Axios/createAxiosInstance', () => ({
     }),
   },
 }))
+
+vi.mock('@left4code/tw-starter/dist/js/dom', () => vi.fn())
 
 const createWrapper = (modelValue: string | string[]) => {
   return mount(FileUpload, {

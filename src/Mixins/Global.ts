@@ -1,6 +1,5 @@
 import { InputField } from '../Types/InputFields'
 import { FormData } from '../Types/FormData'
-import { AnyCrudResource, AnyResourcePost } from '../Types/Resource'
 import dayjs from 'dayjs'
 import { resetFormDataErrors } from './Errors'
 
@@ -57,10 +56,7 @@ export const setQueryParam = (key: string, value: string) => {
   window.history.pushState({ path: newUrl }, '', newUrl)
 }
 
-export const fillFormDataFrom = (
-  formData: FormData,
-  apiResponseData: AnyCrudResource
-) => {
+export const fillFormDataFrom = (formData: FormData, apiResponseData: any) => {
   for (const key in apiResponseData) {
     const formField = formData[key]
     if (formField) formField.value = apiResponseData[key]
@@ -68,9 +64,7 @@ export const fillFormDataFrom = (
   return formData
 }
 
-export const prepareFormData = <PostType extends AnyResourcePost>(
-  formData: FormData
-) => {
+export const prepareFormData = <PostType>(formData: FormData) => {
   resetFormDataErrors(formData)
 
   const data: Partial<Record<keyof PostType, null | string | number>> = {}
@@ -120,3 +114,13 @@ export const syntaxHighlight = (object: any) => {
     }
   )
 }
+
+export const camelToSnakeCase = (str: string) => {
+  return str.replace(/[A-Z]/g, (letter) => `_${letter.toLowerCase()}`)
+}
+export const snakeToCamelCase = (str: string) =>
+  str
+    .toLowerCase()
+    .replace(/([-_][a-z])/g, (group) =>
+      group.toUpperCase().replace('-', '').replace('_', '')
+    )

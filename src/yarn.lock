@@ -599,10 +599,10 @@
   dependencies:
     "@octokit/openapi-types" "^11.2.0"
 
-"@orchidjs/sifter@^0.8.1":
-  version "0.8.2"
-  resolved "https://registry.yarnpkg.com/@orchidjs/sifter/-/sifter-0.8.2.tgz#50f0a4ba8783f2bfbde1bcec9ed97e632940555d"
-  integrity sha512-aDemVMJL2cGo82EVHXMM2y6WoWlk00V2aibvNAl2djtZG1OquirMvnOTlb2L4tjcH5cT2q1/dyHepZcxnFW5zQ==
+"@orchidjs/sifter@^0.9.1":
+  version "0.9.1"
+  resolved "https://registry.yarnpkg.com/@orchidjs/sifter/-/sifter-0.9.1.tgz#20580cb75bcc1de3c9b9c021e0e546eb59ff2813"
+  integrity sha512-bdW8vKTlWXfoAvUud0a4OeVPrtdvHH8gTshKqndzxAI6bXGPBejgry2wvIz0OZOqOuWuFAJWgNCjq/6S85U77A==
 
 "@sinclair/typebox@^0.23.3":
   version "0.23.5"
@@ -3361,12 +3361,12 @@ toastify-js@^1.9.3:
   resolved "https://registry.yarnpkg.com/toastify-js/-/toastify-js-1.11.2.tgz#5c66cb05cee30b09e5bd8961ab809e41a3ce716c"
   integrity sha512-bMBNKhZLPX/sDhpwM7KHIRUTtqCylQeoZDiEWy5zE7iDUJ92XmP8AKgDAp9rXx6pR5GXGFtQHHoH62toahbHgQ==
 
-tom-select@^1.7.5:
-  version "1.7.8"
-  resolved "https://registry.yarnpkg.com/tom-select/-/tom-select-1.7.8.tgz#484a33b800d8574767a5803ccaad1cd6d996d17e"
-  integrity sha512-b9K+RYhbmcGiaqKssKf4N/fkn/Hle330OwOaAO786TtUNfGImR6J/IAuJP3lNOAl4rZyC4Q0uLuxE+1367rQtg==
+tom-select@^2.0.3:
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/tom-select/-/tom-select-2.0.3.tgz#3fe57cf5da82be94b4083fb44c9edda5f198cc6e"
+  integrity sha512-IHcVHVb4/+I+4pAuXjEFVoH97mOvjp8CQ45PemnapcoRY46LqmH07hBwvRIIEznsXqBlFgZH7Uw7Cjh45mNlTA==
   dependencies:
-    "@orchidjs/sifter" "^0.8.1"
+    "@orchidjs/sifter" "^0.9.1"
 
 tough-cookie@^4.0.0:
   version "4.0.0"

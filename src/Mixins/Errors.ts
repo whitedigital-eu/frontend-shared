@@ -1,34 +1,25 @@
 import { nextTick } from 'vue'
-import router from '../router'
 //@ts-ignore
 import { showGlobalError } from './FlashMessages'
-
-import { loadCurrentUser } from './Auth'
-import { DEFAULT_ROUTES } from '../routes'
 
 export const handleError = async (error) => {
   const status = error.response ? error.response.status : error.status
   if (status === 403) {
     // handle lack of permission
   } else if (status === 401) {
-    await loadCurrentUser()
-    router.push({ name: DEFAULT_ROUTES.guest })
+    // await loadCurrentUser()
+    // router.push({ name: DEFAULT_ROUTES.guest })
   } else if (status === 500) {
   }
 
   return Promise.reject(error)
 }
 
-export const handleAndShowError = async (error) => {
-  const is401 = error.response.status === 401
-  const isValidation = error.response.status === 422
-
-  if (
-    !(is401 && router.currentRoute.value.meta.requiresAuth) &&
-    !isValidation
-  ) {
-    getErrors(error.response.data)
-  }
+export const handleAndShowError = async (
+  error,
+  shouldShowError: (error: any) => boolean
+) => {
+  if (shouldShowError(error)) getErrors(error.response.data)
   return handleError(error)
 }
 

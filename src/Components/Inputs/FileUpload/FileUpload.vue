@@ -26,11 +26,11 @@
 <script setup lang="ts">
 import { ref, onMounted, PropType, watch, computed } from 'vue'
 import Dropzone from 'dropzone'
-import { dropzoneTranslations } from '../../Mixins/Translations'
-import { baseAxios } from '../../Axios/createAxiosInstance'
-import FormFieldLabel from '../FormFieldLabel.vue'
-import FilePreview from '../FilePreview.vue'
-import { loadAllResources, loadResource } from '../../Mixins/DataFetching'
+import { dropzoneTranslations } from '../../../Mixins/Translations'
+import FormFieldLabel from '../../FormFieldLabel.vue'
+import FilePreview from './FilePreview.vue'
+import { loadAllResources, loadResource } from '../../../Mixins/DataFetching'
+import { AxiosInstance } from 'axios'
 
 Dropzone.autoDiscover = false
 
@@ -44,6 +44,10 @@ const props = defineProps({
     type: String,
     required: false,
     default: '',
+  },
+  axiosInstance: {
+    type: Object as PropType<AxiosInstance>,
+    required: true,
   },
 })
 
@@ -77,7 +81,7 @@ const removeInitialFile = async (fileIri: string) => {
     if (!initialFiles.value) return
     deletingFileIri.value = fileIri
     try {
-      await baseAxios.delete(fileIri)
+      await props.axiosInstance.delete(fileIri)
       deletingFileIri.value = null
       initialFiles.value = initialFiles.value.filter(
         (file: any) => file['@id'] !== fileIri
@@ -131,7 +135,7 @@ const initDropzone = () => {
   model.value.on('removedfile', async (file: any) => {
     const removedFileIri = getFileIri(file)
     try {
-      await baseAxios.delete(removedFileIri)
+      await props.axiosInstance.delete(removedFileIri)
     } finally {
       uploadedFileIris.value = uploadedFileIris.value.filter(
         (fileIri: string) => fileIri !== removedFileIri

@@ -2,7 +2,7 @@ import {
   DataFetchingSelectConfig,
   SimpleSelectConfig,
 } from '../Types/InputFields'
-import { SelectOption } from '../Types/FormData'
+import { SelectOption } from './SelectOption'
 import { FormField as FormFieldType } from '../Types/FormData'
 import dayjs from 'dayjs'
 

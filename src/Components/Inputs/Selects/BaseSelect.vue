@@ -36,8 +36,7 @@ import { computed, ref, onMounted, watch, PropType } from 'vue'
 import TomSelect from 'tom-select'
 import 'tom-select/dist/css/tom-select.bootstrap5.min.css'
 import FormFieldLabel from '../../FormFieldLabel.vue'
-import { SelectOption } from '../../../Types/FormData'
-import { iconNameToIconHtml } from '../../../Mixins/IconUtilities'
+import { createElement, Users, Phone, Video, Mail } from 'lucide'
 
 const props = defineProps({
   settings: {
@@ -105,14 +104,28 @@ const renderCreateButton = (data, escape) => {
   return createButton
 }
 
+const renderIcon = (data, escape) => {
+  const iconContainer = document.createElement('a')
+  iconContainer.classList.add('flex', 'w-full')
+  iconContainer.title = escape(data.text)
+
+  const iconElement = createElement(
+    {
+      users: Users,
+      'phone-call': Phone,
+      video: Video,
+      mail: Mail,
+    }[data.icon]
+  )
+  iconElement.classList.add('mx-auto')
+  iconContainer.appendChild(iconElement)
+
+  return iconContainer
+}
+
 const renderTextOrIcon = function (data, escape) {
   if (!data.icon) return `<div>${escape(data.text)}</div>`
-  return `
-    <div title="${escape(data.text)}">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide block mx-auto">
-        ${iconNameToIconHtml(data.icon)}
-      </svg>
-    </div>`
+  return renderIcon(data, escape)
 }
 
 const settings: any = {

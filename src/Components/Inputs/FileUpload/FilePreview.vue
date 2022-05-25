@@ -18,7 +18,7 @@
 </template>
 
 <script setup lang="ts">
-import useFileInfo from '../../Composables/useFileInfo'
+import useFileInfo from '../../../Composables/useFileInfo'
 
 const props = defineProps<{
   file: Storage

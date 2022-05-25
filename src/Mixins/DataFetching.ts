@@ -1,15 +1,15 @@
 import { baseAxios } from '../Axios/createAxiosInstance'
-import { AnyCrudResource, IriString, ResourceString } from '../Types/Resource'
+import { IriString } from '../Types/Resource'
 
-export const loadResource = async <ResourceType extends AnyCrudResource>(
-  resource: IriString<ResourceString> | ResourceType
+export const loadResource = async <ResourceType>(
+  resource: IriString<string, string> | ResourceType
 ): Promise<ResourceType> => {
   if (!resource) throw new Error('Resource must be truthy!')
 
   if (typeof resource !== 'string') return resource as ResourceType
   return (await baseAxios.get(resource)).data
 }
-export const loadAllResources = async <ResourceType extends AnyCrudResource>(
+export const loadAllResources = async <ResourceType>(
   resourceSources: string[] | ResourceType[]
 ): Promise<ResourceType[]> => {
   if (!resourceSources || !resourceSources.length) return []

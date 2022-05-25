@@ -23,8 +23,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from 'vue'
 import TomSelect from 'tom-select'
-import { SelectOption as SelectOptionType } from '../../Types/FormData'
-import SelectOption from '../../Models/SelectOption'
+import { SelectOption } from '../../Models/SelectOption'
 
 const props = defineProps<{
   modelValue: string
@@ -69,12 +68,12 @@ const isHours = computed(() => props.type === 'hours')
 const max = computed(() => (isHours.value ? 23 : 59))
 const placeholder = computed(() => (isHours.value ? 'St.' : 'Min.'))
 
-const createSelectOptions = (): SelectOptionType[] => {
+const createSelectOptions = () => {
   const arr: number[] = []
 
   for (let i = 0; i <= max.value; isHours.value ? i++ : (i += 5)) arr.push(i)
 
-  return arr.map((item: number): SelectOptionType => {
+  return arr.map((item: number) => {
     const formattedItem: string =
       item.toString().length === 1 ? `0${item}` : item.toString()
     return new SelectOption(formattedItem, formattedItem)

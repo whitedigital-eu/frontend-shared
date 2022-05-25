@@ -1,5 +1,5 @@
 import { Ref } from 'vue'
-import { AnyResourcePost, IriString, ResourceString } from './Resource'
+import { IriString } from './Resource'
 
 export interface FormField {
   type: string
@@ -17,7 +17,9 @@ export type FormDataRef = Ref<FormData>
 
 export type FormLayout = string[][]
 
-export type UseFormData = (iri: IriString<ResourceString> | null) => {
+export type UseFormData = <T extends string>(
+  iri: IriString<T, T> | null
+) => {
   formData: FormDataRef
   formLayout?: FormLayout
 }
@@ -25,7 +27,7 @@ export type UseFormData = (iri: IriString<ResourceString> | null) => {
 export type SelectOption = { text: string; value: string }
 
 export type RecordFormData<
-  T extends AnyResourcePost,
+  T,
   keys extends keyof T,
   otherKeys extends string = never
 > = Record<keyof Pick<T, keys> | otherKeys, FormField>

@@ -1,4 +1,4 @@
-import { SelectOption } from './FormData'
+import { SelectOption } from '../Models/SelectOption'
 
 export interface InputField {
   type: string

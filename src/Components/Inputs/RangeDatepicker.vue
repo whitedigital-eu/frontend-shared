@@ -25,7 +25,7 @@ import { computed, PropType, ref, watch } from 'vue'
 //@ts-ignore
 import flatPickr from 'vue-flatpickr-component'
 import 'flatpickr/dist/flatpickr.css'
-import { Latvian } from 'flatpickr/dist/l10n/lv.js'
+import locales from 'flatpickr/dist/l10n/'
 
 import dayjs from 'dayjs'
 import LocalizedFormat from 'dayjs/plugin/localizedFormat'
@@ -62,7 +62,7 @@ const config: any = {
   dateFormat: 'Z',
   enableTime: false,
   time_24hr: true,
-  locale: Latvian,
+  locale: locales.lv,
   mode: 'range',
   static: true,
   formatDate: (date: Date) => dayjs(date).format('LL'),
