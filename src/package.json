@@ -1,6 +1,6 @@
 {
   "name": "wd-frontend-shared",
-  "version": "0.1.45",
+  "version": "0.1.47",
   "description": "Shared components, helpers, composables and types for vue frontend SPAs",
   "files": [
     "Axios",
@@ -39,7 +39,7 @@
   "dependencies": {
     "@ckeditor/ckeditor5-build-classic": "^29.1.0",
     "@left4code/tw-starter": "^3.1.26",
-    "axios": "^0.26.1",
+    "axios": "^0.27.2",
     "dayjs": "^1.10.4",
     "dropzone": "^5.7.6",
     "lucide": "^0.17.3",
