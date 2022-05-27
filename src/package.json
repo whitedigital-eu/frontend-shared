@@ -1,9 +1,8 @@
 {
   "name": "wd-frontend-shared",
-  "version": "0.1.58",
+  "version": "0.1.59",
   "description": "Shared components, helpers, composables and types for vue frontend SPAs",
   "files": [
-    "dist",
     "Axios",
     "Components",
     "Composables",
@@ -13,12 +12,6 @@
   ],
   "main": "./dist/wd-frontend-shared.umd.js",
   "module": "./dist/wd-frontend-shared.es.js",
-  "exports": {
-    ".": {
-      "import": "./dist/wd-frontend-shared.es.js",
-      "require": "./dist/wd-frontend-shared.umd.js"
-    }
-  },
   "types": "index.d.ts",
   "scripts": {
     "dev": "vite",
