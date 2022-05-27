@@ -1,6 +1,6 @@
 {
   "name": "wd-frontend-shared",
-  "version": "0.1.57",
+  "version": "0.1.58",
   "description": "Shared components, helpers, composables and types for vue frontend SPAs",
   "files": [
     "dist",
@@ -92,5 +92,8 @@
     "vite-plugin-mkcert": "^1.6.0",
     "vitest": "^0.10.2",
     "vue-tsc": "^0.34.7"
+  },
+  "peerDependencies": {
+    "vue": "^3.0.0"
   }
 }
