@@ -1,6 +1,6 @@
 {
   "name": "wd-frontend-shared",
-  "version": "0.1.91",
+  "version": "0.1.92",
   "description": "Shared components, helpers, composables and types for vue frontend SPAs",
   "files": [
     "components",
@@ -14,6 +14,9 @@
     "./dist/style.css": {
       "import": "./dist/style.css"
     }
+  },
+  "browser": {
+    "./sfc": "src/components/Inputs/TextEditor.vue"
   },
   "types": "index.d.ts",
   "scripts": {
