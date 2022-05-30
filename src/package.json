@@ -1,6 +1,6 @@
 {
   "name": "wd-frontend-shared",
-  "version": "0.1.64",
+  "version": "0.1.65",
   "description": "Shared components, helpers, composables and types for vue frontend SPAs",
   "files": [
     "dist"
@@ -89,6 +89,6 @@
     "vue-tsc": "^0.34.7"
   },
   "peerDependencies": {
-    "vue": "^3.0.0"
+    "vue": "^3.2.0"
   }
 }
