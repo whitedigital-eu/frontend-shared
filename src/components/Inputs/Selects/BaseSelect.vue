@@ -132,6 +132,12 @@ const settings: any = {
   ...props.settings,
   plugins: {
     dropdown_input: {},
+    clear_button: {
+      title: 'Dzēst',
+      html: function (data) {
+        return `<span class="text-xl -mt-[2px] ${data.className}" title="${data.title}">&#10005;</span>`
+      },
+    },
     ...props.settings.plugins,
   },
   maxItems: multiple.value ? 10 : 1,

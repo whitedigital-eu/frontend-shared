@@ -30,7 +30,7 @@ import locales from 'flatpickr/dist/l10n/'
 import dayjs from 'dayjs'
 import LocalizedFormat from 'dayjs/plugin/localizedFormat'
 import FormFieldLabel from '../FormFieldLabel.vue'
-import { areStringArraysEqual } from '../../Mixins/Global'
+import { areStringArraysEqual } from '../../Helpers/Global'
 
 dayjs.extend(LocalizedFormat)
 

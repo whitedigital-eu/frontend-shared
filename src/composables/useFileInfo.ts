@@ -2,10 +2,13 @@ import {
   fileExtensionsToPreview,
   imageExtensions,
   previewSiteUrl,
-} from '../Mixins/FileUtilities'
+} from '../Helpers/FileUtilities'
 import { computed } from 'vue'
 
-export default function useFileInfo(file: any) {
+export default function useFileInfo(file: {
+  filePath: string
+  contentUrl: string
+}) {
   const fileExtension = computed(() => file.filePath.split('.').pop())
   const fileName = computed(() => {
     if (!fileExtension.value) return ''

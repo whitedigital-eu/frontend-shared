@@ -11,7 +11,7 @@ export interface FormField {
   config?: any
 }
 
-export type FormData = { [key: string]: FormField }
+export type FormData = Record<string, FormField>
 
 export type FormDataRef = Ref<FormData>
 
@@ -23,8 +23,6 @@ export type UseFormData = <T extends string>(
   formData: FormDataRef
   formLayout?: FormLayout
 }
-
-export type SelectOption = { text: string; value: string }
 
 export type RecordFormData<
   T,

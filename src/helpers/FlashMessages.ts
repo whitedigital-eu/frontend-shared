@@ -2,7 +2,7 @@ import Toastify from 'toastify-js'
 //@ts-ignore
 import dom from '@left4code/tw-starter/dist/js/dom'
 
-const createToastifyConfig: any = (element: string) => ({
+const createToastifyConfig = (element: Node): Toastify.Options => ({
   node: element,
   duration: 5000,
   newWindow: true,
@@ -42,7 +42,12 @@ export const showGlobalError = (description: string) => {
   Toastify(createToastifyConfig(element)).showToast()
 }
 
-let activeSuccessToast: any = null
+type ToastifyInstance = {
+  showToast(): void
+  hideToast(): void
+}
+
+let activeSuccessToast: ToastifyInstance | null = null
 
 export const showSuccessMessage = (successMessage: string) => {
   const successElement = createToastifyElement(`
@@ -56,7 +61,9 @@ export const showSuccessMessage = (successMessage: string) => {
 
   activeSuccessToast = Toastify(
     createToastifyConfig(successElement)
-  ).showToast()
+  ) as ToastifyInstance
+
+  activeSuccessToast.showToast()
 }
 
 export const showWriteRequestSuccess = (methodName: string) => {

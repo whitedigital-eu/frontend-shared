@@ -21,7 +21,7 @@
 import useFileInfo from '../../../Composables/useFileInfo'
 
 const props = defineProps<{
-  file: Storage
+  file: { filePath: string; contentUrl: string }
 }>()
 
 const emit = defineEmits<{

@@ -1,42 +1,13 @@
 import { nextTick } from 'vue'
-//@ts-ignore
 import { showGlobalError } from './FlashMessages'
+import { FormData } from '../Types/FormData'
 
-export const handleError = async (error) => {
-  const status = error.response ? error.response.status : error.status
-  if (status === 403) {
-    // handle lack of permission
-  } else if (status === 401) {
-    // await loadCurrentUser()
-    // router.push({ name: DEFAULT_ROUTES.guest })
-  } else if (status === 500) {
-  }
-
-  return Promise.reject(error)
-}
-
-export const handleAndShowError = async (
-  error,
-  shouldShowError: (error: any) => boolean
-) => {
-  if (shouldShowError(error)) getErrors(error.response.data)
-  return handleError(error)
-}
-
-export const getErrors = (error) => {
-  if (error) {
-    showGlobalError(error['hydra:description'])
-    return true
-  }
-  return null
-}
-
-export const resetFormDataErrors = (formData) => {
+export const resetFormDataErrors = (formData: FormData) => {
   for (const key in formData) formData[key].errors = []
   return formData
 }
 
-const scrollFirstIncorrectFieldIntoView = () => {
+const scrollFirstIncorrectFieldIntoView = (offsetTop = -100) => {
   nextTick(() => {
     const firstFieldWithError = document.querySelector(
       '[data-has-error="true"]'
@@ -46,20 +17,20 @@ const scrollFirstIncorrectFieldIntoView = () => {
       window.scrollTo({
         top:
           window.scrollY +
-          firstFieldWithError.getBoundingClientRect().top -
-          100,
+          firstFieldWithError.getBoundingClientRect().top +
+          offsetTop,
         behavior: 'smooth',
       })
     }
   })
 }
 
-export const setFormDataErrors = (e, formData) => {
+export const setFormDataErrors = (e, formData: FormData) => {
   if (!e.response) throw new Error(e)
   if (e.response.status !== 422) return formData
   formData = resetFormDataErrors(formData)
   e.response.data.violations.forEach((violation) => {
-    formData[violation.propertyPath].errors.push(violation.message)
+    formData[violation.propertyPath].errors?.push(violation.message)
   })
 
   // scrollFirstIncorrectFieldIntoView()
@@ -68,8 +39,6 @@ export const setFormDataErrors = (e, formData) => {
 }
 
 export const handleTableAjaxError = (error: any) => {
-  handleError(error)
-
   const reader = error.body.getReader()
 
   return new ReadableStream({
