@@ -12,7 +12,7 @@
 import { PropType, ref, watch } from 'vue'
 import BaseSelect from './BaseSelect.vue'
 
-import { DataFetchingSelectConfig } from '../../../Types/InputFields'
+import { DataFetchingSelectConfig } from '../../../types/InputFields'
 import { AxiosInstance } from 'axios'
 
 const props = defineProps({

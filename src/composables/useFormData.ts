@@ -1,5 +1,5 @@
 import { onMounted, Ref, ref } from 'vue'
-import { FormData } from '../Types/FormData'
+import { FormData } from '../types/FormData'
 
 export default function useFormData(
   baseFormData: FormData,

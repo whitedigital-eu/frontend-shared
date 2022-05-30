@@ -23,7 +23,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from 'vue'
 import TomSelect from 'tom-select'
-import { SelectOption } from '../../Models/SelectOption'
+import { SelectOption } from '../../models/SelectOption'
 
 const props = defineProps<{
   modelValue: string

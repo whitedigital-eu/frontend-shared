@@ -2,7 +2,7 @@ import {
   fileExtensionsToPreview,
   imageExtensions,
   previewSiteUrl,
-} from '../Helpers/FileUtilities'
+} from '../helpers/FileUtilities'
 import { computed } from 'vue'
 
 export default function useFileInfo(file: {

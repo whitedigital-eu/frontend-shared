@@ -473,9 +473,9 @@
     "@jridgewell/sourcemap-codec" "^1.4.10"
 
 "@left4code/tw-starter@^3.1.26":
-  version "3.1.33"
-  resolved "https://registry.yarnpkg.com/@left4code/tw-starter/-/tw-starter-3.1.33.tgz#b9debe234e3a1dd6b80fd9c3943501b292892332"
-  integrity sha512-hfwqiZXONlByHlejJgcWSzDK+oqTF3LgEgeT21lXoFcvNJ8sZlCBtr41lYok+ezkjwJZkYO5ckPREFZe8Ms49A==
+  version "3.1.35"
+  resolved "https://registry.yarnpkg.com/@left4code/tw-starter/-/tw-starter-3.1.35.tgz#50f192d5a471d63f4dd009f60ad1d70e7f9bd293"
+  integrity sha512-2WXM6qgxAA3SADaLeAVHfrAV50XluJ5VfZ8KnnEnGNcw/VfoqRW9e3IYnFJbC/AdSGtV1wNNyn+1O/nR8H7Prw==
 
 "@nodelib/fs.scandir@2.1.5":
   version "2.1.5"
@@ -1115,12 +1115,13 @@ axios@^0.21.4:
   dependencies:
     follow-redirects "^1.14.0"
 
-axios@^0.26.1:
-  version "0.26.1"
-  resolved "https://registry.yarnpkg.com/axios/-/axios-0.26.1.tgz#1ede41c51fcf51bbbd6fd43669caaa4f0495aaa9"
-  integrity sha512-fPwcX4EvnSHuInCMItEhAGnaSEXRBjtzh9fOtsE6E1G6p7vl7edEeZe11QHf18+6+9gR5PbKV/sGKNaD8YaMeA==
+axios@^0.27.2:
+  version "0.27.2"
+  resolved "https://registry.yarnpkg.com/axios/-/axios-0.27.2.tgz#207658cc8621606e586c85db4b41a750e756d972"
+  integrity sha512-t+yRIyySRTp/wua5xEr+z1q60QmLq8ABsS5O9Me1AsE5dfKqgnCFzwiCZZ/cGNd1lq4/7akDWMxdhVlucjmnOQ==
   dependencies:
-    follow-redirects "^1.14.8"
+    follow-redirects "^1.14.9"
+    form-data "^4.0.0"
 
 babel-plugin-dynamic-import-node@^2.3.3:
   version "2.3.3"
@@ -1354,9 +1355,9 @@ convert-source-map@^1.6.0:
     safe-buffer "~5.1.1"
 
 core-js@^3.6.5:
-  version "3.22.5"
-  resolved "https://registry.yarnpkg.com/core-js/-/core-js-3.22.5.tgz#a5f5a58e663d5c0ebb4e680cd7be37536fb2a9cf"
-  integrity sha512-VP/xYuvJ0MJWRAobcmQ8F2H6Bsn+s7zqAAjFaHGBMc5AQm7zaelhD1LGduFn2EehEcQcU+br6t+fwbpQ5d1ZWA==
+  version "3.22.7"
+  resolved "https://registry.yarnpkg.com/core-js/-/core-js-3.22.7.tgz#8d6c37f630f6139b8732d10f2c114c3f1d00024f"
+  integrity sha512-Jt8SReuDKVNZnZEzyEQT5eK6T2RRCXkfTq7Lo09kpm+fHjgGewSbNjV+Wt4yZMhPDdzz2x1ulI5z/w4nxpBseg==
 
 cosmiconfig@^7.0.1:
   version "7.0.1"
@@ -1939,7 +1940,7 @@ flatted@^3.1.0:
   resolved "https://registry.yarnpkg.com/flatted/-/flatted-3.2.5.tgz#76c8584f4fc843db64702a6bd04ab7a8bd666da3"
   integrity sha512-WIWGi2L3DyTUvUrwRKgGi9TwxQMUEqPOPQBVi71R96jZXJdFskXEmf54BoZaS1kknGODoIGASGEzBUYdyMCBJg==
 
-follow-redirects@^1.14.0, follow-redirects@^1.14.8:
+follow-redirects@^1.14.0, follow-redirects@^1.14.9:
   version "1.15.0"
   resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.15.0.tgz#06441868281c86d0dda4ad8bdaead2d02dca89d4"
   integrity sha512-aExlJShTV4qOUOL7yF1U5tvLCB0xQuudbf6toyYA0E/acBNw71mvjFTnLaRp50aQaYocMR0a/RMMBIHeZnGyjQ==
@@ -3507,7 +3508,7 @@ vite-plugin-mkcert@^1.6.0:
     debug "^4.3.3"
     picocolors "^1.0.0"
 
-vite@^2.7.10, vite@^2.9.7:
+vite@^2.9.7, vite@^2.9.9:
   version "2.9.9"
   resolved "https://registry.yarnpkg.com/vite/-/vite-2.9.9.tgz#8b558987db5e60fedec2f4b003b73164cb081c5e"
   integrity sha512-ffaam+NgHfbEmfw/Vuh6BHKKlI/XIAhxE5QSS7gFLIngxg171mg1P3a4LSRME0z2ZU1ScxoKzphkipcYwSD5Ew==
@@ -3557,7 +3558,7 @@ vue-property-decorator@^9.0.2:
   resolved "https://registry.yarnpkg.com/vue-property-decorator/-/vue-property-decorator-9.1.2.tgz#266a2eac61ba6527e2e68a6933cfb98fddab5457"
   integrity sha512-xYA8MkZynPBGd/w5QFJ2d/NM0z/YeegMqYTphy7NJQXbZcuU6FC6AOdUAcy4SXP+YnkerC6AfH+ldg7PDk9ESQ==
 
-vue-slider-component@^4.0.0-beta.4:
+vue-slider-component@4.0.0-beta.5:
   version "4.0.0-beta.5"
   resolved "https://registry.yarnpkg.com/vue-slider-component/-/vue-slider-component-4.0.0-beta.5.tgz#01e8b2a57abcbdfdf0f4128330d556436d3fb790"
   integrity sha512-dvaquYv85coVmQQqjWs+aaXFSCbTeNr7rpjXgSFo1E+XscErSXZkf0LF7MHX9rP/aeMpAVMMzm6Y//gS0ELiTw==

@@ -26,11 +26,11 @@
 <script setup lang="ts">
 import { ref, onMounted, PropType, watch, computed } from 'vue'
 import Dropzone from 'dropzone'
-import { dropzoneTranslations } from '../../../Helpers/Translations'
+import { dropzoneTranslations } from '../../../helpers/Translations'
 import FormFieldLabel from '../../FormFieldLabel.vue'
 import FilePreview from './FilePreview.vue'
 import { AxiosInstance } from 'axios'
-import getLoadResourceFunctions from '../../../Helpers/DataFetching'
+import getLoadResourceFunctions from '../../../helpers/DataFetching'
 
 Dropzone.autoDiscover = false
 

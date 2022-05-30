@@ -1,7 +1,7 @@
 import {
   DataFetchingSelectConfig,
   SimpleSelectConfig,
-} from '../Types/InputFields'
+} from '../types/InputFields'
 import { SelectOption } from './SelectOption'
 import dayjs from 'dayjs'
 

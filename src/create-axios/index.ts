@@ -1,6 +1,6 @@
-import axios from 'axios'
+import axios, { AxiosRequestConfig, AxiosResponse } from 'axios'
 
-const requestInterceptor = (config: any) => {
+const requestInterceptor = (config: AxiosRequestConfig) => {
   if (config.method === 'patch' && config.headers) {
     config.headers['Content-Type'] = 'application/merge-patch+json'
   }
@@ -9,7 +9,9 @@ const requestInterceptor = (config: any) => {
 }
 
 const createAxiosWithInterceptors = (
-  responseInterceptor: (value: any) => any | Promise<any>,
+  responseInterceptor: (
+    value: AxiosResponse
+  ) => AxiosResponse | Promise<AxiosResponse>,
   errorInterceptor: ((error: any) => any) | undefined
 ) => {
   const instance = axios.create({

@@ -1,5 +1,5 @@
-import { InputField } from '../Types/InputFields'
-import { FormData } from '../Types/FormData'
+import { InputField } from '../types/InputFields'
+import { FormData } from '../types/FormData'
 import dayjs from 'dayjs'
 import { resetFormDataErrors } from './Errors'
 

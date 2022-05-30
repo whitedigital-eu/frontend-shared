@@ -1,5 +1,5 @@
-import { FormData } from '../Types/FormData'
-import { SelectOption } from '../Models/SelectOption'
+import { FormData } from '../types/FormData'
+import { SelectOption } from '../models/SelectOption'
 
 export const setSelectOptions = async (
   formData: FormData,
