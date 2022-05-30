@@ -1,8 +1,9 @@
 {
   "name": "wd-frontend-shared",
-  "version": "0.1.67",
+  "version": "0.1.68",
   "description": "Shared components, helpers, composables and types for vue frontend SPAs",
   "files": [
+    "Components",
     "dist"
   ],
   "module": "./dist/wd-frontend-shared.es.js",
@@ -83,7 +84,7 @@
     "tailwindcss": "3.0.23",
     "type-coverage": "^2.21.1",
     "typescript": "^4.6.4",
-    "vite": "^2.7.10",
+    "vite": "^2.9.9",
     "vite-plugin-mkcert": "^1.6.0",
     "vitest": "^0.10.2",
     "vue-tsc": "^0.34.7"
