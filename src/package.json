@@ -1,10 +1,14 @@
 {
   "name": "wd-frontend-shared",
-  "version": "0.1.93",
+  "version": "0.1.94",
   "description": "Shared components, helpers, composables and types for vue frontend SPAs",
   "files": [
     "components",
-    "dist"
+    "composables",
+    "create-axios",
+    "helpers",
+    "models",
+    "types"
   ],
   "module": "./dist/wd-frontend-shared.es.js",
   "types": "index.d.ts",
