@@ -1,6 +1,6 @@
 {
   "name": "wd-frontend-shared",
-  "version": "0.1.68",
+  "version": "0.1.69",
   "description": "Shared components, helpers, composables and types for vue frontend SPAs",
   "files": [
     "Components",
@@ -10,6 +10,9 @@
   "exports": {
     ".": {
       "import": "./dist/wd-frontend-shared.es.js"
+    },
+    "./components": {
+      "import": "./Components/index.ts"
     },
     "./dist/style.css": {
       "import": "./dist/styl.css"
