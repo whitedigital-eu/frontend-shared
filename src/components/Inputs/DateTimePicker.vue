@@ -51,6 +51,7 @@ const setValue = () => {
     value.value = dayjs(dateValue.value)
       .hour(hoursValue.value ? parseInt(hoursValue.value) : 0)
       .minute(minutesValue.value ? parseInt(minutesValue.value) : 0)
+      .second(0)
       .toISOString()
   }
 }

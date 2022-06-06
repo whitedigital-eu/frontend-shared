@@ -1,8 +1,14 @@
 <template>
-  <main class="container"></main>
+  <main class="container">
+    <TimePicker v-model="model" type="hours" />
+  </main>
 </template>
 
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+import TimePicker from './components/Inputs/TimePicker.vue'
+import { ref } from 'vue'
+const model = ref(0)
+</script>
 
 <style lang="scss">
 .container {

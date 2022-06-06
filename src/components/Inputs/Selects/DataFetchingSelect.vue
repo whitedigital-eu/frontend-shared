@@ -34,7 +34,7 @@ const props = defineProps({
     default: '',
   },
   axiosInstance: {
-    type: Object as PropType<AxiosInstance>,
+    type: Function as PropType<AxiosInstance>,
     required: true,
   },
 })

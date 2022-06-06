@@ -10,7 +10,7 @@
       :max="max"
       @focus="handleFocus"
       @blur="handleBlur"
-      @input="emitUpdate"
+      @input="handleInput"
     />
     <select ref="selectRef" class="tom-select">
       <option v-for="(option, i) in options" :key="i" :value="option.value">
@@ -26,7 +26,7 @@ import TomSelect from 'tom-select'
 import { SelectOption } from '../../models/SelectOption'
 
 const props = defineProps<{
-  modelValue: string
+  modelValue: string | number
   type: 'hours' | 'minutes'
   disabled?: boolean
 }>()
@@ -48,7 +48,14 @@ const selectModel = ref()
 
 const emitUpdate = () => emit('update:modelValue', parseInt(value.value))
 
-const handleFocus = () => selectModel.value.open()
+const handleInput = (e: InputEvent) => {
+  value.value = formatTimeInput((e.target as HTMLInputElement).value)
+  emitUpdate()
+}
+
+const handleFocus = () => {
+  selectModel.value.open()
+}
 
 const handleBlur = (e: InputEvent) => {
   selectModel.value.close()
@@ -97,7 +104,17 @@ watch(
 </script>
 
 <style>
-.time-picker .ts-control {
-  display: none;
+.time-picker {
+  .ts-control {
+    display: none;
+  }
+
+  .ts-wrapper {
+    min-height: 0;
+  }
+
+  .ts-input {
+    display: none;
+  }
 }
 </style>

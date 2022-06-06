@@ -1,4 +1,5 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios'
+import axiosRetry, { isNetworkOrIdempotentRequestError } from 'axios-retry'
 
 const requestInterceptor = (config: AxiosRequestConfig) => {
   if (config.method === 'patch' && config.headers) {
@@ -20,10 +21,21 @@ const createAxiosWithInterceptors = (
       Accept: 'application/ld+json',
     },
   })
+  axiosRetry(instance, {
+    retries: 3,
+    retryCondition: function (error) {
+      return (
+        isNetworkOrIdempotentRequestError(error) ||
+        error.code === 'ECONNABORTED'
+      )
+    },
+  })
   instance.interceptors.response.use(responseInterceptor, errorInterceptor)
   instance.interceptors.request.use(requestInterceptor)
 
   return instance
 }
+
+export const requestTimeoutMs = 5000
 
 export default createAxiosWithInterceptors

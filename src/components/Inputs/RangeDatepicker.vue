@@ -53,7 +53,7 @@ const datepickerRef = ref(null)
 
 const value = ref<string | null>(null)
 
-const isEmpty = computed(() => !value.value)
+const isEmpty = computed(() => !value.value || value.value.length === 0)
 const isOpen = ref(false)
 
 const config: any = {
