@@ -1,0 +1,38 @@
+.flatpickr-calendar {
+  .flatpickr-day {
+    max-width: 40px;
+    height: 24px;
+    border-radius: 4px;
+    margin: 2px 0;
+    line-height: unset;
+    border: unset;
+
+    &:not(.prevMonthDay):not(.nextMonthDay) {
+      color: #1E293B;
+    }
+
+    &:hover {
+      background: #F1F5F9;
+    }
+
+    &.selected:hover {
+      background: #164E63;
+    }
+
+    &.startRange, &.endRange, &.selected, &.inRange {
+      background: #164E63;
+      color: white !important;
+      box-shadow: none;
+      border-radius: 4px;
+    }
+  }
+}
+
+.flatpickr-wrapper {
+  width: 100%;
+
+  input:read-only {
+    background: white;
+    cursor: pointer;
+  }
+}
