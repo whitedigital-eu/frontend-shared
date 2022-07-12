@@ -49,6 +49,11 @@ const props = defineProps({
     type: Function as PropType<AxiosInstance>,
     required: true,
   },
+  setPublic: {
+    type: Boolean,
+    required: false,
+    default: false,
+  },
 })
 
 const emit = defineEmits(['update:modelValue', 'remove-file'])
@@ -146,6 +151,11 @@ const initDropzone = () => {
       )
     }
   })
+  if (props.setPublic) {
+    model.value.on('sending', async (file, xhr, formData) => {
+      formData.append('isPublic', true)
+    })
+  }
 }
 
 const loadInitialFiles = async () => {
