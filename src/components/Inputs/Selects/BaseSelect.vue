@@ -141,6 +141,7 @@ const settings: any = {
     ...props.settings.plugins,
   },
   maxItems: multiple.value ? 10 : 1,
+  maxOptions: 250,
   allowEmptyOptions: true,
   createFilter: function (input: string) {
     return !(input.toLowerCase() in this.options)
