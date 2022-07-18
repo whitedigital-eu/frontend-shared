@@ -26,11 +26,29 @@
       label="Profile picture"
       v-model="profilePicture"
     />
+
+    <div class="mb-[300px]">
+      <button
+        class="btn btn-primary"
+        type="button"
+        @click="showSelect = !showSelect"
+      >
+        Show/hide select
+      </button>
+      <div v-if="showSelect">
+        <SimpleSelect
+          id="role-select-2"
+          label="Select role"
+          v-model="role2"
+          :config="{ options: roleOptions }"
+        />
+      </div>
+    </div>
   </form>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import axios from 'axios'
 import Text from '../../components/Inputs/Text.vue'
 import Decimal from '../../components/Inputs/Decimal.vue'
@@ -51,11 +69,17 @@ const notes = ref('')
 const isActive = ref(false)
 const probability = ref(60)
 const role = ref('')
+const role2 = ref('')
 const user = ref('')
 const dateOfBirth = ref()
 const eventStartTime = ref('')
 const eventDuration = ref()
 const profilePicture = ref()
+
+const showSelect = ref(true)
+watch(showSelect, (n) => {
+  if (!n) role2.value = ''
+})
 
 const axiosInstance = axios.create()
 

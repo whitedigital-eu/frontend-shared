@@ -1,8 +1,10 @@
 <template>
   <div>
-    <label class="form-label cursor-pointer mr-2" @click="value = !value">{{
-      label
-    }}</label>
+    <label
+      class="form-label cursor-pointer mr-2"
+      @click="emit('update:modelValue', !value)"
+      >{{ label }}</label
+    >
     <input
       v-model="value"
       type="checkbox"

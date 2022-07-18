@@ -32,7 +32,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, onMounted, watch, PropType } from 'vue'
+import { computed, ref, onMounted, watch, PropType, onBeforeUnmount } from 'vue'
 import TomSelect from 'tom-select'
 import 'tom-select/dist/css/tom-select.bootstrap5.min.css'
 import FormFieldLabel from '../../FormFieldLabel.vue'
@@ -215,6 +215,12 @@ watch(
     n ? model.value.disable() : model.value.enable()
   }
 )
+
+onBeforeUnmount(() => {
+  model.value.clearActiveItems()
+  model.value.clearOptions()
+  model.value.destroy()
+})
 </script>
 
 <style>
