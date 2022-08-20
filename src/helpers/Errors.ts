@@ -1,6 +1,7 @@
 import { nextTick } from 'vue'
 import { showGlobalError } from './FlashMessages'
 import { FormData } from '../types/FormData'
+import { AxiosError } from 'axios'
 
 export const resetFormDataErrors = (formData: FormData) => {
   for (const key in formData) formData[key].errors = []
@@ -41,7 +42,7 @@ export const setFormDataErrors = (e, formData: FormData) => {
 export const handleTableAjaxError = (error: any) => {
   const reader = error.body.getReader()
 
-  return new ReadableStream({
+  new ReadableStream({
     start(controller) {
       function push() {
         reader.read().then(({ done, value }: { done: any; value: any }) => {
@@ -62,4 +63,17 @@ export const handleTableAjaxError = (error: any) => {
       push()
     },
   })
+  Promise.reject(error)
+}
+
+export type TableXhrErrRes = {
+  body: ReadableStream
+  bodyUsed: boolean
+  headers: Headers
+  ok: boolean
+  redirected: boolean
+  status: number
+  statusText: string
+  type: string
+  url: string
 }

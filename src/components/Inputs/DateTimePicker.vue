@@ -56,9 +56,28 @@ const setValue = () => {
   }
 }
 
+const setDateHoursAndMinutes = () => {
+  dateValue.value = props.modelValue ?? null
+  hoursValue.value = props.modelValue
+    ? formatTimeInput(dayjs(props.modelValue).format('H'))
+    : ''
+  minutesValue.value = props.modelValue
+    ? formatTimeInput(dayjs(props.modelValue).format('mm'))
+    : ''
+}
+
 watch(dateValue, setValue)
 watch(hoursValue, setValue)
 watch(minutesValue, setValue)
 
 watch(value, (n) => emit('update:modelValue', n))
+
+watch(
+  () => props.modelValue,
+  () => {
+    if (props.modelValue === value.value) return
+
+    setDateHoursAndMinutes()
+  }
+)
 </script>
