@@ -26,17 +26,7 @@ import useResponsivity from '../../composables/useResponsivity'
 import createActionColumn from './ActionColumn'
 import { TableConfig } from './createTableConfig'
 import CellComponent = Tabulator.CellComponent
-
-type HydraMapping = {
-  property: string
-  required: boolean
-  variable: string
-}
-type ApiListResponse = {
-  'hydra:search'?: {
-    'hydra:mapping'?: HydraMapping[]
-  }
-}
+import { ApiListResponse } from './Types'
 
 const table = ref()
 const tabulator = ref()

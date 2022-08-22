@@ -1,4 +1,4 @@
-import axios, { AxiosRequestConfig, AxiosResponse } from 'axios'
+import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
 import axiosRetry, { isNetworkOrIdempotentRequestError } from 'axios-retry'
 
 const requestInterceptor = (config: AxiosRequestConfig) => {
@@ -14,7 +14,7 @@ const createAxiosWithInterceptors = (
     value: AxiosResponse
   ) => AxiosResponse | Promise<AxiosResponse>,
   errorInterceptor: ((error: any) => any) | undefined
-) => {
+): AxiosInstance => {
   const instance = axios.create({
     withCredentials: true,
     headers: {

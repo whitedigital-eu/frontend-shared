@@ -1,14 +1,6 @@
 import dom from '@left4code/tw-starter/dist/js/dom'
 import { nextTick } from 'vue'
-import {
-  CheckSquare,
-  createIcons,
-  Eye,
-  Move,
-  Trash2,
-  Globe,
-  UserPlus,
-} from 'lucide'
+import { icons, createIcons } from 'lucide'
 import { ColumnDefinition, CellComponent } from 'tabulator-tables'
 
 interface IconSettings {
@@ -37,12 +29,15 @@ const iconSettings: Record<string, IconSettings> = {
 const createIcon = (
   wrapper: HTMLElement,
   clickHandler: () => void,
-  settings: IconSettings
+  settings: IconSettings,
+  dataTest: string
 ) => {
   const element = dom(`
     <a
       class="flex items-center ${settings.wrapperClass ?? ''}"
-      title="${settings.title}">
+      title="${settings.title}"
+      data-test="${dataTest}"
+    >
       <i data-lucide="${settings.iconName}" class="w-4 h-4 mr-1"></i>
     </a>`)
 
@@ -56,7 +51,7 @@ const createIcon = (
 
 const renderIcons = () => {
   createIcons({
-    icons: { Eye, Trash2, CheckSquare, Move, Globe, UserPlus },
+    icons,
     attrs: {
       'stroke-width': 1.5,
     },
@@ -100,19 +95,30 @@ const createActionColumn = (
       }
 
       if (props.edit && canUpdateRecordFunc(cell)) {
-        createIcon(wrapper, () => clickHandlers.edit(data), iconSettings.edit)
+        createIcon(
+          wrapper,
+          () => clickHandlers.edit(data),
+          iconSettings.edit,
+          'table-edit-btn'
+        )
       }
 
       if (props.delete && canUpdateRecordFunc(cell)) {
         createIcon(
           wrapper,
           () => clickHandlers.delete(data),
-          iconSettings.delete
+          iconSettings.delete,
+          'table-delete-btn'
         )
       }
 
       if (props.view) {
-        createIcon(wrapper, () => clickHandlers.view(data), iconSettings.view)
+        createIcon(
+          wrapper,
+          () => clickHandlers.view(data),
+          iconSettings.view,
+          'table-view-btn'
+        )
       }
 
       nextTick(renderIcons)

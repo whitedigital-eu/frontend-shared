@@ -1,7 +1,6 @@
 import { nextTick } from 'vue'
 import { showGlobalError } from './FlashMessages'
 import { FormData } from '../types/FormData'
-import { AxiosError } from 'axios'
 
 export const resetFormDataErrors = (formData: FormData) => {
   for (const key in formData) formData[key].errors = []

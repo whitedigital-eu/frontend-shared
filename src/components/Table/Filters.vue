@@ -17,6 +17,7 @@
             v-for="(item, i) in filters.default"
             :item="item"
             :key="i"
+            :axios-instance="axiosInstance"
           />
         </div>
         <div
@@ -28,6 +29,7 @@
             v-for="(item, i) in filters.advanced"
             :item="item"
             :key="i"
+            :axios-instance="axiosInstance"
           />
         </div>
       </div>
@@ -63,14 +65,20 @@
 import { computed, PropType, ref, watch } from 'vue'
 import FilterInput from './FilterInput.vue'
 import 'flatpickr/dist/flatpickr.css'
-import { getQueryParam } from 'wd-frontend-shared/helpers/Global'
-import { Filters } from '../../Models/Filters'
+import { getQueryParam } from '../../helpers/Global'
+import { Filters } from './Types'
 import dayjs from 'dayjs'
+import { AxiosInstance } from 'axios'
 
 const props = defineProps({
   filters: {
     type: Object as PropType<Filters>,
     required: true,
+  },
+  axiosInstance: {
+    type: Object as PropType<AxiosInstance>,
+    required: false,
+    default: undefined,
   },
 })
 
@@ -135,8 +143,11 @@ const filtersToQueryParams = () => {
         if (item.name === 'document-date') {
           const params = createDateRangeQueryParams(item.value, 'date')
           if (params) filterQueryParams.push(...params)
-        } else if (item.name === 'audits-date') {
+        } else if (item.name === 'audits-date' || item.name === 'audit-date') {
           const params = createDateRangeQueryParams(item.value, 'created')
+          if (params) filterQueryParams.push(...params)
+        } else if (item.name === 'activity-date') {
+          const params = createDateRangeQueryParams(item.value, 'fromDate')
           if (params) filterQueryParams.push(...params)
         } else if (item.toggleExact) {
           const computedName = `${item.name}[${

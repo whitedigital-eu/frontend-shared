@@ -7,7 +7,7 @@ type SharedColumnNames = {
 
 export type TableConfig = {
   sharedColumnNames: SharedColumnNames
-  ajaxConfig: typeof Options['ajaxConfig']
+  ajaxConfig: Options['ajaxConfig']
 }
 
 const createTableConfig = (config: Partial<TableConfig> = {}): TableConfig => {

@@ -36,7 +36,7 @@
           v-model="item.value"
           :label="item.label"
           :config="item.config"
-          :axios-instance="baseAxios"
+          :axios-instance="props.axiosInstance"
         />
       </div>
     </div>
@@ -73,18 +73,17 @@
 </template>
 
 <script setup lang="ts">
-import Text from 'wd-frontend-shared/components/Inputs/Text.vue'
-import SimpleSelect from 'wd-frontend-shared/components/Inputs/Selects/SimpleSelect.vue'
-import Datepicker from 'wd-frontend-shared/components/Inputs/Datepicker.vue'
-import RangeDatepicker from 'wd-frontend-shared/components/Inputs/RangeDatepicker.vue'
-import DataFetchingSelect from 'wd-frontend-shared/components/Inputs/Selects/DataFetchingSelect.vue'
-import Checkbox from 'wd-frontend-shared/components/Inputs/Checkbox.vue'
-import Filter from '../../Models/Filters'
-import { baseAxios } from '../../Axios/createAxiosInstance'
+import Text from '../../components/Inputs/Text.vue'
+import SimpleSelect from '../../components/Inputs/Selects/SimpleSelect.vue'
+import Datepicker from '../../components/Inputs/Datepicker.vue'
+import RangeDatepicker from '../../components/Inputs/RangeDatepicker.vue'
+import DataFetchingSelect from '../../components/Inputs/Selects/DataFetchingSelect.vue'
+import Checkbox from '../../components/Inputs/Checkbox.vue'
+import { Filter } from './Types'
+import { AxiosInstance } from 'axios'
 
 const props = defineProps<{
   item: Filter
+  axiosInstance?: AxiosInstance
 }>()
 </script>
-
-<style></style>
