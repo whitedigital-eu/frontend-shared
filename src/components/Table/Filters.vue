@@ -66,7 +66,7 @@ import { computed, PropType, ref, watch } from 'vue'
 import FilterInput from './FilterInput.vue'
 import 'flatpickr/dist/flatpickr.css'
 import { getQueryParam } from '../../helpers/Global'
-import { Filters } from '../../types/ApiPlatform'
+import { Filters } from '../../types/Filters'
 import dayjs from 'dayjs'
 import { AxiosInstance } from 'axios'
 

@@ -79,7 +79,7 @@ import Datepicker from '../../components/Inputs/Datepicker.vue'
 import RangeDatepicker from '../../components/Inputs/RangeDatepicker.vue'
 import DataFetchingSelect from '../../components/Inputs/Selects/DataFetchingSelect.vue'
 import Checkbox from '../../components/Inputs/Checkbox.vue'
-import { Filter } from '../../types/ApiPlatform'
+import { Filter } from '../../types/Filters'
 import { AxiosInstance } from 'axios'
 
 const props = defineProps<{
