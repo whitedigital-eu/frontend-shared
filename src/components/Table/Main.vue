@@ -26,7 +26,7 @@ import useResponsivity from '../../composables/useResponsivity'
 import createActionColumn from './ActionColumn'
 import { TableConfig } from './createTableConfig'
 import CellComponent = Tabulator.CellComponent
-import { ApiListResponse } from './Types'
+import { ApiListResponse } from '../../types/ApiPlatform'
 
 const table = ref()
 const tabulator = ref()
