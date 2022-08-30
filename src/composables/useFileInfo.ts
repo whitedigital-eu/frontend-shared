@@ -7,7 +7,8 @@ import { computed } from 'vue'
 
 export default function useFileInfo(file: {
   filePath: string
-  contentUrl: string
+  sourceUrl: string
+  displayName: string
 }) {
   const fileExtension = computed(() => file.filePath.split('.').pop())
   const fileName = computed(() => {
@@ -24,8 +25,8 @@ export default function useFileInfo(file: {
     return fileExtensionsToPreview.includes(fileExtension.value)
   })
   const filePreviewHref = computed(() => {
-    if (!shouldPreviewFile.value) return file.contentUrl
-    return `${previewSiteUrl}${window.location.origin}${file.contentUrl}`
+    if (!shouldPreviewFile.value) return file.displayName
+    return `${previewSiteUrl}${window.location.origin}${file.displayName}`
   })
 
   return {

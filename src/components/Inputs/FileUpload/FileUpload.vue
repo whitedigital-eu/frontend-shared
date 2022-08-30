@@ -15,7 +15,7 @@
         v-for="file in initialFiles"
         v-if="initialFiles"
         :key="file.id"
-        :file="file"
+        :file="createFileForPreview(file)"
         :disabled="deletingFileIri === file['@id']"
         @remove-file="removeInitialFile(file['@id'])"
       />
@@ -54,6 +54,11 @@ const props = defineProps({
     required: false,
     default: false,
   },
+  endpointUrl: {
+    type: String,
+    required: false,
+    default: '/api/storage',
+  },
 })
 
 const emit = defineEmits(['update:modelValue', 'remove-file'])
@@ -69,7 +74,7 @@ const initialFiles = ref<any[] | null>(null)
 const deletingFileIri = ref<string | null>(null)
 
 const options: any = {
-  url: '/api/storage',
+  url: props.endpointUrl,
   thumbnailWidth: 150,
   maxFilesize: 50,
   headers: {
@@ -171,6 +176,23 @@ const loadInitialFiles = async () => {
   } finally {
   }
 }
+
+const createFileForPreview = (
+  file:
+    | { filePath: string; contentUrl: string }
+    | { sourceUrl: string; originalName: string }
+) =>
+  'filePath' in file
+    ? {
+        filePath: file.filePath,
+        sourceUrl: file.contentUrl,
+        displayName: file.contentUrl,
+      }
+    : {
+        filePath: file.sourceUrl,
+        sourceUrl: file.sourceUrl,
+        displayName: file.originalName,
+      }
 
 onMounted(() => {
   singleFileUpload.value = !Array.isArray(props.modelValue)

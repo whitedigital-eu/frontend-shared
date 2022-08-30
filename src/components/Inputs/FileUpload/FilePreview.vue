@@ -1,7 +1,7 @@
 <template>
   <div class="dz-preview dz-processing dz-image-preview dz-success dz-complete">
     <div class="dz-image relative">
-      <img v-if="isImage" :alt="file.contentUrl" :src="file.contentUrl" />
+      <img v-if="isImage" :alt="file.displayName" :src="file.sourceUrl" />
       <div class="file">
         <span class="w-24 file__icon file__icon--file">
           <span class="file__icon__file-name text-xs">{{ fileExtension }}</span>
@@ -21,7 +21,11 @@
 import useFileInfo from '../../../composables/useFileInfo'
 
 const props = defineProps<{
-  file: { filePath: string; contentUrl: string }
+  file: {
+    filePath: string
+    sourceUrl: string
+    displayName: string
+  }
 }>()
 
 const emit = defineEmits<{
