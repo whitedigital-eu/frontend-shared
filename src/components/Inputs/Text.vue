@@ -1,6 +1,7 @@
 <template>
   <div class="relative" :class="{ 'overflow-hidden': isEmpty && !hasFocus }">
     <FormFieldLabel
+      v-if="label"
       :is-placeholder="isEmpty && !hasFocus"
       @click.native="handleLabelClick"
     >
@@ -32,7 +33,8 @@ const props = defineProps({
   },
   label: {
     type: String,
-    required: true,
+    required: false,
+    default: null,
   },
   readonly: {
     type: Boolean,
