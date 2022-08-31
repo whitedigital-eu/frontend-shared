@@ -61,7 +61,9 @@ const handleInput = (editorValue: string) =>
   emit('update:modelValue', editorValue)
 
 onMounted(() => {
-  ClassicEditor.create(document.querySelector(`#${props.id}`), {
+  const el = document.querySelector(`#${props.id}`)
+  if (!el) return
+  ClassicEditor.create(el, {
     toolbar,
   }).then((ed: any) => {
     ed.model.document.on('change:data', () => handleInput(ed.getData()))
