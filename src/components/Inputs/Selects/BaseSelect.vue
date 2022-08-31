@@ -1,6 +1,7 @@
 <template>
   <div class="relative">
     <FormFieldLabel
+      v-if="props.label"
       class="z-[2]"
       :is-placeholder="isEmpty && !isOpen"
       :placeholder-css-classes="[
@@ -60,7 +61,7 @@ const props = defineProps({
   label: {
     type: String,
     required: false,
-    default: '',
+    default: null,
   },
 })
 
