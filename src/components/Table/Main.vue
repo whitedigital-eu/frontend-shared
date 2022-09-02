@@ -227,8 +227,9 @@ const initTabulator = async (resetPage = false) => {
   let options: Options = {
     paginationSizeSelector: [10, 30, 100],
     paginationInitialPage: resetPage ? 1 : props.page,
+    paginationSize: props.pageSize,
     paginationDataSent: {
-      [props.pageSizeParam]: props.pageSize,
+      size: props.pageSizeParam,
     },
     layout: 'fitColumns',
     headerSort: true,
