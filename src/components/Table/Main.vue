@@ -102,6 +102,11 @@ const props = defineProps({
     required: false,
     default: 30,
   },
+  pageSizeParam: {
+    type: String,
+    required: false,
+    default: 'size',
+  },
   config: {
     type: Object as PropType<TableConfig>,
     required: true,
@@ -222,7 +227,9 @@ const initTabulator = async (resetPage = false) => {
   let options: Options = {
     paginationSizeSelector: [10, 30, 100],
     paginationInitialPage: resetPage ? 1 : props.page,
-    paginationSize: props.pageSize,
+    paginationDataSent: {
+      [props.pageSizeParam]: props.pageSize,
+    },
     layout: 'fitColumns',
     headerSort: true,
     placeholder: 'Netika atrasti dati',
