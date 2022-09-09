@@ -1,6 +1,8 @@
 {
   "name": "wd-frontend-shared",
   "version": "0.1.135",
+  "author": "Imants Liepiņš",
+  "license": "MIT",
   "description": "Shared components, helpers, composables and types for vue frontend SPAs",
   "files": [
     "components",
@@ -30,8 +32,6 @@
     "shared",
     "components"
   ],
-  "author": "Imants Liepiņš",
-  "license": "MIT",
   "dependencies": {
     "@ckeditor/ckeditor5-build-classic": "^29.1.0",
     "@left4code/tw-starter": "^3.1.26",

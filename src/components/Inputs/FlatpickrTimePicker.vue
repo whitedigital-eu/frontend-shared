@@ -1,6 +1,6 @@
 <template>
   <div :id="computedId" class="relative">
-    <FormFieldLabel v-if="label">
+    <FormFieldLabel v-if="label" class="z-[1]">
       {{ label }}
     </FormFieldLabel>
     <flatPickr
