@@ -1,6 +1,6 @@
 {
   "name": "wd-frontend-shared",
-  "version": "0.1.133",
+  "version": "0.1.134",
   "description": "Shared components, helpers, composables and types for vue frontend SPAs",
   "files": [
     "components",
@@ -39,13 +39,14 @@
     "axios-retry": "^3.2.5",
     "dayjs": "^1.10.4",
     "dropzone": "^5.7.6",
+    "flatpickr": "^4.6.13",
     "lucide": "^0.17.3",
     "lucide-vue-next": "^0.17.3",
     "tabulator-tables": "^4.9.3",
     "toastify-js": "^1.9.3",
     "tom-select": "^2.0.3",
     "vue": "^3.2.25",
-    "vue-flatpickr-component": "^9.0.5",
+    "vue-flatpickr-component": "^9.0.6",
     "vue-slider-component": "4.0.0-beta.5"
   },
   "devDependencies": {

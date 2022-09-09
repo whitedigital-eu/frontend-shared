@@ -27,6 +27,8 @@
       v-model="profilePicture"
     />
 
+    <FlatpickrTimePicker v-model="attendanceTime" />
+
     <div class="mb-[300px]">
       <button
         class="btn btn-primary"
@@ -61,6 +63,7 @@ import Datepicker from '../../components/Inputs/Datepicker.vue'
 import DateTimePicker from '../../components/Inputs/DateTimePicker.vue'
 import FileUpload from '../../components/Inputs/FileUpload/FileUpload.vue'
 import RangeDatepicker from '../../components/Inputs/RangeDatepicker.vue'
+import FlatpickrTimePicker from '../../components/Inputs/FlatpickrTimePicker.vue'
 import { SelectOption } from '../../models/SelectOption'
 
 const fullName = ref('')
@@ -75,6 +78,7 @@ const dateOfBirth = ref()
 const eventStartTime = ref('')
 const eventDuration = ref()
 const profilePicture = ref()
+const attendanceTime = ref(null)
 
 const showSelect = ref(true)
 watch(showSelect, (n) => {
