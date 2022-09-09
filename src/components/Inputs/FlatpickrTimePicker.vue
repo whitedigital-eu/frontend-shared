@@ -80,11 +80,13 @@ const parseModelValue = () => {
 }
 
 onMounted(() => {
-  let date = dayjs()
-  const { hours, minutes } = parseModelValue()
-  date = date.hour(hours)
-  date = date.minute(minutes)
-  value.value = date.toISOString()
+  if (props.modelValue) {
+    let date = dayjs()
+    const { hours, minutes } = parseModelValue()
+    date = date.hour(hours)
+    date = date.minute(minutes)
+    value.value = date.toISOString()
+  }
 })
 
 watch(
