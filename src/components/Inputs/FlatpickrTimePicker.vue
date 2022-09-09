@@ -63,7 +63,7 @@ const config = {
 const handleOpen = () => (isOpen.value = true)
 const handleClose = () => (isOpen.value = false)
 
-const clearInput = () => emit('update:modelValue', null)
+const clearInput = () => (value.value = null)
 
 const parseModelValue = () => {
   let hours = 0
