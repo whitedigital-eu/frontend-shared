@@ -2,7 +2,7 @@
   <div class="overflow-x-auto scrollbar-hidden relative" data-test="table">
     <div
       v-if="totalEntryCount"
-      class="table-total-entry-count absolute right-4 mr-4"
+      class="table-total-entry-count absolute right-4"
       data-test="table-total-entry-count"
     >
       <span>Kopējais ierakstu skaits: </span>
@@ -232,6 +232,8 @@ const initTabulator = async (resetPage = false) => {
       size: props.pageSizeParam,
     },
     layout: 'fitColumns',
+    responsiveLayout: 'collapse',
+    responsiveLayoutCollapseStartOpen: false,
     headerSort: true,
     placeholder: 'Netika atrasti dati',
     locale: 'lv',
@@ -247,7 +249,7 @@ const initTabulator = async (resetPage = false) => {
     rowSelectionChanged(selectedRowData) {
       emit('row-selection-changed', selectedRowData)
     },
-    maxHeight: isMobile.value ? 450 : 700,
+    maxHeight: isMobile.value ? null : 700,
   }
 
   if (props.ajaxUrl) {

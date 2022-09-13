@@ -34,7 +34,7 @@
         </div>
       </div>
       <div class="flex justify-between w-full">
-        <div class="xl:mt-0 flex gap-2">
+        <div class="xl:mt-0 flex gap-2 w-full sm:w-auto">
           <button
             type="submit"
             class="btn btn-primary w-full sm:w-16 h-[38px] mt-2 sm:mt-0"
