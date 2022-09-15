@@ -1,63 +1,79 @@
 <template>
-  <div
-    class="flex flex-col sm:flex-row sm:items-end xl:items-start"
-    data-test="filters"
-  >
-    <form
-      id="tabulator-html-filter-form"
-      class="xl:flex xl:flex-col sm:mr-auto items-start mb-4 w-full"
-      @submit.prevent="emit('queryParamsChanged', filters)"
+  <div>
+    <button
+      v-if="isMobile"
+      @click="mobShowFilters = !mobShowFilters"
+      class="btn btn-primary w-full mb-4"
     >
-      <div class="flex flex-col grow">
-        <div
-          class="flex flex-wrap gap-8"
-          :class="{ 'mb-6': noAdvancedFilters }"
-        >
-          <FilterInput
-            v-for="(item, i) in filters.default"
-            :item="item"
-            :key="i"
-            :axios-instance="axiosInstance"
-          />
-        </div>
-        <div
-          v-if="!noAdvancedFilters"
-          id="advanced-filters"
-          class="flex flex-wrap gap-8 mt-4 mb-6"
-        >
-          <FilterInput
-            v-for="(item, i) in filters.advanced"
-            :item="item"
-            :key="i"
-            :axios-instance="axiosInstance"
-          />
-        </div>
-      </div>
-      <div class="flex justify-between w-full">
-        <div class="xl:mt-0 flex gap-2 w-full sm:w-auto">
-          <button
-            type="submit"
-            class="btn btn-primary w-full sm:w-16 h-[38px] mt-2 sm:mt-0"
-            data-test="filters-search-btn"
-            @click.prevent="filter"
+      <span>{{ mobShowFilters ? 'Paslēpt' : 'Parādīt' }} filtrus</span>
+      <span v-show="mobShowFilters">
+        <i data-lucide="chevron-down" class="h-4 w-4"> </i>
+      </span>
+      <span v-show="!mobShowFilters">
+        <i data-lucide="chevron-up" class="h-4 w-4"></i>
+      </span>
+    </button>
+    <div
+      v-show="!isMobile || mobShowFilters"
+      class="flex flex-col sm:flex-row sm:items-end xl:items-start"
+      data-test="filters"
+    >
+      <form
+        id="tabulator-html-filter-form"
+        class="xl:flex xl:flex-col sm:mr-auto items-start mb-4 w-full"
+        @submit.prevent="emit('queryParamsChanged', filters)"
+      >
+        <div class="flex flex-col grow">
+          <div
+            class="flex flex-wrap gap-8"
+            :class="{ 'mb-6': noAdvancedFilters }"
           >
-            Meklēt
-          </button>
-          <button
-            id="tabulator-html-filter-reset"
-            type="button"
-            class="btn btn-secondary w-full sm:w-32 mt-2 sm:mt-0"
-            data-test="filters-reset-btn"
-            @click="resetFilter"
+            <FilterInput
+              v-for="(item, i) in filters.default"
+              :item="item"
+              :key="i"
+              :axios-instance="axiosInstance"
+            />
+          </div>
+          <div
+            v-if="!noAdvancedFilters"
+            id="advanced-filters"
+            class="flex flex-wrap gap-8 mt-4 mb-6"
           >
-            Dzēst filtrus
-          </button>
+            <FilterInput
+              v-for="(item, i) in filters.advanced"
+              :item="item"
+              :key="i"
+              :axios-instance="axiosInstance"
+            />
+          </div>
         </div>
-        <div>
-          <slot></slot>
+        <div class="flex justify-between w-full">
+          <div class="xl:mt-0 flex gap-2 w-full sm:w-auto">
+            <button
+              type="submit"
+              class="btn btn-primary w-full sm:w-16 h-[38px] mt-2 sm:mt-0"
+              data-test="filters-search-btn"
+              @click.prevent="filter"
+            >
+              Meklēt
+            </button>
+            <button
+              id="tabulator-html-filter-reset"
+              type="button"
+              class="btn btn-secondary w-full sm:w-32 mt-2 sm:mt-0"
+              data-test="filters-reset-btn"
+              @click="resetFilter"
+            >
+              Dzēst filtrus
+            </button>
+          </div>
+          <div>
+            <slot></slot>
+          </div>
         </div>
-      </div>
-    </form>
+      </form>
+    </div>
   </div>
 </template>
 
@@ -69,6 +85,7 @@ import { getQueryParam } from '../../helpers/Global'
 import { Filters } from '../../types/Filters'
 import dayjs from 'dayjs'
 import { AxiosInstance } from 'axios'
+import useResponsivity from '../../composables/useResponsivity'
 
 const props = defineProps({
   filters: {
@@ -83,6 +100,9 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['queryParamsChanged'])
+
+const { isMobile } = useResponsivity()
+const mobShowFilters = ref(false)
 
 const filter = () => {
   const data = filtersToQueryParams()

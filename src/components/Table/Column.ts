@@ -9,7 +9,7 @@ export const createColumn = (
 })
 
 export const createToggleCollapseColumn = (
-  colData: Partial<ColumnDefinition>
+  colData: Partial<ColumnDefinition> = {}
 ): Partial<ColumnDefinition> => {
   return createColumn({
     formatter: 'responsiveCollapse',
