@@ -50,7 +50,10 @@ const props = defineProps({
 
 const emit = defineEmits(['update:modelValue'])
 
-const handleFocus = () => (hasFocus.value = true)
+const handleFocus = () => {
+  if (props.readonly) return
+  hasFocus.value = true
+}
 const handleBlur = () => (hasFocus.value = false)
 
 const inputRef = ref<HTMLInputElement | undefined>()
@@ -64,6 +67,7 @@ const handleInput = (e: InputEvent) => {
 }
 
 const handleLabelClick = () => {
+  if (props.readonly) return
   inputRef.value?.focus()
 }
 

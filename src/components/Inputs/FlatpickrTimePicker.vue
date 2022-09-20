@@ -79,20 +79,37 @@ const parseModelValue = () => {
   return { hours, minutes }
 }
 
+const setValueFromModelValue = () => {
+  let date = dayjs()
+  const { hours, minutes } = parseModelValue()
+  date = date.hour(hours)
+  date = date.minute(minutes)
+  value.value = date.toISOString()
+}
+
 onMounted(() => {
-  if (props.modelValue) {
-    let date = dayjs()
-    const { hours, minutes } = parseModelValue()
-    date = date.hour(hours)
-    date = date.minute(minutes)
-    value.value = date.toISOString()
-  }
+  if (props.modelValue) setValueFromModelValue()
 })
+
+let emitted = false
+
+watch(
+  () => props.modelValue,
+  () => {
+    if (emitted) {
+      emitted = false
+      return
+    }
+
+    setValueFromModelValue()
+  }
+)
 
 watch(
   () => value.value,
   (n) => {
     emit('update:modelValue', n)
+    emitted = true
   }
 )
 </script>

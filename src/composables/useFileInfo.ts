@@ -7,7 +7,6 @@ import { computed } from 'vue'
 
 export default function useFileInfo(file: {
   filePath: string
-  sourceUrl: string
   displayName: string
 }) {
   const fileExtension = computed(() => file.filePath.split('.').pop())
