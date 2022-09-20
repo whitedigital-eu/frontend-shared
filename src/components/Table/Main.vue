@@ -18,12 +18,12 @@
 
 <script setup lang="ts">
 import Tabulator, { ColumnDefinition, Options } from 'tabulator-tables'
-import { onMounted, ref, watch, onBeforeUnmount, PropType } from 'vue'
+import { onMounted, ref, watch, onBeforeUnmount, PropType, nextTick } from 'vue'
 import { dateTimeFormatter } from '../../helpers/Global'
 import translations from './translations'
 import { handleTableAjaxError } from '../../helpers/Errors'
 import useResponsivity from '../../composables/useResponsivity'
-import createActionColumn from './ActionColumn'
+import createActionColumn, { renderIcons } from './ActionColumn'
 import { TableConfig } from './createTableConfig'
 import CellComponent = Tabulator.CellComponent
 import { ApiListResponse } from '../../types/ApiPlatform'
@@ -249,7 +249,7 @@ const initTabulator = async (resetPage = false) => {
     rowSelectionChanged(selectedRowData) {
       emit('row-selection-changed', selectedRowData)
     },
-    maxHeight: isMobile.value ? null : 700,
+    maxHeight: isMobile.value ? undefined : 700,
   }
 
   if (props.ajaxUrl) {
@@ -305,6 +305,7 @@ const initTabulator = async (resetPage = false) => {
 
           const titleCell = document.createElement('td')
           const valueCell = document.createElement('td')
+          titleCell.style.whiteSpace = 'initial'
           valueCell.style.whiteSpace = 'initial'
 
           col.title instanceof HTMLElement
@@ -333,6 +334,8 @@ const initTabulator = async (resetPage = false) => {
 
   tabulator.value = await new Tabulator(table.value, options)
 }
+
+nextTick(renderIcons)
 
 const reload = () => {
   tabulator.value.destroy()
@@ -374,9 +377,9 @@ defineExpose({
   }
 
   .tabulator-headers {
-    display: flex;
-    align-items: center;
-    width: max-content;
+    display: flex !important;
+    align-items: center !important;
+    width: max-content !important;
   }
 
   .tabulator-cell {

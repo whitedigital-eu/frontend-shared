@@ -4,7 +4,7 @@ export const createColumn = (
 ): Partial<ColumnDefinition> => ({
   hozAlign: 'left',
   headerHozAlign: 'left',
-  vertAlign: 'middle',
+  vertAlign: 'top',
   ...colData,
 })
 
@@ -13,10 +13,12 @@ export const createToggleCollapseColumn = (
 ): Partial<ColumnDefinition> => {
   return createColumn({
     formatter: 'responsiveCollapse',
-    width: 32,
-    align: 'center',
+    width: 24,
+    maxWidth: 24,
+    minWidth: 24,
     resizable: false,
     headerSort: false,
+    vertAlign: 'middle',
     ...colData,
   })
 }

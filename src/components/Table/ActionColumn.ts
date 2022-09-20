@@ -9,18 +9,21 @@ interface IconSettings {
   iconName: string
 }
 
+const iconWrapperClass = 'mr-3 last:mr-0'
+
 const iconSettings: Record<string, IconSettings> = {
   edit: {
-    wrapperClass: 'mr-3',
+    wrapperClass: iconWrapperClass,
     title: 'Rediģēt',
     iconName: 'check-square',
   },
   delete: {
-    wrapperClass: 'text-danger mr-3',
+    wrapperClass: `text-danger ${iconWrapperClass}`,
     title: 'Dzēst',
     iconName: 'trash-2',
   },
   view: {
+    wrapperClass: iconWrapperClass,
     title: 'Apskatīt',
     iconName: 'eye',
   },
@@ -38,7 +41,7 @@ const createIcon = (
       title="${settings.title}"
       data-test="${dataTest}"
     >
-      <i data-lucide="${settings.iconName}" class="w-4 h-4 mr-1"></i>
+      <i data-lucide="${settings.iconName}" class="w-4 h-4"></i>
     </a>`)
 
   dom(element).on('click', async (e: Event) => {
@@ -49,7 +52,7 @@ const createIcon = (
   wrapper.append(element[0])
 }
 
-const renderIcons = () => {
+export const renderIcons = () => {
   createIcons({
     icons,
     attrs: {

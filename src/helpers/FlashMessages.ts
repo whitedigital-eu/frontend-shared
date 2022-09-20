@@ -1,8 +1,10 @@
-import Toastify from 'toastify-js'
+import StartToastifyInstance from 'toastify-js/src/toastify-es'
 //@ts-ignore
 import dom from '@left4code/tw-starter/dist/js/dom'
 
-const createToastifyConfig = (element: Node): Toastify.Options => ({
+const createToastifyConfig = (
+  element: Node
+): StartToastifyInstance.Options => ({
   node: element,
   duration: 5000,
   newWindow: true,
@@ -43,7 +45,7 @@ export const showGlobalError = (description: string) => {
     'error-popup'
   )
 
-  Toastify(createToastifyConfig(element)).showToast()
+  StartToastifyInstance(createToastifyConfig(element)).showToast()
 }
 
 type ToastifyInstance = {
@@ -66,7 +68,7 @@ export const showSuccessMessage = (successMessage: string) => {
 
   if (activeSuccessToast) activeSuccessToast.hideToast()
 
-  activeSuccessToast = Toastify(
+  activeSuccessToast = StartToastifyInstance(
     createToastifyConfig(successElement)
   ) as ToastifyInstance
 
