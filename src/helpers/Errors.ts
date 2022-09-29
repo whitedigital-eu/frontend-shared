@@ -30,7 +30,7 @@ export const setFormDataErrors = (e, formData: FormData) => {
   if (e.response.status !== 422) return formData
   formData = resetFormDataErrors(formData)
   e.response.data.violations.forEach((violation) => {
-    formData[violation.propertyPath].errors?.push(violation.message)
+    formData[violation.propertyPath]?.errors?.push(violation.message)
   })
 
   // scrollFirstIncorrectFieldIntoView()

@@ -1,42 +1,6 @@
 import { InputField } from '../types/InputFields'
 import { FormData } from '../types/FormData'
-import dayjs from 'dayjs'
 import { resetFormDataErrors } from './Errors'
-
-export const dateTimeFormatter = (value: string) => {
-  if (value) {
-    const date = new Date(value)
-    return (
-      dateFormatter(value) +
-      ' ' +
-      [
-        ('0' + date.getHours()).slice(-2),
-        ('0' + date.getMinutes()).slice(-2),
-        ('0' + date.getSeconds()).slice(-2),
-      ].join(':')
-    )
-  }
-  return ''
-}
-
-export const dateFormatter = (value: string) => {
-  if (value) {
-    const date = new Date(value)
-    return [
-      ('0' + date.getDate()).slice(-2),
-      ('0' + (date.getMonth() + 1)).slice(-2),
-      date.getFullYear(),
-    ].join('.')
-  }
-  return ''
-}
-
-export const daysAgoFormatter = (lastChangesDate: string) => {
-  if (dayjs(lastChangesDate).isToday()) return 'Šodien'
-  if (dayjs(lastChangesDate).isYesterday()) return 'Vakar'
-
-  return dayjs().diff(dayjs(lastChangesDate), 'day')
-}
 
 export const getQueryParam = (key: string) => {
   const searchParams = new URLSearchParams(window.location.search)

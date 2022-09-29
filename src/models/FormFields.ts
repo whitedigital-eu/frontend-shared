@@ -5,13 +5,20 @@ import {
 import { SelectOption } from './SelectOption'
 import dayjs from 'dayjs'
 
-class FormField {
+export class FormField {
+  public formatter: (x: any) => any
   constructor(
     public type: string,
     public name: string,
     public label: string,
     public value: string | string[] | boolean | null = ''
-  ) {}
+  ) {
+    this.formatter = (x) => x
+  }
+
+  public getFormatted() {
+    return this.formatter(this.value)
+  }
 }
 
 class TextField extends FormField {

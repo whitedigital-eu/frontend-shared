@@ -9,6 +9,8 @@ export interface FormField {
   errors?: string[]
   readonly?: boolean
   config?: any
+  formatter: (x: any) => any
+  getFormatted: () => any
 }
 
 export type FormData = Record<string, FormField>

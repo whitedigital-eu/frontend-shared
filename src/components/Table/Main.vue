@@ -19,7 +19,6 @@
 <script setup lang="ts">
 import Tabulator, { ColumnDefinition, Options } from 'tabulator-tables'
 import { onMounted, ref, watch, onBeforeUnmount, PropType, nextTick } from 'vue'
-import { dateTimeFormatter } from '../../helpers/Global'
 import translations from './translations'
 import { handleTableAjaxError } from '../../helpers/Errors'
 import useResponsivity from '../../composables/useResponsivity'
@@ -127,6 +126,7 @@ const emit = defineEmits([
   'row-selection-changed',
   'cell-click',
   'pagination-changed',
+  'total-entry-count-changed',
 ])
 
 const reInitTable = () => {
@@ -151,6 +151,10 @@ watch(
   }
 )
 
+watch(totalEntryCount, (n, o) => {
+  if (n !== o) emit('total-entry-count-changed', n)
+})
+
 const createTimestampColumn = (
   title: string,
   field: string
@@ -160,7 +164,7 @@ const createTimestampColumn = (
   hozAlign: 'left',
   headerHozAlign: 'left',
   width: 150,
-  formatter: (cell) => dateTimeFormatter(cell.getValue()),
+  formatter: (cell) => props.config.dateTimeFormatter(cell.getValue()),
   headerSort: !props.disableOrderByDateColumns,
   vertAlign: 'middle',
 })
@@ -223,6 +227,16 @@ let columns = [...columnsBefore, ...props.columns, ...columnsAfter]
 
 const filtersSet = ref(false)
 
+const setTableHeight = (): void => {
+  setTimeout(() => {
+    const tabulatorTableEl = document.querySelector('.tabulator-table')
+    if (!tabulatorTableEl) return
+    const heightInPx = window.getComputedStyle(tabulatorTableEl).height
+    const newTabulatorHeight = parseInt(heightInPx) + 120
+    tabulator.value.setHeight(newTabulatorHeight)
+  }, 0)
+}
+
 const initTabulator = async (resetPage = false) => {
   let options: Options = {
     paginationSizeSelector: [10, 30, 100],
@@ -248,6 +262,15 @@ const initTabulator = async (resetPage = false) => {
     },
     rowSelectionChanged(selectedRowData) {
       emit('row-selection-changed', selectedRowData)
+    },
+    dataLoaded: function () {
+      setTimeout(() => {
+        document
+          .querySelectorAll('.tabulator-responsive-collapse-toggle')
+          .forEach((el) => {
+            el.addEventListener('click', setTableHeight, true)
+          })
+      }, 0)
     },
     maxHeight: isMobile.value ? undefined : 700,
   }

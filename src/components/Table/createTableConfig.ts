@@ -8,6 +8,7 @@ type SharedColumnNames = {
 export type TableConfig = {
   sharedColumnNames: SharedColumnNames
   ajaxConfig: Options['ajaxConfig']
+  dateTimeFormatter: (string) => string
 }
 
 const createTableConfig = (config: Partial<TableConfig> = {}): TableConfig => {
@@ -21,6 +22,7 @@ const createTableConfig = (config: Partial<TableConfig> = {}): TableConfig => {
         Accept: 'application/ld+json',
       },
     },
+    dateTimeFormatter: (value) => value,
   }
 
   return { ...defaultConfig, ...config }
