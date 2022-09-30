@@ -10,9 +10,11 @@
       ref="inputRef"
       v-model="value"
       type="text"
+      inputmode="decimal"
       class="form-control w-full sm:min-w-[200px]"
       :class="{ 'sm:min-w-[432px]': long }"
       :readonly="readonly"
+      @keydown="handleKeydown"
       @input="handleInput"
       @focus="handleFocus"
       @blur="handleBlur"
@@ -46,36 +48,18 @@ const props = defineProps({
   },
 })
 
-const emit = defineEmits(['update:modelValue'])
+const emit = defineEmits<{
+  (e: 'update:modelValue', value: string): void
+}>()
 
-const handleFocus = () => (hasFocus.value = true)
-const handleBlur = () => {
-  hasFocus.value = false
-  value.value = valueTransformOnBlur(value.value)
-  emit('update:modelValue', value.value)
+const justEmitted = ref(false)
+
+const emitUpdate = (value) => {
+  justEmitted.value = true
+  emit('update:modelValue', value)
 }
 
-const inputRef = ref<HTMLInputElement | undefined>()
-const value = ref('')
-const hasFocus = ref(false)
-const isEmpty = computed(() => !value.value)
-
-const handleInput = (e: InputEvent) => {
-  const targetValue: string = (e.target as HTMLInputElement).value
-  emit('update:modelValue', targetValue)
-}
-
-const handleLabelClick = () => {
-  inputRef.value?.focus()
-}
-
-watch(
-  () => props.modelValue,
-  (n) => (value.value = n as string),
-  { immediate: true }
-)
-
-const valueTransformOnBlur = (value: string): string => {
+const transformValue = (value: string): string => {
   let transformedValue = value
   if (!value) return value
   if (!value.includes('.')) return `${value}.00`
@@ -88,6 +72,53 @@ const valueTransformOnBlur = (value: string): string => {
 
   return transformedValue
 }
+
+const handleFocus = () => (hasFocus.value = true)
+const handleBlur = () => {
+  hasFocus.value = false
+  value.value = transformValue(value.value)
+  emitUpdate(value.value)
+}
+
+const inputRef = ref<HTMLInputElement | undefined>()
+const value = ref('')
+const hasFocus = ref(false)
+const isEmpty = computed(() => !value.value)
+
+const handleKeydown = (e) => {
+  if (['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight'].includes(e.code))
+    return
+
+  const valueSplitByDot = e.target.value.split('.')
+  const hasDot = valueSplitByDot.length === 2
+  const tooManyDecimals = hasDot && valueSplitByDot[1].length === 2
+  const invalidCharacter =
+    (isNaN(Number(e.key)) && (e.key !== '.' || hasDot)) || e.code === 'Space'
+  if (invalidCharacter || tooManyDecimals) e.preventDefault()
+}
+
+const handleInput = (e: InputEvent) => {
+  const targetValue: string = (e.target as HTMLInputElement).value
+  emitUpdate(targetValue)
+}
+
+const handleLabelClick = () => {
+  inputRef.value?.focus()
+}
+
+watch(
+  () => props.modelValue,
+  (n) => {
+    if (justEmitted.value) {
+      justEmitted.value = false
+      return
+    }
+
+    const stringVal = typeof n === 'string' ? n : n.toString()
+    value.value = transformValue(stringVal)
+  },
+  { immediate: true }
+)
 </script>
 
 <style lang="scss" scoped>
