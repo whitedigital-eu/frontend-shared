@@ -115,6 +115,11 @@ const props = defineProps({
     required: false,
     default: () => () => true,
   },
+  tabulatorOptions: {
+    type: Object as PropType<Options>,
+    required: false,
+    default: () => ({}),
+  },
 })
 
 const emit = defineEmits([
@@ -231,8 +236,9 @@ const setTableHeight = (): void => {
   setTimeout(() => {
     const tabulatorTableEl = document.querySelector('.tabulator-table')
     if (!tabulatorTableEl) return
+    const headerHeight = 170 // tried calculating on the fly but it was flaky. 120 is the normal height, but headers can span multiple rows and 170 accomodates 3 header rows...
     const heightInPx = window.getComputedStyle(tabulatorTableEl).height
-    const newTabulatorHeight = parseInt(heightInPx) + 120
+    const newTabulatorHeight = parseInt(heightInPx) + headerHeight
     tabulator.value.setHeight(newTabulatorHeight)
   }, 0)
 }
@@ -352,6 +358,13 @@ const initTabulator = async (resetPage = false) => {
     options = {
       ...options,
       data: props.columnData,
+    }
+  }
+
+  if (props.tabulatorOptions) {
+    options = {
+      ...options,
+      ...props.tabulatorOptions,
     }
   }
 
