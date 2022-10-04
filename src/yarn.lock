@@ -2476,15 +2476,15 @@ lru-cache@^6.0.0:
   dependencies:
     yallist "^4.0.0"
 
-lucide-vue-next@^0.17.3:
-  version "0.17.17"
-  resolved "https://registry.yarnpkg.com/lucide-vue-next/-/lucide-vue-next-0.17.17.tgz#7be5fd9b067028602015aeca4d50e7a51984a111"
-  integrity sha512-CIL5fkYS4OfHwsdV4Z1UfRAqpRtbrh/3QX43Rw9AnbUsZ28P69eIQFokGfs28gM/Zx+eGiq6/YA6DW7efybu5A==
+lucide-vue-next@^0.91.0:
+  version "0.91.0"
+  resolved "https://registry.yarnpkg.com/lucide-vue-next/-/lucide-vue-next-0.91.0.tgz#0531339d86510c2599b9191679281bce2f2e2244"
+  integrity sha512-4WL/4JTF5XVm4DK7kKofzZLkDLMTiNlHOFPG3FwXlWLSPPPrnGqfytq0z3BEQeGr3uGrUZTdh8a012SiN3SITQ==
 
-lucide@^0.17.3:
-  version "0.17.17"
-  resolved "https://registry.yarnpkg.com/lucide/-/lucide-0.17.17.tgz#81190721dc4468284ca3876d3ae6a6aa3a91b8ec"
-  integrity sha512-bB0SdfHIfyUMbD2CyR7WXI3RvLugA839SfJIwqrWiqK9e+HCj4aTwcm0Ft47p9SdI5Q/asYcauQEg9E5Q0iUYA==
+lucide@^0.91.0:
+  version "0.91.0"
+  resolved "https://registry.yarnpkg.com/lucide/-/lucide-0.91.0.tgz#5308d9dbd71a2b7f6873cd4c85d4139a10e3ca79"
+  integrity sha512-Ynd2KJjNIP/H/YJnKusvLazgR5RYpCqBJ3Fe0E1D7Ml+MudIxCfPG2l2Bm/HCxPxnXarWypdowbuy6dkeH8d/w==
 
 magic-string@^0.25.7:
   version "0.25.9"

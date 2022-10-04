@@ -1,6 +1,6 @@
 {
   "name": "wd-frontend-shared",
-  "version": "0.1.198",
+  "version": "0.1.199",
   "author": "Imants Liepiņš",
   "license": "MIT",
   "description": "Shared components, helpers, composables and types for vue frontend SPAs",
@@ -40,8 +40,8 @@
     "dayjs": "^1.10.4",
     "dropzone": "^5.7.6",
     "flatpickr": "^4.6.13",
-    "lucide": "^0.17.3",
-    "lucide-vue-next": "^0.17.3",
+    "lucide": "^0.91.0",
+    "lucide-vue-next": "^0.91.0",
     "tabulator-tables": "^4.9.3",
     "toastify-js": "^1.9.3",
     "tom-select": "^2.0.3",
