@@ -2,6 +2,20 @@
   <form class="mt-4 flex flex-col gap-4 w-[500px] mr-auto">
     <Text label="Full name" v-model="fullName" />
     <Decimal label="Price" v-model="price" />
+    <div class="flex wrap gap-4">
+      <button class="btn btn-primary" type="button" @click="setPriceEmpty">
+        Set price empty
+      </button>
+      <button class="btn btn-primary" type="button" @click="setPriceNull">
+        Set price null
+      </button>
+      <button class="btn btn-primary" type="button" @click="setPriceWithComma">
+        Set price with comma
+      </button>
+      <button class="btn btn-primary" type="button" @click="setPriceWithDot">
+        Set price with dot
+      </button>
+    </div>
     <TextEditor id="notes-editor" label="Notes" v-model="notes" />
     <Checkbox label="Is active" v-model="isActive" />
     <Slider label="Probability" v-model="probability" />
@@ -79,6 +93,11 @@ const eventStartTime = ref('')
 const eventDuration = ref()
 const profilePicture = ref()
 const attendanceTime = ref(null)
+
+const setPriceEmpty = () => (price.value = '')
+const setPriceNull = () => (price.value = null)
+const setPriceWithComma = () => (price.value = '123,61')
+const setPriceWithDot = () => (price.value = '132.2')
 
 const showSelect = ref(true)
 watch(showSelect, (n) => {
