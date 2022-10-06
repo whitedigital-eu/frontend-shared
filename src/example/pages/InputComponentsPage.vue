@@ -84,7 +84,7 @@ import FlatpickrTimePicker from '../../components/Inputs/FlatpickrTimePicker.vue
 import { SelectOption } from '../../models/SelectOption'
 
 const fullName = ref('')
-const price = ref()
+const price = ref('9912,22')
 const notes = ref('')
 const isActive = ref(false)
 const probability = ref(60)

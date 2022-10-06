@@ -1,7 +1,7 @@
 <template>
-  <div class="relative" :class="{ 'overflow-hidden': isEmpty && !hasFocus }">
+  <div class="relative" :class="{ 'overflow-hidden': labelIsPlaceholder }">
     <FormFieldLabel
-      :is-placeholder="isEmpty && !hasFocus"
+      :is-placeholder="labelIsPlaceholder"
       @click.native="handleLabelClick"
     >
       {{ props.label }}
@@ -110,6 +110,9 @@ const inputRef = ref<HTMLInputElement | undefined>()
 const value = ref('')
 const hasFocus = ref(false)
 const isEmpty = computed(() => !value.value)
+const labelIsPlaceholder = computed<boolean>(
+  () => isEmpty.value && !hasFocus.value
+)
 
 const allowedKeys = [
   'Backspace',
@@ -136,6 +139,7 @@ const handleKeydown = (e) => {
     if (e.key === '.' && !hasDecSeparator) {
       value.value += decSeparator
     }
+    return
   }
 
   const textSelected = inputTextSelected(e.target)
@@ -168,9 +172,17 @@ watch(
       return
     }
 
-    const stringVal = typeof n === 'string' ? n : n === null ? '' : n.toString()
-    const newVal = transformValue(stringVal)
-    value.value = newVal
+    let stringVal = ''
+    if (typeof n === 'number') stringVal = n.toString()
+    if (typeof n === 'string') {
+      if (n.indexOf(',') !== -1 && !isNaN(parseFloat(n.replace(',', '.')))) {
+        stringVal = parseFloat(n.replace(',', '.')).toString()
+      } else if (!isNaN(parseFloat(n))) {
+        stringVal = parseFloat(n).toString()
+      }
+    }
+
+    value.value = transformValue(stringVal)
   },
   { immediate: true }
 )
