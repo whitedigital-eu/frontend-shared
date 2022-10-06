@@ -41,7 +41,10 @@
       v-model="profilePicture"
     />
 
-    <FlatpickrTimePicker v-model="attendanceTime" />
+    <FlatpickrTimePicker
+      label="Flatpickr time picker"
+      v-model="attendanceTime"
+    />
 
     <div class="mb-[300px]">
       <button

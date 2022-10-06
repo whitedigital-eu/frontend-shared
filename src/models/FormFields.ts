@@ -6,12 +6,16 @@ import { SelectOption } from './SelectOption'
 import dayjs from 'dayjs'
 
 export class FormField {
+  errors?: string[]
+  readonly?: boolean
+  config?: any
+
   public formatter: (x: any) => any
   constructor(
     public type: string,
     public name: string,
     public label: string,
-    public value: string | string[] | boolean | null = ''
+    public value: string | string[] | number | number[] | boolean | null = ''
   ) {
     this.formatter = (x) => x
   }
@@ -31,9 +35,11 @@ class TextField extends FormField {
 
 class DecimalField extends FormField {
   readonly: boolean
+  override value: string | number | null
   constructor(name: string, label: string, value = '', readonly = false) {
-    super('decimal', name, label, value)
+    super('decimal', name, label)
     this.readonly = readonly
+    this.value = value
   }
 }
 

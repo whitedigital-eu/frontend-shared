@@ -1,6 +1,11 @@
 <template>
   <div :id="computedId" class="relative">
-    <FormFieldLabel v-if="label" class="z-[1]">
+    <FormFieldLabel
+      v-if="label"
+      class="z-[1]"
+      :is-placeholder="isEmpty && !isOpen"
+      @click="handleLabelClick"
+    >
       {{ label }}
     </FormFieldLabel>
     <flatPickr
@@ -48,6 +53,13 @@ const flatpickr = ref(null)
 const value = ref<string | null>(null)
 
 const isOpen = ref(false)
+
+const isEmpty = computed(() => !value.value)
+
+const handleLabelClick = () => {
+  if (!flatpickr.value) return
+  ;(flatpickr.value as any).$el.nextSibling.focus()
+}
 
 const config = {
   altInput: true,

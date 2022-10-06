@@ -1,17 +1,6 @@
 import { Ref } from 'vue'
 import { IriString } from './Resource'
-
-export interface FormField {
-  type: string
-  name: string
-  label: string
-  value: string | string[] | boolean | null
-  errors?: string[]
-  readonly?: boolean
-  config?: any
-  formatter: (x: any) => any
-  getFormatted: () => any
-}
+import { FormField } from '../models/FormFields'
 
 export type FormData = Record<string, FormField>
 
