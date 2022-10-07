@@ -1,21 +1,33 @@
-import { mount } from '@vue/test-utils'
 import Decimal from './Decimal.vue'
+import userEvent from '@testing-library/user-event'
+import { render } from '@testing-library/vue'
+
+const defaultLabel = 'Test label'
 
 const createWrapper = (
   modelValue: string | number | null,
-  placeholder = 'Test placeholder'
+  label = defaultLabel
 ) => {
-  return mount(Decimal, {
-    propsData: { modelValue, label: placeholder },
+  return render(Decimal, {
+    props: { modelValue, label },
   })
 }
 
 describe('Decimal', () => {
-  test('renders label/placeholder', () => {
-    const label = 'This is a label/placeholder'
-    const wrapper = createWrapper('', 'This is a label/placeholder')
-    expect(wrapper.text()).toContain(label)
+  let user
+
+  beforeAll(() => {
+    user = userEvent.setup()
   })
+
+  test('renders label/placeholder', () => {
+    const { getByText } = createWrapper('')
+    const l = getByText(defaultLabel)
+
+    expect(l.getAttribute('data-role')).toBe('placeholder')
+    expect(l.textContent).toBe(defaultLabel)
+  })
+
   it.each(['', null, 'asd', '#5*3[%'])(
     `if initial value is empty string, null or not parseable to number:
       (1) label/placeholder is placeholder;
@@ -24,19 +36,17 @@ describe('Decimal', () => {
       (4) nothing is emitted
   `,
     async (v) => {
-      const wrapper = createWrapper(v)
+      const { getByText, getByRole, emitted } = createWrapper(v)
       // (1), (2)
-      expect(
-        wrapper.findComponent({ name: 'FormFieldLabel' }).props().isPlaceholder
-      ).toBeTruthy()
-      await wrapper.find('input').trigger('focus')
-      expect(
-        wrapper.findComponent({ name: 'FormFieldLabel' }).props().isPlaceholder
-      ).toBeFalsy()
+      const labelEl = getByText(defaultLabel)
+      const input = getByRole('textbox') as HTMLInputElement
+      expect(labelEl.getAttribute('data-role')).toBe('placeholder')
+      await user.click(input)
+      expect(labelEl.getAttribute('data-role')).toBe('label')
       // (3)
-      expect(wrapper.find('input').element.value).toBe('')
+      expect(input.value).toBe('')
       // (4)
-      expect(wrapper.emitted()).not.toHaveProperty('update:modelValue')
+      expect(emitted()).not.toHaveProperty('update:modelValue')
     }
   )
 
@@ -55,66 +65,93 @@ describe('Decimal', () => {
       (3) nothing is emitted
   `,
     async (modelValue, renderedValue) => {
-      const wrapper = createWrapper(modelValue)
+      const label = 'Test label'
+      const { getByText, getByRole, emitted } = createWrapper(modelValue, label)
+      const labelEl = getByText(label)
       // (1)
-      expect(
-        wrapper.findComponent({ name: 'FormFieldLabel' }).props().isPlaceholder
-      ).toBeFalsy()
+      expect(labelEl.getAttribute('data-role')).toBe('label')
       // (2)
-      expect(wrapper.find('input').element.value).toBe(renderedValue)
+      expect((getByRole('textbox') as HTMLInputElement).value).toBe(
+        renderedValue
+      )
       // (3)
-      expect(wrapper.emitted()).not.toHaveProperty('update:modelValue')
+      expect(emitted()).not.toHaveProperty('update:modelValue')
     }
   )
 
-  // const createItem = (
-  //   modelValue: string | number | null,
-  //   keydownKey: string,
-  //   renderedValue: string,
-  //   emitValue: number,
-  //   cursorPosition: number | null = null
-  // ) => {
-  //   return {
-  //     modelValue,
-  //     keydownKey,
-  //     renderedValue,
-  //     emitValue,
-  //     cursorPosition,
-  //   }
-  // }
+  test.only(`
+      when typing (starting with empty input):
+        (1) if a letter or symbol (including comma and dot) has been entered, displayed value does not change and nothing is emitted;
+        (2) THEN if a number is entered, it is rendered and the new value is emitted
+        (3) THEN if a comma is entered, it is rendered
+        (4) THEN if numbers are entered until max decimal places reached, they are rendered and new value emitted
+        (5) THEN if numbers are entered, they are ignored
+        (6) THEN if the cursor is placed before the comma, and number is entered, it is displayed and new value emitted
+        (7) THEN if some numbers are selected (including the comma in this case), and number is entered, selected numbers are deleted, it is displayed and new value emitted
+        (8) THEN if dot is entered, comma is rendered
+    `, async () => {
+    const { getByRole, emitted } = createWrapper('')
+    const input = getByRole('textbox') as HTMLInputElement
+    await user.click(input)
 
-  // const setup = [createItem('2', '4', '24,00', 24)]
-  // it.each(setup)('', async (x) => {
-  //   const wrapper = createWrapper(x.modelValue)
-  //
-  //   wrapper.find('input').element.focus()
-  //   wrapper.find('input').element.setSelectionRange(1, 1)
-  //
-  //   const e = new KeyboardEvent('keydown', {
-  //     key: x.keydownKey,
-  //   })
-  //   // const spy = vi.spyOn(e, 'preventDefault')
-  //   wrapper.find('input').element.dispatchEvent(e)
-  //
-  //   await wrapper.find('input').trigger('change')
-  //
-  //   // expect(spy).toHaveBeenCalledTimes(0)
-  //   // expect(wrapper.find('input').element.value).toBe(x.renderedValue)
-  //   expect(wrapper.emitted()).toHaveProperty('update:modelValue')
-  //   expect(wrapper.emitted()['update:modelValue']).toHaveLength(1)
-  //   expect(wrapper.emitted()['update:modelValue'][0][0]).toBe(x.emitValue)
-  // })
-  // test(`
-  //   when typing (starting with empty input):
-  //     (1) if a letter or symbol (including comma and dot) has been entered, displayed value does not change and nothing is emitted;
-  //     (2) THEN if a number is entered, it is rendered and the new value is emitted
-  //     (3) THEN if a comma is entered, it is rendered
-  //     (4) THEN if numbers are entered until max decimal places reached, they are rendered and new value emitted
-  //     (5) THEN if numbers are entered, they are ignored
-  //     (6) THEN if the cursor is placed before the comma, and number is entered, it is displayed and new value emitted
-  //     (7) THEN if some numbers are selected (including the comma in this case), and number is entered, selected numbers are deleted, it is displayed and new value emitted
-  //     (8) THEN if dot is entered, comma is rendered
-  // `, async () => {
-  //   const wrapper = createWrapper()
-  // })
+    // (1)
+    await user.type(input, '%')
+    await user.type(input, 'a')
+    await user.type(input, '[[')
+    await user.type(input, ',')
+    await user.type(input, '.')
+    expect(input.value).toBe('')
+    expect(emitted()).not.toHaveProperty('update:modelValue')
+
+    // (2)
+    await user.type(input, '5')
+    expect(input.value).toBe('5')
+    expect(emitted()).toHaveProperty('update:modelValue')
+    expect(emitted('update:modelValue')).toHaveLength(1)
+    expect(emitted('update:modelValue')[0][0]).toBe(5)
+
+    //(3)
+    await user.type(input, ',')
+    expect(input.value).toBe('5,')
+    expect(emitted('update:modelValue')).toHaveLength(2)
+    expect(emitted('update:modelValue')[1][0]).toBe(5)
+
+    //(4) and (5) - by default 2 decimal places allowed
+    await user.type(input, '9')
+    await user.type(input, '3')
+    await user.type(input, '6')
+    await user.type(input, '2')
+    expect(input.value).toBe('5,93')
+    expect(emitted('update:modelValue')).toHaveLength(4)
+    expect(emitted('update:modelValue')[2][0]).toBe(5.9)
+    expect(emitted('update:modelValue')[3][0]).toBe(5.93)
+
+    //(6)
+    await userEvent.type(input, '2', {
+      initialSelectionStart: 1,
+      initialSelectionEnd: 1,
+    })
+    await userEvent.type(input, '6', {
+      initialSelectionStart: 2,
+      initialSelectionEnd: 2,
+    })
+    await expect(input.value).toBe('526,93')
+    await expect(emitted('update:modelValue')).toHaveLength(6)
+    await expect(emitted('update:modelValue')[4][0]).toBe(52.93)
+    await expect(emitted('update:modelValue')[5][0]).toBe(526.93)
+
+    //(7)
+    await userEvent.type(input, '8', {
+      initialSelectionStart: 2,
+      initialSelectionEnd: 4,
+    })
+    await expect(input.value).toBe('52893')
+    await expect(emitted('update:modelValue')).toHaveLength(7)
+    await expect(emitted('update:modelValue')[6][0]).toBe(52893)
+
+    //(8)
+    await userEvent.type(input, '.')
+    await expect(input.value).toBe('52893,')
+    await expect(emitted('update:modelValue')).toHaveLength(7)
+  })
 })

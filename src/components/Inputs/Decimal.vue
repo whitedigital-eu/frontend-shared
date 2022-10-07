@@ -130,13 +130,15 @@ const handleKeydown = (e) => {
 
   const valueSplitByDecSeparator = e.target.value.split(decSeparator)
   const hasDecSeparator = valueSplitByDecSeparator.length === 2
+  const allowToEnterDecSeparator = !hasDecSeparator && e.target.value.length
 
   const invalidCharacter =
-    (isNaN(Number(e.key)) && (e.key !== decSeparator || hasDecSeparator)) ||
+    (isNaN(Number(e.key)) &&
+      !(e.key === decSeparator && allowToEnterDecSeparator)) ||
     e.code === 'Space'
   if (invalidCharacter) {
     e.preventDefault()
-    if (e.key === '.' && !hasDecSeparator) {
+    if (e.key === '.' && allowToEnterDecSeparator) {
       value.value += decSeparator
     }
     return
