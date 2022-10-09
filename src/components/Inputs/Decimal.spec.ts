@@ -23,10 +23,15 @@ describe('Decimal', () => {
 
   test('renders label/placeholder', () => {
     const { getByText } = createWrapper('')
-    const l = getByText(defaultLabel)
+    const labelEl = getByText(defaultLabel)
 
-    expect(l.getAttribute('data-role')).toBe('placeholder')
-    expect(l.textContent).toBe(defaultLabel)
+    expect(labelEl.getAttribute('data-role')).toBe('placeholder')
+    expect(labelEl.textContent).toBe(defaultLabel)
+  })
+
+  test.only('does not render placeholder if none provided', async () => {
+    const { queryByTestId } = createWrapper('', null)
+    expect(queryByTestId('form-field-label')).toBeNull()
   })
 
   test.each(['', null, 'asd', '#5*3[%'])(
@@ -187,7 +192,7 @@ describe('Decimal', () => {
     ['1', '1,00'],
     ['1,2', '1,20'],
   ]
-  test.only.each(focusoutTestCases)(
+  test.each(focusoutTestCases)(
     'when focusing out, if all decimal places are not entered, they are filled with zeros',
     async (valueToType, inputValue) => {
       const { getByRole } = createWrapper('')

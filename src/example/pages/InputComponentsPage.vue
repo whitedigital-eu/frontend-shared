@@ -1,7 +1,7 @@
 <template>
   <form class="mt-4 flex flex-col gap-4 w-[500px] mr-auto">
     <Text label="Full name" v-model="fullName" />
-    <Decimal label="Price" v-model="price" />
+    <Decimal v-model="price" />
     <div class="flex wrap gap-4">
       <button class="btn btn-primary" type="button" @click="setPriceEmpty">
         Set price empty

@@ -1,6 +1,7 @@
 <template>
   <label
     :data-role="isPlaceholder ? 'placeholder' : 'label'"
+    data-testid="form-field-label"
     :class="computedCssClasses"
     :style="{ transform: `translateY(${computedTranslateY})` }"
   >

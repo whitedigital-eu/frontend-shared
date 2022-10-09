@@ -1,6 +1,7 @@
 <template>
   <div class="relative" :class="{ 'overflow-hidden': labelIsPlaceholder }">
     <FormFieldLabel
+      v-if="label"
       :is-placeholder="labelIsPlaceholder"
       @click.native="handleLabelClick"
     >
@@ -23,35 +24,25 @@
 </template>
 
 <script setup lang="ts">
-import { computed, PropType, ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import FormFieldLabel from '../FormFieldLabel.vue'
 
-const props = defineProps({
-  modelValue: {
-    type: [String, Number] as PropType<string | number | null>,
-    required: false,
-    default: '',
-  },
-  label: {
-    type: String,
-    required: true,
-  },
-  readonly: {
-    type: Boolean,
-    required: false,
-    default: false,
-  },
-  long: {
-    type: Boolean,
-    required: false,
-    default: false,
-  },
-  maxDecimals: {
-    type: Number as PropType<number | null>,
-    required: false,
-    default: 2,
-  },
-})
+const props = withDefaults(
+  defineProps<{
+    modelValue?: string | number | null
+    label?: string | null
+    readonly?: boolean
+    long?: boolean
+    maxDecimals?: number | null
+  }>(),
+  {
+    modelValue: '',
+    label: null,
+    readonly: false,
+    long: false,
+    maxDecimals: 2,
+  }
+)
 
 const emit = defineEmits<{
   (e: 'update:modelValue', value: number | null): void
@@ -111,7 +102,7 @@ const value = ref('')
 const hasFocus = ref(false)
 const isEmpty = computed(() => !value.value)
 const labelIsPlaceholder = computed<boolean>(
-  () => isEmpty.value && !hasFocus.value
+  () => props.label !== null && isEmpty.value && !hasFocus.value
 )
 
 const allowedKeys = [
