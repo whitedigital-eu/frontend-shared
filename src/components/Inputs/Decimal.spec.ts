@@ -1,15 +1,16 @@
 import Decimal from './Decimal.vue'
 import userEvent from '@testing-library/user-event'
-import { render } from '@testing-library/vue'
+import { fireEvent, render } from '@testing-library/vue'
 
 const defaultLabel = 'Test label'
 
 const createWrapper = (
   modelValue: string | number | null,
-  label = defaultLabel
+  label = defaultLabel,
+  maxDecimals?: number
 ) => {
   return render(Decimal, {
-    props: { modelValue, label },
+    props: { modelValue, label, maxDecimals },
   })
 }
 
@@ -28,7 +29,7 @@ describe('Decimal', () => {
     expect(l.textContent).toBe(defaultLabel)
   })
 
-  it.each(['', null, 'asd', '#5*3[%'])(
+  test.each(['', null, 'asd', '#5*3[%'])(
     `if initial value is empty string, null or not parseable to number:
       (1) label/placeholder is placeholder;
       (2) label/placeholder transitions to label when input focused and back to placeholder when input blurred
@@ -79,7 +80,7 @@ describe('Decimal', () => {
     }
   )
 
-  test.only(`
+  test(`
       when typing (starting with empty input):
         (1) if a letter or symbol (including comma and dot) has been entered, displayed value does not change and nothing is emitted;
         (2) THEN if a number is entered, it is rendered and the new value is emitted
@@ -154,4 +155,46 @@ describe('Decimal', () => {
     await expect(input.value).toBe('52893,')
     await expect(emitted('update:modelValue')).toHaveLength(7)
   })
+
+  const maxDecimalTestCases: Array<
+    [undefined | null | number, string, number]
+  > = [
+    [undefined, '1,23', 1.23],
+    [null, '1,23456789', 1.23456789],
+    [0, '123456789', 123456789], // if 0 decimal places allowed, when typing ",", it is ignored
+    [1, '1,2', 1.2],
+    [5, '1,23456', 1.23456],
+  ]
+  test.each(maxDecimalTestCases)(
+    `when maxDecimals prop is {0} and "1,23456789" is typed into input,
+      input value should be {1} and emitted value should be {2}`,
+    async (maxDecimalsProp, inputValue, emittedValue) => {
+      const valueToType = '1,23456789'
+      const { getByRole, emitted } = createWrapper(
+        '',
+        defaultLabel,
+        maxDecimalsProp
+      )
+      const input = getByRole('textbox') as HTMLInputElement
+      await user.type(input, valueToType)
+      expect(input.value).toBe(inputValue)
+      const emittedUpdates = emitted('update:modelValue')
+      expect(emittedUpdates[emittedUpdates.length - 1][0]).toBe(emittedValue)
+    }
+  )
+
+  const focusoutTestCases: Array<[string, string]> = [
+    ['1', '1,00'],
+    ['1,2', '1,20'],
+  ]
+  test.only.each(focusoutTestCases)(
+    'when focusing out, if all decimal places are not entered, they are filled with zeros',
+    async (valueToType, inputValue) => {
+      const { getByRole } = createWrapper('')
+      const input = getByRole('textbox') as HTMLInputElement
+      await user.type(input, valueToType)
+      await fireEvent(input, new Event('blur'))
+      expect(input.value).toBe(inputValue)
+    }
+  )
 })

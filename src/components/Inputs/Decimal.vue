@@ -130,7 +130,8 @@ const handleKeydown = (e) => {
 
   const valueSplitByDecSeparator = e.target.value.split(decSeparator)
   const hasDecSeparator = valueSplitByDecSeparator.length === 2
-  const allowToEnterDecSeparator = !hasDecSeparator && e.target.value.length
+  const allowToEnterDecSeparator =
+    !hasDecSeparator && e.target.value.length && props.maxDecimals !== 0
 
   const invalidCharacter =
     (isNaN(Number(e.key)) &&
@@ -148,7 +149,7 @@ const handleKeydown = (e) => {
   const caretBeforeDecSeparator = isCaretBeforeDecSeparator(e.target)
 
   const tooManyDecimals =
-    props.maxDecimals &&
+    props.maxDecimals !== undefined &&
     hasDecSeparator &&
     valueSplitByDecSeparator[1].length === props.maxDecimals
 
