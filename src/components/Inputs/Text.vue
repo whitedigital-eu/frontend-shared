@@ -25,28 +25,20 @@
 import { computed, ref, watch } from 'vue'
 import FormFieldLabel from '../FormFieldLabel.vue'
 
-const props = defineProps({
-  modelValue: {
-    type: String,
-    required: false,
-    default: '',
-  },
-  label: {
-    type: String,
-    required: false,
-    default: null,
-  },
-  readonly: {
-    type: Boolean,
-    required: false,
-    default: false,
-  },
-  long: {
-    type: Boolean,
-    required: false,
-    default: false,
-  },
-})
+const props = withDefaults(
+  defineProps<{
+    modelValue?: string | number | null
+    label?: string | null
+    readonly?: boolean
+    long?: boolean
+  }>(),
+  {
+    modelValue: '',
+    label: null,
+    readonly: false,
+    long: false,
+  }
+)
 
 const emit = defineEmits(['update:modelValue'])
 
