@@ -1,6 +1,9 @@
 <template>
   <div class="w-full sm:w-auto">
-    <div v-if="item.type === 'text'" class="sm:flex flex-col items-center">
+    <div
+      v-if="item.type === 'text' && !Array.isArray(item.value)"
+      class="sm:flex flex-col items-center"
+    >
       <Text
         v-model="item.value"
         class="grow"
@@ -32,22 +35,29 @@
     >
       <div class="w-full sm:w-[200px] flex-none grow">
         <DataFetchingSelect
+          v-if="props.axiosInstance && isDataFetchingSelectConfig(item.config)"
           :id="`filter-${item.label}`"
           v-model="item.value"
           :label="item.label"
-          :config="item.config"
+          :config="castToDataFetchingSelect(item.config)"
           :axios-instance="props.axiosInstance"
         />
       </div>
     </div>
-    <div v-if="item.type === 'date'" class="sm:flex items-center">
+    <div
+      v-if="item.type === 'date' && !Array.isArray(item.value)"
+      class="sm:flex items-center"
+    >
       <div class="w-full sm:w-[200px] flex-none grow">
         <Datepicker v-model="item.value" :label="item.label" />
       </div>
     </div>
-    <div v-if="item.type === 'date-range'" class="sm:flex items-center">
+    <div
+      v-if="item.type === 'date-range' && Array.isArray(item.value)"
+      class="sm:flex items-center"
+    >
       <div class="w-full flex-none grow sm:w-[432px]">
-        <RangeDatepicker v-model="item.value" :label="item.label" class="" />
+        <RangeDatepicker v-model="item.value" :label="item.label" />
       </div>
     </div>
     <div
@@ -55,7 +65,7 @@
       class="sm:flex flex-col items-left"
     >
       <label class="mr-2 mb-2">{{ item.label }}</label>
-      <div class="flex gap-4">
+      <div class="flex gap-4" v-if="item.config">
         <div v-for="option in item.config.options" :key="option.value">
           <input
             v-model="item.value"
@@ -63,9 +73,9 @@
             :name="item.name"
             :value="option.value"
           />
-          <label class="ml-1" @click="item.value = option.value">{{
-            option.text
-          }}</label>
+          <label class="ml-1" @click="item.value = option.value">
+            {{ option.text }}
+          </label>
         </div>
       </div>
     </div>
@@ -81,9 +91,37 @@ import DataFetchingSelect from '../../components/Inputs/Selects/DataFetchingSele
 import Checkbox from '../../components/Inputs/Checkbox.vue'
 import { Filter } from '../../types/Filters'
 import { AxiosInstance } from 'axios'
+import {
+  DataFetchingSelectConfig,
+  SimpleSelectConfig,
+} from '../../types/InputFields'
 
 const props = defineProps<{
   item: Filter
   axiosInstance?: AxiosInstance
 }>()
+
+const isDataFetchingSelectConfig = (
+  x: SimpleSelectConfig | DataFetchingSelectConfig | null
+): x is DataFetchingSelectConfig => {
+  return (
+    x !== null &&
+    'requestUrlGenerator' in x &&
+    typeof x.requestUrlGenerator === 'function' &&
+    'responseMapFunction' in x &&
+    typeof x.responseMapFunction === 'function'
+  )
+}
+
+const castToDataFetchingSelect = (
+  x: SimpleSelectConfig | DataFetchingSelectConfig | null
+) => {
+  if (isDataFetchingSelectConfig(x)) return x
+  else {
+    console.error(
+      'Property to be cast to DataFetchingSelectConfig is not DataFetchingSelectConfig!!!'
+    )
+    return x as DataFetchingSelectConfig
+  }
+}
 </script>

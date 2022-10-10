@@ -21,7 +21,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, PropType, ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 //@ts-ignore
 import flatPickr from 'vue-flatpickr-component'
 import 'flatpickr/dist/flatpickr.css'
@@ -34,24 +34,22 @@ import { areStringArraysEqual } from '../../helpers/Global'
 
 dayjs.extend(LocalizedFormat)
 
-const props = defineProps({
-  modelValue: {
-    type: Array as PropType<string[]>,
-    required: false,
-    default: () => [],
-  },
-  label: {
-    type: String,
-    required: false,
-    default: '',
-  },
-})
+const props = withDefaults(
+  defineProps<{
+    modelValue?: string[]
+    label?: string
+  }>(),
+  {
+    modelValue: () => [],
+    label: '',
+  }
+)
 
 const emit = defineEmits(['update:modelValue'])
 
 const datepickerRef = ref(null)
 
-const value = ref<string | null>(null)
+const value = ref<string>('')
 
 const isEmpty = computed(() => !value.value || value.value.length === 0)
 const isOpen = ref(false)
@@ -91,7 +89,7 @@ const handleClose = () => (isOpen.value = false)
 
 watch(
   () => props.modelValue,
-  (n: any) => (value.value = n),
+  (n: any) => (value.value = n === null ? '' : n),
   { immediate: true }
 )
 </script>

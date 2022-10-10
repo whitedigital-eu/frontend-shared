@@ -36,13 +36,25 @@ import FormFieldLabel from '../FormFieldLabel.vue'
 
 dayjs.extend(LocalizedFormat)
 
-const props = defineProps<{
-  modelValue: string | null
-  label?: string
-  id?: string
-}>()
+const props = withDefaults(
+  defineProps<{
+    modelValue: string | null
+    label?: string | null
+    id?: string | null
+  }>(),
+  {
+    label: null,
+    id: null,
+  }
+)
 
-const computedId = computed(() => `timepicker-${props.id}`)
+const computedId = computed(() => {
+  if (!props.id) {
+    console.warn('props.id should be defined! props.id: ', props.id)
+    return `datepicker-1234`
+  }
+  return `datepicker-${props.id}`
+})
 
 const emit = defineEmits<{
   (e: 'update:modelValue', value: string | null)
@@ -50,7 +62,7 @@ const emit = defineEmits<{
 
 const flatpickr = ref(null)
 
-const value = ref<string | null>(null)
+const value = ref<string>('')
 
 const isOpen = ref(false)
 
@@ -61,7 +73,7 @@ const handleLabelClick = () => {
   ;(flatpickr.value as any).$el.nextSibling.focus()
 }
 
-const config = {
+const config: any = {
   altInput: true,
   dateFormat: 'Z',
   enableTime: true,
@@ -75,7 +87,7 @@ const config = {
 const handleOpen = () => (isOpen.value = true)
 const handleClose = () => (isOpen.value = false)
 
-const clearInput = () => (value.value = null)
+const clearInput = () => (value.value = '')
 
 const parseModelValue = () => {
   let hours = 0

@@ -1,7 +1,5 @@
 import { ColumnDefinition } from 'tabulator-tables'
-export const createColumn = (
-  colData: Partial<ColumnDefinition>
-): Partial<ColumnDefinition> => ({
+export const createColumn = (colData: ColumnDefinition): ColumnDefinition => ({
   hozAlign: 'left',
   headerHozAlign: 'left',
   vertAlign: 'top',
@@ -9,8 +7,8 @@ export const createColumn = (
 })
 
 export const createToggleCollapseColumn = (
-  colData: Partial<ColumnDefinition> = {}
-): Partial<ColumnDefinition> => {
+  colData: ColumnDefinition = { title: '' }
+): ColumnDefinition => {
   return createColumn({
     formatter: 'responsiveCollapse',
     width: 24,

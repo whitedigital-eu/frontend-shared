@@ -26,7 +26,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, PropType, ref, watch } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 //@ts-ignore
 import flatPickr from 'vue-flatpickr-component'
 import 'flatpickr/dist/flatpickr.css'
@@ -38,24 +38,37 @@ import FormFieldLabel from '../FormFieldLabel.vue'
 
 dayjs.extend(LocalizedFormat)
 
-const props = defineProps<{
-  modelValue: PropType<string | null>
-  label?: string
-  id?: string
-}>()
+const props = withDefaults(
+  defineProps<{
+    modelValue: string | null
+    label?: string | null
+    id?: string | null
+  }>(),
+  {
+    label: null,
+    id: null,
+  }
+)
 
-const computedId = computed(() => `datepicker-${props.id}`)
+const computedId = computed(() => {
+  if (!props.id) {
+    console.warn('props.id should be defined! props.id: ', props.id)
+    return `datepicker-1234`
+  }
+  return `datepicker-${props.id}`
+})
 
 const emit = defineEmits(['update:modelValue'])
 
 const datepickerRef = ref(null)
 
-const value = ref<string | null>(null)
+const value = ref<string>('')
 
 const isEmpty = computed(() => !value.value)
 const isOpen = ref(false)
 
-const config = {
+// WARNING: 'any' type is needed here due to vue-flatpickr-component having wrong type definitions
+const config: any = {
   altInput: true,
   altFormat: 'D-m-y',
   dateFormat: 'Z',
@@ -86,7 +99,7 @@ const clearInput = () => emit('update:modelValue', null)
 
 watch(
   () => props.modelValue,
-  (n: any) => (value.value = n),
+  (n: any) => (value.value = n === null ? '' : n),
   { immediate: true }
 )
 
