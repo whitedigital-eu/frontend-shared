@@ -1,6 +1,6 @@
 <template>
   <div class="relative border-[1px] rounded-[6px]">
-    <FormFieldLabel>
+    <FormFieldLabel v-if="label">
       {{ label }}
     </FormFieldLabel>
     <VueSlider
@@ -20,33 +20,27 @@ import VueSlider from 'vue-slider-component'
 import 'vue-slider-component/theme/antd.css'
 import FormFieldLabel from '../FormFieldLabel.vue'
 
-const props = defineProps({
-  modelValue: {
-    type: Number,
-    required: false,
-    default: 0,
-  },
-  readonly: {
-    type: Boolean,
-    required: false,
-    default: false,
-  },
-  label: {
-    type: String,
-    required: false,
-    default: '',
-  },
-})
+const props = withDefaults(
+  defineProps<{
+    modelValue?: number
+    readonly?: boolean
+    label?: string | null
+  }>(),
+  {
+    modelValue: 0,
+    readonly: false,
+    label: null,
+  }
+)
 
 const emit = defineEmits(['update:modelValue'])
 
-const value = ref(0)
+const value = ref(props.modelValue)
 
 watch(value, (n) => emit('update:modelValue', n))
 watch(
   () => props.modelValue,
-  (n) => (value.value = n as number),
-  { immediate: true }
+  (n) => (value.value = n)
 )
 </script>
 

@@ -1,41 +1,58 @@
-import { DOMWrapper, mount } from '@vue/test-utils'
+import { fireEvent, render } from '@testing-library/vue'
 import Checkbox from './Checkbox.vue'
 
-const createWrapper = (modelValue: any = undefined) => {
-  return mount(Checkbox, {
-    propsData: { modelValue },
+// copied from Checkbox.vue defineProps - important to keep in sync!!!
+// move to separate file when importing props in vue files is supported
+type Props = {
+  modelValue?: boolean
+  readonly?: boolean
+  label?: string | null
+}
+const defaultProps: Props = {
+  modelValue: false,
+  readonly: false,
+  label: null,
+}
+
+const renderCheckbox = (props?: Props) => {
+  const { getByRole, emitted } = render(Checkbox, {
+    props: { ...defaultProps, ...props },
   })
+
+  const getCheckbox = () => getByRole('checkbox') as HTMLInputElement
+  const getUpdates = () => emitted('update:modelValue')
+
+  return { getCheckbox, getUpdates }
 }
 
 describe('Checkbox', () => {
-  it('is not checked, if no model value is set', async () => {
-    const wrapper = createWrapper()
-    expect(wrapper.find('input[type=checkbox]:checked').exists()).toBeFalsy()
-  })
-  it('is not checked, if initial model value is FALSE', async () => {
-    const wrapper = createWrapper(false)
-    expect(wrapper.find('input[type=checkbox]:checked').exists()).toBeFalsy()
-  })
-  it('is checked, if initial model value is TRUE', async () => {
-    const wrapper = createWrapper(true)
-    expect(wrapper.find('input[type=checkbox]:checked').exists()).toBeTruthy()
-  })
+  const modelValueTestCases: [boolean | undefined, boolean][] = [
+    [undefined, false],
+    [false, false],
+    [true, true],
+  ]
+  it.each(modelValueTestCases)(
+    'if modelValue prop is {modelValue}, then checkbox checked attribute is {isChecked}',
+    async (modelValue, isChecked) => {
+      const { getCheckbox } = renderCheckbox({ modelValue })
+      expect(getCheckbox().checked).toBe(isChecked)
+    }
+  )
   it('toggles state (checked attribute) and updates model value when clicked', async () => {
-    const wrapper = createWrapper()
-    const input = wrapper.find('input[type=checkbox]')
+    const { getCheckbox, getUpdates } = renderCheckbox()
+    const checkbox = getCheckbox()
 
-    await wrapper.setProps({ modelValue: true })
-    await input.trigger('change')
+    await fireEvent.click(checkbox)
 
-    expect(wrapper.find('input[type=checkbox]:checked').exists()).toBeTruthy()
-    expect(wrapper.emitted()['update:modelValue'].length).toBe(1)
-    expect((wrapper.emitted('update:modelValue') as any[])[0][0]).toBe(true)
+    const updates = getUpdates()
+    expect(checkbox.checked).toBe(true)
+    expect(updates.length).toBe(1)
+    expect(updates[0][0]).toBe(true)
 
-    await wrapper.setProps({ modelValue: false })
-    await input.trigger('change', { value: true })
+    await fireEvent.click(checkbox)
 
-    expect(wrapper.find('input[type=checkbox]:checked').exists()).toBeFalsy()
-    expect(wrapper.emitted()['update:modelValue'].length).toBe(2)
-    expect((wrapper.emitted('update:modelValue') as any[])[1][0]).toBe(false)
+    expect(checkbox.checked).toBe(false)
+    expect(updates.length).toBe(2)
+    expect(updates[1][0]).toBe(false)
   })
 })

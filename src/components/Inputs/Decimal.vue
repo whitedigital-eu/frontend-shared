@@ -13,7 +13,6 @@
       type="text"
       inputmode="decimal"
       class="form-control w-full sm:min-w-[200px]"
-      :class="{ 'sm:min-w-[432px]': long }"
       :readonly="readonly"
       @keydown="handleKeydown"
       @input="handleInput"
@@ -27,22 +26,19 @@
 import { computed, ref, watch } from 'vue'
 import FormFieldLabel from '../FormFieldLabel.vue'
 
-const props = withDefaults(
-  defineProps<{
-    modelValue?: string | number | null
-    label?: string | null
-    readonly?: boolean
-    long?: boolean
-    maxDecimals?: number | null
-  }>(),
-  {
-    modelValue: '',
-    label: null,
-    readonly: false,
-    long: false,
-    maxDecimals: 2,
-  }
-)
+type Props = {
+  modelValue?: string | number | null
+  label?: string | null
+  readonly?: boolean
+  maxDecimals?: number | null
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  modelValue: '',
+  label: null,
+  readonly: false,
+  maxDecimals: 2,
+})
 
 const emit = defineEmits<{
   (e: 'update:modelValue', value: number | null): void
@@ -62,10 +58,7 @@ const isCaretBeforeDecSeparator = (el: HTMLInputElement) => {
   return indexOfDecSeparator > -1 && caretPos <= indexOfDecSeparator
 }
 
-const justEmitted = ref(false)
-
 const emitUpdate = (value) => {
-  justEmitted.value = true
   const valueToEmit = value.length ? parseFloat(value.replace(',', '.')) : null
   emit('update:modelValue', valueToEmit)
 }
@@ -97,8 +90,22 @@ const handleBlur = () => {
   emitUpdate(value.value)
 }
 
+const valuePropToValue = (n: Props['modelValue']) => {
+  let stringVal = ''
+  if (typeof n === 'number') stringVal = n.toString()
+  if (typeof n === 'string') {
+    if (n.indexOf(',') !== -1 && !isNaN(parseFloat(n.replace(',', '.')))) {
+      stringVal = parseFloat(n.replace(',', '.')).toString()
+    } else if (!isNaN(parseFloat(n))) {
+      stringVal = parseFloat(n).toString()
+    }
+  }
+
+  return transformValue(stringVal)
+}
+
 const inputRef = ref<HTMLInputElement | undefined>()
-const value = ref('')
+const value = ref(valuePropToValue(props.modelValue))
 const hasFocus = ref(false)
 const isEmpty = computed(() => !value.value)
 const labelIsPlaceholder = computed<boolean>(
@@ -161,24 +168,8 @@ const handleLabelClick = () => {
 watch(
   () => props.modelValue,
   (n) => {
-    if (justEmitted.value) {
-      justEmitted.value = false
-      return
-    }
-
-    let stringVal = ''
-    if (typeof n === 'number') stringVal = n.toString()
-    if (typeof n === 'string') {
-      if (n.indexOf(',') !== -1 && !isNaN(parseFloat(n.replace(',', '.')))) {
-        stringVal = parseFloat(n.replace(',', '.')).toString()
-      } else if (!isNaN(parseFloat(n))) {
-        stringVal = parseFloat(n).toString()
-      }
-    }
-
-    value.value = transformValue(stringVal)
-  },
-  { immediate: true }
+    value.value = valuePropToValue(n)
+  }
 )
 </script>
 

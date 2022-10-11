@@ -18,23 +18,18 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 
-const props = defineProps({
-  modelValue: {
-    type: Boolean,
-    required: false,
-    default: false,
-  },
-  readonly: {
-    type: Boolean,
-    required: false,
-    default: false,
-  },
-  label: {
-    type: String,
-    required: false,
-    default: '',
-  },
-})
+const props = withDefaults(
+  defineProps<{
+    modelValue?: boolean
+    readonly?: boolean
+    label?: string | null
+  }>(),
+  {
+    modelValue: false,
+    readonly: false,
+    label: null,
+  }
+)
 
 const emit = defineEmits(['update:modelValue'])
 

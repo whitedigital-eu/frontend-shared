@@ -1,5 +1,5 @@
 <template>
-  <div :id="computedId" class="relative">
+  <div :id="id" class="relative">
     <FormFieldLabel
       v-if="label"
       class="z-[1]"
@@ -39,30 +39,34 @@ import FormFieldLabel from '../FormFieldLabel.vue'
 dayjs.extend(LocalizedFormat)
 
 const props = withDefaults(
-  defineProps<{
-    modelValue: string | null
-    label?: string | null
-    id?: string | null
-  }>(),
+  defineProps<{ modelValue?: string | null; label?: string | null }>(),
   {
+    modelValue: null,
     label: null,
-    id: null,
   }
 )
 
-const computedId = computed(() => {
-  if (!props.id) {
-    console.warn('props.id should be defined! props.id: ', props.id)
-    return `datepicker-1234`
-  }
-  return `datepicker-${props.id}`
-})
+const createRandomId = () => Math.floor(100000 + Math.random() * 900000)
+
+const id = `datepicker-${createRandomId()}`
 
 const emit = defineEmits(['update:modelValue'])
 
 const datepickerRef = ref(null)
 
-const value = ref<string>('')
+const propValueToModelValue = (propValue: string | null) => {
+  if (propValue === null || propValue === '') return ''
+  if (!dayjs(propValue).isValid()) {
+    console.error(
+      `Datepicker: props.modelValue is not a valid date string! props.modelValue: `,
+      propValue
+    )
+    return null
+  }
+  return propValue
+}
+
+const value = ref<string | null>(propValueToModelValue(props.modelValue))
 
 const isEmpty = computed(() => !value.value)
 const isOpen = ref(false)
@@ -99,7 +103,7 @@ const clearInput = () => emit('update:modelValue', null)
 
 watch(
   () => props.modelValue,
-  (n: any) => (value.value = n === null ? '' : n),
+  (n) => (value.value = propValueToModelValue(n)),
   { immediate: true }
 )
 
@@ -120,9 +124,7 @@ const addCloseButtonToDatepicker = () => {
 
   buttonDiv.appendChild(confirmButton)
 
-  document
-    .querySelector(`#${computedId.value} .flatpickr-calendar`)
-    ?.appendChild(buttonDiv)
+  document.querySelector(`#${id} .flatpickr-calendar`)?.appendChild(buttonDiv)
 }
 
 onMounted(addCloseButtonToDatepicker)

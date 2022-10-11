@@ -4,14 +4,29 @@ import { fireEvent, render } from '@testing-library/vue'
 
 const defaultLabel = 'Test label'
 
-const createWrapper = (
-  modelValue: string | number | null,
-  label = defaultLabel,
-  maxDecimals?: number
-) => {
-  return render(Decimal, {
-    props: { modelValue, label, maxDecimals },
+// copied from Decimal.vue defineProps - important to keep in sync!!!
+// move to separate file when importing props in vue files is supported
+type Props = {
+  modelValue?: string | number | null
+  label?: string | null
+  readonly?: boolean
+  maxDecimals?: number | null
+}
+const defaultProps: Props = {
+  modelValue: '',
+  label: defaultLabel,
+}
+
+const renderDecimal = (props?: Props) => {
+  const { getByRole, queryByTestId, emitted } = render(Decimal, {
+    props: { ...defaultProps, ...props },
   })
+
+  const getInput = () => getByRole('textbox') as HTMLInputElement
+  const getLabel = () => queryByTestId('form-field-label')
+  const getUpdates = () => emitted('update:modelValue')
+
+  return { getInput, getLabel, getUpdates }
 }
 
 describe('Decimal', () => {
@@ -22,16 +37,16 @@ describe('Decimal', () => {
   })
 
   test('renders label/placeholder', () => {
-    const { getByText } = createWrapper('')
-    const labelEl = getByText(defaultLabel)
+    const { getLabel } = renderDecimal()
+    const labelEl = getLabel()
 
     expect(labelEl.getAttribute('data-role')).toBe('placeholder')
     expect(labelEl.textContent).toBe(defaultLabel)
   })
 
-  test.only('does not render placeholder if none provided', async () => {
-    const { queryByTestId } = createWrapper('', null)
-    expect(queryByTestId('form-field-label')).toBeNull()
+  test('does not render placeholder if none provided', async () => {
+    const { getLabel } = renderDecimal({ label: null })
+    expect(getLabel()).toBeNull()
   })
 
   test.each(['', null, 'asd', '#5*3[%'])(
@@ -41,18 +56,18 @@ describe('Decimal', () => {
       (3) displayed value is empty string;
       (4) nothing is emitted
   `,
-    async (v) => {
-      const { getByText, getByRole, emitted } = createWrapper(v)
+    async (modelValue) => {
+      const { getLabel, getInput, getUpdates } = renderDecimal({ modelValue })
       // (1), (2)
-      const labelEl = getByText(defaultLabel)
-      const input = getByRole('textbox') as HTMLInputElement
+      const labelEl = getLabel()
+      const input = getInput()
       expect(labelEl.getAttribute('data-role')).toBe('placeholder')
       await user.click(input)
       expect(labelEl.getAttribute('data-role')).toBe('label')
       // (3)
       expect(input.value).toBe('')
       // (4)
-      expect(emitted()).not.toHaveProperty('update:modelValue')
+      expect(getUpdates()).toBeUndefined()
     }
   )
 
@@ -65,23 +80,23 @@ describe('Decimal', () => {
     [77.32, '77,32'],
   ]
   it.each(truthyInputs)(
-    `if initial value is a non-empty string parseable as number or number:
+    `if initial value is a number or non-empty string parseable as number:
       (1) label/placeholder is label;
       (2) displayed value is a string representation of a number with "," as decimal separator
       (3) nothing is emitted
   `,
     async (modelValue, renderedValue) => {
       const label = 'Test label'
-      const { getByText, getByRole, emitted } = createWrapper(modelValue, label)
-      const labelEl = getByText(label)
+      const { getInput, getLabel, getUpdates } = renderDecimal({
+        modelValue,
+        label,
+      })
       // (1)
-      expect(labelEl.getAttribute('data-role')).toBe('label')
+      expect(getLabel().getAttribute('data-role')).toBe('label')
       // (2)
-      expect((getByRole('textbox') as HTMLInputElement).value).toBe(
-        renderedValue
-      )
+      expect(getInput().value).toBe(renderedValue)
       // (3)
-      expect(emitted()).not.toHaveProperty('update:modelValue')
+      expect(getUpdates).toHaveLength(0)
     }
   )
 
@@ -96,8 +111,8 @@ describe('Decimal', () => {
         (7) THEN if some numbers are selected (including the comma in this case), and number is entered, selected numbers are deleted, it is displayed and new value emitted
         (8) THEN if dot is entered, comma is rendered
     `, async () => {
-    const { getByRole, emitted } = createWrapper('')
-    const input = getByRole('textbox') as HTMLInputElement
+    const { getInput, getUpdates } = renderDecimal()
+    const input = getInput()
     await user.click(input)
 
     // (1)
@@ -107,20 +122,19 @@ describe('Decimal', () => {
     await user.type(input, ',')
     await user.type(input, '.')
     expect(input.value).toBe('')
-    expect(emitted()).not.toHaveProperty('update:modelValue')
+    expect(getUpdates()).toBeUndefined()
 
     // (2)
     await user.type(input, '5')
     expect(input.value).toBe('5')
-    expect(emitted()).toHaveProperty('update:modelValue')
-    expect(emitted('update:modelValue')).toHaveLength(1)
-    expect(emitted('update:modelValue')[0][0]).toBe(5)
+    expect(getUpdates()).toHaveLength(1)
+    expect(getUpdates()[0][0]).toBe(5)
 
     //(3)
     await user.type(input, ',')
     expect(input.value).toBe('5,')
-    expect(emitted('update:modelValue')).toHaveLength(2)
-    expect(emitted('update:modelValue')[1][0]).toBe(5)
+    expect(getUpdates()).toHaveLength(2)
+    expect(getUpdates()[1][0]).toBe(5)
 
     //(4) and (5) - by default 2 decimal places allowed
     await user.type(input, '9')
@@ -128,9 +142,9 @@ describe('Decimal', () => {
     await user.type(input, '6')
     await user.type(input, '2')
     expect(input.value).toBe('5,93')
-    expect(emitted('update:modelValue')).toHaveLength(4)
-    expect(emitted('update:modelValue')[2][0]).toBe(5.9)
-    expect(emitted('update:modelValue')[3][0]).toBe(5.93)
+    expect(getUpdates()).toHaveLength(4)
+    expect(getUpdates()[2][0]).toBe(5.9)
+    expect(getUpdates()[3][0]).toBe(5.93)
 
     //(6)
     await userEvent.type(input, '2', {
@@ -142,9 +156,9 @@ describe('Decimal', () => {
       initialSelectionEnd: 2,
     })
     await expect(input.value).toBe('526,93')
-    await expect(emitted('update:modelValue')).toHaveLength(6)
-    await expect(emitted('update:modelValue')[4][0]).toBe(52.93)
-    await expect(emitted('update:modelValue')[5][0]).toBe(526.93)
+    await expect(getUpdates()).toHaveLength(6)
+    await expect(getUpdates()[4][0]).toBe(52.93)
+    await expect(getUpdates()[5][0]).toBe(526.93)
 
     //(7)
     await userEvent.type(input, '8', {
@@ -152,13 +166,13 @@ describe('Decimal', () => {
       initialSelectionEnd: 4,
     })
     await expect(input.value).toBe('52893')
-    await expect(emitted('update:modelValue')).toHaveLength(7)
-    await expect(emitted('update:modelValue')[6][0]).toBe(52893)
+    await expect(getUpdates()).toHaveLength(7)
+    await expect(getUpdates()[6][0]).toBe(52893)
 
     //(8)
     await userEvent.type(input, '.')
     await expect(input.value).toBe('52893,')
-    await expect(emitted('update:modelValue')).toHaveLength(7)
+    await expect(getUpdates()).toHaveLength(7)
   })
 
   const maxDecimalTestCases: Array<
@@ -175,15 +189,13 @@ describe('Decimal', () => {
       input value should be {1} and emitted value should be {2}`,
     async (maxDecimalsProp, inputValue, emittedValue) => {
       const valueToType = '1,23456789'
-      const { getByRole, emitted } = createWrapper(
-        '',
-        defaultLabel,
-        maxDecimalsProp
-      )
-      const input = getByRole('textbox') as HTMLInputElement
+      const { getInput, getUpdates } = renderDecimal({
+        maxDecimals: maxDecimalsProp,
+      })
+      const input = getInput()
       await user.type(input, valueToType)
       expect(input.value).toBe(inputValue)
-      const emittedUpdates = emitted('update:modelValue')
+      const emittedUpdates = getUpdates()
       expect(emittedUpdates[emittedUpdates.length - 1][0]).toBe(emittedValue)
     }
   )
@@ -195,11 +207,16 @@ describe('Decimal', () => {
   test.each(focusoutTestCases)(
     'when focusing out, if all decimal places are not entered, they are filled with zeros',
     async (valueToType, inputValue) => {
-      const { getByRole } = createWrapper('')
-      const input = getByRole('textbox') as HTMLInputElement
+      const { getInput } = renderDecimal()
+      const input = getInput()
       await user.type(input, valueToType)
       await fireEvent(input, new Event('blur'))
       expect(input.value).toBe(inputValue)
     }
   )
+
+  test('underlying input is readonly if readonly prop is true', async () => {
+    const { getInput } = renderDecimal({ readonly: true })
+    expect((await getInput()).readOnly).toBe(true)
+  })
 })

@@ -2,19 +2,22 @@ import Text from './Text.vue'
 import { render, within } from '@testing-library/vue'
 import userEvent from '@testing-library/user-event'
 
-const createWrapper = (
-  modelValue = '',
-  label = 'Label text',
-  readonly = false,
-  long = false
-) => {
+// copied from Decimal.vue defineProps - important to keep in sync!!!
+// move to separate file when importing props in vue files is supported
+type Props = {
+  modelValue?: string | number | null
+  label?: string | null
+  readonly?: boolean
+  long?: boolean
+}
+const defaultProps: Props = {
+  modelValue: '',
+  label: 'Label text',
+}
+
+const renderText = (props?: Props) => {
   const { emitted, findByRole, queryByTestId } = render(Text, {
-    props: {
-      modelValue,
-      label,
-      readonly,
-      long,
-    },
+    props: { ...defaultProps, ...props },
   })
 
   const getInput = async () => (await findByRole('textbox')) as HTMLInputElement
@@ -26,7 +29,7 @@ const createWrapper = (
 
 describe('Text', () => {
   it('emits model value change event when text entered', async () => {
-    const { getUpdates, getInput } = createWrapper('')
+    const { getUpdates, getInput } = renderText()
     const input = await getInput()
     const newText = 'Jauns teksts'
 
@@ -41,28 +44,28 @@ describe('Text', () => {
   })
 
   it('renders label if provided', async () => {
-    const { getLabel } = createWrapper('', 'Label text')
+    const { getLabel } = renderText()
     const { getByText } = within(await getLabel())
     expect(getByText('Label text')).toBeTruthy()
   })
 
   it('does not render label if not provided', async () => {
-    const { getLabel } = createWrapper('', null)
+    const { getLabel } = renderText({ label: null })
     expect(await getLabel()).toBeNull()
   })
 
   test('input is readonly if readonly prop is true', async () => {
-    const { getInput } = createWrapper('', '', true)
+    const { getInput } = renderText({ readonly: true })
     expect((await getInput()).readOnly).toBe(true)
   })
 
   test('input is long if long prop is true', async () => {
-    const { getInput } = createWrapper('', '', false, true)
+    const { getInput } = renderText({ long: true })
     expect((await getInput()).classList.contains('sm:min-w-[432px]')).toBe(true)
   })
 
   test('input is not long if long prop is not true', async () => {
-    const { getInput } = createWrapper('', '', false, false)
+    const { getInput } = renderText({ long: false })
     expect((await getInput()).classList.contains('sm:min-w-[432px]')).toBe(
       false
     )
