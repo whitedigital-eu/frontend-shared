@@ -53,7 +53,7 @@ const value = ref('')
 const hasFocus = ref(false)
 const isEmpty = computed(() => !value.value)
 
-const handleInput = (e: InputEvent) => {
+const handleInput = (e: Event) => {
   const targetValue: string = (e.target as HTMLInputElement).value
   emit('update:modelValue', targetValue)
 }

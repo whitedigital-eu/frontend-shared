@@ -302,7 +302,9 @@ const initTabulator = async (resetPage = false) => {
           data: response['hydra:member'],
         }
       },
-      ajaxError: handleTableAjaxError,
+      ajaxError(error) {
+        handleTableAjaxError(error, props.config.tableErrorHandler)
+      },
       pageLoaded: (pageno: number) => {
         if (!tabulator.value) return
         emit('pagination-changed', pageno, tabulator.value.getPageSize())

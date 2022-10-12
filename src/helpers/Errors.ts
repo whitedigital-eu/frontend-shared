@@ -1,6 +1,7 @@
 import { nextTick } from 'vue'
 import { showGlobalError } from './FlashMessages'
 import { FormData } from '../types/FormData'
+import { TableConfig } from '../components/Table/createTableConfig'
 
 export const resetFormDataErrors = (formData: FormData) => {
   for (const key in formData) formData[key].errors = []
@@ -38,7 +39,10 @@ export const setFormDataErrors = (e, formData: FormData) => {
   return formData
 }
 
-export const handleTableAjaxError = (error: any) => {
+export const handleTableAjaxError = (
+  error: any,
+  apiErrorHandler?: TableConfig['tableErrorHandler']
+) => {
   const reader = error.body.getReader()
 
   new ReadableStream({
@@ -53,7 +57,15 @@ export const handleTableAjaxError = (error: any) => {
           const string = new TextDecoder().decode(value)
           const errorData = JSON.parse(string)
           if (errorData) {
-            showGlobalError(errorData.message)
+            if (
+              errorData['@context'] === '/api/contexts/Error' &&
+              apiErrorHandler &&
+              typeof apiErrorHandler === 'function'
+            ) {
+              apiErrorHandler(error.status, errorData)
+            } else {
+              showGlobalError(errorData.message)
+            }
           }
           push()
         })

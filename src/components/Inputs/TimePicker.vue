@@ -48,7 +48,7 @@ const selectModel = ref()
 
 const emitUpdate = () => emit('update:modelValue', parseInt(value.value))
 
-const handleInput = (e: InputEvent) => {
+const handleInput = (e: Event) => {
   value.value = formatTimeInput((e.target as HTMLInputElement).value)
   emitUpdate()
 }
@@ -57,7 +57,7 @@ const handleFocus = () => {
   selectModel.value.open()
 }
 
-const handleBlur = (e: InputEvent) => {
+const handleBlur = (e: FocusEvent) => {
   selectModel.value.close()
   value.value = formatTimeInput((e.target as HTMLInputElement).value)
   emitUpdate()

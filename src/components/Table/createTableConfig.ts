@@ -9,6 +9,7 @@ export type TableConfig = {
   sharedColumnNames: SharedColumnNames
   ajaxConfig: Options['ajaxConfig']
   dateTimeFormatter: (string) => string
+  tableErrorHandler?: (status: number, errorData: any) => Promise<void>
 }
 
 const createTableConfig = (config: Partial<TableConfig> = {}): TableConfig => {

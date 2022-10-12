@@ -14,24 +14,42 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { ref, watch } from 'vue'
 import VueSlider from 'vue-slider-component'
 import 'vue-slider-component/theme/antd.css'
 import FormFieldLabel from '../FormFieldLabel.vue'
 
-const props = withDefaults(
-  defineProps<{
-    modelValue?: number
-    readonly?: boolean
-    label?: string | null
-  }>(),
-  {
-    modelValue: 0,
-    readonly: false,
-    label: null,
-  }
-)
+const props = defineProps({
+  modelValue: {
+    type: Number,
+    required: false,
+    default: 0,
+  },
+  readonly: {
+    type: Boolean,
+    required: false,
+    default: false,
+  },
+  label: {
+    type: String,
+    required: false,
+    default: null,
+  },
+})
+
+// const props = withDefaults(
+//   defineProps<{
+//     modelValue?: number
+//     readonly?: boolean
+//     label?: string | null
+//   }>(),
+//   {
+//     modelValue: 0,
+//     readonly: false,
+//     label: null,
+//   }
+// )
 
 const emit = defineEmits(['update:modelValue'])
 

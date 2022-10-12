@@ -156,7 +156,7 @@ const handleKeydown = (e) => {
   }
 }
 
-const handleInput = (e: InputEvent) => {
+const handleInput = (e: Event) => {
   const targetValue: string = (e.target as HTMLInputElement).value
   emitUpdate(targetValue)
 }

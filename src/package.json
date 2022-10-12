@@ -1,6 +1,6 @@
 {
   "name": "wd-frontend-shared",
-  "version": "0.1.209",
+  "version": "0.1.216",
   "author": "Imants Liepiņš",
   "license": "MIT",
   "description": "Shared components, helpers, composables and types for vue frontend SPAs",
@@ -51,6 +51,8 @@
   },
   "devDependencies": {
     "@tailwindcss/forms": "^0.4.0",
+    "@testing-library/user-event": "^14.4.3",
+    "@testing-library/vue": "^6.6.1",
     "@types/dropzone": "^5.7.4",
     "@types/jest": "^29.1.2",
     "@types/lodash": "^4.14.182",
@@ -88,9 +90,7 @@
     "vite-plugin-mkcert": "^1.6.0",
     "vitest": "^0.24.0",
     "vue-router": "^4.0.15",
-    "vue-tsc": "^1.0.3",
-    "@testing-library/user-event": "^14.4.3",
-    "@testing-library/vue": "^6.6.1"
+    "vue-tsc": "^1.0.3"
   },
   "peerDependencies": {
     "vue": "^3.2.0"
