@@ -61,12 +61,12 @@ const propValueToModelValue = (propValue: string | null) => {
       `Datepicker: props.modelValue is not a valid date string! props.modelValue: `,
       propValue
     )
-    return null
+    return undefined
   }
   return propValue
 }
 
-const value = ref<string | null>(propValueToModelValue(props.modelValue))
+const value = ref<string | undefined>(propValueToModelValue(props.modelValue))
 
 const isEmpty = computed(() => !value.value)
 const isOpen = ref(false)
