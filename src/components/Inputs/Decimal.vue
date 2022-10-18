@@ -168,7 +168,10 @@ const handleLabelClick = () => {
 watch(
   () => props.modelValue,
   (n) => {
-    value.value = valuePropToValue(n)
+    const newValue = valuePropToValue(n)
+    if (newValue === valuePropToValue(value.value)) return
+
+    value.value = newValue
   }
 )
 </script>

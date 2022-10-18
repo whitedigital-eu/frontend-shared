@@ -832,7 +832,7 @@
   resolved "https://registry.yarnpkg.com/@types/stack-utils/-/stack-utils-2.0.1.tgz#20f18294f797f2209b5f65c8e3b5c8e8261d127c"
   integrity sha512-Hl219/BT5fLAaz6NDkSuhzasy49dwQS/DSdu4MdggFB8zcXv7vflBI3xp7FEmkmdDkBUI2bPUNeMttp2knYdxw==
 
-"@types/toastify-js@^1.11.0":
+"@types/toastify-js@^1.11.1":
   version "1.11.1"
   resolved "https://registry.yarnpkg.com/@types/toastify-js/-/toastify-js-1.11.1.tgz#48f96596e087025c7f7821668599fd74dcdd8549"
   integrity sha512-Ef03kGFWseAQYIQwN83WbhRxD+DOd+X6p22j9olA/TnvE0crDMc3fyoctKSpXgEDVWq5l3p98otIdpNX1pOYMA==

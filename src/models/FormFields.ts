@@ -8,9 +8,10 @@ import dayjs from 'dayjs'
 export class FormField {
   errors?: string[]
   readonly?: boolean
-  config?: any
 
-  public formatter: (x: any) => any
+  public formatter: (
+    x: string | string[] | number | number[] | boolean | null
+  ) => any
   constructor(
     public type: string,
     public name: string,
@@ -26,7 +27,6 @@ export class FormField {
 }
 
 class TextField extends FormField {
-  readonly: boolean
   constructor(name: string, label: string, value = '', readonly = false) {
     super('text', name, label, value)
     this.readonly = readonly
@@ -34,8 +34,7 @@ class TextField extends FormField {
 }
 
 class DecimalField extends FormField {
-  readonly: boolean
-  override value: string | number | null
+  declare value: string | number | null
   constructor(name: string, label: string, value = '', readonly = false) {
     super('decimal', name, label)
     this.readonly = readonly
@@ -51,7 +50,6 @@ class TextareaField extends FormField {
 
 class SimpleSelectField extends FormField {
   config: SimpleSelectConfig
-  readonly: boolean
   constructor(
     name: string,
     label: string,
@@ -68,7 +66,6 @@ class SimpleSelectField extends FormField {
 
 class DataFetchingSelectField extends FormField {
   config: DataFetchingSelectConfig
-  readonly: boolean
   constructor(
     name: string,
     label: string,
@@ -84,13 +81,17 @@ class DataFetchingSelectField extends FormField {
 }
 
 class DateField extends FormField {
-  constructor(name, label, value = '') {
+  constructor(name: string, label: string, value = '') {
     super('date', name, label, value)
   }
 }
 
 class DateTimeField extends FormField {
-  constructor(name, label, value: string | null = dayjs().toISOString()) {
+  constructor(
+    name: string,
+    label: string,
+    value: string | null = dayjs().toISOString()
+  ) {
     super('date-time', name, label, value)
   }
 }
@@ -113,6 +114,15 @@ class SliderField extends FormField {
   }
 }
 
+const isSelectField = (
+  maybeSelectField: FormField
+): maybeSelectField is DataFetchingSelectField | SimpleSelectField => {
+  return (
+    maybeSelectField.type === 'simple-select' ||
+    maybeSelectField.type === 'data-fetching-select'
+  )
+}
+
 export {
   TextField,
   TextareaField,
@@ -124,4 +134,5 @@ export {
   CheckboxField,
   SliderField,
   DecimalField,
+  isSelectField,
 }

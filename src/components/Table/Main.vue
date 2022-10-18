@@ -276,7 +276,7 @@ const initTabulator = async (resetPage = false) => {
           .forEach((el) => {
             el.addEventListener('click', setTableHeight, true)
           })
-      }, 0)
+      }, 50)
     },
     maxHeight: isMobile.value ? undefined : 700,
   }

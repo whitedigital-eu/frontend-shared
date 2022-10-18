@@ -26,7 +26,7 @@ const scrollFirstIncorrectFieldIntoView = (offsetTop = -100) => {
   })
 }
 
-export const setFormDataErrors = (e, formData: FormData) => {
+export const setFormDataErrors = (e: any, formData: FormData) => {
   if (!e.response) throw new Error(e)
   if (e.response.status !== 422) return formData
   formData = resetFormDataErrors(formData)

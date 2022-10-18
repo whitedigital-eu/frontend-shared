@@ -36,7 +36,7 @@ dayjs.extend(LocalizedFormat)
 
 const props = withDefaults(
   defineProps<{
-    modelValue?: string[]
+    modelValue?: string[] | string
     label?: string
   }>(),
   {
@@ -49,7 +49,7 @@ const emit = defineEmits(['update:modelValue'])
 
 const datepickerRef = ref(null)
 
-const value = ref<string>('')
+const value = ref<string | string[]>('')
 
 const isEmpty = computed(() => !value.value || value.value.length === 0)
 const isOpen = ref(false)
@@ -89,7 +89,7 @@ const handleClose = () => (isOpen.value = false)
 
 watch(
   () => props.modelValue,
-  (n: any) => (value.value = n === null ? '' : n),
+  (n) => (value.value = n),
   { immediate: true }
 )
 </script>

@@ -78,7 +78,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, PropType, ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import FilterInput from './FilterInput.vue'
 import 'flatpickr/dist/flatpickr.css'
 import { getQueryParam } from '../../helpers/Global'
@@ -86,18 +86,13 @@ import { Filters } from '../../types/Filters'
 import dayjs from 'dayjs'
 import { AxiosInstance } from 'axios'
 import useResponsivity from '../../composables/useResponsivity'
+import { TableConfig } from './createTableConfig'
 
-const props = defineProps({
-  filters: {
-    type: Object as PropType<Filters>,
-    required: true,
-  },
-  axiosInstance: {
-    type: Object as PropType<AxiosInstance>,
-    required: false,
-    default: undefined,
-  },
-})
+const props = defineProps<{
+  filters: Filters
+  axiosInstance?: AxiosInstance
+  config?: TableConfig
+}>()
 
 const emit = defineEmits(['queryParamsChanged'])
 
@@ -164,7 +159,10 @@ const filtersToQueryParams = () => {
           const params = createDateRangeQueryParams(item.value, 'date')
           if (params) filterQueryParams.push(...params)
         } else if (item.name === 'audits-date' || item.name === 'audit-date') {
-          const params = createDateRangeQueryParams(item.value, 'created')
+          const params = createDateRangeQueryParams(
+            item.value,
+            props.config?.sharedColumnNames.created ?? 'created'
+          )
           if (params) filterQueryParams.push(...params)
         } else if (item.name === 'activity-date') {
           const params = createDateRangeQueryParams(item.value, 'fromDate')

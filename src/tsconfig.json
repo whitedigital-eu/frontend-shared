@@ -8,24 +8,25 @@
     "allowSyntheticDefaultImports": true,
     "moduleResolution": "node",
     "isolatedModules": false,
-    "strict": true,
     "jsx": "preserve",
     "sourceMap": true,
     "baseUrl": ".",
-    "lib": ["esnext", "dom",
-      "dom.iterable",
-      "scripthost"],
-    "types": ["vite/client", "@types/jest"],
-    "plugins": [{ "name": "@vuedx/typescript-plugin-vue" }],
-    "allowJs": true,
-    "noImplicitAny": false,
-  },
-  "vueCompilerOptions": {
-    "experimentalDisableTemplateSupport": true
+    "lib": [
+      "esnext",
+      "dom",
+      "dom.iterable"
+    ],
+    "types": ["vite/client", "vitest"],
+    "plugins": [
+      { "name": "@vuedx/typescript-plugin-vue" },
+      { "name": "eslint-plugin-import-access" }
+    ],
+    "strict": true,
+    "allowJs": true
   },
   "include": ["**/*.ts", "**/*.d.ts", "**/*.tsx", "**/*.vue"],
   "exclude": [
     "node_modules",
-    "**/*.spec.ts",
-  ],
+    "**/*.spec.ts"
+  ]
 }

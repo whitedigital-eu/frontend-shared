@@ -1,6 +1,6 @@
 {
   "name": "wd-frontend-shared",
-  "version": "0.1.220",
+  "version": "0.1.231",
   "author": "Imants Liepiņš",
   "license": "MIT",
   "description": "Shared components, helpers, composables and types for vue frontend SPAs",
@@ -16,6 +16,7 @@
   "types": "index.d.ts",
   "scripts": {
     "dev": "vite",
+    "type-check": "vue-tsc --noEmit",
     "build": "vue-tsc --noEmit && vite build",
     "preview": "vue-tsc --noEmit && vite build && vite preview",
     "test": "vitest",
@@ -57,7 +58,7 @@
     "@types/dropzone": "^5.7.4",
     "@types/jest": "^29.1.2",
     "@types/lodash": "^4.14.182",
-    "@types/toastify-js": "^1.11.0",
+    "@types/toastify-js": "^1.11.1",
     "@typescript-eslint/eslint-plugin": "^5.22.0",
     "@typescript-eslint/parser": "^5.22.0",
     "@vitejs/plugin-vue": "^3.1.2",

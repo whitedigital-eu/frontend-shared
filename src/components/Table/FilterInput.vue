@@ -45,7 +45,10 @@
       </div>
     </div>
     <div
-      v-if="item.type === 'date' && !Array.isArray(item.value)"
+      v-if="
+        item.type === 'date' &&
+        (item.value === '' || !Array.isArray(item.value))
+      "
       class="sm:flex items-center"
     >
       <div class="w-full sm:w-[200px] flex-none grow">
@@ -53,7 +56,10 @@
       </div>
     </div>
     <div
-      v-if="item.type === 'date-range' && Array.isArray(item.value)"
+      v-if="
+        item.type === 'date-range' &&
+        (item.value === '' || Array.isArray(item.value))
+      "
       class="sm:flex items-center"
     >
       <div class="w-full flex-none grow sm:w-[432px]">
