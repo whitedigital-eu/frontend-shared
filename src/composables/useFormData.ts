@@ -1,18 +1,20 @@
-import { onMounted, Ref, ref } from 'vue'
+import { onMounted, Ref, ref, UnwrapRef } from 'vue'
 import { FormData } from '../types/FormData'
 
-export default function useFormData(
-  baseFormData: FormData,
-  formDataPreparationFunction: (
-    formData: FormData
-  ) => Promise<FormData> = async (formData: FormData) => formData,
-  setupWatchersFunction?: (formDataRef: Ref<FormData>) => void
+export default function useFormData<T extends FormData>(
+  baseFormData: T,
+  formDataPreparationFunction: (formData: T) => Promise<T> = async (
+    formData: T
+  ) => formData,
+  setupWatchersFunction?: (formDataRef: Ref<T>) => void
 ) {
-  const formData = ref<FormData | null>(null)
+  const formData = ref<T | null>(null)
 
   onMounted(async () => {
-    formData.value = await formDataPreparationFunction(baseFormData)
-    if (setupWatchersFunction) setupWatchersFunction(formData as Ref<FormData>)
+    formData.value = (await formDataPreparationFunction(
+      baseFormData
+    )) as UnwrapRef<T>
+    if (setupWatchersFunction) setupWatchersFunction(formData as Ref<T>)
   })
 
   return { formData }

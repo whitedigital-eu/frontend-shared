@@ -3,7 +3,7 @@ import { showGlobalError } from './FlashMessages'
 import { FormData } from '../types/FormData'
 import { TableConfig } from '../components/Table/createTableConfig'
 
-export const resetFormDataErrors = (formData: FormData) => {
+export const resetFormDataErrors = <T extends FormData>(formData: T) => {
   for (const key in formData) formData[key].errors = []
   return formData
 }
@@ -26,7 +26,7 @@ const scrollFirstIncorrectFieldIntoView = (offsetTop = -100) => {
   })
 }
 
-export const setFormDataErrors = (e: any, formData: FormData) => {
+export const setFormDataErrors = <T extends FormData>(e: any, formData: T) => {
   if (!e.response) throw new Error(e)
   if (e.response.status !== 422) return formData
   formData = resetFormDataErrors(formData)

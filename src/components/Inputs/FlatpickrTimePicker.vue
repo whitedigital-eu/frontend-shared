@@ -33,16 +33,18 @@ import locales from 'flatpickr/dist/l10n/'
 import dayjs from 'dayjs'
 import LocalizedFormat from 'dayjs/plugin/localizedFormat'
 import FormFieldLabel from '../FormFieldLabel.vue'
+import { FlatpickrTimePickerValue } from './ValueTypes'
 
 dayjs.extend(LocalizedFormat)
 
 const props = withDefaults(
   defineProps<{
-    modelValue: string | null
+    modelValue: FlatpickrTimePickerValue
     label?: string | null
     id?: string | null
   }>(),
   {
+    modelValue: null,
     label: null,
     id: null,
   }
@@ -57,7 +59,7 @@ const computedId = computed(() => {
 })
 
 const emit = defineEmits<{
-  (e: 'update:modelValue', value: string | null)
+  (e: 'update:modelValue', value: string | null): void
 }>()
 
 const flatpickr = ref(null)

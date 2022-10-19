@@ -24,10 +24,11 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
 import FormFieldLabel from '../FormFieldLabel.vue'
+import { TextValue } from './ValueTypes'
 
 const props = withDefaults(
   defineProps<{
-    modelValue?: string | number | null
+    modelValue?: TextValue
     label?: string | null
     readonly?: boolean
     long?: boolean

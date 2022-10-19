@@ -25,9 +25,10 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
 import FormFieldLabel from '../FormFieldLabel.vue'
+import { DecimalValue } from './ValueTypes'
 
 type Props = {
-  modelValue?: string | number | null
+  modelValue: DecimalValue
   label?: string | null
   readonly?: boolean
   maxDecimals?: number | null

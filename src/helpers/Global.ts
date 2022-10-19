@@ -20,7 +20,10 @@ export const setQueryParam = (key: string, value: string) => {
   window.history.pushState({ path: newUrl }, '', newUrl)
 }
 
-export const fillFormDataFrom = (formData: FormData, apiResponseData: any) => {
+export const fillFormDataFrom = <T extends FormData>(
+  formData: T,
+  apiResponseData: any
+) => {
   for (const key in apiResponseData) {
     const formField = formData[key]
     if (formField) formField.value = apiResponseData[key]

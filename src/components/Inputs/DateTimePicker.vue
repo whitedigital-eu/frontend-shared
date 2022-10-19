@@ -1,6 +1,6 @@
 <template>
   <div class="flex gap-4">
-    <Datepicker :id="label" v-model="dateValue" class="grow" :label="label" />
+    <Datepicker v-model="dateValue" class="grow" :label="label" />
     <TimePicker v-model="hoursValue" :disabled="!value" type="hours" />
     <span class="leading-9">:</span>
     <TimePicker
@@ -16,11 +16,18 @@ import Datepicker from './Datepicker.vue'
 import { ref, watch } from 'vue'
 import dayjs from 'dayjs'
 import TimePicker from './TimePicker.vue'
+import { DateTimePickerValue } from './ValueTypes'
 
-const props = defineProps<{
-  modelValue: string
-  label?: string
-}>()
+const props = withDefaults(
+  defineProps<{
+    modelValue: DateTimePickerValue
+    label?: string | null
+  }>(),
+  {
+    modelValue: null,
+    label: null,
+  }
+)
 
 const emit = defineEmits<{
   (e: 'update:modelValue', value: string | null): void
@@ -32,7 +39,7 @@ const formatTimeInput = (value: string) => {
   return value.slice(-2)
 }
 
-const dateValue = ref<string | null>(props.modelValue ?? null)
+const dateValue = ref<string | null>(props.modelValue)
 const hoursValue = ref(
   props.modelValue ? formatTimeInput(dayjs(props.modelValue).format('H')) : ''
 )
@@ -40,7 +47,7 @@ const minutesValue = ref(
   props.modelValue ? formatTimeInput(dayjs(props.modelValue).format('mm')) : ''
 )
 
-const value = ref<string | null>(props.modelValue ?? null)
+const value = ref<string | null>(props.modelValue)
 
 const setValue = () => {
   if (!dateValue.value) {
@@ -57,7 +64,7 @@ const setValue = () => {
 }
 
 const setDateHoursAndMinutes = () => {
-  dateValue.value = props.modelValue ?? null
+  dateValue.value = props.modelValue
   hoursValue.value = props.modelValue
     ? formatTimeInput(dayjs(props.modelValue).format('H'))
     : ''

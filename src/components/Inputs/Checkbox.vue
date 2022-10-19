@@ -17,10 +17,11 @@
 
 <script setup lang="ts">
 import { ref, watch } from 'vue'
+import { CheckboxValue } from './ValueTypes'
 
 const props = withDefaults(
   defineProps<{
-    modelValue?: boolean
+    modelValue: CheckboxValue
     readonly?: boolean
     label?: string | null
   }>(),

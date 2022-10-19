@@ -31,12 +31,13 @@ import FormFieldLabel from '../../FormFieldLabel.vue'
 import FilePreview from './FilePreview.vue'
 import { AxiosInstance } from 'axios'
 import getLoadResourceFunctions from '../../../helpers/DataFetching'
+import { FileUploadValue } from '../ValueTypes'
 
 Dropzone.autoDiscover = false
 
 const props = defineProps({
   modelValue: {
-    type: [String, Array] as PropType<string | string[]>,
+    type: [String, Array] as PropType<FileUploadValue>,
     required: false,
     default: () => [],
   },

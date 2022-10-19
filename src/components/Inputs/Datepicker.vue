@@ -35,11 +35,15 @@ import locales from 'flatpickr/dist/l10n/'
 import dayjs from 'dayjs'
 import LocalizedFormat from 'dayjs/plugin/localizedFormat'
 import FormFieldLabel from '../FormFieldLabel.vue'
+import { DatepickerValue } from './ValueTypes'
 
 dayjs.extend(LocalizedFormat)
 
 const props = withDefaults(
-  defineProps<{ modelValue?: string | null; label?: string | null }>(),
+  defineProps<{
+    modelValue: DatepickerValue
+    label?: string | null
+  }>(),
   {
     modelValue: null,
     label: null,

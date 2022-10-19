@@ -13,14 +13,15 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, PropType, ref } from 'vue'
 //@ts-ignore
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 import FormFieldLabel from '../FormFieldLabel.vue'
+import { TextEditorValue } from './ValueTypes'
 
 const props = defineProps({
   modelValue: {
-    type: String,
+    type: [String, Number] as PropType<TextEditorValue>,
     required: false,
     default: '',
   },

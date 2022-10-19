@@ -13,6 +13,7 @@
 <script setup lang="ts">
 import { PropType, ref, watch } from 'vue'
 import BaseSelect from './BaseSelect.vue'
+import { SimpleSelectValue } from '../ValueTypes'
 
 const props = defineProps({
   id: {
@@ -24,8 +25,9 @@ const props = defineProps({
     required: true,
   },
   modelValue: {
-    type: [String, Array, null] as PropType<string | string[] | null>,
-    required: true,
+    type: [String, Array, null] as PropType<SimpleSelectValue>,
+    required: false,
+    default: '',
   },
   readonly: {
     type: Boolean,

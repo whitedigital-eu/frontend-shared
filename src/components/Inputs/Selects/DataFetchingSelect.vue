@@ -14,6 +14,7 @@ import BaseSelect from './BaseSelect.vue'
 
 import { DataFetchingSelectConfig } from '../../../types/InputFields'
 import { AxiosInstance } from 'axios'
+import { DataFetchingSelectValue } from '../ValueTypes'
 
 const props = defineProps({
   id: {
@@ -25,7 +26,7 @@ const props = defineProps({
     required: true,
   },
   modelValue: {
-    type: [String, Array] as PropType<string | string[]>,
+    type: [String, Array] as PropType<DataFetchingSelectValue>,
     required: true,
   },
   label: {

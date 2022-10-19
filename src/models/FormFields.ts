@@ -4,19 +4,39 @@ import {
 } from '../types/InputFields'
 import { SelectOption } from './SelectOption'
 import dayjs from 'dayjs'
+import {
+  TextValue,
+  DecimalValue,
+  TextEditorValue,
+  DatepickerValue,
+  DataFetchingSelectValue,
+  SimpleSelectValue,
+  DateTimePickerValue,
+  FileUploadValue,
+  CheckboxValue,
+  SliderValue,
+  FlatpickrTimePickerValue,
+} from '../components/Inputs/ValueTypes'
+
+type FormFieldValue =
+  | string
+  | string[]
+  | number
+  | number[]
+  | boolean
+  | null
+  | undefined
 
 export class FormField {
   errors?: string[]
   readonly?: boolean
 
-  public formatter: (
-    x: string | string[] | number | number[] | boolean | null
-  ) => any
+  public formatter: (x: this['value']) => any
   constructor(
     public type: string,
     public name: string,
     public label: string,
-    public value: string | string[] | number | number[] | boolean | null = ''
+    public value: FormFieldValue = ''
   ) {
     this.formatter = (x) => x
   }
@@ -27,15 +47,32 @@ export class FormField {
 }
 
 class TextField extends FormField {
-  constructor(name: string, label: string, value = '', readonly = false) {
-    super('text', name, label, value)
+  declare value: Exclude<TextValue, number>
+
+  constructor(
+    name: string,
+    label: string,
+    value?: TextValue,
+    readonly = false
+  ) {
+    super(
+      'text',
+      name,
+      label,
+      typeof value === 'number' ? value.toString() : value
+    )
     this.readonly = readonly
   }
 }
 
 class DecimalField extends FormField {
-  declare value: string | number | null
-  constructor(name: string, label: string, value = '', readonly = false) {
+  declare value: DecimalValue
+  constructor(
+    name: string,
+    label: string,
+    value?: TextValue,
+    readonly = false
+  ) {
     super('decimal', name, label)
     this.readonly = readonly
     this.value = value
@@ -43,17 +80,19 @@ class DecimalField extends FormField {
 }
 
 class TextareaField extends FormField {
-  constructor(name: string, label: string, value = '') {
+  declare value: TextEditorValue
+  constructor(name: string, label: string, value?: TextEditorValue) {
     super('textarea', name, label, value)
   }
 }
 
 class SimpleSelectField extends FormField {
+  declare value: SimpleSelectValue
   config: SimpleSelectConfig
   constructor(
     name: string,
     label: string,
-    value: string | string[] = '',
+    value?: SimpleSelectValue,
     options: SelectOption[] = [],
     readonly = false,
     create = false
@@ -65,11 +104,12 @@ class SimpleSelectField extends FormField {
 }
 
 class DataFetchingSelectField extends FormField {
+  declare value: DataFetchingSelectValue
   config: DataFetchingSelectConfig
   constructor(
     name: string,
     label: string,
-    value: string | string[] = '',
+    value: DataFetchingSelectValue = '',
     config: DataFetchingSelectConfig,
     readonly = false
   ) {
@@ -81,34 +121,47 @@ class DataFetchingSelectField extends FormField {
 }
 
 class DateField extends FormField {
-  constructor(name: string, label: string, value = '') {
+  declare value: DatepickerValue
+  constructor(name: string, label: string, value?: DatepickerValue) {
     super('date', name, label, value)
   }
 }
 
+class TimeField extends FormField {
+  declare value: FlatpickrTimePickerValue
+  constructor(name: string, label: string, value = '', readonly = false) {
+    super('time', name, label, value)
+    this.readonly = readonly
+  }
+}
+
 class DateTimeField extends FormField {
+  declare value: DateTimePickerValue
   constructor(
     name: string,
     label: string,
-    value: string | null = dayjs().toISOString()
+    value: DateTimePickerValue = dayjs().toISOString()
   ) {
     super('date-time', name, label, value)
   }
 }
 
 class FileUploadField extends FormField {
-  constructor(name: string, label: string, value: string | string[] = '') {
+  declare value: FileUploadValue
+  constructor(name: string, label: string, value?: FileUploadValue) {
     super('file-upload', name, label, value)
   }
 }
 
 class CheckboxField extends FormField {
-  constructor(name: string, label: string, value = false) {
+  declare value: CheckboxValue
+  constructor(name: string, label: string, value?: CheckboxValue) {
     super('checkbox', name, label, value)
   }
 }
 
 class SliderField extends FormField {
+  declare value: SliderValue
   constructor(name: string, label: string) {
     super('slider', name, label)
   }
@@ -116,6 +169,7 @@ class SliderField extends FormField {
 
 const isSelectField = (
   maybeSelectField: FormField
+  //@ts-ignore
 ): maybeSelectField is DataFetchingSelectField | SimpleSelectField => {
   return (
     maybeSelectField.type === 'simple-select' ||
@@ -129,10 +183,55 @@ export {
   SimpleSelectField,
   DataFetchingSelectField,
   DateField,
+  TimeField,
   DateTimeField,
   FileUploadField,
   CheckboxField,
   SliderField,
   DecimalField,
   isSelectField,
+}
+
+// START OF NEW TYPED FIELDS!
+export type SimpleSelectConfigTyped<T extends string> = {
+  options: SelectOptionTyped<string, T>[]
+  create?: boolean
+}
+
+export class SelectOptionTyped<T extends string, V extends string> {
+  constructor(public text: T, public value: V) {}
+}
+
+export class SimpleSelectFieldTS<T extends string> extends FormField {
+  declare value: null | undefined | T
+  config: SimpleSelectConfigTyped<T>
+  constructor(
+    name: string,
+    label: string,
+    value?: null | undefined | T,
+    options: SelectOptionTyped<string, T>[] = [],
+    readonly = false,
+    create = false
+  ) {
+    super('simple-select', name, label, value)
+    this.config = { options, create }
+    this.readonly = readonly
+  }
+}
+
+export class SimpleSelectFieldTM<T extends string> extends FormField {
+  declare value: null | undefined | T[]
+  config: SimpleSelectConfigTyped<T>
+  constructor(
+    name: string,
+    label: string,
+    value?: null | undefined | T[],
+    options: SelectOptionTyped<string, T>[] = [],
+    readonly = false,
+    create = false
+  ) {
+    super('simple-select', name, label, value)
+    this.config = { options, create }
+    this.readonly = readonly
+  }
 }
