@@ -116,6 +116,7 @@ class SliderField extends FormField {
 
 const isSelectField = (
   maybeSelectField: FormField
+  //@ts-ignore
 ): maybeSelectField is DataFetchingSelectField | SimpleSelectField => {
   return (
     maybeSelectField.type === 'simple-select' ||
