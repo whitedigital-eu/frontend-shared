@@ -330,6 +330,7 @@ const initTabulator = async (resetPage = false) => {
 
         data.forEach((col, i) => {
           const row = document.createElement('tr')
+          row.classList.add('flex', 'flex-wrap')
           if (i !== data.length - 1) {
             row.classList.add('border-b', 'border-slate-300')
           }
@@ -338,6 +339,7 @@ const initTabulator = async (resetPage = false) => {
           const valueCell = document.createElement('td')
           titleCell.style.whiteSpace = 'initial'
           valueCell.style.whiteSpace = 'initial'
+          titleCell.classList.add('basis-[50px]', 'flex-1')
 
           col.title instanceof HTMLElement
             ? titleCell.appendChild(col.title)
