@@ -5,7 +5,6 @@ import { TableConfig } from '../components/Table/createTableConfig'
 
 export const resetFormDataErrors = <T extends FormData>(formData: T) => {
   for (const key in formData) formData[key].errors = []
-  return formData
 }
 
 const scrollFirstIncorrectFieldIntoView = (offsetTop = -100) => {
@@ -29,14 +28,12 @@ const scrollFirstIncorrectFieldIntoView = (offsetTop = -100) => {
 export const setFormDataErrors = <T extends FormData>(e: any, formData: T) => {
   if (!e.response) throw new Error(e)
   if (e.response.status !== 422) return formData
-  formData = resetFormDataErrors(formData)
+  resetFormDataErrors(formData)
   e.response.data.violations.forEach((violation) => {
     formData[violation.propertyPath]?.errors?.push(violation.message)
   })
 
   // scrollFirstIncorrectFieldIntoView()
-
-  return formData
 }
 
 export const handleTableAjaxError = (

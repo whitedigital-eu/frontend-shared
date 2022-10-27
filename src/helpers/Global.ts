@@ -25,8 +25,7 @@ export const fillFormDataFrom = <T extends FormData>(
   apiResponseData: any
 ) => {
   for (const key in apiResponseData) {
-    const formField = formData[key]
-    if (formField) formField.value = apiResponseData[key]
+    if (key in formData) formData[key].value = apiResponseData[key]
   }
   return formData
 }
