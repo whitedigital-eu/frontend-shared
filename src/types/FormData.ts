@@ -1,8 +1,8 @@
 import { Ref } from 'vue'
 import { IriString } from './Resource'
-import { FormField } from '../models/FormFields'
+import { AnyFormField, FormField } from '../models/FormFields'
 
-export type FormData = Record<string, FormField>
+export type FormData = Record<string, AnyFormField>
 
 export type FormDataRef = Ref<FormData>
 
