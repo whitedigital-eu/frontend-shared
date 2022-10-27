@@ -21,7 +21,7 @@
       <form
         id="tabulator-html-filter-form"
         class="xl:flex xl:flex-col sm:mr-auto items-start mb-4 w-full"
-        @submit.prevent="emit('queryParamsChanged', filters)"
+        @submit.prevent="filter"
       >
         <div class="flex flex-col grow">
           <div
@@ -81,7 +81,6 @@
 import { computed, ref, watch } from 'vue'
 import FilterInput from './FilterInput.vue'
 import 'flatpickr/dist/flatpickr.css'
-import { getQueryParam } from '../../helpers/Global'
 import { Filters } from '../../types/Filters'
 import dayjs from 'dayjs'
 import { AxiosInstance } from 'axios'
@@ -94,22 +93,25 @@ const props = defineProps<{
   config?: TableConfig
 }>()
 
-const emit = defineEmits(['queryParamsChanged'])
+const emit = defineEmits<{
+  (
+    e: 'update:query-params',
+    data: ReturnType<typeof filtersToQueryParams>
+  ): void
+}>()
 
 const { isMobile } = useResponsivity()
 const mobShowFilters = ref(false)
 
 const filter = () => {
-  const data = filtersToQueryParams()
-  updateQueryParams(data)
-  emit('queryParamsChanged', data)
+  emit('update:query-params', filtersToQueryParams())
 }
 
 const noAdvancedFilters = computed(
   () => !props.filters.advanced || !props.filters.advanced.length
 )
 
-const types = ['default', 'advanced']
+const types = ['default', 'advanced'] as const
 
 const resetFilter = () => {
   types.forEach((type: string) => {
@@ -119,17 +121,7 @@ const resetFilter = () => {
       })
     }
   })
-  updateQueryParams('')
-  emit('queryParamsChanged', '')
-}
-
-const updateQueryParams = (data: string) => {
-  const page = getQueryParam('page') ?? 1
-  let size = getQueryParam('size')
-  size = size ? `&size=${size}` : ''
-  data = data ? `&${data}` : ''
-  const newUrl = `${window.location.protocol}//${window.location.host}${window.location.pathname}?page=${page}${size}${data}`
-  window.history.pushState({ path: newUrl }, '', newUrl)
+  emit('update:query-params', {})
 }
 
 const createDateRangeQueryParams = (
@@ -147,8 +139,23 @@ const createDateRangeQueryParams = (
   ]
 }
 
+const createDateRangeQueryParamsArr = (
+  value: [number, number],
+  searchProperty: string
+) => {
+  if (value.length < 2) return
+
+  const start = dayjs(value[0]).hour(0).minute(0).toISOString()
+  const end = dayjs(value[1]).hour(23).minute(59).toISOString()
+
+  return {
+    [`${searchProperty}[after]`]: start,
+    [`${searchProperty}[before]`]: end,
+  }
+}
+
 const filtersToQueryParams = () => {
-  let filterQueryParams: string[] = []
+  const objParams: Record<string, string> = {}
 
   types.forEach((type: string) => {
     if (props.filters[type]) {
@@ -157,33 +164,47 @@ const filtersToQueryParams = () => {
 
         if (item.name === 'document-date') {
           const params = createDateRangeQueryParams(item.value, 'date')
-          if (params) filterQueryParams.push(...params)
+          const paramsObj = createDateRangeQueryParamsArr(item.value, 'date')
+
+          if (params) {
+            Object.assign(objParams, paramsObj)
+          }
         } else if (item.name === 'audits-date' || item.name === 'audit-date') {
           const params = createDateRangeQueryParams(
             item.value,
             props.config?.sharedColumnNames.created ?? 'created'
           )
-          if (params) filterQueryParams.push(...params)
+          const paramsObj = createDateRangeQueryParamsArr(
+            item.value,
+            props.config?.sharedColumnNames.created ?? 'created'
+          )
+
+          if (params) {
+            Object.assign(objParams, paramsObj)
+          }
         } else if (item.name === 'activity-date') {
           const params = createDateRangeQueryParams(item.value, 'fromDate')
-          if (params) filterQueryParams.push(...params)
+          const paramsObj = createDateRangeQueryParamsArr(
+            item.value,
+            'fromDate'
+          )
+
+          if (params) {
+            Object.assign(objParams, paramsObj)
+          }
         } else if (item.toggleExact) {
           const computedName = `${item.name}[${
             item.exact ? 'exact' : 'ipartial'
           }]`
-          filterQueryParams.push(
-            `${computedName}=${encodeURIComponent(item.value)}`
-          )
+          objParams[computedName] = item.value
         } else {
-          filterQueryParams.push(
-            `${item.name}=${encodeURIComponent(item.value)}`
-          )
+          objParams[item.name] = item.value
         }
       })
     }
   })
 
-  return filterQueryParams.join('&')
+  return objParams
 }
 
 const setFilterInitialValues = () => {
@@ -200,8 +221,7 @@ const setFilterInitialValues = () => {
     })
   }
 
-  const emitValue: string = filtersToQueryParams()
-  if (emitValue) emit('queryParamsChanged', emitValue)
+  emit('update:query-params', filtersToQueryParams())
 }
 
 const filterInitialValuesSet = ref(false)
