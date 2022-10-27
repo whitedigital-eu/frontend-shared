@@ -58,6 +58,7 @@
     "@types/dropzone": "^5.7.4",
     "@types/jest": "^29.1.2",
     "@types/lodash": "^4.14.182",
+    "@types/tabulator-tables": "4.9.1",
     "@types/toastify-js": "^1.11.1",
     "@typescript-eslint/eslint-plugin": "^5.22.0",
     "@typescript-eslint/parser": "^5.22.0",
