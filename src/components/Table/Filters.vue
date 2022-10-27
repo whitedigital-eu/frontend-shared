@@ -14,7 +14,6 @@
       </span>
     </button>
     <div
-      v-show="!isMobile || mobShowFilters"
       class="flex flex-col sm:flex-row sm:items-end xl:items-start"
       data-test="filters"
     >
@@ -23,7 +22,7 @@
         class="xl:flex xl:flex-col sm:mr-auto items-start mb-4 w-full"
         @submit.prevent="emit('queryParamsChanged', filters)"
       >
-        <div class="flex flex-col grow">
+        <div v-show="!isMobile || mobShowFilters" class="flex flex-col grow">
           <div
             class="flex flex-wrap gap-8"
             :class="{ 'mb-6': noAdvancedFilters }"
@@ -49,7 +48,10 @@
           </div>
         </div>
         <div class="flex flex-col sm:flex-row justify-between w-full">
-          <div class="xl:mt-0 flex gap-2 w-full sm:w-auto">
+          <div
+            v-show="!isMobile || mobShowFilters"
+            class="xl:mt-0 flex gap-2 w-full sm:w-auto"
+          >
             <button
               type="submit"
               class="btn btn-primary w-full sm:w-16 h-[38px] mt-2 sm:mt-0"

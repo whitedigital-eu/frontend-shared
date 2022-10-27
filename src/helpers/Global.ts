@@ -31,7 +31,7 @@ export const fillFormDataFrom = <T extends FormData>(
   return formData
 }
 
-export const prepareFormData = <PostType>(formData: FormData) => {
+export const prepareFormData = <PostType, T extends FormData>(formData: T) => {
   resetFormDataErrors(formData)
 
   const data: Partial<Record<keyof PostType, null | string | number>> = {}

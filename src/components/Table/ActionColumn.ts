@@ -41,7 +41,9 @@ const createIcon = (
       title="${settings.title}"
       data-test="${dataTest}"
     >
-      <i data-lucide="${settings.iconName}" class="w-4 h-4"></i>
+      <i data-lucide="${
+        settings.iconName
+      }" style="height: 18px; width: 18px;"></i>
     </a>`)
 
   dom(element).on('click', async (e: Event) => {
@@ -93,7 +95,9 @@ const createActionColumn = (
 
       if (props.movableRows) {
         wrapper.append(
-          dom(`<i data-lucide="move" class="w-4 h-4 mr-4"></i>`)[0]
+          dom(
+            `<i data-lucide="move" class="mr-2" style="height: 18px; width: 18px;"></i>`
+          )[0]
         )
       }
 
