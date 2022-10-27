@@ -243,6 +243,8 @@ const setTableHeight = (): void => {
   }, 0)
 }
 
+let tabulatorScrollTop = 0
+
 const initTabulator = async (resetPage = false) => {
   let options: Options = {
     paginationSizeSelector: [10, 30, 100],
@@ -277,8 +279,14 @@ const initTabulator = async (resetPage = false) => {
             el.addEventListener('click', setTableHeight, true)
           })
       }, 50)
+      tabulator.value.rowManager.element.scrollTop = tabulatorScrollTop
     },
     maxHeight: isMobile.value ? undefined : 700,
+    scrollVertical(top) {
+      nextTick(() => {
+        tabulatorScrollTop = top
+      })
+    },
   }
 
   if (props.ajaxUrl) {
