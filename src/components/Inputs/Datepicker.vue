@@ -19,6 +19,7 @@
       @onClose="handleClose"
     />
     <XIcon
+      v-if="!isMobile"
       class="cursor-pointer absolute right-[8px] top-[50%] translate-y-[-50%]"
       @click="clearInput"
     />

@@ -81,7 +81,7 @@ const dateOfBirth = ref()
 const eventStartTime = ref('')
 const eventDuration = ref()
 const profilePicture = ref()
-const attendanceTime = ref(null)
+const attendanceTime = ref('12:34')
 
 const showSelect = ref(true)
 watch(showSelect, (n) => {

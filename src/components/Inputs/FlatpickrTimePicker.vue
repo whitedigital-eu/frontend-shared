@@ -8,19 +8,23 @@
     >
       {{ label }}
     </FormFieldLabel>
-    <flatPickr
-      ref="flatpickr"
-      v-model="value"
-      class="form-control input w-full"
-      step="60"
-      :config="config"
-      @on-open="handleOpen"
-      @on-close="handleClose"
-    />
-    <XIcon
-      class="cursor-pointer absolute right-[8px] top-[50%] translate-y-[-50%]"
-      @click="clearInput"
-    />
+    <div v-if="!isMobile">
+      <flatPickr
+        ref="flatpickr"
+        v-model="value"
+        :class="inputClass"
+        step="60"
+        :config="config"
+        @on-open="handleOpen"
+        @on-close="handleClose"
+      />
+      <XIcon
+        v-if="!isMobile"
+        class="cursor-pointer absolute right-[8px] top-[50%] translate-y-[-50%]"
+        @click="clearInput"
+      />
+    </div>
+    <input v-else v-model="value" type="time" step="60" :class="inputClass" />
   </div>
 </template>
 
@@ -74,6 +78,8 @@ const isOpen = ref(false)
 
 const isEmpty = computed(() => !value.value)
 
+const inputClass = ref('form-control input w-full')
+
 const handleLabelClick = () => {
   if (!flatpickr.value) return
   ;(flatpickr.value as any).$el.nextSibling.focus()
@@ -114,7 +120,7 @@ const setValueFromModelValue = () => {
   const { hours, minutes } = parseModelValue()
   date = date.hour(hours)
   date = date.minute(minutes)
-  value.value = date.toISOString()
+  value.value = isMobile.value ? date.format('HH:mm') : date.toISOString()
 }
 
 onMounted(() => {
@@ -138,8 +144,7 @@ watch(
 watch(
   () => value.value,
   (n) => {
-    const valToEmit = isMobile.value ? dayjs(n).format('H:mm') : n
-    emit('update:modelValue', valToEmit)
+    emit('update:modelValue', n)
     emitted = true
   }
 )
