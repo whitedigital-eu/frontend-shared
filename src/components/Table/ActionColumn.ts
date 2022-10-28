@@ -84,8 +84,8 @@ const createActionColumn = (
     width: 100,
     headerSort: false,
     vertAlign: 'middle',
-    hozAlign: 'center',
-    headerHozAlign: 'center',
+    hozAlign: 'right',
+    headerHozAlign: 'right',
     formatter(cell: CellComponent) {
       const data = cell.getData()
 

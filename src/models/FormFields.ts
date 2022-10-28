@@ -200,7 +200,7 @@ class TimeWithCurrentField extends FormField {
 }
 
 class SignatureField extends FormField {
-  public value: string
+  public value: string | null
   constructor(name: string, label: string, value = '') {
     super('signature', name, label)
     this.value = value
