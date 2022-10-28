@@ -3,7 +3,7 @@
     <FormFieldLabel
       v-if="label"
       class="z-[1]"
-      :is-placeholder="isEmpty && !isOpen"
+      :is-placeholder="!isMobile && isEmpty && !isOpen"
       :placeholder-css-classes="['!cursor-pointer']"
       @click="handleLabelClick"
     >
@@ -12,7 +12,7 @@
     <flatPickr
       ref="datepickerRef"
       v-model="value"
-      class="w-full"
+      class="w-full form-control input"
       :config="config"
       @onChange="handleChange"
       @onOpen="handleOpen"
@@ -36,6 +36,7 @@ import dayjs from 'dayjs'
 import LocalizedFormat from 'dayjs/plugin/localizedFormat'
 import FormFieldLabel from '../FormFieldLabel.vue'
 import { DatepickerValue } from './ValueTypes'
+import useResponsivity from '../../composables/useResponsivity'
 
 dayjs.extend(LocalizedFormat)
 
@@ -49,6 +50,8 @@ const props = withDefaults(
     label: null,
   }
 )
+
+const { isMobile } = useResponsivity()
 
 const createRandomId = () => Math.floor(100000 + Math.random() * 900000)
 
@@ -91,7 +94,6 @@ const handleChange = (selectedDates: Date[]) => {
   const emitValue = selectedDates.length
     ? dayjs(selectedDates[0]).format('YYYY-MM-DD')
     : null
-
   emit('update:modelValue', emitValue)
 }
 

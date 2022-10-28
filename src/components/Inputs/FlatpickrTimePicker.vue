@@ -3,7 +3,7 @@
     <FormFieldLabel
       v-if="label"
       class="z-[1]"
-      :is-placeholder="isEmpty && !isOpen"
+      :is-placeholder="!isMobile && isEmpty && !isOpen"
       @click="handleLabelClick"
     >
       {{ label }}
@@ -11,7 +11,8 @@
     <flatPickr
       ref="flatpickr"
       v-model="value"
-      class="w-full"
+      class="form-control input w-full"
+      step="60"
       :config="config"
       @on-open="handleOpen"
       @on-close="handleClose"
@@ -34,6 +35,7 @@ import dayjs from 'dayjs'
 import LocalizedFormat from 'dayjs/plugin/localizedFormat'
 import FormFieldLabel from '../FormFieldLabel.vue'
 import { FlatpickrTimePickerValue } from './ValueTypes'
+import useResponsivity from '../../composables/useResponsivity'
 
 dayjs.extend(LocalizedFormat)
 
@@ -49,6 +51,8 @@ const props = withDefaults(
     id: null,
   }
 )
+
+const { isMobile } = useResponsivity()
 
 const computedId = computed(() => {
   if (!props.id) {
@@ -134,7 +138,8 @@ watch(
 watch(
   () => value.value,
   (n) => {
-    emit('update:modelValue', n)
+    const valToEmit = isMobile.value ? dayjs(n).format('H:mm') : n
+    emit('update:modelValue', valToEmit)
     emitted = true
   }
 )

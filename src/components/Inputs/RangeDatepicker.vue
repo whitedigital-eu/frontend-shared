@@ -13,6 +13,7 @@
       ref="datepickerRef"
       v-model="value"
       :config="config"
+      class="form-control input"
       @onChange="handleChange"
       @onOpen="handleOpen"
       @onClose="handleClose"
