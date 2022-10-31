@@ -207,6 +207,22 @@ class SignatureField extends FormField {
   }
 }
 
+class GovernmentIdField extends FormField {
+  value: string | null
+  constructor(name: string, label: string, value = '', readonly = false) {
+    super('government-id', name, label)
+    this.value = value
+    this.readonly = readonly
+  }
+}
+
+class PublicFileUploadField extends FileUploadField {
+  public setPublic = true
+  constructor(name: string, label: string, value: string | string[] = '') {
+    super(name, label, value)
+  }
+}
+
 export {
   TextField,
   TextareaField,
@@ -222,6 +238,8 @@ export {
   TimeWithCurrentField,
   SignatureField,
   isSelectField,
+  GovernmentIdField,
+  PublicFileUploadField,
 }
 
 // START OF NEW TYPED FIELDS!
@@ -286,3 +304,5 @@ export type AnyFormField =
   | SignatureField
   | SimpleSelectFieldTS<any>
   | SimpleSelectFieldTM<any>
+  | GovernmentIdField
+  | PublicFileUploadField
