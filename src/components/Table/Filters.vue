@@ -33,9 +33,28 @@
               :key="i"
               :axios-instance="axiosInstance"
             />
+            <button
+              v-if="!noAdvancedFilters && toggleAdvancedFilters"
+              @click="showAdvancedFilters = !showAdvancedFilters"
+              type="button"
+              class="btn btn-primary h-10"
+            >
+              Detalizēta meklēšana
+              <ChevronDownIcon
+                v-if="showAdvancedFilters"
+                size="20"
+                class="ml-2"
+              />
+              <ChevronUpIcon
+                v-if="!showAdvancedFilters"
+                size="20"
+                class="ml-2"
+              />
+            </button>
           </div>
           <div
             v-if="!noAdvancedFilters"
+            v-show="showAdvancedFilters"
             id="advanced-filters"
             class="flex flex-wrap gap-8 mt-4 mb-6"
           >
@@ -47,7 +66,10 @@
             />
           </div>
         </div>
-        <div class="flex flex-col sm:flex-row justify-between w-full">
+        <div
+          class="flex flex-col sm:flex-row justify-between w-full"
+          :class="{ 'mt-4': !showAdvancedFilters }"
+        >
           <div
             v-show="!isMobile || mobShowFilters"
             class="xl:mt-0 flex gap-2 w-full sm:w-auto"
@@ -63,7 +85,7 @@
             <button
               id="tabulator-html-filter-reset"
               type="button"
-              class="btn btn-secondary w-full sm:w-32 mt-2 sm:mt-0"
+              class="btn btn-secondary w-full sm:w-32 h-[38px] mt-2 sm:mt-0"
               data-test="filters-reset-btn"
               @click="resetFilter"
             >
@@ -89,11 +111,19 @@ import { AxiosInstance } from 'axios'
 import useResponsivity from '../../composables/useResponsivity'
 import { TableConfig } from './createTableConfig'
 
-const props = defineProps<{
-  filters: Filters
-  axiosInstance?: AxiosInstance
-  config?: TableConfig
-}>()
+const props = withDefaults(
+  defineProps<{
+    filters: Filters
+    axiosInstance?: AxiosInstance | null
+    config?: TableConfig | null
+    toggleAdvancedFilters?: boolean
+  }>(),
+  {
+    axiosInstance: null,
+    config: null,
+    toggleAdvancedFilters: false,
+  }
+)
 
 const emit = defineEmits<{
   (
@@ -111,6 +141,10 @@ const filter = () => {
 
 const noAdvancedFilters = computed(
   () => !props.filters.advanced || !props.filters.advanced.length
+)
+
+const showAdvancedFilters = ref(
+  !noAdvancedFilters.value && !props.toggleAdvancedFilters
 )
 
 const types = ['default', 'advanced'] as const
