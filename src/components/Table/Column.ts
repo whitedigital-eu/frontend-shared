@@ -1,8 +1,16 @@
 import { ColumnDefinition } from 'tabulator-tables'
+
+export const COLLAPSE_ORDER = {
+  never: 0,
+  first: 1,
+  second: 2,
+}
+
 export const createColumn = (colData: ColumnDefinition): ColumnDefinition => ({
   hozAlign: 'left',
   headerHozAlign: 'left',
   vertAlign: 'top',
+  responsive: COLLAPSE_ORDER.second,
   ...colData,
 })
 

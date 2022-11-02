@@ -26,6 +26,7 @@ import createActionColumn, { CustomAction, renderIcons } from './ActionColumn'
 import { TableConfig } from './createTableConfig'
 import CellComponent = Tabulator.CellComponent
 import { ApiListResponse } from '../../types/ApiPlatform'
+import { COLLAPSE_ORDER, createColumn } from './Column'
 
 const table = ref()
 const tabulator = ref()
@@ -167,25 +168,27 @@ watch(totalEntryCount, (n, o) => {
 
 const createTimestampColumn = (
   title: string,
-  field: string
-): ColumnDefinition => ({
-  title: title,
-  field: field,
-  hozAlign: 'left',
-  headerHozAlign: 'left',
-  width: 150,
-  formatter: (cell) => props.config.dateTimeFormatter(cell.getValue()),
-  headerSort: !props.disableOrderByDateColumns,
-  vertAlign: 'middle',
-})
+  field: string,
+  hideLast: boolean
+): ColumnDefinition =>
+  createColumn({
+    title: title,
+    field: field,
+    width: 150,
+    formatter: (cell: any) => props.config.dateTimeFormatter(cell.getValue()),
+    headerSort: !props.disableOrderByDateColumns,
+    responsive: hideLast ? COLLAPSE_ORDER.first : COLLAPSE_ORDER.second,
+  })
 
 const createdColumn = createTimestampColumn(
   'IZVEIDOTS',
-  props.config.sharedColumnNames.created
+  props.config.sharedColumnNames.created,
+  true
 )
 const updatedColumn = createTimestampColumn(
   'ATJAUNOTS',
-  props.config.sharedColumnNames.updated
+  props.config.sharedColumnNames.updated,
+  false
 )
 
 const actionColumn = createActionColumn(props, {

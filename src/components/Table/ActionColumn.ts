@@ -2,6 +2,7 @@ import dom from '@left4code/tw-starter/dist/js/dom'
 import { nextTick } from 'vue'
 import { icons, createIcons } from 'lucide'
 import { ColumnDefinition, CellComponent } from 'tabulator-tables'
+import { COLLAPSE_ORDER } from './Column'
 
 interface IconSettings {
   wrapperClass?: string
@@ -97,6 +98,7 @@ const createActionColumn = (
     vertAlign: 'middle',
     hozAlign: 'right',
     headerHozAlign: 'right',
+    responsive: COLLAPSE_ORDER.never,
     formatter(cell: CellComponent) {
       const data = cell.getData()
 
