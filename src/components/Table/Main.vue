@@ -22,7 +22,7 @@ import { onMounted, ref, watch, onBeforeUnmount, PropType, nextTick } from 'vue'
 import translations from './translations'
 import { handleTableAjaxError } from '../../helpers/Errors'
 import useResponsivity from '../../composables/useResponsivity'
-import createActionColumn, { renderIcons } from './ActionColumn'
+import createActionColumn, { CustomAction, renderIcons } from './ActionColumn'
 import { TableConfig } from './createTableConfig'
 import CellComponent = Tabulator.CellComponent
 import { ApiListResponse } from '../../types/ApiPlatform'
@@ -120,6 +120,11 @@ const props = defineProps({
     required: false,
     default: () => ({}),
   },
+  customActions: {
+    type: Array as PropType<CustomAction[]>,
+    required: false,
+    default: null,
+  },
 })
 
 const emit = defineEmits([
@@ -183,15 +188,11 @@ const updatedColumn = createTimestampColumn(
   props.config.sharedColumnNames.updated
 )
 
-const actionColumn = createActionColumn(
-  props,
-  {
-    edit: (resource) => emit('edit-click', resource),
-    delete: (resource) => emit('delete-click', resource),
-    view: (resource) => emit('view-click', resource),
-  },
-  props.canUpdateRecordFunc
-)
+const actionColumn = createActionColumn(props, {
+  edit: (resource) => emit('edit-click', resource),
+  delete: (resource) => emit('delete-click', resource),
+  view: (resource) => emit('view-click', resource),
+})
 
 const selectionColumn: ColumnDefinition = {
   title: '',
@@ -224,7 +225,7 @@ if (props.updated) {
   columnsAfter.push(updatedColumn)
 }
 
-if (props.view || props.edit || props.delete) {
+if (props.view || props.edit || props.delete || props.customActions) {
   columnsAfter.push(actionColumn)
 }
 
@@ -335,6 +336,7 @@ const initTabulator = async (resetPage = false) => {
         if (!data.length) return ''
 
         const table = document.createElement('table')
+        table.classList.add('w-full')
 
         data.forEach((col, i) => {
           const row = document.createElement('tr')
@@ -347,15 +349,18 @@ const initTabulator = async (resetPage = false) => {
           const valueCell = document.createElement('td')
           titleCell.style.whiteSpace = 'initial'
           valueCell.style.whiteSpace = 'initial'
-          titleCell.classList.add('basis-[50px]', 'flex-1')
+          titleCell.classList.add('basis-[20%]')
+          valueCell.style.flexGrow = '4'
 
           col.title instanceof HTMLElement
             ? titleCell.appendChild(col.title)
             : (titleCell.innerHTML = '<strong>' + col.title + '</strong>')
 
-          col.value instanceof HTMLElement
-            ? valueCell.appendChild(col.value)
-            : (valueCell.innerHTML = col.value ?? '')
+          if (col.value) {
+            col.value instanceof HTMLElement
+              ? valueCell.appendChild(col.value)
+              : (valueCell.innerHTML = col.value ?? '')
+          }
 
           row.appendChild(titleCell)
           row.appendChild(valueCell)

@@ -29,11 +29,21 @@ const iconSettings: Record<string, IconSettings> = {
   },
 }
 
+// either object of settings, or function that renders the action icon
+export type CustomAction =
+  | {
+      shouldShow: (data: any) => boolean
+      clickHandler: (data: any) => void
+      settings: IconSettings
+      dataTest?: string
+    }
+  | ((data: any) => HTMLElement | null)
+
 const createIcon = (
   wrapper: HTMLElement,
   clickHandler: () => void,
   settings: IconSettings,
-  dataTest: string
+  dataTest = ''
 ) => {
   const element = dom(`
     <a
@@ -70,13 +80,14 @@ const createActionColumn = (
     delete: boolean
     view: boolean
     movableRows: boolean
+    canUpdateRecordFunc: (cell: CellComponent) => boolean
+    customActions?: CustomAction[]
   },
   clickHandlers: {
     edit: (resource) => void
     delete: (resource) => void
     view: (resource) => void
-  },
-  canUpdateRecordFunc = (cell: CellComponent) => true
+  }
 ): ColumnDefinition => {
   return {
     title: 'DARBĪBAS',
@@ -101,7 +112,7 @@ const createActionColumn = (
         )
       }
 
-      if (props.edit && canUpdateRecordFunc(cell)) {
+      if (props.edit && props.canUpdateRecordFunc(cell)) {
         createIcon(
           wrapper,
           () => clickHandlers.edit(data),
@@ -110,7 +121,7 @@ const createActionColumn = (
         )
       }
 
-      if (props.delete && canUpdateRecordFunc(cell)) {
+      if (props.delete && props.canUpdateRecordFunc(cell)) {
         createIcon(
           wrapper,
           () => clickHandlers.delete(data),
@@ -126,6 +137,24 @@ const createActionColumn = (
           iconSettings.view,
           'table-view-btn'
         )
+      }
+
+      if (props.customActions) {
+        props.customActions.forEach((a) => {
+          if (typeof a === 'function') {
+            const actionIcon = a(data)
+            if (actionIcon) wrapper.append(actionIcon)
+          } else {
+            if (a.shouldShow(data)) {
+              createIcon(
+                wrapper,
+                () => a.clickHandler(data),
+                a.settings,
+                a.dataTest
+              )
+            }
+          }
+        })
       }
 
       nextTick(renderIcons)
