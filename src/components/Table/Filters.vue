@@ -149,11 +149,9 @@ const showAdvancedFilters = ref(
 const types = ['default', 'advanced'] as const
 
 const resetFilter = () => {
-  types.forEach((type: string) => {
+  types.forEach((type) => {
     if (props.filters[type]) {
-      props.filters[type].forEach((item) => {
-        item.value = ''
-      })
+      props.filters[type].forEach((item) => (item.value = ''))
     }
   })
   emit('update:query-params', {})
@@ -192,13 +190,15 @@ const createDateRangeQueryParamsArr = (
 const filtersToQueryParams = () => {
   const objParams: Record<string, string> = {}
 
-  types.forEach((type: string) => {
+  types.forEach((type) => {
     if (props.filters[type]) {
       props.filters[type].forEach((item) => {
         if (item.value === '') return
 
         if (item.name === 'document-date') {
+          //@ts-ignore
           const params = createDateRangeQueryParams(item.value, 'date')
+          //@ts-ignore
           const paramsObj = createDateRangeQueryParamsArr(item.value, 'date')
 
           if (params) {
@@ -206,10 +206,12 @@ const filtersToQueryParams = () => {
           }
         } else if (item.name === 'audits-date' || item.name === 'audit-date') {
           const params = createDateRangeQueryParams(
+            //@ts-ignore
             item.value,
             props.config?.sharedColumnNames.created ?? 'created'
           )
           const paramsObj = createDateRangeQueryParamsArr(
+            //@ts-ignore
             item.value,
             props.config?.sharedColumnNames.created ?? 'created'
           )
@@ -218,8 +220,10 @@ const filtersToQueryParams = () => {
             Object.assign(objParams, paramsObj)
           }
         } else if (item.name === 'activity-date') {
+          //@ts-ignore
           const params = createDateRangeQueryParams(item.value, 'fromDate')
           const paramsObj = createDateRangeQueryParamsArr(
+            //@ts-ignore
             item.value,
             'fromDate'
           )
@@ -231,8 +235,10 @@ const filtersToQueryParams = () => {
           const computedName = `${item.name}[${
             item.exact ? 'exact' : 'ipartial'
           }]`
+          //@ts-ignore
           objParams[computedName] = item.value
         } else {
+          //@ts-ignore
           objParams[item.name] = item.value
         }
       })
@@ -247,7 +253,7 @@ const setFilterInitialValues = () => {
   const params = Object.fromEntries(urlSearchParams.entries())
 
   for (const param in params) {
-    types.forEach((type: string) => {
+    types.forEach((type) => {
       const filterIndex = props.filters[type].findIndex(
         (filter) => filter.name === param
       )

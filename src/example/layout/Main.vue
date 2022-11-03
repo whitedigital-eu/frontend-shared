@@ -1,6 +1,5 @@
 <template>
   <div>
-    <MobileMenu />
     <TopBar />
     <div class="flex overflow-hidden">
       <!-- BEGIN: Side Menu -->
@@ -37,13 +36,16 @@
                       'transform rotate-180': menu.title === openMenuTitle,
                     }"
                   >
-                    <ChevronDownIcon />
+                    <ChevronDownIcon data-role="toggle-menu" />
                   </div>
                 </div>
               </SideMenuTooltip>
               <!-- BEGIN: Second Child -->
               <transition @enter="enter" @leave="leave">
-                <ul v-if="menu.subMenu && menu.title === openMenuTitle">
+                <ul
+                  v-if="menu.subMenu && menu.title === openMenuTitle"
+                  class="ml-2 xl:ml-8"
+                >
                   <li
                     v-for="(subMenu, subMenuKey) in menu.subMenu"
                     :key="subMenuKey"
@@ -56,24 +58,17 @@
                           ? 'javascript:;'
                           : router.resolve({ name: subMenu.name }).path
                       "
-                      class="side-menu"
-                      :class="{ 'side-menu--active': subMenu.active }"
+                      class="side-menu !pl-4 !xl:pl-8"
+                      :class="{
+                        'side-menu--active': subMenu.name === route.name,
+                      }"
                       @click="linkTo(subMenu, router, $event)"
                     >
                       <div class="side-menu__icon">
-                        <ActivityIcon />
+                        <component :is="subMenu.icon" />
                       </div>
                       <div class="side-menu__title">
                         {{ subMenu.title }}
-                        <div
-                          v-if="subMenu.subMenu"
-                          class="side-menu__sub-icon"
-                          :class="{
-                            'transform rotate-180': subMenu.activeDropdown,
-                          }"
-                        >
-                          <ChevronDownIcon />
-                        </div>
                       </div>
                     </SideMenuTooltip>
                   </li>
@@ -97,72 +92,61 @@
 
 <script setup lang="ts">
 import { computed, onMounted, provide, ref, watch } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { Router, RouteRecordName, useRoute, useRouter } from 'vue-router'
 // @ts-ignore
+import { helper as $h } from '@/utils/helper'
 import TopBar from './TopBar.vue'
-import MobileMenu from './mobile-menu/Main.vue'
 import SideMenuTooltip from './SideMenuTooltip.vue'
+//@ts-ignore
 import dom from '@left4code/tw-starter/dist/js/dom'
-import { menu } from './index'
 import useNavigationShared from './shared'
-import _ from 'lodash'
-
-const toRaw = (obj) => JSON.parse(JSON.stringify(obj))
+import { menu, MenuItem } from './index'
 
 const { enter, leave, isActive } = useNavigationShared()
 
 const route = useRoute()
 const router = useRouter()
-const formattedMenu = ref<Array<any>>([])
-
-const sideMenu = ref(menu)
+const formattedMenu = ref<any[]>([])
 
 provide('forceActiveMenu', () => {
-  formattedMenu.value = toRaw(sideMenu.value)
+  formattedMenu.value = $h.toRaw(menu)
 })
 
 watch(
   computed(() => route.path),
   () => {
-    formattedMenu.value = toRaw(sideMenu.value)
+    formattedMenu.value = $h.toRaw(menu)
   }
 )
-
 const openMenuTitle = ref<string | null>(null)
 
 onMounted(() => {
   dom('body').removeClass('error-page').removeClass('login').addClass('main')
-  formattedMenu.value = toRaw(sideMenu.value)
-  openMenuTitle.value = route.name as string
+  formattedMenu.value = $h.toRaw(menu)
 })
 
-const getSideMenuItemHref = (menu) => {
-  if (menu.url) return menu.url
-  if (!menu.subMenu) return router.resolve({ name: menu.name }).path
+const getSideMenuItemHref = (menu: MenuItem) => {
+  if (!menu.subMenu)
+    return router.resolve({ name: menu.name as RouteRecordName }).path
   return 'javascript:;'
 }
 
-const linkTo = (menu, router, event) => {
-  if (event.target.dataset?.role === 'toggle-menu') {
+const linkTo = (menu: MenuItem, router: Router, event: Event) => {
+  if (
+    (event?.target as HTMLElement | undefined)?.dataset?.role === 'toggle-menu'
+  ) {
     openMenuTitle.value = openMenuTitle.value === menu.title ? null : menu.title
     return
-  }
-  if (menu.urlPort) {
-    return window
-      .open(`http://${window.location.hostname}:${menu.urlPort}`, '_blank')
-      ?.focus()
   }
   if (menu.subMenu && menu.subMenu.length) {
     openMenuTitle.value = menu.title
     router.push({
-      name: menu.subMenu[0].name,
-      params: menu.subMenu[0].params,
+      name: menu.subMenu[0].name as RouteRecordName,
     })
   } else {
     event.preventDefault()
     router.push({
-      name: menu.name,
-      params: menu.params,
+      name: menu.name as RouteRecordName,
     })
   }
 }

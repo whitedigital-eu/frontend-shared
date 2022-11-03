@@ -24,7 +24,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, PropType, watch, computed } from 'vue'
+import { ref, onMounted, watch, computed } from 'vue'
 import Dropzone from 'dropzone'
 import { dropzoneTranslations } from '../../../helpers/Translations'
 import FormFieldLabel from '../../FormFieldLabel.vue'
@@ -32,35 +32,26 @@ import FilePreview from './FilePreview.vue'
 import { AxiosInstance } from 'axios'
 import getLoadResourceFunctions from '../../../helpers/DataFetching'
 import { FileUploadValue } from '../ValueTypes'
+import { Resource } from '../../../types/Resource'
 
 Dropzone.autoDiscover = false
 
-const props = defineProps({
-  modelValue: {
-    type: [String, Array] as PropType<FileUploadValue>,
-    required: false,
-    default: () => [],
-  },
-  label: {
-    type: String,
-    required: false,
-    default: '',
-  },
-  axiosInstance: {
-    type: Function as PropType<AxiosInstance>,
-    required: true,
-  },
-  setPublic: {
-    type: Boolean,
-    required: false,
-    default: false,
-  },
-  endpointUrl: {
-    type: String,
-    required: false,
-    default: '/api/storage',
-  },
-})
+const props = withDefaults(
+  defineProps<{
+    modelValue?: FileUploadValue
+    label?: string
+    axiosInstance: AxiosInstance
+    setPublic?: boolean
+    endpointUrl?: string
+  }>(),
+  {
+    //@ts-ignore
+    modelValue: [] as string[],
+    label: '',
+    setPublic: false,
+    endpointUrl: '/api/storage',
+  }
+)
 
 const emit = defineEmits(['update:modelValue', 'remove-file'])
 
@@ -68,13 +59,19 @@ const { loadResource, loadAllResources } = getLoadResourceFunctions(
   props.axiosInstance
 )
 
+type ApiPlatformFile = Resource<string, string> &
+  (
+    | { filePath: string; contentUrl: string }
+    | { sourceUrl: string; originalName: string }
+  )
+
 const fileUploadRef = ref()
-const model = ref<any>(null)
+const model = ref<Dropzone | null>(null)
 const uploadedFileIris = ref<string[]>([])
-const initialFiles = ref<any[] | null>(null)
+const initialFiles = ref<ApiPlatformFile[] | null>(null)
 const deletingFileIri = ref<string | null>(null)
 
-const options: any = {
+const options: Dropzone.DropzoneOptions = {
   url: props.endpointUrl,
   thumbnailWidth: 150,
   maxFilesize: 50,
@@ -132,11 +129,15 @@ const anyFiles = computed(() => {
 
 watch(newValue, (n: string | string[]) => emit('update:modelValue', n))
 
-const getFileIri = (file: any) => JSON.parse(file.xhr.response)['@id']
+const getFileIri = (file: Dropzone.DropzoneFile) => {
+  if (file.xhr) return JSON.parse(file.xhr.response)['@id']
+}
 
 const initDropzone = () => {
   model.value = new Dropzone(fileUploadRef.value, options)
-  model.value.on('success', (file: any) => {
+  model.value.on('success', (file) => {
+    if (!model.value) return
+
     if (singleFileUpload.value) {
       if (model.value.files.length > 1) {
         model.value.removeFile(model.value.files[0])
@@ -147,7 +148,7 @@ const initDropzone = () => {
 
     uploadedFileIris.value = [...uploadedFileIris.value, getFileIri(file)]
   })
-  model.value.on('removedfile', async (file: any) => {
+  model.value.on('removedfile', async (file) => {
     const removedFileIri = getFileIri(file)
     try {
       await props.axiosInstance.delete(removedFileIri)
@@ -159,7 +160,7 @@ const initDropzone = () => {
   })
   if (props.setPublic) {
     model.value.on('sending', async (file, xhr, formData) => {
-      formData.append('isPublic', true)
+      formData.append('isPublic', Boolean(true).toString())
     })
   }
 }
@@ -178,11 +179,7 @@ const loadInitialFiles = async () => {
   }
 }
 
-const createFileForPreview = (
-  file:
-    | { filePath: string; contentUrl: string }
-    | { sourceUrl: string; originalName: string }
-) =>
+const createFileForPreview = (file: ApiPlatformFile) =>
   'filePath' in file
     ? {
         filePath: file.filePath,

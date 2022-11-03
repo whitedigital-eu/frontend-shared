@@ -9,7 +9,7 @@
     >
       {{ label }}
     </FormFieldLabel>
-    <flatPickr
+    <FlatPickr
       ref="datepickerRef"
       v-model="value"
       class="w-full form-control input"
@@ -28,8 +28,7 @@
 
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from 'vue'
-//@ts-ignore
-import flatPickr from 'vue-flatpickr-component'
+import FlatPickr from 'vue-flatpickr-component'
 import 'flatpickr/dist/flatpickr.css'
 import locales from 'flatpickr/dist/l10n/'
 

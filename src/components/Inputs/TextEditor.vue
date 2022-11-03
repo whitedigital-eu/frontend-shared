@@ -14,7 +14,6 @@
 
 <script setup lang="ts">
 import { computed, onMounted, PropType, ref } from 'vue'
-//@ts-ignore
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 import FormFieldLabel from '../FormFieldLabel.vue'
 import { TextEditorValue } from './ValueTypes'
@@ -51,7 +50,7 @@ const toolbar: string[] = [
   'undo',
   'redo',
 ]
-const editor = ref<any>(null)
+const editor = ref<ClassicEditor | null>(null)
 
 const isEmpty = computed(() => !props.modelValue)
 const isFocused = ref(false)
@@ -61,19 +60,19 @@ const emit = defineEmits(['update:modelValue'])
 const handleInput = (editorValue: string) =>
   emit('update:modelValue', editorValue)
 
-onMounted(() => {
+onMounted(async () => {
   const el = document.querySelector(`#${props.id}`)
   if (!el) return
-  ClassicEditor.create(el, {
-    toolbar,
-  }).then((ed: any) => {
-    ed.model.document.on('change:data', () => handleInput(ed.getData()))
-    ed.ui.focusTracker.on(
-      'change:isFocused',
-      (evt, name, hasFocus) => (isFocused.value = hasFocus)
-    )
-    editor.value = ed
-  })
+
+  const ed = await ClassicEditor.create(el as HTMLElement, { toolbar })
+
+  ed.model.document.on('change:data', () => handleInput(ed.getData()))
+  ed.ui.focusTracker.on(
+    'change:isFocused',
+    //@ts-ignore
+    (evt, name, hasFocus) => (isFocused.value = hasFocus)
+  )
+  editor.value = ed
 })
 
 const focusEditor = () => {

@@ -11,10 +11,10 @@
 <script setup lang="ts">
 import { PropType, ref, watch } from 'vue'
 import BaseSelect from './BaseSelect.vue'
-
 import { DataFetchingSelectConfig } from '../../../types/InputFields'
 import { AxiosInstance } from 'axios'
 import { DataFetchingSelectValue } from '../ValueTypes'
+import { TomSettings } from 'tom-select/src/types'
 
 const props = defineProps({
   id: {
@@ -40,7 +40,7 @@ const props = defineProps({
   },
 })
 
-const settings: any = {
+const settings: Partial<TomSettings> = {
   shouldLoad: (query) => query.length >= 3,
   async load(searchValue, callback) {
     const requestUrl = props.config.requestUrlGenerator(searchValue)
@@ -49,12 +49,13 @@ const settings: any = {
       'hydra:member'
     ].map(props.config.responseMapFunction)
 
+    //@ts-ignore
     callback(options)
   },
 }
 
 if (props.config.options) {
-  settings.options = props.config.options
+  settings.options = { ...props.config.options }
 }
 
 const emit = defineEmits(['update:modelValue'])

@@ -17,25 +17,24 @@
 </template>
 
 <script setup lang="ts">
-import Tabulator, { ColumnDefinition, Options } from 'tabulator-tables'
+import Tabulator from 'tabulator-tables'
 import { onMounted, ref, watch, onBeforeUnmount, PropType, nextTick } from 'vue'
 import translations from './translations'
 import { handleTableAjaxError } from '../../helpers/Errors'
 import useResponsivity from '../../composables/useResponsivity'
 import createActionColumn, { CustomAction, renderIcons } from './ActionColumn'
 import { TableConfig } from './createTableConfig'
-import CellComponent = Tabulator.CellComponent
 import { ApiListResponse } from '../../types/ApiPlatform'
 import { COLLAPSE_ORDER, createColumn } from './Column'
 
 const table = ref()
 const tabulator = ref()
-const totalEntryCount = ref(null)
+const totalEntryCount = ref<number | null>(null)
 const { isMobile } = useResponsivity()
 
 const props = defineProps({
   columns: {
-    type: Array as PropType<ColumnDefinition[]>,
+    type: Array as PropType<Tabulator.ColumnDefinition[]>,
     required: true,
   },
   delete: {
@@ -112,12 +111,12 @@ const props = defineProps({
     required: true,
   },
   canUpdateRecordFunc: {
-    type: Function as PropType<(cell: CellComponent) => boolean>,
+    type: Function as PropType<(cell: Tabulator.CellComponent) => boolean>,
     required: false,
     default: () => () => true,
   },
   tabulatorOptions: {
-    type: Object as PropType<Options>,
+    type: Object as PropType<Tabulator.Options>,
     required: false,
     default: () => ({}),
   },
@@ -170,12 +169,12 @@ const createTimestampColumn = (
   title: string,
   field: string,
   hideLast: boolean
-): ColumnDefinition =>
+): Tabulator.ColumnDefinition =>
   createColumn({
     title: title,
     field: field,
     width: 150,
-    formatter: (cell: any) => props.config.dateTimeFormatter(cell.getValue()),
+    formatter: (cell) => props.config.dateTimeFormatter(cell.getValue()),
     headerSort: !props.disableOrderByDateColumns,
     responsive: hideLast ? COLLAPSE_ORDER.first : COLLAPSE_ORDER.second,
   })
@@ -197,7 +196,7 @@ const actionColumn = createActionColumn(props, {
   view: (resource) => emit('view-click', resource),
 })
 
-const selectionColumn: ColumnDefinition = {
+const selectionColumn: Tabulator.ColumnDefinition = {
   title: '',
   formatter: 'rowSelection',
   titleFormatter: 'rowSelection',
@@ -205,7 +204,7 @@ const selectionColumn: ColumnDefinition = {
   headerHozAlign: 'left',
   headerSort: false,
   width: 40,
-  cellClick: function (e, cell) {
+  cellClick: function (e: Event, cell: Tabulator.CellComponent) {
     cell.getRow().toggleSelect()
   },
   tooltip: props.selectionCheckboxLabel,
@@ -213,8 +212,8 @@ const selectionColumn: ColumnDefinition = {
   vertAlign: 'middle',
 }
 
-const columnsBefore: ColumnDefinition[] = []
-const columnsAfter: ColumnDefinition[] = []
+const columnsBefore: Tabulator.ColumnDefinition[] = []
+const columnsAfter: Tabulator.ColumnDefinition[] = []
 
 if (props.selectionColumn) {
   columnsBefore.push(selectionColumn)
@@ -250,7 +249,7 @@ const setTableHeight = (): void => {
 let tabulatorScrollTop = 0
 
 const initTabulator = async (resetPage = false) => {
-  let options: Options = {
+  let options: Tabulator.Options = {
     paginationSizeSelector: [10, 30, 100],
     paginationInitialPage: resetPage ? 1 : props.page,
     paginationSize: props.pageSize,

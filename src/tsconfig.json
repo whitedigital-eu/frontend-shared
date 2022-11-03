@@ -21,8 +21,8 @@
       { "name": "@vuedx/typescript-plugin-vue" },
       { "name": "eslint-plugin-import-access" }
     ],
-    "strict": true,
-    "allowJs": true
+    "allowJs": true,
+    "strict": true
   },
   "include": ["**/*.ts", "**/*.d.ts", "**/*.tsx", "**/*.vue"],
   "exclude": [

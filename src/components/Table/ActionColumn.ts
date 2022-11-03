@@ -1,8 +1,9 @@
+//@ts-ignore
 import dom from '@left4code/tw-starter/dist/js/dom'
 import { nextTick } from 'vue'
 import { icons, createIcons } from 'lucide'
-import { ColumnDefinition, CellComponent } from 'tabulator-tables'
 import { COLLAPSE_ORDER } from './Column'
+import { Resource } from '../../types/Resource'
 
 interface IconSettings {
   wrapperClass?: string
@@ -81,15 +82,15 @@ const createActionColumn = (
     delete: boolean
     view: boolean
     movableRows: boolean
-    canUpdateRecordFunc: (cell: CellComponent) => boolean
+    canUpdateRecordFunc: (cell: Tabulator.CellComponent) => boolean
     customActions?: CustomAction[]
   },
   clickHandlers: {
-    edit: (resource) => void
-    delete: (resource) => void
-    view: (resource) => void
+    edit: <R extends Resource<string, string>>(resource: R) => void
+    delete: <R extends Resource<string, string>>(resource: R) => void
+    view: <R extends Resource<string, string>>(resource: R) => void
   }
-): ColumnDefinition => {
+): Tabulator.ColumnDefinition => {
   return {
     title: 'DARBĪBAS',
     field: 'actions',
@@ -99,8 +100,8 @@ const createActionColumn = (
     hozAlign: 'right',
     headerHozAlign: 'right',
     responsive: COLLAPSE_ORDER.never,
-    formatter(cell: CellComponent) {
-      const data = cell.getData()
+    formatter(cell: Tabulator.CellComponent) {
+      const data = cell.getData() as Resource<string, string>
 
       const wrapper = dom(
         `<div class="flex lg:justify-start items-center"></div>`

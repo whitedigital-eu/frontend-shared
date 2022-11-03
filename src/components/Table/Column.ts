@@ -1,12 +1,12 @@
-import { ColumnDefinition } from 'tabulator-tables'
-
 export const COLLAPSE_ORDER = {
   never: 0,
   first: 1,
   second: 2,
 }
 
-export const createColumn = (colData: ColumnDefinition): ColumnDefinition => ({
+export const createColumn = (
+  colData: Tabulator.ColumnDefinition
+): Tabulator.ColumnDefinition => ({
   hozAlign: 'left',
   headerHozAlign: 'left',
   vertAlign: 'top',
@@ -15,8 +15,8 @@ export const createColumn = (colData: ColumnDefinition): ColumnDefinition => ({
 })
 
 export const createToggleCollapseColumn = (
-  colData: Partial<ColumnDefinition> = {}
-): ColumnDefinition => {
+  colData: Partial<Tabulator.ColumnDefinition> = {}
+): Tabulator.ColumnDefinition => {
   return createColumn({
     title: '',
     formatter: 'responsiveCollapse',

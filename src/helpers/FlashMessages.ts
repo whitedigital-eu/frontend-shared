@@ -1,4 +1,4 @@
-import StartToastifyInstance from 'toastify-js/src/toastify-es'
+import StartToastifyInstance from 'toastify-js'
 //@ts-ignore
 import dom from '@left4code/tw-starter/dist/js/dom'
 

@@ -1,5 +1,3 @@
-import { Options } from 'tabulator-tables'
-
 type SharedColumnNames = {
   created: string
   updated: string
@@ -7,8 +5,8 @@ type SharedColumnNames = {
 
 export type TableConfig = {
   sharedColumnNames: SharedColumnNames
-  ajaxConfig: Options['ajaxConfig']
-  dateTimeFormatter: (string) => string
+  ajaxConfig: Tabulator.Options['ajaxConfig']
+  dateTimeFormatter: (dateString: string) => string
   tableErrorHandler?: (status: number, errorData: any) => Promise<void>
 }
 
@@ -23,7 +21,7 @@ const createTableConfig = (config: Partial<TableConfig> = {}): TableConfig => {
         Accept: 'application/ld+json',
       },
     },
-    dateTimeFormatter: (value) => value,
+    dateTimeFormatter: (dateString: string) => dateString,
   }
 
   return { ...defaultConfig, ...config }

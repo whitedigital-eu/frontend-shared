@@ -68,6 +68,7 @@ import FileUpload from '../../components/Inputs/FileUpload/FileUpload.vue'
 import RangeDatepicker from '../../components/Inputs/RangeDatepicker.vue'
 import FlatpickrTimePicker from '../../components/Inputs/FlatpickrTimePicker.vue'
 import { SelectOption } from '../../models/SelectOption'
+import { DataFetchingSelectConfig } from '../../types/InputFields'
 
 const fullName = ref('')
 const price = ref('9912,22')
@@ -95,9 +96,9 @@ const roleOptions = [
   new SelectOption('Admin', 'ROLE_ADMIN'),
   new SelectOption('Super admin', 'ROLE_SUPER_ADMIN'),
 ]
-const userSelectConfig = {
+const userSelectConfig: DataFetchingSelectConfig = {
   requestUrlGenerator: (searchValue: string) =>
     `https://randomuser.me/api?name=${searchValue}`,
-  responseMapFunction: (data) => new SelectOption('test', 'test'),
+  responseMapFunction: () => new SelectOption('test', 'test'),
 }
 </script>

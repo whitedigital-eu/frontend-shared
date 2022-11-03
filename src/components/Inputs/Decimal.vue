@@ -59,7 +59,7 @@ const isCaretBeforeDecSeparator = (el: HTMLInputElement) => {
   return indexOfDecSeparator > -1 && caretPos <= indexOfDecSeparator
 }
 
-const emitUpdate = (value) => {
+const emitUpdate = (value: string) => {
   const valueToEmit = value.length ? parseFloat(value.replace(',', '.')) : null
   emit('update:modelValue', valueToEmit)
 }
@@ -124,8 +124,9 @@ const allowedKeys = [
   'Enter',
 ]
 
-const handleKeydown = (e) => {
+const handleKeydown = (e: KeyboardEvent) => {
   if (allowedKeys.includes(e.code)) return
+  if (!e.target || !(e.target instanceof HTMLInputElement)) return
 
   const valueSplitByDecSeparator = e.target.value.split(decSeparator)
   const hasDecSeparator = valueSplitByDecSeparator.length === 2

@@ -29,7 +29,11 @@ export const setFormDataErrors = <T extends FormData>(e: any, formData: T) => {
   if (!e.response) throw new Error(e)
   if (e.response.status !== 422) return formData
   resetFormDataErrors(formData)
-  e.response.data.violations.forEach((violation) => {
+  ;(
+    e.response.data as {
+      violations: Array<{ propertyPath: string; message: string }>
+    }
+  ).violations.forEach((violation) => {
     formData[violation.propertyPath]?.errors?.push(violation.message)
   })
 
