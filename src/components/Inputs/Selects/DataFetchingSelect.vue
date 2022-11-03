@@ -14,7 +14,8 @@ import BaseSelect from './BaseSelect.vue'
 import { DataFetchingSelectConfig } from '../../../types/InputFields'
 import { AxiosInstance } from 'axios'
 import { DataFetchingSelectValue } from '../ValueTypes'
-import { TomSettings } from 'tom-select/src/types'
+// import { TomSettings } from 'tom-select/src/types'
+type TomSettings = any
 
 const props = defineProps({
   id: {

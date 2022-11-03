@@ -33,37 +33,34 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, onMounted, watch, PropType, onBeforeUnmount } from 'vue'
+import { computed, ref, onMounted, watch, onBeforeUnmount } from 'vue'
 import TomSelect from 'tom-select'
 import 'tom-select/dist/css/tom-select.bootstrap5.min.css'
 import FormFieldLabel from '../../FormFieldLabel.vue'
 import { createElement, Users, Phone, Video, Mail } from 'lucide'
+// this throws type errors, cannot be used right now :(
+// import { TomSettings, TomTemplate } from 'tom-select/src/types'
+type TomSettings = any
+type TomTemplate = any
 
-const props = defineProps({
-  settings: {
-    type: Object,
-    default: () => ({}),
-  },
-  modelValue: {
-    type: [String, Array] as PropType<string | string[]>,
-    required: false,
-    default: '',
-  },
-  id: {
-    type: String,
-    required: true,
-  },
-  readonly: {
-    type: Boolean,
-    required: false,
-    default: false,
-  },
-  label: {
-    type: String,
-    required: false,
-    default: null,
-  },
-})
+type ModelValue = string | string[]
+
+const props = withDefaults(
+  defineProps<{
+    settings?: Partial<TomSettings>
+    modelValue?: ModelValue
+    id: string
+    readonly?: boolean
+    label?: string | null
+  }>(),
+  {
+    //@ts-ignore
+    settings: {} as Partial<TomSettings>,
+    modelValue: '',
+    readonly: false,
+    label: null,
+  }
+)
 
 const emit = defineEmits(['update:modelValue', 'create-new-item'])
 
@@ -87,7 +84,7 @@ const createNewItem = (e: Event) => {
   emit('create-new-item', buttonElement?.dataset.itemName)
 }
 
-const renderCreateButton = (data, escape) => {
+const renderCreateButton: TomTemplate = (data, escape) => {
   const escapedInput = escape(data.input)
 
   const createButton = document.createElement('button')
@@ -105,53 +102,73 @@ const renderCreateButton = (data, escape) => {
   return createButton
 }
 
-const renderIcon = (data, escape) => {
+const iconMapping = {
+  users: Users,
+  'phone-call': Phone,
+  video: Video,
+  mail: Mail,
+} as const
+
+const isKeyOfIconMapping = (
+  maybeKeyOfIconMapping: string
+): maybeKeyOfIconMapping is keyof typeof iconMapping => {
+  return maybeKeyOfIconMapping in iconMapping
+}
+
+const renderIcon: TomTemplate = (data, escape) => {
   const iconContainer = document.createElement('a')
   iconContainer.classList.add('flex', 'w-full')
   iconContainer.title = escape(data.text)
 
-  const iconElement = createElement(
-    {
-      users: Users,
-      'phone-call': Phone,
-      video: Video,
-      mail: Mail,
-    }[data.icon]
-  )
-  iconElement.classList.add('mx-auto')
-  iconContainer.appendChild(iconElement)
+  if (isKeyOfIconMapping(data.icon)) {
+    const iconElement = createElement(iconMapping[data.icon])
+    iconElement.classList.add('mx-auto')
+    iconContainer.appendChild(iconElement)
+  }
 
   return iconContainer
 }
 
-const renderTextOrIcon = function (data, escape) {
+const renderTextOrIcon: TomTemplate = function (data, escape) {
   if (!data.icon) return `<div>${escape(data.text)}</div>`
   return renderIcon(data, escape)
 }
 
-const settings: any = {
-  ...props.settings,
-  plugins: {
+const createPlugins = () => {
+  const plugins: TomSettings['plugins'] = {
     dropdown_input: {},
     clear_button: {
       title: 'Dzēst',
-      html: function (data) {
+      html: function (data: { className: string; title: string }) {
         return `<span class="text-xl -mt-[2px] ${data.className}" title="${data.title}">&#10005;</span>`
       },
     },
-    ...props.settings.plugins,
-  },
+  }
+
+  if (multiple.value) {
+    plugins.remove_button = { title: 'Noņemt vērtību' }
+  }
+
+  if (props.settings) {
+    Object.assign(plugins, props.settings.plugins)
+  }
+
+  return plugins
+}
+
+const settings: Partial<TomSettings> = {
+  ...props.settings,
+  plugins: createPlugins(),
   maxItems: multiple.value ? 10 : 1,
   maxOptions: 250,
-  allowEmptyOptions: true,
+  allowEmptyOption: true,
   createFilter: function (input: string) {
+    if (!this?.options) return false
     return !(input.toLowerCase() in this.options)
   },
-  onChange(selected: string | string[]) {
-    const newValue: string | string[] = Array.isArray(selected)
-      ? [...selected]
-      : selected
-    isEmpty.value = selected.length === 0
+  onChange(selected) {
+    const newValue = Array.isArray(selected) ? [...selected] : selected
+    isEmpty.value = !(typeof selected === 'number') && selected.length === 0
     emit('update:modelValue', newValue)
   },
   onDropdownOpen() {
@@ -160,6 +177,8 @@ const settings: any = {
   onDropdownClose() {
     isOpen.value = false
   },
+  // TODO: iesniegt bug report tom-select
+  //@ts-ignore
   render: {
     option: renderTextOrIcon,
     item: renderTextOrIcon,
@@ -172,12 +191,6 @@ const settings: any = {
   },
 }
 
-if (multiple.value) {
-  settings.plugins.remove_button = {
-    title: 'Noņemt vērtību',
-  }
-}
-
 const isOptionSelected = (value: string) => {
   return multiple.value
     ? (props.modelValue as string[]).includes(value)
@@ -188,20 +201,20 @@ const init = () => {
   model.value = new TomSelect(selectRef.value, settings)
 }
 
-const refreshOptions = (options) => {
-  model.value.clearOptions()
-  model.value.addOptions(options)
-  if (options.length) model.value.refreshOptions(false)
-}
-
-const refreshValue = (value) => {
-  model.value.setValue(value, true)
-}
-
 onMounted(init)
 
-watch(() => props.settings.options, refreshOptions)
-watch(() => props.modelValue, refreshValue)
+watch(
+  () => props.settings?.options,
+  (options) => {
+    model.value.clearOptions()
+    model.value.addOptions(options)
+    if (options?.length) model.value.refreshOptions(false)
+  }
+)
+watch(
+  () => props.modelValue,
+  (value) => model.value.setValue(value, true)
+)
 watch(
   () => props.modelValue,
   () =>
