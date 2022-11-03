@@ -114,12 +114,11 @@ import { TableConfig } from './createTableConfig'
 const props = withDefaults(
   defineProps<{
     filters: Filters
-    axiosInstance?: AxiosInstance | null
+    axiosInstance?: AxiosInstance
     config?: TableConfig | null
     toggleAdvancedFilters?: boolean
   }>(),
   {
-    axiosInstance: null,
     config: null,
     toggleAdvancedFilters: false,
   }
