@@ -62,15 +62,18 @@ class TextField extends FormField {
 
 class DecimalField extends FormField {
   public value: Exclude<DecimalValue, string>
+  public config: Record<string, any>
   constructor(
     name: string,
     label: string,
     value?: Exclude<DecimalValue, string>,
-    readonly = false
+    readonly = false,
+    config: Record<string, any> = {}
   ) {
     super('decimal', name, label)
     this.value = value
     this.readonly = readonly
+    this.config = config
   }
 }
 
