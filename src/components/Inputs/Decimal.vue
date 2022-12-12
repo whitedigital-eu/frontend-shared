@@ -69,15 +69,19 @@ const transformValue = (value: string): string => {
   if (!value) return value
 
   transformedValue = transformedValue.replace('.', decSeparator)
-  if (!transformedValue.includes(decSeparator)) return `${transformedValue},00`
+  if (!transformedValue.includes(decSeparator)) {
+    return props.maxDecimals! === 0
+      ? transformedValue
+      : `${transformedValue},${'0'.repeat(props.maxDecimals!)}`
+  }
 
   const decimal = transformedValue.split(decSeparator)[1]
 
   transformedValue =
-    decimal.length > 2
-      ? transformedValue.slice(0, 2 - decimal.length)
+    decimal.length > props.maxDecimals!
+      ? transformedValue.slice(0, props.maxDecimals! - decimal.length)
       : transformedValue.padEnd(
-          transformedValue.length + (2 - decimal.length),
+          transformedValue.length + (props.maxDecimals! - decimal.length),
           '0'
         )
 
