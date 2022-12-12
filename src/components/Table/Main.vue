@@ -282,7 +282,9 @@ const initTabulator = async (resetPage = false) => {
             el.addEventListener('click', setTableHeight, true)
           })
       }, 50)
-      tabulator.value.rowManager.element.scrollTop = tabulatorScrollTop
+      if (tabulator.value) {
+        tabulator.value.rowManager.element.scrollTop = tabulatorScrollTop
+      }
     },
     maxHeight: isMobile.value ? undefined : 700,
     scrollVertical(top) {
