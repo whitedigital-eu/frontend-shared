@@ -17,6 +17,7 @@
         :key="file.id"
         :file="createFileForPreview(file)"
         :disabled="deletingFileIri === file['@id']"
+        :allow-download="allowDownload"
         @remove-file="removeInitialFile(file['@id'])"
       />
     </div>
@@ -43,6 +44,7 @@ const props = withDefaults(
     axiosInstance: AxiosInstance
     setPublic?: boolean
     endpointUrl?: string
+    allowDownload: boolean
   }>(),
   {
     //@ts-ignore
@@ -50,6 +52,7 @@ const props = withDefaults(
     label: '',
     setPublic: false,
     endpointUrl: '/api/storage',
+    allowDownload: false,
   }
 )
 

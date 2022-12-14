@@ -157,9 +157,16 @@ class DateTimeField extends FormField {
 
 class FileUploadField extends FormField {
   public value: FileUploadValue
-  constructor(name: string, label: string, value?: FileUploadValue) {
+  public allowDownload = false
+  constructor(
+    name: string,
+    label: string,
+    value?: FileUploadValue,
+    config?: { allowDownload: boolean }
+  ) {
     super('file-upload', name, label)
     this.value = value
+    if (config) this.allowDownload = config.allowDownload
   }
 }
 

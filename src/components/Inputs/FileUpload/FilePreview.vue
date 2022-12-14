@@ -12,6 +12,16 @@
       <div class="dz-filename">
         <span>{{ file.filePath }}</span>
       </div>
+      <div v-if="allowDownload" class="my-4">
+        <a
+          :href="file.sourceUrl"
+          download
+          title="Lejupielādēt"
+          class="btn btn-outline-primary !cursor-pointer"
+        >
+          <DownloadIcon class="h-6 w-6 !cursor-pointer" />
+        </a>
+      </div>
     </div>
     <a class="dz-remove" @click="emit('remove-file', file)">Noņemt failu</a>
   </div>
@@ -20,13 +30,17 @@
 <script setup lang="ts">
 import useFileInfo from '../../../composables/useFileInfo'
 
-const props = defineProps<{
-  file: {
-    filePath: string
-    sourceUrl: string
-    displayName: string
-  }
-}>()
+const props = withDefaults(
+  defineProps<{
+    file: {
+      filePath: string
+      sourceUrl: string
+      displayName: string
+    }
+    allowDownload?: boolean
+  }>(),
+  { allowDownload: false }
+)
 
 const emit = defineEmits<{
   (e: 'remove-file', file: any): void
