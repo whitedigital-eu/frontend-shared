@@ -44,7 +44,7 @@ const props = withDefaults(
     axiosInstance: AxiosInstance
     setPublic?: boolean
     endpointUrl?: string
-    allowDownload: boolean
+    allowDownload?: boolean
   }>(),
   {
     //@ts-ignore

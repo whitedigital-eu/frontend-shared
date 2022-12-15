@@ -19,7 +19,7 @@
           title="Lejupielādēt"
           class="btn btn-outline-primary !cursor-pointer"
         >
-          <DownloadIcon class="h-6 w-6 !cursor-pointer" />
+          <Download class="h-6 w-6 !cursor-pointer" />
         </a>
       </div>
     </div>
@@ -29,6 +29,7 @@
 
 <script setup lang="ts">
 import useFileInfo from '../../../composables/useFileInfo'
+import { Download } from 'lucide-vue-next'
 
 const props = withDefaults(
   defineProps<{

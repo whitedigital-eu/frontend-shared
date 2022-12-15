@@ -40,16 +40,8 @@
               class="btn btn-primary h-10"
             >
               Detalizēta meklēšana
-              <ChevronDownIcon
-                v-if="showAdvancedFilters"
-                size="20"
-                class="ml-2"
-              />
-              <ChevronUpIcon
-                v-if="!showAdvancedFilters"
-                size="20"
-                class="ml-2"
-              />
+              <ChevronDown v-if="showAdvancedFilters" size="20" class="ml-2" />
+              <ChevronUp v-if="!showAdvancedFilters" size="20" class="ml-2" />
             </button>
           </div>
           <div
@@ -110,6 +102,7 @@ import dayjs from 'dayjs'
 import { AxiosInstance } from 'axios'
 import useResponsivity from '../../composables/useResponsivity'
 import { TableConfig } from './createTableConfig'
+import { ChevronUp, ChevronDown } from 'lucide-vue-next'
 
 const props = withDefaults(
   defineProps<{

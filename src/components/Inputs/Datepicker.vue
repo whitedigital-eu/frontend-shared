@@ -18,7 +18,7 @@
       @onOpen="handleOpen"
       @onClose="handleClose"
     />
-    <XIcon
+    <X
       v-if="!isMobile"
       class="cursor-pointer absolute right-[8px] top-[50%] translate-y-[-50%]"
       @click="clearInput"
@@ -31,6 +31,7 @@ import { computed, onMounted, ref, watch } from 'vue'
 import FlatPickr from 'vue-flatpickr-component'
 import 'flatpickr/dist/flatpickr.css'
 import locales from 'flatpickr/dist/l10n/'
+import { X } from 'lucide-vue-next'
 
 import dayjs from 'dayjs'
 import LocalizedFormat from 'dayjs/plugin/localizedFormat'
