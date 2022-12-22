@@ -1,5 +1,6 @@
 <template>
   <BaseSelect
+    :key="baseSelectKey"
     :id="id"
     v-model="value"
     :settings="settings"
@@ -9,7 +10,7 @@
 </template>
 
 <script setup lang="ts">
-import { PropType, ref, watch } from 'vue'
+import { PropType, ref, watch, watchEffect } from 'vue'
 import BaseSelect from './BaseSelect.vue'
 import { DataFetchingSelectConfig } from '../../../types/InputFields'
 import { AxiosInstance } from 'axios'
@@ -55,9 +56,18 @@ const settings: Partial<TomSettings> = {
   },
 }
 
-if (props.config.options) {
-  settings.options = { ...props.config.options }
-}
+const baseSelectKey = ref(0)
+
+watchEffect(() => {
+  if (props.config.options) {
+    settings.options = props.config.options
+    baseSelectKey.value++
+  }
+  if (props.config.create) {
+    settings.create = props.config.create
+    baseSelectKey.value++
+  }
+})
 
 const emit = defineEmits(['update:modelValue'])
 
