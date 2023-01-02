@@ -40,8 +40,8 @@
               class="btn btn-primary h-10"
             >
               Detalizēta meklēšana
-              <ChevronDown v-if="showAdvancedFilters" size="20" class="ml-2" />
-              <ChevronUp v-if="!showAdvancedFilters" size="20" class="ml-2" />
+              <ChevronDown v-if="showAdvancedFilters" :size="20" class="ml-2" />
+              <ChevronUp v-if="!showAdvancedFilters" :size="20" class="ml-2" />
             </button>
           </div>
           <div
