@@ -5,6 +5,7 @@
     v-model="value"
     :settings="settings"
     :label="label"
+    :allow-delete="allowDelete"
     @update:modelValue="handleInput"
   />
 </template>
@@ -39,6 +40,11 @@ const props = defineProps({
   axiosInstance: {
     type: Function as PropType<AxiosInstance>,
     required: true,
+  },
+  allowDelete: {
+    type: Boolean,
+    required: false,
+    default: true,
   },
 })
 

@@ -92,36 +92,42 @@ class TextareaField extends FormField {
 class SimpleSelectField extends FormField {
   public value: SimpleSelectValue
   config: SimpleSelectConfig
+  public allowDelete: boolean
   constructor(
     name: string,
     label: string,
     value?: SimpleSelectValue,
     options: SelectOption[] = [],
     readonly = false,
-    create = false
+    create = false,
+    allowDelete = true
   ) {
     super('simple-select', name, label)
     this.value = value
     this.config = { options, create }
     this.readonly = readonly
+    this.allowDelete = allowDelete
   }
 }
 
 class DataFetchingSelectField extends FormField {
   public value: DataFetchingSelectValue
   config: DataFetchingSelectConfig
+  public allowDelete: boolean
   constructor(
     name: string,
     label: string,
     value: DataFetchingSelectValue = '',
     config: DataFetchingSelectConfig,
-    readonly = false
+    readonly = false,
+    allowDelete = true
   ) {
     super('data-fetching-select', name, label)
     this.value = value
     const defaultConfig: Partial<DataFetchingSelectConfig> = { minSymbols: 3 }
     this.config = { ...defaultConfig, ...config }
     this.readonly = readonly
+    this.allowDelete = allowDelete
   }
 }
 
@@ -188,8 +194,6 @@ const isSelectField = (
   maybeSelectField: any
 ): maybeSelectField is DataFetchingSelectField | SimpleSelectField => {
   return (
-    maybeSelectField.type === 'simple-select' ||
-    maybeSelectField.type === 'data-fetching-select' ||
     maybeSelectField.type === 'simple-select' ||
     maybeSelectField.type === 'data-fetching-select'
   )
@@ -265,36 +269,42 @@ export class SelectOptionTyped<T extends string, V extends string> {
 export class SimpleSelectFieldTS<T extends string> extends FormField {
   public value: null | undefined | T
   config: SimpleSelectConfigTyped<T>
+  public allowDelete: boolean
   constructor(
     name: string,
     label: string,
     value?: null | undefined | T,
     options: SelectOptionTyped<string, T>[] = [],
     readonly = false,
-    create = false
+    create = false,
+    allowDelete = true
   ) {
     super('simple-select', name, label)
     this.value = value
     this.config = { options, create }
     this.readonly = readonly
+    this.allowDelete = allowDelete
   }
 }
 
 export class SimpleSelectFieldTM<T extends string> extends FormField {
   public value: null | undefined | T[]
   config: SimpleSelectConfigTyped<T>
+  public allowDelete: boolean
   constructor(
     name: string,
     label: string,
     value?: null | undefined | T[],
     options: SelectOptionTyped<string, T>[] = [],
     readonly = false,
-    create = false
+    create = false,
+    allowDelete = true
   ) {
     super('simple-select', name, label)
     this.value = value
     this.config = { options, create }
     this.readonly = readonly
+    this.allowDelete = allowDelete
   }
 }
 

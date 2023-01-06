@@ -5,6 +5,7 @@
     :settings="props.config"
     :readonly="props.readonly"
     :label="label"
+    :allow-delete="allowDelete"
     @update:modelValue="handleInput"
     @create-new-item="(item) => emit('create-new-item', item)"
   />
@@ -38,6 +39,11 @@ const props = defineProps({
     type: String,
     required: false,
     default: '',
+  },
+  allowDelete: {
+    type: Boolean,
+    required: false,
+    default: true,
   },
 })
 

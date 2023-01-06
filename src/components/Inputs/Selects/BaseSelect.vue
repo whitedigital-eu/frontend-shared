@@ -52,6 +52,7 @@ const props = withDefaults(
     id: string
     readonly?: boolean
     label?: string | null
+    allowDelete?: boolean
   }>(),
   {
     //@ts-ignore
@@ -59,6 +60,7 @@ const props = withDefaults(
     modelValue: '',
     readonly: false,
     label: null,
+    allowDelete: true,
   }
 )
 
@@ -137,12 +139,14 @@ const renderTextOrIcon: TomTemplate = function (data, escape) {
 const createPlugins = () => {
   const plugins: TomSettings['plugins'] = {
     dropdown_input: {},
-    clear_button: {
+  }
+  if (props.allowDelete) {
+    plugins.clear_button = {
       title: 'Dzēst',
       html: function (data: { className: string; title: string }) {
         return `<span class="text-xl -mt-[2px] ${data.className}" title="${data.title}">&#10005;</span>`
       },
-    },
+    }
   }
 
   if (multiple.value) {
