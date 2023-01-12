@@ -465,6 +465,7 @@ defineExpose({
   updateData,
   getActiveRows,
   refreshData,
+  instance: tabulator,
 })
 </script>
 
