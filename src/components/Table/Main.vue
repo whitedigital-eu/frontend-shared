@@ -331,6 +331,7 @@ const initTabulator = async (resetPage = false) => {
           '.tabulator-paginator'
         ) as HTMLElement
         topPaginator.innerHTML = ''
+        topFooterContainer.innerHTML = ''
         topFooterContainer.appendChild(footerClone)
 
         const elSelectorToMoveToTop =
