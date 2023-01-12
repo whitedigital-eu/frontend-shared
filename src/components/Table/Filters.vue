@@ -24,7 +24,7 @@
       >
         <div v-show="!isMobile || mobShowFilters" class="flex flex-col grow">
           <div
-            class="flex flex-wrap gap-8"
+            class="flex flex-wrap gap-4"
             :class="{ 'mb-6': noAdvancedFilters }"
           >
             <FilterInput
@@ -48,7 +48,7 @@
             v-if="!noAdvancedFilters"
             v-show="showAdvancedFilters"
             id="advanced-filters"
-            class="flex flex-wrap gap-8 mt-4 mb-6"
+            class="flex flex-wrap gap-4 mt-4 mb-6"
           >
             <FilterInput
               v-for="(item, i) in filters.advanced"

@@ -1,7 +1,7 @@
 export const tableTranslations = {
   lv: {
     pagination: {
-      page_size: 'Ierakstu skaits',
+      page_size: 'Ierakstu skaits lapā',
       first_title: 'Pirmā lapa',
       last_title: 'Pēdējā lapa',
       prev: 'Iepriekšējais',

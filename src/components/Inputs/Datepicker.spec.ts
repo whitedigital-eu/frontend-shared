@@ -1,5 +1,8 @@
 import Datepicker from './Datepicker.vue'
 import { fireEvent, render } from '@testing-library/vue'
+import { vi } from 'vitest'
+
+vi.mock('../../composables/useResponsivity', () => ({ default: () => false }))
 
 // copied from Datepicker.vue defineProps - important to keep in sync!!!
 // move to separate file when importing props in vue files is supported

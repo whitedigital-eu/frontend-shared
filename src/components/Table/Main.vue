@@ -1,36 +1,34 @@
 <template>
   <div class="overflow-x-auto scrollbar-hidden relative" data-test="table">
+    <div class="tabulator tabulator-top-pagination-placeholder"></div>
     <div
       v-if="totalEntryCount"
-      class="table-total-entry-count absolute right-4"
+      class="table-total-entry-count absolute"
       data-test="table-total-entry-count"
     >
-      <span>Kopējais ierakstu skaits: </span>
-      <span>{{ totalEntryCount }}</span>
+      <span>(Kopējais ierakstu skaits: {{ totalEntryCount }})</span>
     </div>
     <div
       id="tabulator"
       ref="table"
-      class="mt-5 table-report table-report--tabulator"
-    />
+      class="table-report table-report--tabulator"
+    ></div>
   </div>
 </template>
 
 <script setup lang="ts">
 import Tabulator from 'tabulator-tables'
 import { onMounted, ref, watch, onBeforeUnmount, PropType, nextTick } from 'vue'
-import translations from './translations'
 import { handleTableAjaxError } from '../../helpers/Errors'
-import useResponsivity from '../../composables/useResponsivity'
 import createActionColumn, { CustomAction, renderIcons } from './ActionColumn'
 import { TableConfig } from './createTableConfig'
 import { ApiListResponse } from '../../types/ApiPlatform'
 import { COLLAPSE_ORDER, createColumn } from './Column'
+import { tableTranslations } from '../../helpers/Translations'
 
 const table = ref()
 const tabulator = ref()
 const totalEntryCount = ref<number | null>(null)
-const { isMobile } = useResponsivity()
 
 const props = defineProps({
   columns: {
@@ -235,16 +233,16 @@ let columns = [...columnsBefore, ...props.columns, ...columnsAfter]
 
 const filtersSet = ref(false)
 
-const setTableHeight = (): void => {
-  setTimeout(() => {
-    const tabulatorTableEl = document.querySelector('.tabulator-table')
-    if (!tabulatorTableEl) return
-    const headerHeight = 170 // tried calculating on the fly but it was flaky. 120 is the normal height, but headers can span multiple rows and 170 accomodates 3 header rows...
-    const heightInPx = window.getComputedStyle(tabulatorTableEl).height
-    const newTabulatorHeight = parseInt(heightInPx) + headerHeight
-    tabulator.value.setHeight(newTabulatorHeight)
-  }, 0)
-}
+// const setTableHeight = (): void => {
+//   setTimeout(() => {
+//     const tabulatorTableEl = document.querySelector('.tabulator-table')
+//     if (!tabulatorTableEl) return
+//     const headerHeight = 170 // tried calculating on the fly but it was flaky. 120 is the normal height, but headers can span multiple rows and 170 accommodates 3 header rows...
+//     const heightInPx = window.getComputedStyle(tabulatorTableEl).height
+//     const newTabulatorHeight = parseInt(heightInPx) + headerHeight
+//     tabulator.value.setHeight(newTabulatorHeight)
+//   }, 0)
+// }
 
 let tabulatorScrollTop = 0
 
@@ -262,7 +260,7 @@ const initTabulator = async (resetPage = false) => {
     headerSort: true,
     placeholder: 'Netika atrasti dati',
     locale: 'lv',
-    langs: translations,
+    langs: tableTranslations,
     columns,
     movableRows: props.movableRows,
     rowMoved: function (row) {
@@ -275,21 +273,50 @@ const initTabulator = async (resetPage = false) => {
       emit('row-selection-changed', selectedRowData)
     },
     dataLoaded: function () {
-      setTimeout(() => {
+      /*setTimeout(() => {
         document
           .querySelectorAll('.tabulator-responsive-collapse-toggle')
           .forEach((el) => {
             el.addEventListener('click', setTableHeight, true)
           })
-      }, 50)
+      }, 50)*/
       if (tabulator.value) {
         tabulator.value.rowManager.element.scrollTop = tabulatorScrollTop
       }
     },
-    maxHeight: isMobile.value ? undefined : 700,
     scrollVertical(top) {
+      nextTick(() => (tabulatorScrollTop = top))
+    },
+    tableBuilt(this: Tabulator) {
       nextTick(() => {
-        tabulatorScrollTop = top
+        if (!this.element.parentElement) {
+          console.warn('Table element does not have parentElement!')
+          return
+        }
+
+        const footer = this.element.querySelector(
+          '.tabulator-footer'
+        ) as HTMLElement
+        const topFooterContainer = this.element.parentElement.querySelector(
+          '.tabulator-top-pagination-placeholder'
+        ) as HTMLElement
+        const footerClone = footer.cloneNode(true) as HTMLElement
+        const topPaginator = footerClone.querySelector(
+          '.tabulator-paginator'
+        ) as HTMLElement
+        topPaginator.innerHTML = ''
+        topFooterContainer.appendChild(footerClone)
+
+        const elSelectorToMoveToTop =
+          '.tabulator-paginator>label, .tabulator-paginator>.tabulator-page-size'
+        footer
+          .querySelectorAll(elSelectorToMoveToTop)
+          .forEach(function (this: HTMLElement, element) {
+            ;(
+              footer.querySelector('.tabulator-paginator') as HTMLElement
+            ).removeChild(element)
+            topPaginator.appendChild(element)
+          })
       })
     },
   }
@@ -416,9 +443,12 @@ defineExpose({
 </script>
 
 <style lang="scss">
+$page-entry-count-switcher-width: 201px;
+
 .table-total-entry-count {
   color: rgb(var(--color-slate-700) / var(--tw-text-opacity));
-  top: -4px;
+  top: 24px;
+  left: calc(#{$page-entry-count-switcher-width} + 16px);
 }
 
 .tabulator {
@@ -445,6 +475,15 @@ defineExpose({
 
   .tabulator-paginator {
     padding: 4px 0 8px 0;
+
+    & > button {
+      &:first-child {
+        margin-left: auto;
+      }
+      &:last-child {
+        margin-right: auto;
+      }
+    }
   }
 }
 </style>
