@@ -1,15 +1,15 @@
 <template>
   <div>
     <button
-      v-if="isMobile"
-      @click="mobShowFilters = !mobShowFilters"
+      v-if="isMobile && showMobileToggleButton"
       class="btn btn-primary w-full mb-4"
+      @click="showFilters = !showFilters"
     >
-      <span>{{ mobShowFilters ? 'Paslēpt' : 'Parādīt' }} filtrus</span>
-      <span v-show="mobShowFilters">
+      <span>{{ showFilters ? 'Paslēpt' : 'Parādīt' }} filtrus</span>
+      <span v-show="showFilters">
         <i data-lucide="chevron-down" class="h-4 w-4"> </i>
       </span>
-      <span v-show="!mobShowFilters">
+      <span v-show="!showFilters">
         <i data-lucide="chevron-up" class="h-4 w-4"></i>
       </span>
     </button>
@@ -22,7 +22,7 @@
         class="xl:flex xl:flex-col sm:mr-auto items-start mb-4 w-full"
         @submit.prevent="filter"
       >
-        <div v-show="!isMobile || mobShowFilters" class="flex flex-col grow">
+        <div v-show="showFilters" class="flex flex-col grow">
           <div
             class="flex flex-wrap gap-4"
             :class="{ 'mb-6': noAdvancedFilters }"
@@ -62,28 +62,36 @@
           class="flex flex-col sm:flex-row justify-between w-full"
           :class="{ 'mt-4': !showAdvancedFilters }"
         >
-          <div
-            v-show="!isMobile || mobShowFilters"
-            class="xl:mt-0 flex gap-2 w-full sm:w-auto"
+          <slot
+            name="action-buttons"
+            :filter-function="filter"
+            :reset-filter-function="resetFilter"
+            :show-filters="showFilters"
+            :toggle-show-filters="toggleShowFilters"
           >
-            <button
-              type="submit"
-              class="btn btn-primary w-full sm:w-16 h-[38px] mt-2 sm:mt-0"
-              data-test="filters-search-btn"
-              @click.prevent="filter"
+            <div
+              v-show="showFilters"
+              class="xl:mt-0 flex gap-2 w-full sm:w-auto"
             >
-              Meklēt
-            </button>
-            <button
-              id="tabulator-html-filter-reset"
-              type="button"
-              class="btn btn-secondary w-full sm:w-32 h-[38px] mt-2 sm:mt-0"
-              data-test="filters-reset-btn"
-              @click="resetFilter"
-            >
-              Dzēst filtrus
-            </button>
-          </div>
+              <button
+                type="submit"
+                class="btn btn-primary w-full sm:w-16 h-[38px] mt-2 sm:mt-0"
+                data-test="filters-search-btn"
+                @click.prevent="filter"
+              >
+                Meklēt
+              </button>
+              <button
+                id="tabulator-html-filter-reset"
+                type="button"
+                class="btn btn-secondary w-full sm:w-32 h-[38px] mt-2 sm:mt-0"
+                data-test="filters-reset-btn"
+                @click="resetFilter"
+              >
+                Dzēst filtrus
+              </button>
+            </div>
+          </slot>
           <div>
             <slot></slot>
           </div>
@@ -110,10 +118,14 @@ const props = withDefaults(
     axiosInstance?: AxiosInstance
     config?: TableConfig | null
     toggleAdvancedFilters?: boolean
+    initialShowFiltersDesktop?: boolean
+    showMobileToggleButton?: boolean
   }>(),
   {
     config: null,
     toggleAdvancedFilters: false,
+    initialShowFiltersDesktop: true,
+    showMobileToggleButton: true,
   }
 )
 
@@ -125,7 +137,7 @@ const emit = defineEmits<{
 }>()
 
 const { isMobile } = useResponsivity()
-const mobShowFilters = ref(false)
+const showFilters = ref(!isMobile.value && props.initialShowFiltersDesktop)
 
 const filter = () => {
   emit('update:query-params', filtersToQueryParams())
@@ -271,4 +283,8 @@ watch(
   },
   { immediate: true }
 )
+
+const toggleShowFilters = () => {
+  showFilters.value = !showFilters.value
+}
 </script>
