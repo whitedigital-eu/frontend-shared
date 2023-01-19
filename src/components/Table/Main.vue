@@ -123,6 +123,11 @@ const props = defineProps({
     required: false,
     default: null,
   },
+  paginationSizeSelector: {
+    type: Array as PropType<Array<number | boolean>>,
+    required: false,
+    default: () => [10, 30, 100],
+  },
 })
 
 const emit = defineEmits([
@@ -271,7 +276,7 @@ let tabulatorScrollTop = 0
 
 const initTabulator = async (resetPage = false) => {
   let options: Tabulator.Options = {
-    paginationSizeSelector: [10, 30, 100],
+    paginationSizeSelector: props.paginationSizeSelector,
     paginationInitialPage: resetPage ? 1 : props.page,
     paginationSize: props.pageSize,
     paginationDataSent: {
