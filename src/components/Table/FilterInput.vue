@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full sm:w-auto">
+  <div class="w-full" :class="containerClass">
     <div
       v-if="item.type === 'text' && !Array.isArray(item.value)"
       class="sm:flex flex-col items-center"
@@ -14,58 +14,50 @@
         <span>Meklēt precīzi </span>
         <Checkbox v-model="item.exact" />
       </label>
-      <span v-if="item.description && !item.exact" class="w-[200px] mt-2">
+      <span v-if="item.description && !item.exact" class="w-full mt-2">
         {{ item.description }}
       </span>
     </div>
-    <div v-if="item.type === 'simple-select'" class="sm:flex items-center">
-      <div class="w-full sm:w-[200px] flex-none grow">
-        <SimpleSelect
-          :id="`filter-${item.label}`"
-          v-model="item.value"
-          :label="item.label"
-          :required="false"
-          :config="item.config"
-        />
-      </div>
-    </div>
-    <div
-      v-if="item.type === 'data-fetching-select'"
-      class="sm:flex items-center"
-    >
-      <div class="w-full sm:w-[200px] flex-none grow">
-        <DataFetchingSelect
-          v-if="props.axiosInstance && isDataFetchingSelectConfig(item.config)"
-          :id="`filter-${item.label}`"
-          v-model="item.value"
-          :label="item.label"
-          :config="castToDataFetchingSelect(item.config)"
-          :axios-instance="props.axiosInstance"
-        />
-      </div>
-    </div>
-    <div
+    <SimpleSelect
+      v-if="item.type === 'simple-select'"
+      class="w-full"
+      :id="`filter-${item.label}`"
+      v-model="item.value"
+      :label="item.label"
+      :required="false"
+      :config="item.config"
+    />
+    <DataFetchingSelect
+      v-if="
+        item.type === 'data-fetching-select' &&
+        props.axiosInstance &&
+        isDataFetchingSelectConfig(item.config)
+      "
+      class="w-full"
+      :id="`filter-${item.label}`"
+      v-model="item.value"
+      :label="item.label"
+      :config="castToDataFetchingSelect(item.config)"
+      :axios-instance="props.axiosInstance"
+    />
+    <Datepicker
       v-if="
         item.type === 'date' &&
         (item.value === '' || !Array.isArray(item.value))
       "
-      class="sm:flex items-center"
-    >
-      <div class="w-full sm:w-[200px] flex-none grow">
-        <Datepicker v-model="item.value" :label="item.label" />
-      </div>
-    </div>
-    <div
+      class="w-full"
+      v-model="item.value"
+      :label="item.label"
+    />
+    <RangeDatepicker
       v-if="
         item.type === 'date-range' &&
         (item.value === '' || Array.isArray(item.value))
       "
-      class="sm:flex items-center"
-    >
-      <div class="w-full flex-none grow sm:w-[416px]">
-        <RangeDatepicker v-model="item.value" :label="item.label" />
-      </div>
-    </div>
+      class="w-full"
+      v-model="item.value"
+      :label="item.label"
+    />
     <div
       v-if="item.type === 'radio-buttons'"
       class="sm:flex flex-col items-left"
@@ -101,6 +93,7 @@ import {
   DataFetchingSelectConfig,
   SimpleSelectConfig,
 } from '../../types/InputFields'
+import { computed } from 'vue'
 
 const props = defineProps<{
   item: Filter
@@ -130,4 +123,15 @@ const castToDataFetchingSelect = (
     return x as DataFetchingSelectConfig
   }
 }
+
+const standardWidth = 200
+const gap = 16
+const doubleWidth = 2 * standardWidth + gap
+// cannot use variables in class definitions so tailwind picks them up
+const standardWidthClass = `sm:w-[200px]` // based on standardWidth
+const doubleWidthClass = `sm:w-[416px]` // based on doubleWidth
+
+const containerClass = computed(() =>
+  props.item.type === 'date-range' ? doubleWidthClass : standardWidthClass
+)
 </script>

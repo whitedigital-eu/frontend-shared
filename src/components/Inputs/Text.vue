@@ -77,12 +77,4 @@ input {
   appearance: none;
   transition: all 0.2s ease-in-out;
 }
-
-@media not all and (min-resolution: 0.001dpcm) and (min-width: 540px) {
-  @supports (-webkit-appearance: none) {
-    input {
-      width: 200px !important;
-    }
-  }
-}
 </style>
