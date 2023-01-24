@@ -62,7 +62,7 @@
       "
       class="sm:flex items-center"
     >
-      <div class="w-full flex-none grow sm:w-[432px]">
+      <div class="w-full flex-none grow sm:w-[416px]">
         <RangeDatepicker v-model="item.value" :label="item.label" />
       </div>
     </div>
