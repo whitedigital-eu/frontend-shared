@@ -162,23 +162,8 @@ const resetFilter = () => {
   emit('update:query-params', {})
 }
 
-const createDateRangeQueryParams = (
-  value: [number, number],
-  searchProperty: string
-) => {
-  if (value.length < 2) return
-
-  const start = dayjs(value[0]).hour(0).minute(0).toISOString()
-  const end = dayjs(value[1]).hour(23).minute(59).toISOString()
-
-  return [
-    `${searchProperty}[after]=${start}`,
-    `${searchProperty}[before]=${end}`,
-  ]
-}
-
 const createDateRangeQueryParamsArr = (
-  value: [number, number],
+  value: [string, string],
   searchProperty: string
 ) => {
   if (value.length < 2) return
@@ -200,42 +185,26 @@ const filtersToQueryParams = () => {
       props.filters[type].forEach((item) => {
         if (item.value === '') return
 
-        if (item.name === 'document-date') {
-          //@ts-ignore
-          const params = createDateRangeQueryParams(item.value, 'date')
-          //@ts-ignore
-          const paramsObj = createDateRangeQueryParamsArr(item.value, 'date')
+        if (item.type === 'date-range') {
+          const searchProperty = (() => {
+            switch (item.name) {
+              case 'document-date':
+                return 'date'
+              case 'audits-date':
+              case 'audit-date':
+                return props.config?.sharedColumnNames.created ?? 'created'
+              case 'activity-date':
+                return 'fromDate'
+              default:
+                return item.name
+            }
+          })()
 
-          if (params) {
-            Object.assign(objParams, paramsObj)
-          }
-        } else if (item.name === 'audits-date' || item.name === 'audit-date') {
-          const params = createDateRangeQueryParams(
-            //@ts-ignore
-            item.value,
-            props.config?.sharedColumnNames.created ?? 'created'
-          )
           const paramsObj = createDateRangeQueryParamsArr(
-            //@ts-ignore
-            item.value,
-            props.config?.sharedColumnNames.created ?? 'created'
+            item.value as [string, string],
+            searchProperty
           )
-
-          if (params) {
-            Object.assign(objParams, paramsObj)
-          }
-        } else if (item.name === 'activity-date') {
-          //@ts-ignore
-          const params = createDateRangeQueryParams(item.value, 'fromDate')
-          const paramsObj = createDateRangeQueryParamsArr(
-            //@ts-ignore
-            item.value,
-            'fromDate'
-          )
-
-          if (params) {
-            Object.assign(objParams, paramsObj)
-          }
+          if (paramsObj) Object.assign(objParams, paramsObj)
         } else if (item.toggleExact) {
           const computedName = `${item.name}[${
             item.exact ? 'exact' : 'ipartial'
