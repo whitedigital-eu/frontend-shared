@@ -61,12 +61,12 @@ describe('Text', () => {
 
   test('input is long if long prop is true', async () => {
     const { getInput } = renderText({ long: true })
-    expect((await getInput()).classList.contains('sm:min-w-[432px]')).toBe(true)
+    expect((await getInput()).classList.contains('sm:min-w-[416px]')).toBe(true)
   })
 
   test('input is not long if long prop is not true', async () => {
     const { getInput } = renderText({ long: false })
-    expect((await getInput()).classList.contains('sm:min-w-[432px]')).toBe(
+    expect((await getInput()).classList.contains('sm:min-w-[416px]')).toBe(
       false
     )
   })

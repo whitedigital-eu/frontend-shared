@@ -8,7 +8,7 @@
         v-model="item.value"
         class="grow"
         :label="item.label"
-        :long="item.name === 'multisearch'"
+        :long="isMultisearchInput"
       />
       <label class="flex mt-1" v-if="item.toggleExact">
         <span>Meklēt precīzi </span>
@@ -124,6 +124,9 @@ const castToDataFetchingSelect = (
   }
 }
 
+const isDateRangeInput = computed(() => props.item.type === 'date-range')
+const isMultisearchInput = computed(() => props.item.name === 'multisearch')
+
 const standardWidth = 200
 const gap = 16
 const doubleWidth = 2 * standardWidth + gap
@@ -132,6 +135,8 @@ const standardWidthClass = `sm:w-[200px]` // based on standardWidth
 const doubleWidthClass = `sm:w-[416px]` // based on doubleWidth
 
 const containerClass = computed(() =>
-  props.item.type === 'date-range' ? doubleWidthClass : standardWidthClass
+  isDateRangeInput.value || isMultisearchInput.value
+    ? doubleWidthClass
+    : standardWidthClass
 )
 </script>

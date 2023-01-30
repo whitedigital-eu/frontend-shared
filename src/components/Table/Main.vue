@@ -327,7 +327,8 @@ const initTabulator = async (resetPage = false) => {
 
         const footer = this.element.querySelector(
           '.tabulator-footer'
-        ) as HTMLElement
+        ) as HTMLElement | null
+        if (!footer) return
         const topFooterContainer = this.element.parentElement.querySelector(
           '.tabulator-top-pagination-placeholder'
         ) as HTMLElement

@@ -35,9 +35,9 @@
             />
             <button
               v-if="!noAdvancedFilters && toggleAdvancedFilters"
-              @click="showAdvancedFilters = !showAdvancedFilters"
               type="button"
               class="btn btn-primary h-10"
+              @click="showAdvancedFilters = !showAdvancedFilters"
             >
               Detalizēta meklēšana
               <ChevronDown v-if="showAdvancedFilters" :size="20" class="ml-2" />

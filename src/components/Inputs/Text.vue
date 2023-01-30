@@ -12,7 +12,7 @@
       v-model="value"
       type="text"
       class="form-control w-full sm:min-w-[200px]"
-      :class="{ 'sm:min-w-[432px]': long }"
+      :class="{ 'sm:min-w-[416px]': long }"
       :readonly="readonly"
       @input="handleInput"
       @focus="handleFocus"
