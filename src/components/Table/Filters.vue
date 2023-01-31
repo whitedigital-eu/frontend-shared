@@ -111,6 +111,7 @@ import { AxiosInstance } from 'axios'
 import useResponsivity from '../../composables/useResponsivity'
 import { TableConfig } from './createTableConfig'
 import { ChevronUp, ChevronDown } from 'lucide-vue-next'
+import { isNumericString } from '../../helpers/Global'
 
 const props = withDefaults(
   defineProps<{
@@ -178,7 +179,7 @@ const createDateRangeQueryParamsArr = (
 }
 
 const filtersToQueryParams = () => {
-  const objParams: Record<string, string> = {}
+  const objParams: Record<string, string | string[] | number> = {}
 
   types.forEach((type) => {
     if (props.filters[type]) {
@@ -209,10 +210,8 @@ const filtersToQueryParams = () => {
           const computedName = `${item.name}[${
             item.exact ? 'exact' : 'ipartial'
           }]`
-          //@ts-ignore
           objParams[computedName] = item.value
         } else {
-          //@ts-ignore
           objParams[item.name] = item.value
         }
       })
@@ -231,8 +230,12 @@ const setFilterInitialValues = () => {
       const filterIndex = props.filters[type].findIndex(
         (filter) => filter.name === param
       )
-      if (filterIndex !== -1)
-        props.filters[type][filterIndex].value = params[param]
+      if (filterIndex === -1) return
+
+      //@ts-ignore
+      props.filters[type][filterIndex].value = isNumericString(params[param])
+        ? parseInt(params[param])
+        : params[param]
     })
   }
 

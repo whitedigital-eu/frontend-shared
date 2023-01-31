@@ -95,3 +95,8 @@ export const snakeToCamelCase = (str: string) =>
     .replace(/([-_][a-z])/g, (group) =>
       group.toUpperCase().replace('-', '').replace('_', '')
     )
+
+// source: https://stackoverflow.com/questions/175739/how-can-i-check-if-a-string-is-a-valid-number
+export const isNumericString = (maybeNumber: string) => {
+  return !isNaN(parseFloat(maybeNumber))
+}
