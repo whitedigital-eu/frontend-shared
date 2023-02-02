@@ -1,12 +1,16 @@
-import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
+import axios, {
+  AxiosInstance,
+  AxiosResponse,
+  InternalAxiosRequestConfig,
+} from 'axios'
 import axiosRetry, { isNetworkOrIdempotentRequestError } from 'axios-retry'
 
-const requestInterceptor = (config: AxiosRequestConfig) => {
+const requestInterceptor = (config: InternalAxiosRequestConfig) => {
   if (config.method === 'patch' && config.headers) {
     config.headers['Content-Type'] = 'application/merge-patch+json'
   }
 
-  return config
+  return config as InternalAxiosRequestConfig
 }
 
 const createAxiosWithInterceptors = (
