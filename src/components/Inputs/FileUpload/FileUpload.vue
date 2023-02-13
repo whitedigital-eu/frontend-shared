@@ -212,3 +212,8 @@ onMounted(() => {
   line-height: 38px;
 }
 </style>
+<style>
+.dz-details {
+  padding-bottom: 0 !important;
+}
+</style>
