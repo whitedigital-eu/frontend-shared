@@ -166,7 +166,7 @@ const createPlugins = () => {
 const settings: Partial<TomSettings> = {
   ...props.settings,
   plugins: createPlugins(),
-  maxItems: multiple.value ? 10 : 1,
+  maxItems: multiple.value ? null : 1,
   maxOptions: 250,
   allowEmptyOption: true,
   createFilter: function (input: string) {
