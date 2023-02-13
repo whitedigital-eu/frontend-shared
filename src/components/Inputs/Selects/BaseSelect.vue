@@ -18,6 +18,7 @@
       class="tom-select"
       :multiple="multiple"
       :disabled="props.readonly"
+      :placeholder="!(isEmpty && !isOpen) ? searchInputPlaceholder : ''"
     >
       <option value="" />
       <option
@@ -53,6 +54,7 @@ const props = withDefaults(
     readonly?: boolean
     label?: string | null
     allowDelete?: boolean
+    searchInputPlaceholder?: string
   }>(),
   {
     //@ts-ignore
@@ -61,6 +63,7 @@ const props = withDefaults(
     readonly: false,
     label: null,
     allowDelete: true,
+    searchInputPlaceholder: '',
   }
 )
 

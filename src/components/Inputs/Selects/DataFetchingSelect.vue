@@ -6,12 +6,13 @@
     :settings="settings"
     :label="label"
     :allow-delete="allowDelete"
+    :search-input-placeholder="searchInputPlaceholder"
     @update:modelValue="handleInput"
   />
 </template>
 
 <script setup lang="ts">
-import { PropType, ref, watch, watchEffect } from 'vue'
+import { computed, PropType, ref, watch, watchEffect } from 'vue'
 import BaseSelect from './BaseSelect.vue'
 import { DataFetchingSelectConfig } from '../../../types/InputFields'
 import { AxiosInstance } from 'axios'
@@ -48,8 +49,13 @@ const props = defineProps({
   },
 })
 
+const minSymbolsForSearch = 3
+const searchInputPlaceholder = computed(
+  () => `Ievadiet vismaz ${minSymbolsForSearch} simbolus!`
+)
+
 const settings: Partial<TomSettings> = {
-  shouldLoad: (query) => query.length >= 3,
+  shouldLoad: (query) => query.length >= minSymbolsForSearch,
   async load(searchValue, callback) {
     const requestUrl = props.config.requestUrlGenerator(searchValue)
     const res = await props.axiosInstance.get(requestUrl)
