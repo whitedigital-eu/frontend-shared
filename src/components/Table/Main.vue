@@ -3,7 +3,7 @@
     <div class="tabulator tabulator-top-pagination-placeholder"></div>
     <div
       v-if="totalEntryCount"
-      class="table-total-entry-count absolute"
+      class="table-total-entry-count sm:absolute"
       data-test="table-total-entry-count"
     >
       <span>(Kopējais ierakstu skaits: {{ totalEntryCount }})</span>
@@ -432,6 +432,8 @@ const initTabulator = async (resetPage = false) => {
           table.appendChild(row)
         })
 
+        nextTick(renderIcons)
+
         return table
       },
     }
@@ -479,10 +481,12 @@ defineExpose({
 <style lang="scss">
 $page-entry-count-switcher-width: 201px;
 
-.table-total-entry-count {
-  color: rgb(var(--color-slate-700) / var(--tw-text-opacity));
-  top: 24px;
-  left: calc(#{$page-entry-count-switcher-width} + 16px);
+@media (min-width: 640px) {
+  .table-total-entry-count {
+    color: rgb(var(--color-slate-700) / var(--tw-text-opacity));
+    top: 24px;
+    left: calc(#{$page-entry-count-switcher-width} + 16px);
+  }
 }
 
 .tabulator {
