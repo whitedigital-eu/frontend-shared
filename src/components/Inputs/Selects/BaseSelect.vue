@@ -77,6 +77,14 @@ const multiple = computed(() => Array.isArray(props.modelValue))
 const isOpen = ref(false)
 const isEmpty = ref(false)
 
+watch(isOpen, (n) => {
+  if (!n || !model.value.dropdown) return
+  const parentModalBody = model.value.dropdown.closest('.modal-body')
+  if (parentModalBody) {
+    setTimeout(() => model.value.dropdown.scrollIntoView(), 0)
+  }
+})
+
 const handleLabelClick = () => {
   if (!model.value || props.readonly || isOpen.value) return
   model.value.open()
