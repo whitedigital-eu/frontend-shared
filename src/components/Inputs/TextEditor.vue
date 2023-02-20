@@ -9,6 +9,7 @@
       {{ label }}
     </FormFieldLabel>
     <div :id="id" v-html="modelValue" />
+    <div v-if="readonly" class="disabled-overlay"></div>
   </div>
 </template>
 
@@ -34,6 +35,11 @@ const props = defineProps({
     required: true,
   },
   small: {
+    type: Boolean,
+    required: false,
+    default: false,
+  },
+  readonly: {
     type: Boolean,
     required: false,
     default: false,
@@ -84,5 +90,14 @@ const focusEditor = () => {
 <style>
 .small .ck .ck .ck-content {
   min-height: 107px;
+}
+</style>
+
+<style scoped lang="scss">
+.disabled-overlay {
+  position: absolute;
+  inset: 0;
+  background: #f3f5f6;
+  opacity: 0.5;
 }
 </style>

@@ -13,6 +13,8 @@
       ref="datepickerRef"
       v-model="value"
       class="w-full form-control input"
+      :class="{ 'flatpickr-input-readonly': readonly }"
+      :disabled="readonly"
       :config="config"
       @onChange="handleChange"
       @onOpen="handleOpen"
@@ -45,10 +47,12 @@ const props = withDefaults(
   defineProps<{
     modelValue: DatepickerValue
     label?: string | null
+    readonly?: boolean
   }>(),
   {
     modelValue: null,
     label: null,
+    readonly: false,
   }
 )
 
@@ -136,3 +140,9 @@ const addCloseButtonToDatepicker = () => {
 
 onMounted(addCloseButtonToDatepicker)
 </script>
+
+<style lang="scss">
+.flatpickr-input-readonly {
+  background: #f3f5f6 !important;
+}
+</style>
