@@ -81,7 +81,7 @@ watch(isOpen, (n) => {
   if (!n || !model.value.dropdown) return
   const parentModalBody = model.value.dropdown.closest('.modal-body')
   if (parentModalBody) {
-    setTimeout(() => model.value.dropdown.scrollIntoView(), 0)
+    setTimeout(() => model.value.dropdown.scrollIntoView(), 0) //FIXME: should only scroll into view if dropdown overflows modal body!
   }
 })
 
