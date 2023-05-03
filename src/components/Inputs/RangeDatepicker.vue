@@ -18,6 +18,11 @@
       @onOpen="handleOpen"
       @onClose="handleClose"
     />
+    <X
+      v-if="!isMobile"
+      class="cursor-pointer absolute right-[8px] top-[50%] translate-y-[-50%]"
+      @click="clearInput"
+    />
   </div>
 </template>
 
@@ -32,6 +37,8 @@ import dayjs from 'dayjs'
 import LocalizedFormat from 'dayjs/plugin/localizedFormat'
 import FormFieldLabel from '../FormFieldLabel.vue'
 import { areStringArraysEqual } from '../../helpers/Global'
+import { X } from 'lucide-vue-next'
+import useResponsivity from '../../composables/useResponsivity'
 
 dayjs.extend(LocalizedFormat)
 
@@ -47,6 +54,8 @@ const props = withDefaults(
 )
 
 const emit = defineEmits(['update:modelValue'])
+
+const { isMobile } = useResponsivity()
 
 const datepickerRef = ref(null)
 
@@ -93,4 +102,6 @@ watch(
   (n) => (value.value = n),
   { immediate: true }
 )
+
+const clearInput = () => emit('update:modelValue', [])
 </script>

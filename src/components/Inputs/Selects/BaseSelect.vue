@@ -22,7 +22,7 @@
     >
       <option value="" />
       <option
-        v-for="(option, i) in settings.options"
+        v-for="(option, i) in settings.options as Array<{text: string, value: string}>"
         :key="i"
         :value="option.value"
         :selected="isOptionSelected(option.value)"

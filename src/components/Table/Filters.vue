@@ -190,12 +190,12 @@ const filtersToQueryParams = () => {
           const searchProperty = (() => {
             switch (item.name) {
               case 'document-date':
+                console.warn('Deprecated!')
                 return 'date'
               case 'audits-date':
               case 'audit-date':
+                console.warn('Deprecated!')
                 return props.config?.sharedColumnNames.created ?? 'created'
-              case 'activity-date':
-                return 'fromDate'
               default:
                 return item.name
             }

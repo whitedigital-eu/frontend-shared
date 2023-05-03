@@ -35,7 +35,7 @@ const computedCssClasses = computed(() => {
 <style lang="scss" scoped>
 label {
   position: absolute;
-  transition: all 0.2s ease-in-out, background 1ms;
+  transition: all 0.2s ease-in-out, background 1ms, visibility 0s;
   top: 0;
   left: 8px;
   background: white;

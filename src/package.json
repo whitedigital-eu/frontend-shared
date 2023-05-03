@@ -1,6 +1,6 @@
 {
   "name": "wd-frontend-shared",
-  "version": "0.2.169",
+  "version": "0.2.172",
   "author": "Imants Liepiņš",
   "license": "MIT",
   "description": "Shared components, helpers, composables and types for vue frontend SPAs",
