@@ -53,7 +53,7 @@ label {
     color: #39687b;
     opacity: 0.8;
     left: 12px;
-    width: 230px;
+    width: 170px;
     background: transparent;
   }
 }
