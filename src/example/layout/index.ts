@@ -11,6 +11,11 @@ const menu = [
     icon: 'BriefcaseIcon',
     name: 'input-components',
   },
+  {
+    title: 'Tabula',
+    icon: 'TableIcon',
+    name: 'table-component',
+  },
 ]
 
 export { menu }

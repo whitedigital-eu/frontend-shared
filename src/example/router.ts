@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from 'vue-router'
-const InputComponentsPage = () => import('./pages/InputComponentsPage.vue')
 
 const routes = [
   {
@@ -11,7 +10,12 @@ const routes = [
   {
     name: 'input-components',
     path: '/input-components',
-    component: InputComponentsPage,
+    component: () => import('./pages/InputComponentsPage.vue'),
+  },
+  {
+    name: 'table-component',
+    path: '/table-component',
+    component: () => import('./pages/TableComponentPage.vue'),
   },
   {
     path: '/:catchAll(.*)',

@@ -315,6 +315,10 @@ const initTabulator = async (resetPage = false) => {
         tabulator.value.rowManager.element.scrollTop = tabulatorScrollTop
       }
     },
+    // dataProcessed() {
+    //   console.log('processed')
+    //   nextTick(renderIcons)
+    // },
     scrollVertical(top) {
       nextTick(() => (tabulatorScrollTop = top))
     },

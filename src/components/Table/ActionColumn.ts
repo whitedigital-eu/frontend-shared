@@ -69,9 +69,7 @@ const createIcon = (
 export const renderIcons = () => {
   createIcons({
     icons,
-    attrs: {
-      'stroke-width': 1.5,
-    },
+    attrs: { 'stroke-width': 1.5 },
     nameAttr: 'data-lucide',
   })
 }
