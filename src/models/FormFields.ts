@@ -13,7 +13,6 @@ import {
   SimpleSelectValue,
   DateTimePickerValue,
   FileUploadValue,
-  CheckboxValue,
   SliderValue,
   FlatpickrTimePickerValue,
 } from '../components/Inputs/ValueTypes'
@@ -177,10 +176,10 @@ class FileUploadField extends FormField {
 }
 
 class CheckboxField extends FormField {
-  value: CheckboxValue
-  constructor(name: string, label: string, value?: CheckboxValue) {
+  value: boolean
+  constructor(name: string, label: string, value?: boolean | undefined) {
     super('checkbox', name, label)
-    this.value = value
+    this.value = value ?? false
   }
 }
 
