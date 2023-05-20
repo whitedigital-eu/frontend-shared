@@ -41,6 +41,11 @@ export type CustomAction =
     }
   | ((data: any) => HTMLElement | null)
 
+export const ACTION_ICON_SIZE = 18
+export const ACTION_ICON_MR = 12
+export const ACTION_ICON_TOTAL_WIDTH = ACTION_ICON_SIZE + ACTION_ICON_MR
+export const ACTION_COLUMN_MIN_WIDTH = 90
+
 const createIcon = (
   wrapper: HTMLElement,
   clickHandler: () => void,
@@ -55,7 +60,7 @@ const createIcon = (
     >
       <i data-lucide="${
         settings.iconName
-      }" style="height: 18px; width: 18px;"></i>
+      }" style="height: ${ACTION_ICON_SIZE}px; width: ${ACTION_ICON_SIZE}px;"></i>
     </a>`)
 
   dom(element).on('click', async (e: Event) => {
@@ -74,15 +79,28 @@ export const renderIcons = () => {
   })
 }
 
+type TableProps = {
+  edit: boolean
+  delete: boolean
+  view: boolean
+  movableRows: boolean
+  canUpdateRecordFunc: (cell: Tabulator.CellComponent) => boolean
+  customActions?: CustomAction[]
+}
+
+const computeActionColumnWidth = (props: TableProps) => {
+  let res = 10
+  if (props.edit) res += ACTION_ICON_TOTAL_WIDTH
+  if (props.delete) res += ACTION_ICON_TOTAL_WIDTH
+  if (props.view) res += ACTION_ICON_TOTAL_WIDTH
+  if (props.customActions) {
+    res += props.customActions.length * ACTION_ICON_TOTAL_WIDTH
+  }
+  return res > ACTION_COLUMN_MIN_WIDTH ? res : ACTION_COLUMN_MIN_WIDTH
+}
+
 const createActionColumn = (
-  props: {
-    edit: boolean
-    delete: boolean
-    view: boolean
-    movableRows: boolean
-    canUpdateRecordFunc: (cell: Tabulator.CellComponent) => boolean
-    customActions?: CustomAction[]
-  },
+  props: TableProps,
   clickHandlers: {
     edit: <R extends Resource<string, string>>(resource: R) => void
     delete: <R extends Resource<string, string>>(resource: R) => void
@@ -92,7 +110,7 @@ const createActionColumn = (
   return {
     title: 'DARBĪBAS',
     field: 'actions',
-    width: 100,
+    width: computeActionColumnWidth(props),
     headerSort: false,
     vertAlign: 'middle',
     hozAlign: 'right',
@@ -108,7 +126,7 @@ const createActionColumn = (
       if (props.movableRows) {
         wrapper.append(
           dom(
-            `<i data-lucide="move" class="mr-2" style="height: 18px; width: 18px;"></i>`
+            `<i data-lucide="move" class="mr-2" style="height: ${ACTION_ICON_SIZE}px; width: ${ACTION_ICON_SIZE}px;"></i>`
           )[0]
         )
       }
