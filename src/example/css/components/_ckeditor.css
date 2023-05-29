@@ -2,6 +2,13 @@
 .document-editor,
 .ck-editor__editable {
   @apply shadow-sm;
+
+  ul, ol {
+    @apply pl-3;
+  }
+  a {
+    @apply text-primary underline;
+  }
 }
 
 .document-editor {
@@ -116,7 +123,7 @@
   }
   &.ck-toolbar,
   &.ck-balloon-panel {
-    @apply bg-slate-100 border-slate-200;
+    @apply border-slate-200;
     .ck-icon {
       @apply w-[16px];
     }

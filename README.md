@@ -51,3 +51,6 @@ Some components which depend on other external libraries need to have a unique I
 
 All components emit event `update:modelValue` which updates the value of the property provided via `v-model`.
 Some components emit other events as well, see each component definition.
+
+## HTML content editor (for CMS)
+In order for elfinder to work, jquery, jqueryUI and elfinder must be loaded globally (see index.html)

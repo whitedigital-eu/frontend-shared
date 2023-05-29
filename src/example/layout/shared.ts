@@ -5,8 +5,8 @@ import { useRoute } from 'vue-router'
 export default function useNavigationShared() {
   const route = useRoute()
 
-  const enter = (el: HTMLElement) => dom(el).slideDown(300)
-  const leave = (el: HTMLElement) => dom(el).slideUp(300)
+  const enter = (el: Element) => dom(el).slideDown(300)
+  const leave = (el: Element) => dom(el).slideUp(300)
 
   const isActive = (menuItem: any) => {
     if (menuItem.subMenu) {

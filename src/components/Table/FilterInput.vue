@@ -93,7 +93,8 @@ import {
   DataFetchingSelectConfig,
   SimpleSelectConfig,
 } from '../../types/InputFields'
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
+import HtmlContentEditor from '../Inputs/HtmlContentEditor.vue'
 
 const props = defineProps<{
   item: Filter

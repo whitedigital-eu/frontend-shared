@@ -28,7 +28,7 @@ import {
   roseinherit,
 } from 'tailwindcss/colors'
 // @ts-ignore
-import { helper } from '@/utils/helper'
+import { helper } from './helper'
 
 const el = getComputedStyle(document.body)
 const mainColors = {

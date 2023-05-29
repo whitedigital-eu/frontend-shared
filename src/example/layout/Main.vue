@@ -94,7 +94,7 @@
 import { computed, onMounted, provide, ref, watch } from 'vue'
 import { Router, RouteRecordName, useRoute, useRouter } from 'vue-router'
 // @ts-ignore
-import { helper as $h } from '@/utils/helper'
+import { helper as $h } from '../../utils/helper'
 import TopBar from './TopBar.vue'
 import SideMenuTooltip from './SideMenuTooltip.vue'
 //@ts-ignore

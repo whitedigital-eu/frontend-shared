@@ -2,7 +2,8 @@
   <form class="mt-4 flex flex-col gap-4 w-[500px] mr-auto">
     <Text label="Full name" v-model="fullName" />
     <Decimal v-model="price" />
-    <TextEditor id="notes-editor" label="Notes" v-model="notes" />
+    <TextEditor label="Notes" v-model="notes" />
+    <HtmlContentEditor v-model="htmlContent" label="Html content" />
     <Checkbox label="Is active" v-model="isActive" />
     <Slider label="Probability" v-model="probability" />
     <SimpleSelect
@@ -28,6 +29,7 @@
     />
 
     <FlatpickrTimePicker
+      id="flatpickr-time-picker"
       label="Flatpickr time picker"
       v-model="attendanceTime"
     />
@@ -69,6 +71,7 @@ import RangeDatepicker from '../../components/Inputs/RangeDatepicker.vue'
 import FlatpickrTimePicker from '../../components/Inputs/FlatpickrTimePicker.vue'
 import { SelectOption } from '../../models/SelectOption'
 import { DataFetchingSelectConfig } from '../../types/InputFields'
+import HtmlContentEditor from '../../components/Inputs/HtmlContentEditor.vue'
 
 const fullName = ref('')
 const price = ref('9912,22')
@@ -101,4 +104,6 @@ const userSelectConfig: DataFetchingSelectConfig = {
     `https://randomuser.me/api?name=${searchValue}`,
   responseMapFunction: () => new SelectOption('test', 'test'),
 }
+
+const htmlContent = ref('<p>test</p>')
 </script>

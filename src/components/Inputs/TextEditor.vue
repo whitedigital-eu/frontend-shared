@@ -1,90 +1,50 @@
 <template>
   <div class="relative" :class="{ small: small }">
     <FormFieldLabel
-      :is-placeholder="isEmpty && !isFocused"
-      class="mt-[44px] -ml-1 z-[1]"
+      class="-ml-1 mt-[44px] pointer-events-none z-[1]"
+      :is-placeholder="!modelValue && !isFocused"
       title-offset-top="-60px"
-      @click="focusEditor"
     >
       {{ label }}
     </FormFieldLabel>
-    <div :id="id" v-html="modelValue" />
+    <CKEditorComponent
+      v-model="internalValue"
+      :editor="TextEditor"
+      @blur="isFocused = false"
+      @focus="isFocused = true"
+    />
     <div v-if="readonly" class="disabled-overlay"></div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, PropType, ref } from 'vue'
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
+import { ref, watch } from 'vue'
 import FormFieldLabel from '../FormFieldLabel.vue'
-import { TextEditorValue } from './ValueTypes'
+import { TextEditor } from './ckeditor/htmlEditors'
+import CKEditor from '@ckeditor/ckeditor5-vue'
 
-const props = defineProps({
-  modelValue: {
-    type: [String, Number] as PropType<TextEditorValue>,
-    required: false,
-    default: '',
-  },
-  label: {
-    type: String,
-    required: false,
-    default: '',
-  },
-  id: {
-    type: String,
-    required: true,
-  },
-  small: {
-    type: Boolean,
-    required: false,
-    default: false,
-  },
-  readonly: {
-    type: Boolean,
-    required: false,
-    default: false,
-  },
-})
+const {
+  modelValue,
+  label = '',
+  small = false,
+  readonly = false,
+} = defineProps<{
+  modelValue: string | number | null
+  label?: string
+  small?: boolean
+  readonly?: boolean
+}>()
 
-const toolbar: string[] = [
-  'bold',
-  'italic',
-  'link',
-  'bulletedList',
-  'numberedList',
-  '|',
-  'undo',
-  'redo',
-]
-const editor = ref<ClassicEditor | null>(null)
+const emit = defineEmits<{
+  'update:modelValue': [internalValue: string | number | null | undefined]
+}>()
 
-const isEmpty = computed(() => !props.modelValue)
+const CKEditorComponent = CKEditor.component
+
+const internalValue = ref(modelValue)
+watch(internalValue, (n) => emit('update:modelValue', n))
+
 const isFocused = ref(false)
-
-const emit = defineEmits(['update:modelValue'])
-
-const handleInput = (editorValue: string) =>
-  emit('update:modelValue', editorValue)
-
-onMounted(async () => {
-  const el = document.querySelector(`#${props.id}`)
-  if (!el) return
-
-  const ed = await ClassicEditor.create(el as HTMLElement, { toolbar })
-
-  ed.model.document.on('change:data', () => handleInput(ed.getData()))
-  ed.ui.focusTracker.on(
-    'change:isFocused',
-    //@ts-ignore
-    (evt, name, hasFocus) => (isFocused.value = hasFocus)
-  )
-  editor.value = ed
-})
-
-const focusEditor = () => {
-  if (!editor.value || isFocused || !isEmpty.value) return
-  editor.value.focus()
-}
 </script>
 
 <style>

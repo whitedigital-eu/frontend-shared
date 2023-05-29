@@ -7,7 +7,7 @@
     :label="label"
     :allow-delete="allowDelete"
     :search-input-placeholder="searchInputPlaceholder"
-    @update:modelValue="handleInput"
+    @update:model-value="handleInput"
   />
 </template>
 
@@ -17,8 +17,8 @@ import BaseSelect from './BaseSelect.vue'
 import { DataFetchingSelectConfig } from '../../../types/InputFields'
 import { AxiosInstance } from 'axios'
 import { DataFetchingSelectValue } from '../ValueTypes'
-// import { TomSettings } from 'tom-select/src/types'
-type TomSettings = any
+import { RecursivePartial, TomSettings } from 'tom-select/src/types'
+import { SelectOption } from '../../../models/SelectOption'
 
 const props = defineProps({
   id: {
@@ -54,16 +54,14 @@ const searchInputPlaceholder = computed(
   () => `Ievadiet vismaz ${minSymbolsForSearch} simbolus!`
 )
 
-const settings: Partial<TomSettings> = {
-  shouldLoad: (query) => query.length >= minSymbolsForSearch,
-  async load(searchValue, callback) {
+const settings: RecursivePartial<TomSettings> = {
+  shouldLoad: (query: string) => query.length >= minSymbolsForSearch,
+  async load(searchValue: string, callback: (options: SelectOption[]) => void) {
     const requestUrl = props.config.requestUrlGenerator(searchValue)
     const res = await props.axiosInstance.get(requestUrl)
     const options: { value: string; text: string }[] = res.data[
       'hydra:member'
     ].map(props.config.responseMapFunction)
-
-    //@ts-ignore
     callback(options)
   },
 }
@@ -72,7 +70,7 @@ const baseSelectKey = ref(0)
 
 watchEffect(() => {
   if (props.config.options) {
-    settings.options = props.config.options
+    settings.options = props.config.options as RecursivePartial<SelectOption[]>
     baseSelectKey.value++
   }
   if (props.config.create) {

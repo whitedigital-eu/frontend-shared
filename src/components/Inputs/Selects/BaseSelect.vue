@@ -8,7 +8,7 @@
         '!cursor-pointer',
         readonly ? '!z-[1]' : 'z-[2]',
       ]"
-      @click.native="handleLabelClick"
+      @click="handleLabelClick"
     >
       {{ props.label }}
     </FormFieldLabel>
@@ -22,10 +22,10 @@
     >
       <option value="" />
       <option
-        v-for="(option, i) in settings.options as Array<{text: string, value: string}>"
+        v-for="(option, i) in settings.options as Array<RecursivePartial<{text: string, value: string}>>"
         :key="i"
         :value="option.value"
-        :selected="isOptionSelected(option.value)"
+        :selected="isOptionSelected(option.value ?? '')"
       >
         {{ option.text }}
       </option>
@@ -39,16 +39,18 @@ import TomSelect from 'tom-select'
 import 'tom-select/dist/css/tom-select.bootstrap5.min.css'
 import FormFieldLabel from '../../FormFieldLabel.vue'
 import { createElement, Users, Phone, Video, Mail } from 'lucide'
-// this throws type errors, cannot be used right now :(
-// import { TomSettings, TomTemplate } from 'tom-select/src/types'
-type TomSettings = any
-type TomTemplate = any
+import {
+  RecursivePartial,
+  TomOption,
+  TomSettings,
+  TomTemplate,
+} from 'tom-select/src/types'
 
 type ModelValue = string | string[]
 
 const props = withDefaults(
   defineProps<{
-    settings?: Partial<TomSettings>
+    settings?: RecursivePartial<TomSettings>
     modelValue?: ModelValue
     id: string
     readonly?: boolean
@@ -58,7 +60,7 @@ const props = withDefaults(
   }>(),
   {
     //@ts-ignore
-    settings: {} as Partial<TomSettings>,
+    settings: {} as RecursivePartial<TomSettings>,
     modelValue: '',
     readonly: false,
     label: null,
@@ -97,7 +99,10 @@ const createNewItem = (e: Event) => {
   emit('create-new-item', buttonElement?.dataset.itemName)
 }
 
-const renderCreateButton: TomTemplate = (data, escape) => {
+const renderCreateButton: TomTemplate = (
+  data: TomOption,
+  escape: (str: string) => string
+) => {
   const escapedInput = escape(data.input)
 
   const createButton = document.createElement('button')
@@ -171,17 +176,17 @@ const createPlugins = () => {
   return plugins
 }
 
-const settings: Partial<TomSettings> = {
+const settings: RecursivePartial<TomSettings> = {
   ...props.settings,
   plugins: createPlugins(),
-  maxItems: multiple.value ? null : 1,
+  maxItems: multiple.value ? undefined : 1,
   maxOptions: 250,
   allowEmptyOption: true,
   createFilter: function (input: string) {
     if (!this?.options) return false
     return !(input.toLowerCase() in this.options)
   },
-  onChange(selected) {
+  onChange(selected: string | number | string[]) {
     const newValue = Array.isArray(selected) ? [...selected] : selected
     isEmpty.value = !(typeof selected === 'number') && selected.length === 0
     emit('update:modelValue', newValue)
@@ -192,13 +197,11 @@ const settings: Partial<TomSettings> = {
   onDropdownClose() {
     isOpen.value = false
   },
-  // TODO: iesniegt bug report tom-select
-  //@ts-ignore
   render: {
     option: renderTextOrIcon,
     item: renderTextOrIcon,
     option_create: renderCreateButton,
-    no_results: function (data, escape) {
+    no_results: function (data: TomOption, escape: (str: string) => string) {
       return `<div class="no-results">Netika atrasti rezultāti vaicājumam "${escape(
         data.input
       )}"</div>`
