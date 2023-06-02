@@ -1,9 +1,9 @@
 <template>
-  <div class="overflow-x-auto scrollbar-hidden relative" data-test="table">
+  <div class="overflow-x-auto relative scrollbar-hidden" data-test="table">
     <div class="tabulator tabulator-top-pagination-placeholder"></div>
     <div
       v-if="totalEntryCount"
-      class="table-total-entry-count sm:absolute"
+      class="sm:absolute table-total-entry-count"
       data-test="table-total-entry-count"
     >
       <span>(Kopējais ierakstu skaits: {{ totalEntryCount }})</span>
@@ -25,10 +25,6 @@ import { TableConfig } from './createTableConfig'
 import { ApiListResponse } from '../../types/ApiPlatform'
 import { COLLAPSE_ORDER, createColumn } from './Column'
 import { tableTranslations } from '../../helpers/Translations'
-
-const table = ref()
-const tabulator = ref()
-const totalEntryCount = ref<number | null>(null)
 
 const props = defineProps({
   columns: {
@@ -129,7 +125,6 @@ const props = defineProps({
     default: () => [10, 30, 100],
   },
 })
-
 const emit = defineEmits([
   'edit-click',
   'delete-click',
@@ -141,6 +136,9 @@ const emit = defineEmits([
   'pagination-changed',
   'total-entry-count-changed',
 ])
+const table = ref()
+const tabulator = ref()
+const totalEntryCount = ref<number | null>(null)
 
 const reInitTable = () => {
   tabulator.value.redraw()
@@ -234,7 +232,7 @@ if (props.view || props.edit || props.delete || props.customActions) {
   columnsAfter.push(actionColumn)
 }
 
-let columns = [...columnsBefore, ...props.columns, ...columnsAfter]
+const columns = [...columnsBefore, ...props.columns, ...columnsAfter]
 
 const filtersSet = ref(false)
 

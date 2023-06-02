@@ -1,6 +1,6 @@
 {
   "name": "wd-frontend-shared",
-  "version": "0.3.0",
+  "version": "0.3.2",
   "author": "Imants Liepiņš",
   "license": "MIT",
   "description": "Shared components, helpers, composables and types for vue frontend SPAs",
@@ -57,7 +57,7 @@
     "flatpickr": "^4.6.13",
     "lucide": "^0.224.0",
     "lucide-vue-next": "^0.224.0",
-    "tabulator-tables": "^4.9.3",
+    "tabulator-tables": "^4.9",
     "toastify-js": "^1.9.3",
     "tom-select": "^2.2.2",
     "vue": "^3.3.4",
@@ -66,6 +66,7 @@
   },
   "devDependencies": {
     "@ckeditor/vite-plugin-ckeditor5": "^0.1.1",
+    "@rushstack/eslint-patch": "^1.2.0",
     "@tailwindcss/forms": "^0.4.0",
     "@testing-library/user-event": "^14.4.3",
     "@testing-library/vue": "^7.0.0",
@@ -86,7 +87,9 @@
     "eslint": "^8.25.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-unused-imports": "^2.0.0",
     "eslint-plugin-vue": "^9.6.0",
+    "eslint-plugin-vuejs-accessibility": "^2.1.0",
     "jest-environment-jsdom": "^29.1.2",
     "jsdom": "^22.1.0",
     "lodash": "^4.17.21",
@@ -107,10 +110,7 @@
     "vite-plugin-mkcert": "^1.6.0",
     "vitest": "^0.31.1",
     "vue-router": "^4.0.15",
-    "vue-tsc": "^1.0.3",
-    "@rushstack/eslint-patch": "^1.2.0",
-    "eslint-plugin-unused-imports": "^2.0.0",
-    "eslint-plugin-vuejs-accessibility": "^2.1.0"
+    "vue-tsc": "^1.0.3"
   },
   "peerDependencies": {
     "vue": "^3.2.0"

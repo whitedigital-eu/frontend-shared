@@ -54,6 +54,16 @@ const isFocused = ref(false)
 .ck-powered-by-balloon {
   display: none !important;
 }
+
+.ck-editor {
+  ul,
+  ol {
+    @apply pl-3;
+  }
+  a {
+    @apply text-primary underline;
+  }
+}
 </style>
 
 <style scoped lang="scss">

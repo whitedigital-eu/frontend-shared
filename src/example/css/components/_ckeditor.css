@@ -2,13 +2,6 @@
 .document-editor,
 .ck-editor__editable {
   @apply shadow-sm;
-
-  ul, ol {
-    @apply pl-3;
-  }
-  a {
-    @apply text-primary underline;
-  }
 }
 
 .document-editor {
