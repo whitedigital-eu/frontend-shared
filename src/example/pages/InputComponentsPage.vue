@@ -1,37 +1,37 @@
 <template>
-  <form class="mt-4 flex flex-col gap-4 w-[500px] mr-auto">
-    <Text label="Full name" v-model="fullName" />
+  <form class="flex flex-col gap-4 mr-auto mt-4 w-[500px]">
+    <Text v-model="fullName" label="Full name" />
     <Decimal v-model="price" />
-    <TextEditor label="Notes" v-model="notes" />
+    <TextEditor v-model="notes" label="Notes" />
     <HtmlContentEditor v-model="htmlContent" label="Html content" />
-    <Checkbox label="Is active" v-model="isActive" />
-    <Slider label="Probability" v-model="probability" />
+    <Checkbox v-model="isActive" label="Is active" />
+    <Slider v-model="probability" label="Probability" />
     <SimpleSelect
       id="role-select"
-      label="Select role"
       v-model="role"
       :config="{ options: roleOptions }"
+      label="Select role"
     />
     <DataFetchingSelect
-      :axios-instance="axiosInstance"
       id="user-select"
-      label="Select user"
       v-model="user"
+      :axios-instance="axiosInstance"
       :config="userSelectConfig"
+      label="Select user"
     />
-    <Datepicker label="Date of birth" v-model="dateOfBirth" />
-    <DateTimePicker label="Event starts at" v-model="eventStartTime" />
-    <RangeDatepicker label="Event duration" v-model="eventDuration" />
+    <Datepicker v-model="dateOfBirth" label="Date of birth" />
+    <DateTimePicker v-model="eventStartTime" label="Event starts at" />
+    <RangeDatepicker v-model="eventDuration" label="Event duration" />
     <FileUpload
+      v-model="profilePicture"
       :axios-instance="axiosInstance"
       label="Profile picture"
-      v-model="profilePicture"
     />
 
     <FlatpickrTimePicker
       id="flatpickr-time-picker"
-      label="Flatpickr time picker"
       v-model="attendanceTime"
+      label="Flatpickr time picker"
     />
 
     <div class="mb-[300px]">
@@ -45,9 +45,9 @@
       <div v-if="showSelect">
         <SimpleSelect
           id="role-select-2"
-          label="Select role"
           v-model="role2"
           :config="{ options: roleOptions }"
+          label="Select role"
         />
       </div>
     </div>
@@ -105,5 +105,21 @@ const userSelectConfig: DataFetchingSelectConfig = {
   responseMapFunction: () => new SelectOption('test', 'test'),
 }
 
-const htmlContent = ref('<p>test</p>')
+const htmlContent = ref(`
+<h2>Heading 1</h2>
+<h3>Heading 2</h3>
+<h4>Heading 3</h4>
+<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium ad alias blanditiis consectetur consequuntur delectus deleniti, est et fugit illum incidunt nemo, quam quas quo sint, tempore temporibus vel velit. </p>
+<ul>
+  <li>Stuff</li>
+  <li>And</li>
+  <li>Things</li>
+</ul>
+<ol>
+   <li>Stuff</li>
+   <li>And</li>
+   <li>Things</li>
+</ol>
+<a href="www.example.com">Example link</a>
+`)
 </script>

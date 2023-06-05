@@ -19,12 +19,12 @@ import CKEditor from '@ckeditor/ckeditor5-vue'
 import { setupElfinder } from './ckeditor/setupElfinder'
 
 const {
-  modelValue,
+  modelValue = '',
   label = '',
   small = false,
   readonly = false,
 } = defineProps<{
-  modelValue: string | number | null
+  modelValue?: string | number | null
   label?: string
   small?: boolean
   readonly?: boolean
@@ -62,6 +62,18 @@ const isFocused = ref(false)
   }
   a {
     @apply text-primary underline;
+  }
+  h2 {
+    @apply text-2xl font-medium;
+  }
+  h3 {
+    @apply text-xl font-medium;
+  }
+  h4 {
+    @apply text-lg font-medium;
+  }
+  h5 {
+    @apply text-base font-medium;
   }
 }
 </style>

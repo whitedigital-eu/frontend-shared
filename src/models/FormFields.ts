@@ -88,6 +88,18 @@ class TextareaField extends FormField {
   }
 }
 
+class HtmlContentField extends FormField {
+  public value: Exclude<TextEditorValue, number>
+  constructor(
+    name: string,
+    label: string,
+    value?: Exclude<TextEditorValue, number>
+  ) {
+    super('html-content', name, label)
+    this.value = value
+  }
+}
+
 class SimpleSelectField extends FormField {
   public value: SimpleSelectValue
   config: SimpleSelectConfig
@@ -239,6 +251,7 @@ class PublicFileUploadField extends FileUploadField {
 export {
   TextField,
   TextareaField,
+  HtmlContentField,
   SimpleSelectField,
   DataFetchingSelectField,
   DateField,
@@ -310,6 +323,7 @@ export class SimpleSelectFieldTM<T extends string> extends FormField {
 export type AnyFormField =
   | TextField
   | TextareaField
+  | HtmlContentField
   | SimpleSelectField
   | DataFetchingSelectField
   | DateField

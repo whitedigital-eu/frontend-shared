@@ -6,7 +6,7 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 const uploadTargetHash = 'l1_Lw'
 
 // elFinder connector URL
-const connectorUrl = 'php/connector.minimal.php'
+const connectorUrl = '/api/efconnect'
 
 export const setupElfinder = (editor: ClassicEditor) => {
   const ckf = editor.commands.get('ckfinder'),
