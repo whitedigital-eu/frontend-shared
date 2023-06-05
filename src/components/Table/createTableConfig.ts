@@ -1,3 +1,5 @@
+import { AxiosInstance } from 'axios'
+
 type SharedColumnNames = {
   created: string
   updated: string
@@ -8,6 +10,7 @@ export type TableConfig = {
   ajaxConfig: Tabulator.Options['ajaxConfig']
   dateTimeFormatter: (dateString: string) => string
   tableErrorHandler?: (status: number, errorData: any) => Promise<void>
+  axiosInstance?: AxiosInstance
 }
 
 const createTableConfig = (config: Partial<TableConfig> = {}): TableConfig => {
@@ -17,9 +20,7 @@ const createTableConfig = (config: Partial<TableConfig> = {}): TableConfig => {
       updated: 'updated',
     },
     ajaxConfig: {
-      headers: {
-        Accept: 'application/ld+json',
-      },
+      headers: { Accept: 'application/ld+json' },
     },
     dateTimeFormatter: (dateString: string) => dateString,
   }

@@ -125,6 +125,7 @@ const props = defineProps({
     default: () => [10, 30, 100],
   },
 })
+
 const emit = defineEmits([
   'edit-click',
   'delete-click',
@@ -136,6 +137,7 @@ const emit = defineEmits([
   'pagination-changed',
   'total-entry-count-changed',
 ])
+
 const table = ref()
 const tabulator = ref()
 const totalEntryCount = ref<number | null>(null)
@@ -278,7 +280,7 @@ const initTabulator = async (resetPage = false) => {
     paginationInitialPage: resetPage ? 1 : props.page,
     paginationSize: props.pageSize,
     paginationDataSent: {
-      size: props.pageSizeParam,
+      size: props.pageSizeParam as string,
     },
     layout: 'fitColumns',
     responsiveLayout: 'collapse',
@@ -450,6 +452,17 @@ const initTabulator = async (resetPage = false) => {
     options = {
       ...options,
       ...props.tabulatorOptions,
+    }
+  }
+
+  if (props.config.axiosInstance) {
+    options = {
+      ...options,
+      ajaxRequestFunc: function (url, config, params) {
+        return props.config
+          .axiosInstance!.get(url, { headers: config.headers, params })
+          .then((response) => response.data)
+      },
     }
   }
 
