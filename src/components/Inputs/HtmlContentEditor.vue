@@ -19,18 +19,20 @@ import CKEditor from '@ckeditor/ckeditor5-vue'
 import { setupElfinder } from './ckeditor/setupElfinder'
 
 const {
-  modelValue = '',
+  modelValue,
   label = '',
   small = false,
   readonly = false,
 } = defineProps<{
-  modelValue?: string | number | null
+  modelValue: string | number | null | undefined
   label?: string
   small?: boolean
   readonly?: boolean
 }>()
 
-const emit = defineEmits<{ (e: 'update:modelValue', content: string): void }>()
+const emit = defineEmits<{
+  (e: 'update:modelValue', content: string | undefined): void
+}>()
 
 const CKEditorComponent = CKEditor.component
 

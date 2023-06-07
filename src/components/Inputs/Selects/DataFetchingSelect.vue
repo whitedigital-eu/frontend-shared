@@ -17,7 +17,7 @@ import BaseSelect from './BaseSelect.vue'
 import { DataFetchingSelectConfig } from '../../../types/InputFields'
 import { AxiosInstance } from 'axios'
 import { DataFetchingSelectValue } from '../ValueTypes'
-import { RecursivePartial, TomSettings } from 'tom-select/src/types'
+import type { RecursivePartial, TomSettings } from 'tom-select/src/types'
 import { SelectOption } from '../../../models/SelectOption'
 
 const props = defineProps({

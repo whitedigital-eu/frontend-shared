@@ -2,7 +2,7 @@
   <div>
     <div
       ref="fileUploadRef"
-      class="dropzone relative dz-clickable"
+      class="dropzone dz-clickable relative"
       :class="{ 'dz-started': anyFiles }"
     >
       <FormFieldLabel v-if="label">
@@ -11,15 +11,16 @@
       <div class="dz-message">
         <span v-if="!anyFiles">{{ dropFilesMessage }}</span>
       </div>
-      <FilePreview
-        v-for="file in initialFiles"
-        v-if="initialFiles"
-        :key="file.id"
-        :file="createFileForPreview(file)"
-        :disabled="deletingFileIri === file['@id']"
-        :allow-download="allowDownload"
-        @remove-file="removeInitialFile(file['@id'])"
-      />
+      <template v-if="initialFiles">
+        <FilePreview
+          v-for="file in initialFiles"
+          :key="file.id"
+          :allow-download="allowDownload"
+          :disabled="deletingFileIri === file['@id']"
+          :file="createFileForPreview(file)"
+          @remove-file="removeInitialFile(file['@id'])"
+        />
+      </template>
     </div>
   </div>
 </template>
@@ -34,8 +35,6 @@ import { AxiosInstance } from 'axios'
 import getLoadResourceFunctions from '../../../helpers/DataFetching'
 import { FileUploadValue } from '../ValueTypes'
 import { Resource } from '../../../types/Resource'
-
-Dropzone.autoDiscover = false
 
 const props = withDefaults(
   defineProps<{
@@ -57,6 +56,8 @@ const props = withDefaults(
 )
 
 const emit = defineEmits(['update:modelValue', 'remove-file'])
+
+Dropzone.autoDiscover = false
 
 const { loadResource, loadAllResources } = getLoadResourceFunctions(
   props.axiosInstance
@@ -87,9 +88,7 @@ const options: Dropzone.DropzoneOptions = {
 
 const singleFileUpload = ref(false)
 
-if (singleFileUpload.value) {
-  options.maxFiles = 1
-}
+if (singleFileUpload.value) options.maxFiles = 1
 
 const removeInitialFile = async (fileIri: string) => {
   emit('remove-file', fileIri, async () => {
@@ -97,11 +96,13 @@ const removeInitialFile = async (fileIri: string) => {
     deletingFileIri.value = fileIri
     try {
       await props.axiosInstance.delete(fileIri)
-      deletingFileIri.value = null
       initialFiles.value = initialFiles.value.filter(
         (file: any) => file['@id'] !== fileIri
       )
+    } catch (e) {
+      console.error(e)
     } finally {
+      deletingFileIri.value = null
     }
   })
 }
@@ -138,7 +139,7 @@ const getFileIri = (file: Dropzone.DropzoneFile) => {
 
 const initDropzone = () => {
   model.value = new Dropzone(fileUploadRef.value, options)
-  model.value.on('success', (file) => {
+  model.value.on('success', (file: Dropzone.DropzoneFile) => {
     if (!model.value) return
 
     if (singleFileUpload.value) {
@@ -151,7 +152,7 @@ const initDropzone = () => {
 
     uploadedFileIris.value = [...uploadedFileIris.value, getFileIri(file)]
   })
-  model.value.on('removedfile', async (file) => {
+  model.value.on('removedfile', async (file: Dropzone.DropzoneFile) => {
     const removedFileIri = getFileIri(file)
     try {
       await props.axiosInstance.delete(removedFileIri)
@@ -162,9 +163,12 @@ const initDropzone = () => {
     }
   })
   if (props.setPublic) {
-    model.value.on('sending', async (file, xhr, formData) => {
-      formData.append('isPublic', Boolean(true).toString())
-    })
+    model.value.on(
+      'sending',
+      async (file: Dropzone.DropzoneFile, xhr: any, formData: FormData) => {
+        formData.append('isPublic', Boolean(true).toString())
+      }
+    )
   }
 }
 
@@ -178,7 +182,8 @@ const loadInitialFiles = async () => {
         props.modelValue as string[]
       )
     }
-  } finally {
+  } catch (e) {
+    console.error(e)
   }
 }
 
@@ -212,6 +217,7 @@ onMounted(() => {
   line-height: 38px;
 }
 </style>
+
 <style>
 .dz-details {
   padding-bottom: 0 !important;

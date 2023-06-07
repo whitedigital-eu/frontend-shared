@@ -29,19 +29,25 @@ const {
   small = false,
   readonly = false,
 } = defineProps<{
-  modelValue: string | number | null
+  modelValue: string | number | null | undefined
   label?: string
   small?: boolean
   readonly?: boolean
 }>()
 
 const emit = defineEmits<{
-  'update:modelValue': [internalValue: string | number | null | undefined]
+  'update:modelValue': [internalValue: string | undefined]
 }>()
 
 const CKEditorComponent = CKEditor.component
 
-const internalValue = ref(modelValue)
+const internalValue = ref(
+  typeof modelValue === 'number'
+    ? modelValue.toString()
+    : modelValue !== null
+    ? modelValue
+    : ''
+)
 watch(internalValue, (n) => emit('update:modelValue', n))
 
 const isFocused = ref(false)

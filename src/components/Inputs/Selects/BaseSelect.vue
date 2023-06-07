@@ -35,11 +35,12 @@
 
 <script setup lang="ts">
 import { computed, ref, onMounted, watch, onBeforeUnmount } from 'vue'
+//@ts-ignore
 import TomSelect from 'tom-select'
 import 'tom-select/dist/css/tom-select.bootstrap5.min.css'
 import FormFieldLabel from '../../FormFieldLabel.vue'
 import { createElement, Users, Phone, Video, Mail } from 'lucide'
-import {
+import type {
   RecursivePartial,
   TomOption,
   TomSettings,

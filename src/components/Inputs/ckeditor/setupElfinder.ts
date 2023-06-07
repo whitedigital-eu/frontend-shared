@@ -1,5 +1,4 @@
 //SOURCE: https://github.com/Studio-42/elFinder/wiki/Integration-with-CKEditor-5
-
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 
 // elfinder folder hash of the destination folder to be uploaded in this CKeditor 5
@@ -95,7 +94,7 @@ export const setupElfinder = (editor: ClassicEditor) => {
         } else {
           // To create elFinder instance
           _fm = $('<div/>')
-            //@ts-expect-error - elfinder plugin method
+            //@ts-ignore
             .dialogelfinder({
               // dialog title
               title: 'File Manager',
@@ -128,7 +127,7 @@ export const setupElfinder = (editor: ClassicEditor) => {
               ) => {
                 const imgs: string[] = []
                 fm.getUI('cwd').trigger('unselectall')
-                $.each(files, function (i, f) {
+                $.each(files, function (i: any, f: any) {
                   if (f && f.mime.match(/^image\//i)) {
                     imgs.push(fm.convAbsUrl(f.url))
                   } else {
@@ -242,7 +241,7 @@ export const setupElfinder = (editor: ClassicEditor) => {
 
   // Set up image uploader
   fileRepo.createUploadAdapter = (loader) => {
-    // @ts-expect-error - ckeditor5 plugin method
+    //@ts-ignore
     return new uploder(loader)
   }
 }

@@ -43,7 +43,7 @@ import {
   EmojiPeople,
   EmojiPlaces,
   EmojiSymbols,
-  //@ts-expect-error - missing types
+  //@ts-ignore
 } from '@phudak/ckeditor5-emoji/src'
 import { PageBreak } from '@ckeditor/ckeditor5-page-break'
 import { RemoveFormat } from '@ckeditor/ckeditor5-remove-format'
@@ -54,12 +54,14 @@ export class TextEditor extends ClassicEditor {}
 TextEditor.builtinPlugins = [
   Essentials,
   Autoformat,
+  Paragraph,
   Bold,
   Italic,
   Underline,
   Strikethrough,
   List,
   Link,
+  AutoLink,
 ]
 TextEditor.defaultConfig = {
   toolbar: [
