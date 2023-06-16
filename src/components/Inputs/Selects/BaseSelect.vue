@@ -16,16 +16,16 @@
       :id="selectId"
       ref="selectRef"
       class="tom-select"
-      :multiple="multiple"
       :disabled="props.readonly"
+      :multiple="multiple"
       :placeholder="!(isEmpty && !isOpen) ? searchInputPlaceholder : ''"
     >
-      <option value="" />
+      <option value=""></option>
       <option
         v-for="(option, i) in settings.options as Array<RecursivePartial<{text: string, value: string}>>"
         :key="i"
-        :value="option.value"
         :selected="isOptionSelected(option.value ?? '')"
+        :value="option.value"
       >
         {{ option.text }}
       </option>
@@ -70,7 +70,10 @@ const props = withDefaults(
   }
 )
 
-const emit = defineEmits(['update:modelValue', 'create-new-item'])
+const emit = defineEmits<{
+  'update:modelValue': [value: string | string[] | number]
+  'create-new-item': [itemName: string | undefined]
+}>()
 
 const selectRef = ref()
 const model = ref()

@@ -76,11 +76,14 @@ const initialFiles = ref<ApiPlatformFile[] | null>(null)
 const deletingFileIri = ref<string | null>(null)
 
 const options: Dropzone.DropzoneOptions = {
-  url: props.endpointUrl,
+  url: (props.axiosInstance.defaults.baseURL ?? '') + props.endpointUrl,
   thumbnailWidth: 150,
   maxFilesize: 50,
+  // these headers are set to null to fix a CORS issue; source: https://github.com/dropzone/dropzone/pull/685
   headers: {
-    Accept: 'application/ld+json',
+    "Accept": "null",
+    "Cache-Control": "null",
+    "X-Requested-With": "null"
   },
   addRemoveLinks: true,
   ...dropzoneTranslations,

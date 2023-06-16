@@ -1,12 +1,13 @@
 <template>
   <BaseSelect
-    :key="baseSelectKey"
     :id="id"
+    :key="baseSelectKey"
     v-model="value"
-    :settings="settings"
-    :label="label"
     :allow-delete="allowDelete"
+    :label="label"
     :search-input-placeholder="searchInputPlaceholder"
+    :settings="settings"
+    @create-new-item="(item) => emit('create-new-item', item)"
     @update:model-value="handleInput"
   />
 </template>
@@ -49,6 +50,11 @@ const props = defineProps({
   },
 })
 
+const emit = defineEmits<{
+  'update:modelValue': [value: string | string[] | number]
+  'create-new-item': [itemName: string | undefined]
+}>()
+
 const minSymbolsForSearch = 3
 const searchInputPlaceholder = computed(
   () => `Ievadiet vismaz ${minSymbolsForSearch} simbolus!`
@@ -79,11 +85,9 @@ watchEffect(() => {
   }
 })
 
-const emit = defineEmits(['update:modelValue'])
-
 const value = ref()
 
-const handleInput = (value: string | string[]) => {
+const handleInput = (value: string | string[] | number) => {
   emit('update:modelValue', value)
 }
 

@@ -2,12 +2,12 @@
   <BaseSelect
     :id="props.id"
     v-model="value"
-    :settings="props.config"
-    :readonly="props.readonly"
-    :label="label"
     :allow-delete="allowDelete"
-    @update:modelValue="handleInput"
+    :label="label"
+    :readonly="props.readonly"
+    :settings="props.config"
     @create-new-item="(item) => emit('create-new-item', item)"
+    @update:model-value="handleInput"
   />
 </template>
 
@@ -47,11 +47,14 @@ const props = defineProps({
   },
 })
 
-const emit = defineEmits(['update:modelValue', 'create-new-item'])
+const emit = defineEmits<{
+  'update:modelValue': [value: string | string[] | number]
+  'create-new-item': [itemName: string | undefined]
+}>()
 
 const value = ref()
 
-const handleInput = (value: string | number) => {
+const handleInput = (value: string | string[] | number) => {
   emit('update:modelValue', value)
 }
 
