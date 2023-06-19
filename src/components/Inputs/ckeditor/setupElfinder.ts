@@ -7,7 +7,7 @@ const uploadTargetHash = 'l1_Lw'
 // elFinder connector URL
 const connectorUrl = '/api/efconnect'
 
-export const setupElfinder = (editor: ClassicEditor) => {
+export const setupElfinder = (editor: ClassicEditor, apiOrigin: string) => {
   const ckf = editor.commands.get('ckfinder'),
     fileRepo = editor.plugins.get('FileRepository'),
     ntf = editor.plugins.get('Notification'),
@@ -99,7 +99,7 @@ export const setupElfinder = (editor: ClassicEditor) => {
               // dialog title
               title: 'File Manager',
               // connector URL
-              url: connectorUrl,
+              url: apiOrigin + connectorUrl,
               // start folder setting
               startPathHash: open ? open : void 0,
               // Set to do not use browser history to un-use location.hash

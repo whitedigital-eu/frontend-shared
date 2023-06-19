@@ -6,7 +6,7 @@
       :editor="HtmlEditor"
       @blur="isFocused = false"
       @focus="isFocused = true"
-      @ready="setupElfinder"
+      @ready="(editor) => setupElfinder(editor, apiOrigin)"
     />
     <div v-if="readonly" class="disabled-overlay"></div>
   </div>
@@ -28,6 +28,7 @@ const {
   label?: string
   small?: boolean
   readonly?: boolean
+  apiOrigin: string
 }>()
 
 const emit = defineEmits<{

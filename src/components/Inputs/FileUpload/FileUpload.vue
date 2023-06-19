@@ -81,9 +81,12 @@ const options: Dropzone.DropzoneOptions = {
   maxFilesize: 50,
   // these headers are set to null to fix a CORS issue; source: https://github.com/dropzone/dropzone/pull/685
   headers: {
-    "Accept": "null",
-    "Cache-Control": "null",
-    "X-Requested-With": "null"
+    //@ts-ignore
+    "Accept": null,
+    //@ts-ignore
+    "Cache-Control": null,
+    //@ts-ignore
+    "X-Requested-With": null
   },
   addRemoveLinks: true,
   ...dropzoneTranslations,
