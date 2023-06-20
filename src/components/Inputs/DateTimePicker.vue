@@ -1,11 +1,17 @@
 <template>
   <div class="flex gap-4">
     <Datepicker v-model="dateValue" class="grow" :label="label" />
-    <TimePicker v-model="hoursValue" :disabled="!value" type="hours" />
+    <TimePicker
+      v-model="hoursValue"
+      :disabled="!value && value !== 0"
+      :step="config?.hoursStep"
+      type="hours"
+    />
     <span class="leading-9">:</span>
     <TimePicker
       v-model="minutesValue"
       :disabled="!value || !hoursValue"
+      :step="config?.minutesStep"
       type="minutes"
     />
   </div>
@@ -22,6 +28,10 @@ const props = withDefaults(
   defineProps<{
     modelValue: DateTimePickerValue
     label?: string | null
+    config?: {
+      hoursStep?: number
+      minutesStep?: number
+    }
   }>(),
   {
     modelValue: null,

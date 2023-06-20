@@ -1,15 +1,15 @@
 <template>
   <div class="time-picker">
     <input
+      class="form-control w-[70px]"
       :disabled="disabled"
-      :value="modelValue"
-      type="number"
-      :placeholder="placeholder"
-      class="w-[70px] form-control"
-      min="0"
       :max="max"
-      @focus="handleFocus"
+      min="0"
+      :placeholder="placeholder"
+      type="number"
+      :value="modelValue"
       @blur="handleBlur"
+      @focus="handleFocus"
       @input="handleInput"
     />
     <select ref="selectRef" class="tom-select">
@@ -29,6 +29,7 @@ const props = defineProps<{
   modelValue: string | number
   type: 'hours' | 'minutes'
   disabled?: boolean
+  step?: number
 }>()
 
 const emit = defineEmits<{
@@ -75,10 +76,15 @@ const isHours = computed(() => props.type === 'hours')
 const max = computed(() => (isHours.value ? 23 : 59))
 const placeholder = computed(() => (isHours.value ? 'St.' : 'Min.'))
 
+const optionStep = computed(() => {
+  if (props.step) return props.step
+  return isHours.value ? 1 : 5
+})
+
 const createSelectOptions = () => {
   const arr: number[] = []
 
-  for (let i = 0; i <= max.value; isHours.value ? i++ : (i += 5)) arr.push(i)
+  for (let i = 0; i <= max.value; i += optionStep.value) arr.push(i)
 
   return arr.map((item: number) => {
     const formattedItem: string =

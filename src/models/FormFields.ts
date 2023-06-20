@@ -166,7 +166,10 @@ class DateTimeField extends FormField {
   constructor(
     name: string,
     label: string,
-    public value: DateTimePickerValue = dayjs().toISOString()
+    public value: DateTimePickerValue = dayjs().toISOString(),
+    public config:
+      | { hoursStep?: number; minutesStep?: number }
+      | undefined = undefined
   ) {
     super('date-time', name, label)
   }
