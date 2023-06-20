@@ -3,7 +3,7 @@
     <Datepicker v-model="dateValue" class="grow" :label="label" />
     <TimePicker
       v-model="hoursValue"
-      :disabled="!value && value !== 0"
+      :disabled="!value && (value as unknown as number) !== 0"
       :step="config?.hoursStep"
       type="hours"
     />
