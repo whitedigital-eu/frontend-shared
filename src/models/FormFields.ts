@@ -15,6 +15,7 @@ import {
   FileUploadValue,
   SliderValue,
   FlatpickrTimePickerValue,
+  SimpleStringList,
 } from '../components/Inputs/ValueTypes'
 
 export type FormFieldValue =
@@ -251,6 +252,14 @@ class PublicFileUploadField extends FileUploadField {
   }
 }
 
+class TextArrayField extends FormField {
+  public value: SimpleStringList = []
+  constructor(name: string, label: string, value: SimpleStringList = []) {
+    super('text-list', name, label)
+    this.value = value
+  }
+}
+
 export {
   TextField,
   TextareaField,
@@ -269,6 +278,7 @@ export {
   isSelectField,
   GovernmentIdField,
   PublicFileUploadField,
+  TextArrayField,
 }
 
 // START OF NEW TYPED FIELDS!
@@ -326,6 +336,7 @@ export class SimpleSelectFieldTM<T extends string> extends FormField {
 export type AnyFormField =
   | TextField
   | TextareaField
+  | TextArrayField
   | HtmlContentField
   | SimpleSelectField
   | DataFetchingSelectField
