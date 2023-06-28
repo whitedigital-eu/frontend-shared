@@ -17,7 +17,6 @@ import {
   FlatpickrTimePickerValue,
   SimpleStringList,
 } from '../components/Inputs/ValueTypes'
-import TextList from '../components/Inputs/TextList.vue'
 
 export type FormFieldValue =
   | string
@@ -254,12 +253,8 @@ class PublicFileUploadField extends FileUploadField {
 }
 
 class TextArrayField extends FormField {
-  public value: SimpleStringList = [] as SimpleStringList
-  constructor(
-    name: string,
-    label: string,
-    value: SimpleStringList = [] as SimpleStringList
-  ) {
+  public value: SimpleStringList = []
+  constructor(name: string, label: string, value: SimpleStringList = []) {
     super('text-list', name, label)
     this.value = value
   }
@@ -341,7 +336,7 @@ export class SimpleSelectFieldTM<T extends string> extends FormField {
 export type AnyFormField =
   | TextField
   | TextareaField
-  | TextList
+  | TextArrayField
   | HtmlContentField
   | SimpleSelectField
   | DataFetchingSelectField

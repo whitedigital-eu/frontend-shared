@@ -35,7 +35,6 @@
         />
       </div>
     </div>
-    <div v-else class="px-2">Tuks</div>
   </div>
 </template>
 
@@ -53,7 +52,6 @@ const props = withDefaults(
     long?: boolean
   }>(),
   {
-    modelValue: [] as SimpleStringList,
     label: null,
     readonly: false,
     long: false,
