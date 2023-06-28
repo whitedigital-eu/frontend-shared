@@ -12,6 +12,7 @@ import FileUpload from './Inputs/FileUpload/FileUpload.vue'
 import Checkbox from './Inputs/Checkbox.vue'
 import Slider from './Inputs/Slider.vue'
 import FormFieldLabel from './FormFieldLabel.vue'
+import TextList from './Inputs/TextList.vue'
 
 export {
   Text,
@@ -28,4 +29,5 @@ export {
   Checkbox,
   Slider,
   FormFieldLabel,
+  TextList,
 }

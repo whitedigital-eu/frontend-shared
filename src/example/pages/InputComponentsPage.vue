@@ -1,9 +1,14 @@
 <template>
   <form class="flex flex-col gap-4 mr-auto mt-4 w-[500px]">
     <Text v-model="fullName" label="Full name" />
+    <TextList v-model="textArrayList" label="Text List" />
     <Decimal v-model="price" />
     <TextEditor v-model="notes" label="Notes" />
-    <HtmlContentEditor v-model="htmlContent" label="Html content" />
+    <HtmlContentEditor
+      v-model="htmlContent"
+      api-origin="/"
+      label="Html content"
+    />
     <Checkbox v-model="isActive" label="Is active" />
     <Slider v-model="probability" label="Probability" />
     <SimpleSelect
@@ -72,7 +77,7 @@ import FlatpickrTimePicker from '../../components/Inputs/FlatpickrTimePicker.vue
 import { SelectOption } from '../../models/SelectOption'
 import { DataFetchingSelectConfig } from '../../types/InputFields'
 import HtmlContentEditor from '../../components/Inputs/HtmlContentEditor.vue'
-
+import TextList from '../../components/Inputs/TextList.vue'
 const fullName = ref('')
 const price = ref('9912,22')
 const notes = ref('')
@@ -86,6 +91,7 @@ const eventStartTime = ref('')
 const eventDuration = ref()
 const profilePicture = ref()
 const attendanceTime = ref('12:34')
+const textArrayList = ref(['test', 'test2', 'test3'])
 
 const showSelect = ref(true)
 watch(showSelect, (n) => {

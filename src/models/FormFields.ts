@@ -15,7 +15,9 @@ import {
   FileUploadValue,
   SliderValue,
   FlatpickrTimePickerValue,
+  SimpleStringList,
 } from '../components/Inputs/ValueTypes'
+import TextList from '../components/Inputs/TextList.vue'
 
 export type FormFieldValue =
   | string
@@ -251,6 +253,18 @@ class PublicFileUploadField extends FileUploadField {
   }
 }
 
+class TextArrayField extends FormField {
+  public value: SimpleStringList = [] as SimpleStringList
+  constructor(
+    name: string,
+    label: string,
+    value: SimpleStringList = [] as SimpleStringList
+  ) {
+    super('text-list', name, label)
+    this.value = value
+  }
+}
+
 export {
   TextField,
   TextareaField,
@@ -269,6 +283,7 @@ export {
   isSelectField,
   GovernmentIdField,
   PublicFileUploadField,
+  TextArrayField,
 }
 
 // START OF NEW TYPED FIELDS!
@@ -326,6 +341,7 @@ export class SimpleSelectFieldTM<T extends string> extends FormField {
 export type AnyFormField =
   | TextField
   | TextareaField
+  | TextList
   | HtmlContentField
   | SimpleSelectField
   | DataFetchingSelectField
