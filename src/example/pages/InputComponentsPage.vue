@@ -4,7 +4,11 @@
     <TextList v-model="textArrayList" label="Text List" />
     <KeyAndValueList
       v-model="KeyAndValueArrayList"
-      :text="{ key_label: 'title', value_label: 'value', add_field: 'Add field' }"
+      :text="{
+        key_label: 'title',
+        value_label: 'value',
+        add_field: 'Add field',
+      }"
     />
     <Decimal v-model="price" />
     <TextEditor v-model="notes" label="Notes" />

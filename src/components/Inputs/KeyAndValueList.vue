@@ -22,9 +22,7 @@
                 :is-placeholder="!single.key && hasFocus !== 'key' + index"
                 @click.native="handleLabelClick"
               >
-                {{ props.text.key_label ? props.text.key_label : 'Key' }} Nr.{{
-                  index + 1
-                }}
+                {{ props.text?.key_label ? props.text?.key_label : 'Key' }}
               </FormFieldLabel>
               <input
                 ref="inputRef"
@@ -49,8 +47,9 @@
                 :is-placeholder="!single.value && hasFocus !== 'value' + index"
                 @click.native="handleLabelClick"
               >
-                {{ props.text.value_label ? props.text.value_label : 'Value' }}
-                Nr.{{ index + 1 }}
+                {{
+                  props.text?.value_label ? props.text?.value_label : 'Value'
+                }}
               </FormFieldLabel>
               <input
                 ref="inputRef"
@@ -70,7 +69,7 @@
     </div>
     <div>
       <button class="btn btn-primary me-1" type="button" @click="addFields">
-        {{ props.text.add_field ? props.text.add_field : 'Add field' }}
+        {{ props.text?.add_field ? props.text?.add_field : 'Add field' }}
       </button>
     </div>
   </div>
@@ -84,21 +83,19 @@ import { X } from 'lucide-vue-next'
 
 const props = withDefaults(
   defineProps<{
-    modelValue: KeyAndValueList
+    modelValue: { key: string; value: string }[]
     text?: { key_label: string; value_label: string; add_field: string } | null
     readonly?: boolean
     long?: boolean
   }>(),
   {
     text: null,
-    label_two: null,
     readonly: false,
     long: false,
   }
 )
 const emit = defineEmits(['update:modelValue'])
-console.log()
-const handleFocus = (type, index) => {
+const handleFocus = (type: string, index: number) => {
   if (props.readonly) return
   hasFocus.value = type + index
 }
@@ -108,13 +105,13 @@ const inputRef = ref<HTMLInputElement | undefined>()
 const value: Ref<KeyAndValueList> = ref([])
 const hasFocus = ref('')
 
-const handleLabelClick = function (event) {
+const handleLabelClick = function (event: any) {
   if (props.readonly) return
   event.target.nextElementSibling.focus()
 }
 
-const handleInput = (type, index, event) => {
-  props.modelValue[index][type] = event.target.value
+const handleInput = (type: string, index: number, event: Event) => {
+  (props.modelValue[index] as any)[type] = (event.target as HTMLInputElement).value
   emit('update:modelValue', props.modelValue)
 }
 
@@ -122,7 +119,7 @@ const addFields = () => {
   props.modelValue.push({ key: '', value: '' })
 }
 
-const removeFields = (index) => {
+const removeFields = (index: number) => {
   if (props.modelValue.length > 1) {
     props.modelValue.splice(index, 1)
     emit('update:modelValue', props.modelValue)

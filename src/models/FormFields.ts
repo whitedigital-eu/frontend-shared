@@ -27,6 +27,7 @@ export type FormFieldValue =
   | boolean
   | null
   | undefined
+  | KeyAndValueList;
 
 export abstract class FormField {
   public errors?: string[]
@@ -38,7 +39,6 @@ export abstract class FormField {
     public type: string,
     public name: string,
     public label: string,
-    public label_two?: string
   ) {
     this.formatter = (x) => x
   }
@@ -264,8 +264,8 @@ class TextArrayField extends FormField {
 
 class KeyAndValueArrayField extends FormField {
   public value: KeyAndValueList = []
-  constructor(name: string, label: string, label_two: string, value: KeyAndValueList = []) {
-    super('title-and-text-list', name, label, label_two)
+  constructor(name: string, label: string, value: KeyAndValueList = []) {
+    super('title-and-text-list', name, label)
     this.value = value
   }
 }
