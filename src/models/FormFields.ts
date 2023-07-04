@@ -1,6 +1,7 @@
 import {
   DataFetchingSelectConfig,
   SimpleSelectConfig,
+  LabelProps,
 } from '../types/InputFields'
 import { SelectOption } from './SelectOption'
 import dayjs from 'dayjs'
@@ -28,13 +29,6 @@ export type FormFieldValue =
   | null
   | undefined
   | KeyAndValueList
-
-export interface LabelProps {
-  key_label?: string
-  value_label?: string
-  add_field?: string
-  form_label?: string
-}
 
 export abstract class FormField {
   public errors?: string[]
