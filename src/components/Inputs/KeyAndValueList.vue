@@ -3,7 +3,7 @@
     <div class="flex gap-4 relative">
       <div v-if="modelValue && modelValue.length !== 0" class="w-full">
         <div
-          v-for="(single, index) in modelValue"
+          v-for="(item, index) in modelValue"
           :key="index"
           class="relative"
         >
@@ -15,18 +15,18 @@
             <div
               class="relative"
               :class="{
-                'overflow-hidden': !single.key && hasFocus !== 'key' + index,
+                'overflow-hidden': !item.key && hasFocus !== 'key' + index,
               }"
             >
               <FormFieldLabel
-                :is-placeholder="!single.key && hasFocus !== 'key' + index"
+                :is-placeholder="!item.key && hasFocus !== 'key' + index"
                 @click.native="handleLabelClick"
               >
                 {{ props.text?.key_label ? props.text?.key_label : 'Key' }}
               </FormFieldLabel>
               <input
                 ref="inputRef"
-                v-model="single.key"
+                v-model="item.key"
                 class="form-control sm:min-w-[200px] w-full"
                 :class="{ 'sm:min-w-[416px]': long }"
                 :readonly="readonly"
@@ -40,11 +40,11 @@
               class="relative"
               :class="{
                 'overflow-hidden':
-                  !single.value && hasFocus !== 'value' + index,
+                  !item.value && hasFocus !== 'value' + index,
               }"
             >
               <FormFieldLabel
-                :is-placeholder="!single.value && hasFocus !== 'value' + index"
+                :is-placeholder="!item.value && hasFocus !== 'value' + index"
                 @click.native="handleLabelClick"
               >
                 {{
@@ -53,7 +53,7 @@
               </FormFieldLabel>
               <input
                 ref="inputRef"
-                v-model="single.value"
+                v-model="item.value"
                 class="form-control sm:min-w-[200px] w-full"
                 :class="{ 'sm:min-w-[416px]': long }"
                 :readonly="readonly"
