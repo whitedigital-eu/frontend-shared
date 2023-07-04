@@ -21,7 +21,7 @@ interface DataFetchingSelectConfig {
   create?: boolean
 }
 
-export interface LabelProps {
+interface LabelProps {
   key_label?: string
   value_label?: string
   add_field?: string
