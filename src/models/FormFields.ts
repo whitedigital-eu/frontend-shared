@@ -294,8 +294,9 @@ class KeyAndValueArrayField extends FormField {
     text: LabelProps,
     value: KeyAndValueList = []
   ) {
-    super('key-and-value-list', name, label, text)
+    super('key-and-value-list', name, label)
     this.value = value
+    this.text = text
   }
 }
 
