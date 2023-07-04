@@ -8,6 +8,7 @@
         key_label: 'title',
         value_label: 'value',
         add_field: 'Add field',
+        form_label: 'Forma'
       }"
     />
     <Decimal v-model="price" />

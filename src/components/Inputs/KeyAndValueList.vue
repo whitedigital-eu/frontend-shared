@@ -1,5 +1,6 @@
 <template>
   <div class="relative">
+    <p class="mb-4">{{ props.text?.form_label ? props.text?.form_label : 'Value and Key form' }}</p>
     <div class="flex gap-4 relative">
       <div v-if="modelValue && modelValue.length !== 0" class="w-full">
         <div
@@ -84,7 +85,7 @@ import { X } from 'lucide-vue-next'
 const props = withDefaults(
   defineProps<{
     modelValue: { key: string; value: string }[]
-    text?: { key_label: string; value_label: string; add_field: string } | null
+    text?: { key_label: string; value_label: string; add_field: string, form_label: string } | null
     readonly?: boolean
     long?: boolean
   }>(),
