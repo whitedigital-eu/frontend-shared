@@ -16,6 +16,7 @@ import {
   SliderValue,
   FlatpickrTimePickerValue,
   SimpleStringList,
+  TitleAndTextList,
 } from '../components/Inputs/ValueTypes'
 
 export type FormFieldValue =
@@ -36,7 +37,8 @@ export abstract class FormField {
   protected constructor(
     public type: string,
     public name: string,
-    public label: string
+    public label: string,
+    public label_two?: string
   ) {
     this.formatter = (x) => x
   }
@@ -260,6 +262,14 @@ class TextArrayField extends FormField {
   }
 }
 
+class TitleAndTextArrayField extends FormField {
+  public value: TitleAndTextList = []
+  constructor(name: string, label: string, label_two: string, value: TitleAndTextList = []) {
+    super('title-and-text-list', name, label, label_two)
+    this.value = value
+  }
+}
+
 export {
   TextField,
   TextareaField,
@@ -279,6 +289,7 @@ export {
   GovernmentIdField,
   PublicFileUploadField,
   TextArrayField,
+  TitleAndTextArrayField,
 }
 
 // START OF NEW TYPED FIELDS!
@@ -337,6 +348,7 @@ export type AnyFormField =
   | TextField
   | TextareaField
   | TextArrayField
+  | TitleAndTextArrayField
   | HtmlContentField
   | SimpleSelectField
   | DataFetchingSelectField

@@ -13,6 +13,7 @@ import Checkbox from './Inputs/Checkbox.vue'
 import Slider from './Inputs/Slider.vue'
 import FormFieldLabel from './FormFieldLabel.vue'
 import TextList from './Inputs/TextList.vue'
+import TitleAndTextList from './Inputs/TitleAndTextList.vue'
 
 export {
   Text,
@@ -30,4 +31,5 @@ export {
   Slider,
   FormFieldLabel,
   TextList,
+  TitleAndTextList,
 }

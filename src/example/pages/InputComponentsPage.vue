@@ -2,6 +2,11 @@
   <form class="flex flex-col gap-4 mr-auto mt-4 w-[500px]">
     <Text v-model="fullName" label="Full name" />
     <TextList v-model="textArrayList" label="Text List" />
+    <TitleAndTextList
+      v-model="titleAndTextArrayList"
+      label="Title"
+      label_two="Text"
+    />
     <Decimal v-model="price" />
     <TextEditor v-model="notes" label="Notes" />
     <HtmlContentEditor
@@ -78,6 +83,7 @@ import { SelectOption } from '../../models/SelectOption'
 import { DataFetchingSelectConfig } from '../../types/InputFields'
 import HtmlContentEditor from '../../components/Inputs/HtmlContentEditor.vue'
 import TextList from '../../components/Inputs/TextList.vue'
+import TitleAndTextList from '../../components/Inputs/TitleAndTextList.vue'
 const fullName = ref('')
 const price = ref('9912,22')
 const notes = ref('')
@@ -92,6 +98,7 @@ const eventDuration = ref()
 const profilePicture = ref()
 const attendanceTime = ref('12:34')
 const textArrayList = ref(['test', 'test2', 'test3'])
+const titleAndTextArrayList = ref([{ title: 'test', text: 'test2' }])
 
 const showSelect = ref(true)
 watch(showSelect, (n) => {
