@@ -6,7 +6,7 @@
       :editor="HtmlEditor"
       @blur="isFocused = false"
       @focus="isFocused = true"
-      @ready="(editor) => setupElfinder(editor, apiOrigin)"
+      @ready="(editor: ClassicEditor) => setupElfinder(editor, apiOrigin)"
     />
     <div v-if="readonly" class="disabled-overlay"></div>
   </div>
@@ -17,6 +17,8 @@ import { ref, watch } from 'vue'
 import { HtmlEditor } from './ckeditor/htmlEditors'
 import CKEditor from '@ckeditor/ckeditor5-vue'
 import { setupElfinder } from './ckeditor/setupElfinder'
+import { ClassicEditor } from '@ckeditor/ckeditor5-editor-classic'
+
 
 const {
   modelValue,

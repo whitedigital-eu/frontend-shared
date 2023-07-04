@@ -1,6 +1,7 @@
 import {
   DataFetchingSelectConfig,
   SimpleSelectConfig,
+  LabelProps,
 } from '../types/InputFields'
 import { SelectOption } from './SelectOption'
 import dayjs from 'dayjs'
@@ -16,6 +17,7 @@ import {
   SliderValue,
   FlatpickrTimePickerValue,
   SimpleStringList,
+  KeyAndValueList,
 } from '../components/Inputs/ValueTypes'
 
 export type FormFieldValue =
@@ -26,6 +28,7 @@ export type FormFieldValue =
   | boolean
   | null
   | undefined
+  | KeyAndValueList
 
 export abstract class FormField {
   public errors?: string[]
@@ -33,10 +36,12 @@ export abstract class FormField {
   public abstract value: FormFieldValue
 
   public formatter: (x: this['value']) => any
+
   protected constructor(
     public type: string,
     public name: string,
-    public label: string
+    public label: string,
+    public text?: LabelProps
   ) {
     this.formatter = (x) => x
   }
@@ -48,6 +53,7 @@ export abstract class FormField {
 
 class TextField extends FormField {
   value: Exclude<TextValue, number>
+
   constructor(
     name: string,
     label: string,
@@ -63,6 +69,7 @@ class TextField extends FormField {
 class DecimalField extends FormField {
   public value: Exclude<DecimalValue, string>
   public config: Record<string, any>
+
   constructor(
     name: string,
     label: string,
@@ -79,6 +86,7 @@ class DecimalField extends FormField {
 
 class TextareaField extends FormField {
   public value: Exclude<TextEditorValue, number>
+
   constructor(
     name: string,
     label: string,
@@ -91,6 +99,7 @@ class TextareaField extends FormField {
 
 class HtmlContentField extends FormField {
   public value: Exclude<TextEditorValue, number>
+
   constructor(
     name: string,
     label: string,
@@ -105,6 +114,7 @@ class SimpleSelectField extends FormField {
   public value: SimpleSelectValue
   config: SimpleSelectConfig
   public allowDelete: boolean
+
   constructor(
     name: string,
     label: string,
@@ -126,6 +136,7 @@ class DataFetchingSelectField extends FormField {
   public value: DataFetchingSelectValue
   config: DataFetchingSelectConfig
   public allowDelete: boolean
+
   constructor(
     name: string,
     label: string,
@@ -145,6 +156,7 @@ class DataFetchingSelectField extends FormField {
 
 class DateField extends FormField {
   public value: DatepickerValue
+
   constructor(name: string, label: string, value?: DatepickerValue) {
     super('date', name, label)
     this.value = value
@@ -179,6 +191,7 @@ class DateTimeField extends FormField {
 class FileUploadField extends FormField {
   public value: FileUploadValue
   public allowDownload = false
+
   constructor(
     name: string,
     label: string,
@@ -193,6 +206,7 @@ class FileUploadField extends FormField {
 
 class CheckboxField extends FormField {
   value: boolean
+
   constructor(name: string, label: string, value?: boolean | undefined) {
     super('checkbox', name, label)
     this.value = value ?? false
@@ -216,6 +230,7 @@ const isSelectField = (
 
 class TimeWithCurrentField extends FormField {
   public value: FlatpickrTimePickerValue
+
   constructor(
     name: string,
     label: string,
@@ -230,6 +245,7 @@ class TimeWithCurrentField extends FormField {
 
 class SignatureField extends FormField {
   public value: string | null
+
   constructor(name: string, label: string, value = '') {
     super('signature', name, label)
     this.value = value
@@ -238,6 +254,7 @@ class SignatureField extends FormField {
 
 class GovernmentIdField extends FormField {
   value: string | null
+
   constructor(name: string, label: string, value = '', readonly = false) {
     super('government-id', name, label)
     this.value = value
@@ -247,6 +264,7 @@ class GovernmentIdField extends FormField {
 
 class PublicFileUploadField extends FileUploadField {
   public setPublic = true
+
   constructor(name: string, label: string, value: string | string[] = '') {
     super(name, label, value)
   }
@@ -254,9 +272,25 @@ class PublicFileUploadField extends FileUploadField {
 
 class TextArrayField extends FormField {
   public value: SimpleStringList = []
+
   constructor(name: string, label: string, value: SimpleStringList = []) {
     super('text-list', name, label)
     this.value = value
+  }
+}
+
+class KeyAndValueArrayField extends FormField {
+  public value: KeyAndValueList = []
+
+  constructor(
+    name: string,
+    label: string,
+    text: LabelProps,
+    value: KeyAndValueList = []
+  ) {
+    super('key-and-value-list', name, label)
+    this.value = value
+    this.text = text
   }
 }
 
@@ -279,6 +313,7 @@ export {
   GovernmentIdField,
   PublicFileUploadField,
   TextArrayField,
+  KeyAndValueArrayField,
 }
 
 // START OF NEW TYPED FIELDS!
@@ -295,6 +330,7 @@ export class SimpleSelectFieldTS<T extends string> extends FormField {
   public value: null | undefined | T
   config: SimpleSelectConfigTyped<T>
   public allowDelete: boolean
+
   constructor(
     name: string,
     label: string,
@@ -316,6 +352,7 @@ export class SimpleSelectFieldTM<T extends string> extends FormField {
   public value: null | undefined | T[]
   config: SimpleSelectConfigTyped<T>
   public allowDelete: boolean
+
   constructor(
     name: string,
     label: string,
@@ -337,6 +374,7 @@ export type AnyFormField =
   | TextField
   | TextareaField
   | TextArrayField
+  | KeyAndValueArrayField
   | HtmlContentField
   | SimpleSelectField
   | DataFetchingSelectField

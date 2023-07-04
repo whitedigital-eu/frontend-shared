@@ -21,4 +21,11 @@ interface DataFetchingSelectConfig {
   create?: boolean
 }
 
-export { SimpleSelectConfig, DataFetchingSelectConfig }
+export interface LabelProps {
+  key_label?: string
+  value_label?: string
+  add_field?: string
+  form_label?: string
+}
+
+export { SimpleSelectConfig, DataFetchingSelectConfig, LabelProps }
