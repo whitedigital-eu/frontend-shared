@@ -35,7 +35,7 @@ import { AxiosInstance } from 'axios'
 import getLoadResourceFunctions from '../../../helpers/DataFetching'
 import { FileUploadValue } from '../ValueTypes'
 import { Resource } from '../../../types/Resource'
-
+import defaultPreviewTemplate from './preview-template.html?raw'
 const props = withDefaults(
   defineProps<{
     modelValue?: FileUploadValue
@@ -82,14 +82,15 @@ const options: Dropzone.DropzoneOptions = {
   // these headers are set to null to fix a CORS issue; source: https://github.com/dropzone/dropzone/pull/685
   headers: {
     //@ts-ignore
-    "Accept": null,
+    Accept: null,
     //@ts-ignore
-    "Cache-Control": null,
+    'Cache-Control': null,
     //@ts-ignore
-    "X-Requested-With": null
+    'X-Requested-With': null,
   },
   addRemoveLinks: true,
   ...dropzoneTranslations,
+  previewTemplate: defaultPreviewTemplate,
 }
 
 const singleFileUpload = ref(false)

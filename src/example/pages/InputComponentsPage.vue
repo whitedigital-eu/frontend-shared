@@ -8,7 +8,7 @@
         key_label: 'title',
         value_label: 'value',
         add_field: 'Add field',
-        form_label: 'Forma'
+        form_label: 'Forma',
       }"
     />
     <Decimal v-model="price" />
@@ -39,6 +39,7 @@
     <FileUpload
       v-model="profilePicture"
       :axios-instance="axiosInstance"
+      endpoint-url="/api/storage_items"
       label="Profile picture"
     />
 

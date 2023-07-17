@@ -1,12 +1,15 @@
 <template>
-  <div class="dz-preview dz-processing dz-image-preview dz-success dz-complete">
+  <div class="dz-complete dz-image-preview dz-preview dz-processing dz-success">
     <div class="dz-image relative">
       <img v-if="isImage" :alt="file.displayName" :src="file.sourceUrl" />
       <div class="file">
-        <span class="w-24 file__icon file__icon--file">
+        <span class="file__icon file__icon--file w-24">
           <span class="file__icon__file-name text-xs">{{ fileExtension }}</span>
         </span>
       </div>
+    </div>
+    <div class="dz-actions">
+      <span>EDIT</span>
     </div>
     <div class="dz-details">
       <div class="dz-filename">
@@ -14,12 +17,12 @@
       </div>
       <div v-if="allowDownload" class="my-4">
         <a
-          :href="file.sourceUrl"
+          class="!cursor-pointer btn btn-outline-primary"
           download
+          :href="file.sourceUrl"
           title="Lejupielādēt"
-          class="btn btn-outline-primary !cursor-pointer"
         >
-          <Download class="h-6 w-6 !cursor-pointer" />
+          <Download class="!cursor-pointer h-6 w-6" />
         </a>
       </div>
     </div>
