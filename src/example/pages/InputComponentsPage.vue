@@ -38,7 +38,8 @@
     <RangeDatepicker v-model="eventDuration" label="Event duration" />
     <FileUpload
       v-model="profilePicture"
-      :allow-download="true"
+      allow-download
+      allow-edit
       :axios-instance="axiosInstance"
       endpoint-url="/api/storage_items"
       host-url="https://goldwork.local.io"

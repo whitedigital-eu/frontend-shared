@@ -61,7 +61,7 @@ const props = withDefaults(
     hostUrl: '',
     allowDownload: false,
     allowDelete: true,
-    allowEdit: true,
+    allowEdit: false,
   }
 )
 
