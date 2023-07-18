@@ -1,6 +1,5 @@
 <template>
   <div>
-    {{ modelValue }}
     <div
       ref="fileUploadRef"
       class="dropzone dz-clickable relative"
