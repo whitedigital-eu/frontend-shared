@@ -8,7 +8,7 @@
         key_label: 'title',
         value_label: 'value',
         add_field: 'Add field',
-        form_label: 'Forma'
+        form_label: 'Forma',
       }"
     />
     <Decimal v-model="price" />
@@ -38,7 +38,10 @@
     <RangeDatepicker v-model="eventDuration" label="Event duration" />
     <FileUpload
       v-model="profilePicture"
+      allow-download
+      allow-edit
       :axios-instance="axiosInstance"
+      endpoint-url="/api/storage_items"
       label="Profile picture"
     />
 
