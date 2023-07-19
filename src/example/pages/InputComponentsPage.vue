@@ -42,7 +42,6 @@
       allow-edit
       :axios-instance="axiosInstance"
       endpoint-url="/api/storage_items"
-      host-url="https://goldwork.local.io"
       label="Profile picture"
     />
 
@@ -114,7 +113,6 @@ watch(showSelect, (n) => {
 })
 
 const axiosInstance = axios.create()
-axiosInstance.defaults.baseURL = 'https://goldwork.local.io'
 
 const roleOptions = [
   new SelectOption('User', 'ROLE_USER'),
