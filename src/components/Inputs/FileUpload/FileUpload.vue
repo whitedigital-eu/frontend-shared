@@ -220,10 +220,10 @@ const editFileEvent = (file: Dropzone.DropzoneFile) => {
   emit('edit-file', fileIri)
 }
 
+// file remove for not linked yet
 const removeFileEvent = (file: Dropzone.DropzoneFile, element: Element) => {
   const removedFileIri = getFileIri(file)
 
-  // Axios.delete returns a Promise, so we can use .then() and .catch() to handle the result.
   props.axiosInstance
     .delete(removedFileIri)
     .then(() => {
