@@ -193,16 +193,29 @@ class DateTimeField extends FormField {
 class FileUploadField extends FormField {
   public value: FileUploadValue
   public allowDownload = false
+  public allowEdit = false
+  public allowDelete = true
+  public hostUrl = ''
 
   constructor(
     name: string,
     label: string,
     value?: FileUploadValue,
-    config?: { allowDownload: boolean }
+    config?: {
+      allowDownload?: boolean
+      allowEdit?: boolean
+      allowDelete?: boolean
+      hostUrl?: string
+    }
   ) {
     super('file-upload', name, label)
     this.value = value
-    if (config) this.allowDownload = config.allowDownload
+    if (config) {
+      this.allowDownload = config.allowDownload ?? this.allowDownload
+      this.allowEdit = config.allowEdit ?? this.allowEdit
+      this.allowDelete = config.allowDelete ?? this.allowDelete
+      this.hostUrl = config.hostUrl ?? this.hostUrl
+    }
   }
 }
 

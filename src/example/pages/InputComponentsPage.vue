@@ -51,7 +51,10 @@
     <RangeDatepicker v-model="eventDuration" label="Event duration" />
     <FileUpload
       v-model="profilePicture"
+      allow-download
+      allow-edit
       :axios-instance="axiosInstance"
+      endpoint-url="/api/storage_items"
       label="Profile picture"
     />
 
