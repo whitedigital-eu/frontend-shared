@@ -18,6 +18,7 @@ import {
   FlatpickrTimePickerValue,
   SimpleStringList,
   KeyAndValueList,
+  MultipleTextFieldList,
 } from '../components/Inputs/ValueTypes'
 
 export type FormFieldValue =
@@ -41,6 +42,7 @@ export abstract class FormField {
     public type: string,
     public name: string,
     public label: string,
+    public labelArray?: string[],
     public text?: LabelProps
   ) {
     this.formatter = (x) => x
@@ -294,6 +296,21 @@ class KeyAndValueArrayField extends FormField {
   }
 }
 
+class MultipleTextFields extends FormField {
+  public value: MultipleTextFieldList = []
+
+  constructor(
+    name: string,
+    label: string,
+    labelArray: string[],
+    value: MultipleTextFieldList = []
+  ) {
+    super('multiple-text-fields', name, label, labelArray)
+    this.labelArray = labelArray
+    this.value = value
+  }
+}
+
 export {
   TextField,
   TextareaField,
@@ -314,6 +331,7 @@ export {
   PublicFileUploadField,
   TextArrayField,
   KeyAndValueArrayField,
+  MultipleTextFields,
 }
 
 // START OF NEW TYPED FIELDS!
@@ -375,6 +393,7 @@ export type AnyFormField =
   | TextareaField
   | TextArrayField
   | KeyAndValueArrayField
+  | MultipleTextFields
   | HtmlContentField
   | SimpleSelectField
   | DataFetchingSelectField

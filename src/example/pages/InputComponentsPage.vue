@@ -8,8 +8,21 @@
         key_label: 'title',
         value_label: 'value',
         add_field: 'Add field',
-        form_label: 'Forma'
+        form_label: 'Forma',
       }"
+    />
+    <MultipleTextFields
+      v-model="MultipleTextArrayList"
+      label="Work times"
+      :label-array="[
+        'monday',
+        'tuesday',
+        'wednesday',
+        'thursday',
+        'friday',
+        'saturday',
+        'sunday',
+      ]"
     />
     <Decimal v-model="price" />
     <TextEditor v-model="notes" label="Notes" />
@@ -88,6 +101,7 @@ import { DataFetchingSelectConfig } from '../../types/InputFields'
 import HtmlContentEditor from '../../components/Inputs/HtmlContentEditor.vue'
 import TextList from '../../components/Inputs/TextList.vue'
 import KeyAndValueList from '../../components/Inputs/KeyAndValueList.vue'
+import MultipleTextFields from '../../components/Inputs/MultipleTextFields.vue'
 const fullName = ref('')
 const price = ref('9912,22')
 const notes = ref('')
@@ -103,6 +117,7 @@ const profilePicture = ref()
 const attendanceTime = ref('12:34')
 const textArrayList = ref(['test', 'test2', 'test3'])
 const KeyAndValueArrayList = ref([{ key: 'test', value: 'test2' }])
+const MultipleTextArrayList = ref(['12:30', '13:30', '14:40'])
 
 const showSelect = ref(true)
 watch(showSelect, (n) => {
