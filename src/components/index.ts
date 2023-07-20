@@ -14,6 +14,7 @@ import Slider from './Inputs/Slider.vue'
 import FormFieldLabel from './FormFieldLabel.vue'
 import TextList from './Inputs/TextList.vue'
 import KeyAndValueList from './Inputs/KeyAndValueList.vue'
+import MultipleTextFieldList from './Inputs/MultipleTextFields.vue'
 
 export {
   Text,
@@ -32,4 +33,5 @@ export {
   FormFieldLabel,
   TextList,
   KeyAndValueList,
+  MultipleTextFieldList,
 }
