@@ -64,7 +64,9 @@
     "tom-select": "^2.2.2",
     "vue": "^3.3.4",
     "vue-flatpickr-component": "^9.0.6",
-    "vue-slider-component": "4.0.0-beta.5"
+    "vue-slider-component": "4.0.0-beta.5",
+    "@types/google.maps": "^3.53.5",
+    "vue-google-autocomplete": "^1.1.4"
   },
   "devDependencies": {
     "@ckeditor/vite-plugin-ckeditor5": "^0.1.1",

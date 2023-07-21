@@ -15,6 +15,7 @@ import FormFieldLabel from './FormFieldLabel.vue'
 import TextList from './Inputs/TextList.vue'
 import KeyAndValueList from './Inputs/KeyAndValueList.vue'
 import MultipleTextFieldList from './Inputs/MultipleTextFields.vue'
+import MapCoordinateSelectorFieldValue from './Inputs/Map.vue'
 
 export {
   Text,
@@ -34,4 +35,5 @@ export {
   TextList,
   KeyAndValueList,
   MultipleTextFieldList,
+  MapCoordinateSelectorFieldValue,
 }
