@@ -28,7 +28,7 @@ interface LabelProps {
   form_label?: string
 }
 interface MapProps {
-  googleApi?: string
+  googleApiKey?: string
   initialLat?: number
   initialLng?: number
 }

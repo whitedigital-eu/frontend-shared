@@ -3,7 +3,7 @@
     <Text v-model="fullName" label="Full name" />
     <TextList v-model="textArrayList" label="Text List" />
     <KeyAndValueList
-      v-model="KeyAndValueArrayList"
+      v-model="keyAndValueArrayList"
       :text="{
         key_label: 'title',
         value_label: 'value',
@@ -12,7 +12,7 @@
       }"
     />
     <MultipleTextFields
-      v-model="MultipleTextArrayList"
+      v-model="multipleTextArrayList"
       label="Work times"
       :label-array="[
         'monday',
@@ -64,10 +64,10 @@
       label="Flatpickr time picker"
     />
     <Map
-      v-model="MapDataArray"
+      v-model="mapDataArray"
       label="Input address"
       :map-data="{
-        googleApi: 'AIzaSyCAIwTPctnSM2PWcbK6cMdlZaSgEYIKp5U',
+        googleApiKey: 'AIzaSyCAIwTPctnSM2PWcbK6cMdlZaSgEYIKp5U',
         initialLat: 56.946285,
         initialLng: 24.105078,
       }"
@@ -129,9 +129,9 @@ const eventDuration = ref()
 const profilePicture = ref()
 const attendanceTime = ref('12:34')
 const textArrayList = ref(['test', 'test2', 'test3'])
-const KeyAndValueArrayList = ref([{ key: 'test', value: 'test2' }])
-const MultipleTextArrayList = ref(['12:30', '13:30', '14:40'])
-const MapDataArray = ref({
+const keyAndValueArrayList = ref([{ key: 'test', value: 'test2' }])
+const multipleTextArrayList = ref(['12:30', '13:30', '14:40'])
+const mapDataArray = ref({
   address: 'Slokas iela 193',
   lat: 10.0,
   lng: 10.0,

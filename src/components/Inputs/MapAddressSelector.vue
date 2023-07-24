@@ -36,7 +36,7 @@ const props = withDefaults(
     modelValue?: { address: string; lat: number; lng: number } | undefined
     label?: string | null
     mapData?: {
-      googleApi: string
+      googleApiKey: string
       initialLat: number
       initialLng: number
     } | null
@@ -78,13 +78,13 @@ let googleMap: google.maps.Map | null = null
 let marker: google.maps.Marker | null = null
 
 const loadGoogleMapsAPI = () => {
-  const existingScript = document.querySelector(`script[src="https://maps.googleapis.com/maps/api/js?key=${props.mapData?.googleApi}&libraries=places"]`);
+  const existingScript = document.querySelector(`script[src="https://maps.googleapis.com/maps/api/js?key=${props.mapData?.googleApiKey}&libraries=places"]`);
   if (existingScript) {
     initMap();
     return;
   }
   const script = document.createElement('script');
-  script.src = `https://maps.googleapis.com/maps/api/js?key=${props.mapData?.googleApi}&libraries=places`;
+  script.src = `https://maps.googleapis.com/maps/api/js?key=${props.mapData?.googleApiKey}&libraries=places`;
   script.onload = initMap;
   document.head.appendChild(script);
 };
@@ -95,8 +95,8 @@ const initMap = () => {
   if (mapElement && props.mapData) {
     const mapOptions: google.maps.MapOptions = {
       center: new google.maps.LatLng(
-          props.modelValue?.lat ? props.modelValue.lat : props.mapData.initialLat,
-          props.modelValue?.lng ? props.modelValue.lng : props.mapData?.initialLng
+          props.modelValue?.lat ?? props.mapData.initialLat,
+          props.modelValue?.lng ?? props.mapData.initialLng
       ),
       zoom: 12,
     }
@@ -127,7 +127,7 @@ const handleAddressAutocomplete = () => {
   geocoder.geocode({ address: value.value }, (results, status) => {
     if (
       status === google.maps.GeocoderStatus.OK &&
-      results &&
+        results &&
       results?.length > 0
     ) {
       const location = results[0].geometry.location
