@@ -2,6 +2,7 @@ import {
   DataFetchingSelectConfig,
   SimpleSelectConfig,
   LabelProps,
+  MapProps,
 } from '../types/InputFields'
 import { SelectOption } from './SelectOption'
 import dayjs from 'dayjs'
@@ -19,6 +20,7 @@ import {
   SimpleStringList,
   KeyAndValueList,
   MultipleTextFieldList,
+  MapCoordinateSelectorFieldValue,
 } from '../components/Inputs/ValueTypes'
 
 export type FormFieldValue =
@@ -30,6 +32,7 @@ export type FormFieldValue =
   | null
   | undefined
   | KeyAndValueList
+  | MapCoordinateSelectorFieldValue
 
 export abstract class FormField {
   public errors?: string[]
@@ -43,6 +46,7 @@ export abstract class FormField {
     public name: string,
     public label: string,
     public labelArray?: string[],
+    public mapData?: MapProps,
     public text?: LabelProps
   ) {
     this.formatter = (x) => x
@@ -324,6 +328,25 @@ class MultipleTextFields extends FormField {
   }
 }
 
+class MapCoordinateSelectorField extends FormField {
+  public value: MapCoordinateSelectorFieldValue = {
+    address: '',
+    lat: 0,
+    lng: 0,
+  }
+
+  constructor(
+    name: string,
+    label: string,
+    mapData: MapProps,
+    value: MapCoordinateSelectorFieldValue = { address: '', lat: 0, lng: 0 }
+  ) {
+    super('map-coordinate-selector', name, label)
+    this.mapData = mapData
+    this.value = value
+  }
+}
+
 export {
   TextField,
   TextareaField,
@@ -345,6 +368,7 @@ export {
   TextArrayField,
   KeyAndValueArrayField,
   MultipleTextFields,
+  MapCoordinateSelectorField,
 }
 
 // START OF NEW TYPED FIELDS!
@@ -407,6 +431,7 @@ export type AnyFormField =
   | TextArrayField
   | KeyAndValueArrayField
   | MultipleTextFields
+  | MapCoordinateSelectorField
   | HtmlContentField
   | SimpleSelectField
   | DataFetchingSelectField
