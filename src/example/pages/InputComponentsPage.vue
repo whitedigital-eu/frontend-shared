@@ -114,7 +114,7 @@ import HtmlContentEditor from '../../components/Inputs/HtmlContentEditor.vue'
 import TextList from '../../components/Inputs/TextList.vue'
 import KeyAndValueList from '../../components/Inputs/KeyAndValueList.vue'
 import MultipleTextFields from '../../components/Inputs/MultipleTextFields.vue'
-import Map from '../../components/Inputs/Map.vue'
+import Map from '../../components/Inputs/MapAddressSelector.vue'
 const fullName = ref('')
 const price = ref('9912,22')
 const notes = ref('')
@@ -131,7 +131,11 @@ const attendanceTime = ref('12:34')
 const textArrayList = ref(['test', 'test2', 'test3'])
 const KeyAndValueArrayList = ref([{ key: 'test', value: 'test2' }])
 const MultipleTextArrayList = ref(['12:30', '13:30', '14:40'])
-const MapDataArray = ref({ lat: '', lng: '' })
+const MapDataArray = ref({
+  address: 'Slokas iela 193',
+  lat: 10.0,
+  lng: 10.0,
+})
 
 const showSelect = ref(true)
 watch(showSelect, (n) => {

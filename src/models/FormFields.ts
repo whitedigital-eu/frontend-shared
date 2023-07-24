@@ -329,13 +329,17 @@ class MultipleTextFields extends FormField {
 }
 
 class MapCoordinateSelectorField extends FormField {
-  public value: MapCoordinateSelectorFieldValue = { lat: '', lng: '' }
+  public value: MapCoordinateSelectorFieldValue = {
+    address: '',
+    lat: 0,
+    lng: 0,
+  }
 
   constructor(
     name: string,
     label: string,
     mapData: MapProps,
-    value: MapCoordinateSelectorFieldValue = { lat: '', lng: '' }
+    value: MapCoordinateSelectorFieldValue = { address: '', lat: 0, lng: 0 }
   ) {
     super('map-coordinate-selector', name, label)
     this.mapData = mapData

@@ -7,7 +7,7 @@ export type SimpleSelectValue = string | string[] | null | undefined
 export type SimpleStringList = string[]
 export type MultipleTextFieldList = string[]
 export type MapCoordinateSelectorFieldValue =
-  | { lat: string; lng: string }
+  | { address: string; lat: number; lng: number }
   | undefined
 export type KeyAndValueList = { key: string; value: string }[]
 export type DataFetchingSelectValue = string | string[]

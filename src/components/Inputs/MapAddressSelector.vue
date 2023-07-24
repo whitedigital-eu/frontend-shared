@@ -29,10 +29,11 @@
 <script setup lang="ts">
 import { computed, ref, onMounted } from 'vue'
 import FormFieldLabel from '../FormFieldLabel.vue'
+import { watch } from 'vue'
 
 const props = withDefaults(
   defineProps<{
-    modelValue?: { lat: string; lng: string } | undefined
+    modelValue?: { address: string; lat: number; lng: number } | undefined
     label?: string | null
     mapData?: {
       googleApi: string
@@ -77,11 +78,16 @@ let googleMap: google.maps.Map | null = null
 let marker: google.maps.Marker | null = null
 
 const loadGoogleMapsAPI = () => {
-  const script = document.createElement('script')
-  script.src = `https://maps.googleapis.com/maps/api/js?key=${props.mapData?.googleApi}&libraries=places`
-  script.onload = initMap
-  document.head.appendChild(script)
-}
+  const existingScript = document.querySelector(`script[src="https://maps.googleapis.com/maps/api/js?key=${props.mapData?.googleApi}&libraries=places"]`);
+  if (existingScript) {
+    initMap();
+    return;
+  }
+  const script = document.createElement('script');
+  script.src = `https://maps.googleapis.com/maps/api/js?key=${props.mapData?.googleApi}&libraries=places`;
+  script.onload = initMap;
+  document.head.appendChild(script);
+};
 
 const initMap = () => {
   const mapElement = document.getElementById('map')
@@ -89,8 +95,8 @@ const initMap = () => {
   if (mapElement && props.mapData) {
     const mapOptions: google.maps.MapOptions = {
       center: new google.maps.LatLng(
-        props.mapData.initialLat,
-        props.mapData?.initialLng
+          props.modelValue?.lat ? props.modelValue.lat : props.mapData.initialLat,
+          props.modelValue?.lng ? props.modelValue.lng : props.mapData?.initialLng
       ),
       zoom: 12,
     }
@@ -111,7 +117,6 @@ const initMap = () => {
     }
   }
 }
-
 const onPlaceChanged = () => {
   value.value = (<HTMLInputElement>document.getElementById('autocomplete-input')).value
   handleAddressAutocomplete()
@@ -126,7 +131,8 @@ const handleAddressAutocomplete = () => {
       results?.length > 0
     ) {
       const location = results[0].geometry.location
-      const position = { lat: location.lat(), lng: location.lng() }
+      const address = results[0].formatted_address
+      const position = {address: address, lat: location.lat(), lng: location.lng() }
       emit('update:modelValue', position)
       marker?.setPosition(location)
       googleMap?.setCenter(location)
@@ -135,9 +141,10 @@ const handleAddressAutocomplete = () => {
 }
 
 const onMarkerDragEnd = (event: google.maps.MapMouseEvent) => {
-  const position = event.latLng?.toJSON()
-  emit('update:modelValue', position)
-}
+  const { lat, lng } = event.latLng?.toJSON() || {};
+  const position = { address: value.value, lat, lng };
+  emit('update:modelValue', position);
+};
 
 onMounted(() => {
   inputRef.value = document.getElementById(
@@ -147,6 +154,12 @@ onMounted(() => {
     loadGoogleMapsAPI()
   }
 })
+
+watch(
+    () => props.modelValue?.address,
+    (n) => (value.value = n as string),
+    { immediate: true }
+)
 </script>
 
 <style lang="scss" scoped>
