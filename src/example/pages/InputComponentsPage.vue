@@ -3,7 +3,7 @@
     <Text v-model="fullName" label="Full name" />
     <TextList v-model="textArrayList" label="Text List" />
     <KeyAndValueList
-      v-model="KeyAndValueArrayList"
+      v-model="keyAndValueArrayList"
       :text="{
         key_label: 'title',
         value_label: 'value',
@@ -12,7 +12,7 @@
       }"
     />
     <MultipleTextFields
-      v-model="MultipleTextArrayList"
+      v-model="multipleTextArrayList"
       label="Work times"
       :label-array="[
         'monday',
@@ -63,6 +63,15 @@
       v-model="attendanceTime"
       label="Flatpickr time picker"
     />
+    <Map
+      v-model="mapDataArray"
+      label="Input address"
+      :map-data="{
+        googleApiKey: 'AIzaSyCAIwTPctnSM2PWcbK6cMdlZaSgEYIKp5U',
+        initialLat: 56.946285,
+        initialLng: 24.105078,
+      }"
+    />
 
     <div class="mb-[300px]">
       <button
@@ -105,6 +114,7 @@ import HtmlContentEditor from '../../components/Inputs/HtmlContentEditor.vue'
 import TextList from '../../components/Inputs/TextList.vue'
 import KeyAndValueList from '../../components/Inputs/KeyAndValueList.vue'
 import MultipleTextFields from '../../components/Inputs/MultipleTextFields.vue'
+import Map from '../../components/Inputs/MapAddressSelector.vue'
 const fullName = ref('')
 const price = ref('9912,22')
 const notes = ref('')
@@ -119,8 +129,13 @@ const eventDuration = ref()
 const profilePicture = ref()
 const attendanceTime = ref('12:34')
 const textArrayList = ref(['test', 'test2', 'test3'])
-const KeyAndValueArrayList = ref([{ key: 'test', value: 'test2' }])
-const MultipleTextArrayList = ref(['12:30', '13:30', '14:40'])
+const keyAndValueArrayList = ref([{ key: 'test', value: 'test2' }])
+const multipleTextArrayList = ref(['12:30', '13:30', '14:40'])
+const mapDataArray = ref({
+  address: 'Slokas iela 193',
+  lat: 10.0,
+  lng: 10.0,
+})
 
 const showSelect = ref(true)
 watch(showSelect, (n) => {

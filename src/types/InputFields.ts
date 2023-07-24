@@ -27,5 +27,10 @@ interface LabelProps {
   add_field?: string
   form_label?: string
 }
+interface MapProps {
+  googleApiKey?: string
+  initialLat?: number
+  initialLng?: number
+}
 
-export { SimpleSelectConfig, DataFetchingSelectConfig, LabelProps }
+export { SimpleSelectConfig, DataFetchingSelectConfig, LabelProps, MapProps }
