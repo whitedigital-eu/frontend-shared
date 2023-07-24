@@ -40,6 +40,7 @@ import getLoadResourceFunctions from '../../../helpers/DataFetching'
 import { FileUploadValue } from '../ValueTypes'
 import { Resource } from '../../../types/Resource'
 import defaultPreviewTemplate from './preview-template.html?raw'
+
 const props = withDefaults(
   defineProps<{
     modelValue?: FileUploadValue

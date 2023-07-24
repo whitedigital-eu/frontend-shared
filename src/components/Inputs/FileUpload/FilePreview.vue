@@ -16,7 +16,7 @@
     <div
       class="absolute dz-actions flex flex-row flex-wrap justify-end right-1 text-white top-1 w-full z-30"
     >
-      <button v-if="allowEdit" dz-edit>
+      <button v-if="allowEdit" type="button" dz-edit>
         <FileEditIcon
           class="cursor-pointer"
           height="20"
@@ -24,14 +24,14 @@
           @click="emit('edit-file', file)"
         />
       </button>
-      <div v-if="allowDelete" class="cursor-pointer" dz-remove>
+      <button v-if="allowDelete" type="button" class="cursor-pointer" dz-remove>
         <Trash2Icon
           class="cursor-pointer"
           height="20"
           width="20"
           @click="emit('remove-file', file)"
         />
-      </div>
+      </button>
     </div>
     <div class="dz-details">
       <div class="dz-filename">
