@@ -11,21 +11,21 @@ interface IconSettings {
   iconName: string
 }
 
-const iconWrapperClass = 'mr-3 last:mr-0'
+const iconWrapperClass = 'wd-table-btn mr-3 last:mr-0'
 
 const iconSettings: Record<string, IconSettings> = {
   edit: {
-    wrapperClass: iconWrapperClass,
+    wrapperClass: `${iconWrapperClass} wd-table-btn-edit`,
     title: 'Rediģēt',
     iconName: 'check-square',
   },
   delete: {
-    wrapperClass: `text-danger ${iconWrapperClass}`,
+    wrapperClass: `text-danger ${iconWrapperClass} wd-table-btn-delete`,
     title: 'Dzēst',
     iconName: 'trash-2',
   },
   view: {
-    wrapperClass: iconWrapperClass,
+    wrapperClass: `${iconWrapperClass} wd-table-btn-view`,
     title: 'Apskatīt',
     iconName: 'eye',
   },
