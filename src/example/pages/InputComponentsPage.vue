@@ -72,6 +72,7 @@
         initialLng: 24.105078,
       }"
     />
+    <PlainTextarea v-model="textareaValue" label="Plain textarea" />
 
     <div class="mb-[300px]">
       <button
@@ -115,6 +116,8 @@ import TextList from '../../components/Inputs/TextList.vue'
 import KeyAndValueList from '../../components/Inputs/KeyAndValueList.vue'
 import MultipleTextFields from '../../components/Inputs/MultipleTextFields.vue'
 import Map from '../../components/Inputs/MapAddressSelector.vue'
+import PlainTextarea from '../../components/Inputs/PlainTextarea.vue'
+
 const fullName = ref('')
 const price = ref('9912,22')
 const notes = ref('')
@@ -172,4 +175,6 @@ const htmlContent = ref(`
 </ol>
 <a href="www.example.com">Example link</a>
 `)
+
+const textareaValue = ref('Lorem ipsum dolor sit amet...')
 </script>

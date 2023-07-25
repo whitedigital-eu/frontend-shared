@@ -347,6 +347,20 @@ class MapCoordinateSelectorField extends FormField {
   }
 }
 
+export class PlainTextareaField extends FormField {
+  value: Exclude<TextValue, number>
+  constructor(
+    name: string,
+    label: string,
+    value?: TextValue,
+    readonly = false
+  ) {
+    super('plain-textarea', name, label)
+    this.value = typeof value === 'number' ? value.toString() : value
+    this.readonly = readonly
+  }
+}
+
 export {
   TextField,
   TextareaField,
