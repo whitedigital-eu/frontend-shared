@@ -35,16 +35,14 @@ const {
   readonly?: boolean
 }>()
 
-const emit = defineEmits<{
-  'update:modelValue': [internalValue: string | undefined]
-}>()
+const emit = defineEmits<{ 'update:modelValue': [value: string] }>()
 
 const CKEditorComponent = CKEditor.component
 
 const internalValue = ref(
   typeof modelValue === 'number'
     ? modelValue.toString()
-    : modelValue !== null
+    : modelValue !== null && typeof modelValue !== 'undefined'
     ? modelValue
     : ''
 )

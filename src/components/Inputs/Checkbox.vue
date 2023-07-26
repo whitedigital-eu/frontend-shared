@@ -25,7 +25,7 @@ const {
   label = null,
 } = defineProps<CheckboxProps>()
 
-const emit = defineEmits(['update:modelValue'])
+const emit = defineEmits<{ 'update:modelValue': [value: boolean] }>()
 
 const value = ref(false)
 

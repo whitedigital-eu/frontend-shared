@@ -25,6 +25,7 @@ import { ApiListResponse } from '../../types/ApiPlatform'
 import { COLLAPSE_ORDER, createColumn } from './Column'
 import { tableTranslations } from '../../helpers/Translations'
 import { TableProps } from './createTableConfig'
+import { Resource } from '../../types/Resource'
 
 const props = withDefaults(defineProps<TableProps>(), {
   delete: true,
@@ -48,17 +49,17 @@ const props = withDefaults(defineProps<TableProps>(), {
   paginationSizeSelector: () => [10, 30, 100],
 })
 
-const emit = defineEmits([
-  'edit-click',
-  'delete-click',
-  'view-click',
-  'move-row',
-  'set:filters',
-  'row-selection-changed',
-  'cell-click',
-  'pagination-changed',
-  'total-entry-count-changed',
-])
+const emit = defineEmits<{
+  'edit-click': [resource: Resource<string, string>]
+  'delete-click': [resource: Resource<string, string>]
+  'view-click': [resource: Resource<string, string>]
+  'move-row': [row: Tabulator.RowComponent]
+  'set:filters': [response: ApiListResponse]
+  'row-selection-changed': [selectedRowData: Resource<string, string>[]]
+  'cell-click': [field: string, resource: Resource<string, string>]
+  'pagination-changed': [page: number, pageSize: number]
+  'total-entry-count-changed': [totalEntryCount: number | null]
+}>()
 
 const table = ref()
 const tabulator = ref()
@@ -217,7 +218,11 @@ const initTabulator = async (resetPage = false) => {
       emit('move-row', row)
     },
     cellClick: function (e, cell) {
-      emit('cell-click', cell.getField(), cell.getData())
+      emit(
+        'cell-click',
+        cell.getField(),
+        cell.getData() as Resource<string, string>
+      )
     },
     rowSelectionChanged(selectedRowData) {
       emit('row-selection-changed', selectedRowData)

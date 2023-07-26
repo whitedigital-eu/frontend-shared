@@ -91,7 +91,9 @@ const {
   long?: boolean
 }>()
 
-const emit = defineEmits(['update:modelValue'])
+const emit = defineEmits<{
+  'update:modelValue': [value: KeyAndValueListValue]
+}>()
 
 const handleFocus = (type: string, index: number) => {
   if (readonly) return

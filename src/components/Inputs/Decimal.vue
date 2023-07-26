@@ -34,9 +34,7 @@ const {
   maxDecimals = 2,
 } = defineProps<DecimalProps>()
 
-const emit = defineEmits<{
-  (e: 'update:modelValue', value: number | null): void
-}>()
+const emit = defineEmits<{ 'update:modelValue': [value: number | null] }>()
 
 const decSeparator = ','
 

@@ -51,7 +51,7 @@ const {
   readonly?: boolean
 }>()
 
-const emit = defineEmits(['update:modelValue'])
+const emit = defineEmits<{ 'update:modelValue': [value: string | null] }>()
 
 dayjs.extend(LocalizedFormat)
 

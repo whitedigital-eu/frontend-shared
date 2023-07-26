@@ -52,9 +52,7 @@ const {
   id?: string | null
 }>()
 
-const emit = defineEmits<{
-  (e: 'update:modelValue', value: string | null): void
-}>()
+const emit = defineEmits<{ 'update:modelValue': [value: string | null] }>()
 
 dayjs.extend(LocalizedFormat)
 

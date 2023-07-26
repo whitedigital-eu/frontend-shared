@@ -764,5 +764,8 @@
 </template>
 
 <script setup lang="ts">
-const { icon, color } = defineProps<{ icon: ''; color: '#2d3748' }>()
+const { icon = '', color = '#2d3748' } = defineProps<{
+  icon: string
+  color: string
+}>()
 </script>

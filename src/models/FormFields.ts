@@ -17,9 +17,9 @@ import {
   FileUploadValue,
   SliderValue,
   FlatpickrTimePickerValue,
-  SimpleStringList,
+  StringListValue,
   KeyAndValueListValue,
-  MultipleTextFieldList,
+  MultipleTextFieldListValue,
   MapCoordinateSelectorFieldValue,
 } from '../components/Inputs/ValueTypes'
 
@@ -290,9 +290,9 @@ class PublicFileUploadField extends FileUploadField {
 }
 
 class TextArrayField extends FormField {
-  public value: SimpleStringList = []
+  public value: StringListValue = []
 
-  constructor(name: string, label: string, value: SimpleStringList = []) {
+  constructor(name: string, label: string, value: StringListValue = []) {
     super('text-list', name, label)
     this.value = value
   }
@@ -314,13 +314,13 @@ class KeyAndValueArrayField extends FormField {
 }
 
 class MultipleTextFields extends FormField {
-  public value: MultipleTextFieldList = []
+  public value: MultipleTextFieldListValue = []
 
   constructor(
     name: string,
     label: string,
     labelArray: string[],
-    value: MultipleTextFieldList = []
+    value: MultipleTextFieldListValue = []
   ) {
     super('multiple-text-fields', name, label, labelArray)
     this.labelArray = labelArray

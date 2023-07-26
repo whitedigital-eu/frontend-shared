@@ -41,17 +41,11 @@ import { X } from 'lucide-vue-next'
 import useResponsivity from '../../composables/useResponsivity'
 
 const props = withDefaults(
-  defineProps<{
-    modelValue?: string[] | string
-    label?: string
-  }>(),
-  {
-    modelValue: () => [],
-    label: '',
-  }
+  defineProps<{ modelValue?: string[] | string; label?: string }>(),
+  { modelValue: () => [], label: '' }
 )
 
-const emit = defineEmits(['update:modelValue'])
+const emit = defineEmits<{ 'update:modelValue': [value: string[]] }>()
 
 dayjs.extend(LocalizedFormat)
 
@@ -83,8 +77,9 @@ const handleChange = (selectedDates: Date[]) => {
   if (
     newVal.length < 2 ||
     areStringArraysEqual(newVal, props.modelValue as string[])
-  )
+  ) {
     return
+  }
 
   emit('update:modelValue', newVal)
 }

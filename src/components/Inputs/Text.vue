@@ -41,7 +41,7 @@ const props = withDefaults(
   }
 )
 
-const emit = defineEmits(['update:modelValue'])
+const emit = defineEmits<{ 'update:modelValue': [value: string] }>()
 
 const handleFocus = () => {
   if (props.readonly) return

@@ -32,9 +32,7 @@ const props = defineProps<{
   step?: number
 }>()
 
-const emit = defineEmits<{
-  (e: 'update:modelValue', value: number): void
-}>()
+const emit = defineEmits<{ 'update:modelValue': [value: number] }>()
 
 const formatTimeInput = (v: string | number) => {
   const value = v.toString()
@@ -54,9 +52,7 @@ const handleInput = (e: Event) => {
   emitUpdate()
 }
 
-const handleFocus = () => {
-  selectModel.value.open()
-}
+const handleFocus = () => selectModel.value.open()
 
 const handleBlur = (e: FocusEvent) => {
   selectModel.value.close()

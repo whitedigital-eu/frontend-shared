@@ -41,12 +41,12 @@
 <script setup lang="ts">
 import { computed, Ref, ref, watch } from 'vue'
 import FormFieldLabel from '../FormFieldLabel.vue'
-import { SimpleStringList } from './ValueTypes'
+import { StringListValue } from './ValueTypes'
 import { PlusIcon, X } from 'lucide-vue-next'
 
 const props = withDefaults(
   defineProps<{
-    modelValue: SimpleStringList
+    modelValue: StringListValue
     label?: string | null
     readonly?: boolean
     long?: boolean
@@ -58,7 +58,7 @@ const props = withDefaults(
   }
 )
 
-const emit = defineEmits(['update:modelValue'])
+const emit = defineEmits<{ 'update:modelValue': [value: StringListValue] }>()
 
 const handleFocus = () => {
   if (props.readonly) return
@@ -67,20 +67,20 @@ const handleFocus = () => {
 const handleBlur = () => (hasFocus.value = false)
 
 const inputRef = ref<HTMLInputElement | undefined>()
-const value: Ref<SimpleStringList> = ref([])
+const value: Ref<StringListValue> = ref([])
 const hasFocus = ref(false)
 const addValue = ref('')
 const isEmpty = computed(() => !addValue.value)
 
 const addNewValue = () => {
   if (addValue.value.trim() === '') return
-  emit('update:modelValue', [...props.modelValue, addValue.value])
+  emit('update:modelValue', [...(props.modelValue as string[]), addValue.value])
   addValue.value = ''
 }
 
 const removeValue = (index: number) => {
   if (index === -1) return
-  const newModelValue = [...props.modelValue]
+  const newModelValue = [...(props.modelValue as string[])]
   newModelValue.splice(index, 1)
   emit('update:modelValue', newModelValue)
 }

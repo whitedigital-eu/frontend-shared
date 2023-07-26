@@ -132,10 +132,7 @@ const props = withDefaults(
 )
 
 const emit = defineEmits<{
-  (
-    e: 'update:query-params',
-    data: ReturnType<typeof filtersToQueryParams>
-  ): void
+  'update:query-params': [data: ReturnType<typeof filtersToQueryParams>]
 }>()
 
 const { isMobile } = useResponsivity()

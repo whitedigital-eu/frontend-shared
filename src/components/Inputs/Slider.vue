@@ -15,7 +15,7 @@
 </template>
 
 <script setup>
-// TODO: convert ^ to TS
+// TODO: convert this file to TS!
 import { ref, watch } from 'vue'
 import VueSlider from 'vue-slider-component'
 import 'vue-slider-component/theme/antd.css'

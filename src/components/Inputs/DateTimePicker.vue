@@ -31,15 +31,10 @@ const {
 } = defineProps<{
   modelValue?: DateTimePickerValue
   label?: string | null
-  config?: {
-    hoursStep?: number
-    minutesStep?: number
-  } | null
+  config?: { hoursStep?: number; minutesStep?: number } | null
 }>()
 
-const emit = defineEmits<{
-  (e: 'update:modelValue', value: string | null): void
-}>()
+const emit = defineEmits<{ 'update:modelValue': [value: string | null] }>()
 
 const formatTimeInput = (value: string) => {
   if (value.length === 1) return '0' + value

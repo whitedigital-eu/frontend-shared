@@ -33,7 +33,7 @@ const {
 }>()
 
 const emit = defineEmits<{
-  (e: 'update:modelValue', content: string | undefined): void
+  'update:modelValue': [content: string | undefined]
 }>()
 
 const CKEditorComponent = CKEditor.component

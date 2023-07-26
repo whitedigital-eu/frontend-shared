@@ -4,8 +4,8 @@ export type TextValue = SNNU
 export type DecimalValue = SNNU
 export type TextEditorValue = SNNU
 export type SimpleSelectValue = string | string[] | null | undefined
-export type SimpleStringList = string[]
-export type MultipleTextFieldList = string[]
+export type StringListValue = string[]
+export type MultipleTextFieldListValue = string[]
 export type MapCoordinateSelectorFieldValue =
   | { address: string; lat: number; lng: number }
   | undefined

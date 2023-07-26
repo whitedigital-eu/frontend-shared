@@ -5,9 +5,7 @@
       class="dropzone dz-clickable relative"
       :class="{ 'dz-started': anyFiles }"
     >
-      <FormFieldLabel v-if="label">
-        {{ label }}
-      </FormFieldLabel>
+      <FormFieldLabel v-if="label">{{ label }}</FormFieldLabel>
       <div class="dz-message">
         <span v-if="!anyFiles">{{ dropFilesMessage }}</span>
       </div>
@@ -66,7 +64,11 @@ const props = withDefaults(
   }
 )
 
-const emit = defineEmits(['update:modelValue', 'remove-file', 'edit-file'])
+const emit = defineEmits<{
+  'update:modelValue': [value: string[] | string]
+  'remove-file': [fileIri: string, callback: () => void]
+  'edit-file': [fileIri: string]
+}>()
 
 Dropzone.autoDiscover = false
 
@@ -74,8 +76,10 @@ const { loadResource, loadAllResources } = getLoadResourceFunctions(
   props.axiosInstance
 )
 
-type ApiPlatformFile = Resource<string, string> &
-  (
+type ApiPlatformFile = Resource<string, string> & {
+  id: number
+  '@id': string
+} & (
     | { filePath: string; contentUrl: string }
     | { sourceUrl: string; originalName: string }
   )
@@ -115,7 +119,7 @@ const removeInitialFile = async (fileIri: string) => {
     try {
       await props.axiosInstance.delete(fileIri)
       initialFiles.value = initialFiles.value.filter(
-        (file: any) => file['@id'] !== fileIri
+        (file) => file['@id'] !== fileIri
       )
     } catch (e) {
       console.error(e)
@@ -127,7 +131,7 @@ const removeInitialFile = async (fileIri: string) => {
 
 const newValue = computed(() => {
   const initialFileIris: string[] = initialFiles.value
-    ? initialFiles.value.map((file: any) => file['@id'])
+    ? initialFiles.value.map((file) => file['@id'])
     : []
 
   if (singleFileUpload.value) {
@@ -149,7 +153,7 @@ const anyFiles = computed(() => {
   return singleFileUpload.value ? !!props.modelValue : props.modelValue?.length
 })
 
-watch(newValue, (n: string | string[]) => emit('update:modelValue', n))
+watch(newValue, (n) => emit('update:modelValue', n))
 
 const getFileIri = (file: Dropzone.DropzoneFile) => {
   if (file.xhr) return JSON.parse(file.xhr.response)['@id']

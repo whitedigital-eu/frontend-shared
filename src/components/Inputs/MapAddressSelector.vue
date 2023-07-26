@@ -30,10 +30,11 @@
 import { computed, ref, onMounted } from 'vue'
 import FormFieldLabel from '../FormFieldLabel.vue'
 import { watch } from 'vue'
+import {MapCoordinateSelectorFieldValue} from "./ValueTypes";
 
 const props = withDefaults(
   defineProps<{
-    modelValue?: { address: string; lat: number; lng: number } | undefined
+    modelValue?: MapCoordinateSelectorFieldValue
     label?: string | null
     mapData?: {
       googleApiKey: string
@@ -52,7 +53,9 @@ const props = withDefaults(
   }
 )
 
-const emit = defineEmits(['update:modelValue'])
+const emit = defineEmits<{
+  'update:modelValue': [value: MapCoordinateSelectorFieldValue]
+}>()
 
 const handleFocus = () => {
   if (props.readonly) return
@@ -141,8 +144,8 @@ const handleAddressAutocomplete = () => {
 }
 
 const onMarkerDragEnd = (event: google.maps.MapMouseEvent) => {
-  const { lat, lng } = event.latLng?.toJSON() || {};
-  const position = { address: value.value, lat, lng };
+  const coords = event.latLng?.toJSON();
+  const position = { address: value.value, lat: coords?.lat ?? 0, lng: coords?.lng ?? 0 };
   emit('update:modelValue', position);
 };
 
@@ -150,9 +153,7 @@ onMounted(() => {
   inputRef.value = document.getElementById(
     'autocomplete-input'
   ) as HTMLInputElement
-  if (props.mapData) {
-    loadGoogleMapsAPI()
-  }
+  if (props.mapData) loadGoogleMapsAPI()
 })
 
 watch(

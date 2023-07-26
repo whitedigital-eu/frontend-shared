@@ -37,11 +37,11 @@
 <script setup lang="ts">
 import { Ref, ref } from 'vue'
 import FormFieldLabel from '../FormFieldLabel.vue'
-import { MultipleTextFieldList } from './ValueTypes'
+import { MultipleTextFieldListValue } from './ValueTypes'
 
 const props = withDefaults(
   defineProps<{
-    modelValue: MultipleTextFieldList
+    modelValue: MultipleTextFieldListValue
     label?: string | null
     labelArray?: string[] | null
     readonly?: boolean
@@ -55,9 +55,12 @@ const props = withDefaults(
   }
 )
 
-const emit = defineEmits(['update:modelValue'])
+const emit = defineEmits<{
+  'update:modelValue': [value: MultipleTextFieldListValue]
+}>()
+
 const inputRef: Ref<HTMLInputElement[]> = ref([])
-const value: Ref<MultipleTextFieldList> = ref(props.modelValue) // Initialize with props.modelValue
+const value: Ref<MultipleTextFieldListValue> = ref(props.modelValue) // Initialize with props.modelValue
 const hasFocus = ref(-1)
 const handleFocus = (type: string, index: number) => {
   if (props.readonly) return
