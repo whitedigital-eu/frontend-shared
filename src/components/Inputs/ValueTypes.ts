@@ -9,7 +9,7 @@ export type MultipleTextFieldList = string[]
 export type MapCoordinateSelectorFieldValue =
   | { address: string; lat: number; lng: number }
   | undefined
-export type KeyAndValueList = { key: string; value: string }[]
+export type KeyAndValueListValue = { key: string; value: string }[]
 export type DataFetchingSelectValue = string | string[]
 export type DatepickerValue = string | null | undefined
 export type DateTimePickerValue = string | null | undefined

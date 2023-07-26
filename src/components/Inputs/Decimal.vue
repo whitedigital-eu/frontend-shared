@@ -3,21 +3,21 @@
     <FormFieldLabel
       v-if="label"
       :is-placeholder="labelIsPlaceholder"
-      @click.native="handleLabelClick"
+      @click="handleLabelClick"
     >
-      {{ props.label }}
+      {{ label }}
     </FormFieldLabel>
     <input
       ref="inputRef"
       v-model="value"
-      type="text"
+      class="form-control sm:min-w-[200px] w-full"
       inputmode="decimal"
-      class="form-control w-full sm:min-w-[200px]"
       :readonly="readonly"
-      @keydown="handleKeydown"
-      @input="handleInput"
-      @focus="handleFocus"
+      type="text"
       @blur="handleBlur"
+      @focus="handleFocus"
+      @input="handleInput"
+      @keydown="handleKeydown"
     />
   </div>
 </template>
@@ -25,21 +25,14 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
 import FormFieldLabel from '../FormFieldLabel.vue'
-import { DecimalValue } from './ValueTypes'
+import { DecimalProps } from './PropTypes'
 
-type Props = {
-  modelValue: DecimalValue
-  label?: string | null
-  readonly?: boolean
-  maxDecimals?: number | null
-}
-
-const props = withDefaults(defineProps<Props>(), {
-  modelValue: '',
-  label: null,
-  readonly: false,
-  maxDecimals: 2,
-})
+const {
+  modelValue = '',
+  label = null,
+  readonly = false,
+  maxDecimals = 2,
+} = defineProps<DecimalProps>()
 
 const emit = defineEmits<{
   (e: 'update:modelValue', value: number | null): void
@@ -70,18 +63,18 @@ const transformValue = (value: string): string => {
 
   transformedValue = transformedValue.replace('.', decSeparator)
   if (!transformedValue.includes(decSeparator)) {
-    return props.maxDecimals! === 0
+    return maxDecimals! === 0
       ? transformedValue
-      : `${transformedValue},${'0'.repeat(props.maxDecimals!)}`
+      : `${transformedValue},${'0'.repeat(maxDecimals!)}`
   }
 
   const decimal = transformedValue.split(decSeparator)[1]
 
   transformedValue =
-    decimal.length > props.maxDecimals!
-      ? transformedValue.slice(0, props.maxDecimals! - decimal.length)
+    decimal.length > maxDecimals!
+      ? transformedValue.slice(0, maxDecimals! - decimal.length)
       : transformedValue.padEnd(
-          transformedValue.length + (props.maxDecimals! - decimal.length),
+          transformedValue.length + (maxDecimals! - decimal.length),
           '0'
         )
 
@@ -95,7 +88,7 @@ const handleBlur = () => {
   emitUpdate(value.value)
 }
 
-const valuePropToValue = (n: Props['modelValue']) => {
+const valuePropToValue = (n: DecimalProps['modelValue']) => {
   let stringVal = ''
   if (typeof n === 'number') stringVal = n.toString()
   if (typeof n === 'string') {
@@ -110,11 +103,11 @@ const valuePropToValue = (n: Props['modelValue']) => {
 }
 
 const inputRef = ref<HTMLInputElement | undefined>()
-const value = ref(valuePropToValue(props.modelValue))
+const value = ref(valuePropToValue(modelValue))
 const hasFocus = ref(false)
 const isEmpty = computed(() => !value.value)
 const labelIsPlaceholder = computed<boolean>(
-  () => props.label !== null && isEmpty.value && !hasFocus.value
+  () => label !== null && isEmpty.value && !hasFocus.value
 )
 
 const allowedKeys = [
@@ -135,7 +128,7 @@ const handleKeydown = (e: KeyboardEvent) => {
   const valueSplitByDecSeparator = e.target.value.split(decSeparator)
   const hasDecSeparator = valueSplitByDecSeparator.length === 2
   const allowToEnterDecSeparator =
-    !hasDecSeparator && e.target.value.length && props.maxDecimals !== 0
+    !hasDecSeparator && e.target.value.length && maxDecimals !== 0
 
   const invalidCharacter =
     (isNaN(Number(e.key)) &&
@@ -153,9 +146,9 @@ const handleKeydown = (e: KeyboardEvent) => {
   const caretBeforeDecSeparator = isCaretBeforeDecSeparator(e.target)
 
   const tooManyDecimals =
-    props.maxDecimals !== undefined &&
+    maxDecimals !== undefined &&
     hasDecSeparator &&
-    valueSplitByDecSeparator[1].length === props.maxDecimals
+    valueSplitByDecSeparator[1].length === maxDecimals
 
   if (!textSelected && !caretBeforeDecSeparator && tooManyDecimals) {
     e.preventDefault()
@@ -167,12 +160,10 @@ const handleInput = (e: Event) => {
   emitUpdate(targetValue)
 }
 
-const handleLabelClick = () => {
-  inputRef.value?.focus()
-}
+const handleLabelClick = () => inputRef.value?.focus()
 
 watch(
-  () => props.modelValue,
+  () => modelValue,
   (n) => {
     const newValue = valuePropToValue(n)
     if (newValue === valuePropToValue(value.value)) return

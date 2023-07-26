@@ -3,7 +3,7 @@
     <FormFieldLabel
       v-if="label"
       :is-placeholder="isEmpty && !hasFocus"
-      @click.native="handleLabelClick"
+      @click="handleLabelClick"
     >
       {{ props.label }}
     </FormFieldLabel>
@@ -67,11 +67,3 @@ watch(
   { immediate: true }
 )
 </script>
-
-<style lang="scss" scoped>
-input {
-  display: block;
-  appearance: none;
-  transition: all 0.2s ease-in-out;
-}
-</style>

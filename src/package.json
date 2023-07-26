@@ -1,6 +1,6 @@
 {
   "name": "@whitedigital-eu/wd-frontend-shared",
-  "version": "0.3.40",
+  "version": "0.4.0",
   "author": "Imants Liepiņš",
   "license": "MIT",
   "description": "Shared components, helpers, composables and types for vue frontend SPAs",
@@ -21,7 +21,9 @@
     "preview": "vue-tsc --noEmit && vite build && vite preview",
     "test": "vitest",
     "test-coverage": "vitest run --coverage",
-    "type-coverage": "type-coverage --detail"
+    "type-coverage": "type-coverage --detail",
+    "safe-publish": "yarn && yarn type-check && yarn vitest run && yarn publish-only",
+    "publish-only": "yarn publish --access public"
   },
   "repository": {
     "type": "git",

@@ -24,20 +24,18 @@ import dayjs from 'dayjs'
 import TimePicker from './TimePicker.vue'
 import { DateTimePickerValue } from './ValueTypes'
 
-const props = withDefaults(
-  defineProps<{
-    modelValue: DateTimePickerValue
-    label?: string | null
-    config?: {
-      hoursStep?: number
-      minutesStep?: number
-    }
-  }>(),
-  {
-    modelValue: null,
-    label: null,
-  }
-)
+const {
+  modelValue = null,
+  label = null,
+  config = null,
+} = defineProps<{
+  modelValue?: DateTimePickerValue
+  label?: string | null
+  config?: {
+    hoursStep?: number
+    minutesStep?: number
+  } | null
+}>()
 
 const emit = defineEmits<{
   (e: 'update:modelValue', value: string | null): void
@@ -49,15 +47,15 @@ const formatTimeInput = (value: string) => {
   return value.slice(-2)
 }
 
-const dateValue = ref<string | null>(props.modelValue)
+const dateValue = ref<string | null>(modelValue)
 const hoursValue = ref(
-  props.modelValue ? formatTimeInput(dayjs(props.modelValue).format('H')) : ''
+  modelValue ? formatTimeInput(dayjs(modelValue).format('H')) : ''
 )
 const minutesValue = ref(
-  props.modelValue ? formatTimeInput(dayjs(props.modelValue).format('mm')) : ''
+  modelValue ? formatTimeInput(dayjs(modelValue).format('mm')) : ''
 )
 
-const value = ref<string | null>(props.modelValue)
+const value = ref<string | null>(modelValue)
 
 const setValue = () => {
   if (!dateValue.value) {
@@ -74,12 +72,12 @@ const setValue = () => {
 }
 
 const setDateHoursAndMinutes = () => {
-  dateValue.value = props.modelValue
-  hoursValue.value = props.modelValue
-    ? formatTimeInput(dayjs(props.modelValue).format('H'))
+  dateValue.value = modelValue
+  hoursValue.value = modelValue
+    ? formatTimeInput(dayjs(modelValue).format('H'))
     : ''
-  minutesValue.value = props.modelValue
-    ? formatTimeInput(dayjs(props.modelValue).format('mm'))
+  minutesValue.value = modelValue
+    ? formatTimeInput(dayjs(modelValue).format('mm'))
     : ''
 }
 
@@ -90,9 +88,9 @@ watch(minutesValue, setValue)
 watch(value, (n) => emit('update:modelValue', n))
 
 watch(
-  () => props.modelValue,
+  () => modelValue,
   () => {
-    if (props.modelValue === value.value) return
+    if (modelValue === value.value) return
 
     setDateHoursAndMinutes()
   }

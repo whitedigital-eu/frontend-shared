@@ -2,7 +2,7 @@
   <div class="w-full" :class="containerClass">
     <div
       v-if="item.type === 'text' && !Array.isArray(item.value)"
-      class="sm:flex flex-col items-center"
+      class="flex-col items-center sm:flex"
     >
       <Text
         v-model="item.value"
@@ -10,43 +10,43 @@
         :label="item.label"
         :long="isMultisearchInput"
       />
-      <label class="flex mt-1" v-if="item.toggleExact">
+      <label v-if="item.toggleExact" class="flex mt-1">
         <span>Meklēt precīzi </span>
         <Checkbox v-model="item.exact" />
       </label>
-      <span v-if="item.description && !item.exact" class="w-full mt-2">
+      <span v-if="item.description && !item.exact" class="mt-2 w-full">
         {{ item.description }}
       </span>
     </div>
     <SimpleSelect
       v-if="item.type === 'simple-select'"
-      class="w-full"
       :id="`filter-${item.label}`"
       v-model="item.value"
+      class="w-full"
+      :config="item.config as SimpleSelectConfig"
       :label="item.label"
       :required="false"
-      :config="item.config"
     />
     <DataFetchingSelect
       v-if="
         item.type === 'data-fetching-select' &&
-        props.axiosInstance &&
+        axiosInstance &&
         isDataFetchingSelectConfig(item.config)
       "
-      class="w-full"
       :id="`filter-${item.label}`"
       v-model="item.value"
-      :label="item.label"
+      :axios-instance="axiosInstance"
+      class="w-full"
       :config="castToDataFetchingSelect(item.config)"
-      :axios-instance="props.axiosInstance"
+      :label="item.label"
     />
     <Datepicker
       v-if="
         item.type === 'date' &&
         (item.value === '' || !Array.isArray(item.value))
       "
-      class="w-full"
       v-model="item.value"
+      class="w-full"
       :label="item.label"
     />
     <RangeDatepicker
@@ -54,21 +54,21 @@
         item.type === 'date-range' &&
         (item.value === '' || Array.isArray(item.value))
       "
-      class="w-full"
       v-model="item.value"
+      class="w-full"
       :label="item.label"
     />
     <div
       v-if="item.type === 'radio-buttons'"
-      class="sm:flex flex-col items-left"
+      class="flex-col items-left sm:flex"
     >
-      <label class="mr-2 mb-2">{{ item.label }}</label>
-      <div class="flex gap-4" v-if="item.config">
+      <label class="mb-2 mr-2">{{ item.label }}</label>
+      <div v-if="item.config" class="flex gap-4">
         <div v-for="option in item.config.options" :key="option.value">
           <input
             v-model="item.value"
-            type="radio"
             :name="item.name"
+            type="radio"
             :value="option.value"
           />
           <label class="ml-1" @click="item.value = option.value">
@@ -93,12 +93,11 @@ import {
   DataFetchingSelectConfig,
   SimpleSelectConfig,
 } from '../../types/InputFields'
-import { computed, ref } from 'vue'
-import HtmlContentEditor from '../Inputs/HtmlContentEditor.vue'
+import { computed } from 'vue'
 
-const props = defineProps<{
+const { item, axiosInstance = null } = defineProps<{
   item: Filter
-  axiosInstance?: AxiosInstance
+  axiosInstance?: AxiosInstance | null
 }>()
 
 const isDataFetchingSelectConfig = (
@@ -125,8 +124,8 @@ const castToDataFetchingSelect = (
   }
 }
 
-const isDateRangeInput = computed(() => props.item.type === 'date-range')
-const isMultisearchInput = computed(() => props.item.name === 'multisearch')
+const isDateRangeInput = computed(() => item.type === 'date-range')
+const isMultisearchInput = computed(() => item.name === 'multisearch')
 
 const standardWidth = 200
 const gap = 16

@@ -4,14 +4,14 @@
       <FormFieldLabel
         v-if="label"
         :is-placeholder="isEmpty && !hasFocus"
-        @click.native="handleLabelClick"
+        @click="handleLabelClick"
       >
         {{ props.label }}
       </FormFieldLabel>
       <input
         ref="inputRef"
         v-model="addValue"
-        class="form-control sm:min-w-[200px] w-full"
+        class="appearance-none block form-control sm:min-w-[200px] w-full"
         :class="{ 'sm:min-w-[416px]': long }"
         :readonly="readonly"
         type="text"
@@ -73,19 +73,16 @@ const addValue = ref('')
 const isEmpty = computed(() => !addValue.value)
 
 const addNewValue = () => {
-  if (addValue.value.trim() === '') {
-    return
-  }
-  props.modelValue.push(addValue.value)
+  if (addValue.value.trim() === '') return
+  emit('update:modelValue', [...props.modelValue, addValue.value])
   addValue.value = ''
-  emit('update:modelValue', props.modelValue)
 }
 
 const removeValue = (index: number) => {
-  if (index !== -1) {
-    props.modelValue.splice(index, 1)
-    emit('update:modelValue', props.modelValue)
-  }
+  if (index === -1) return
+  const newModelValue = [...props.modelValue]
+  newModelValue.splice(index, 1)
+  emit('update:modelValue', newModelValue)
 }
 
 const handleLabelClick = () => {
@@ -102,8 +99,6 @@ watch(
 
 <style lang="scss" scoped>
 input {
-  display: block;
-  appearance: none;
   transition: all 0.2s ease-in-out;
 }
 </style>

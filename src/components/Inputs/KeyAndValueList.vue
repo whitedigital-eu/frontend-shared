@@ -1,18 +1,17 @@
 <template>
   <div class="relative">
-    <p class="mb-4">{{ props.text?.form_label ? props.text?.form_label : 'Value and Key form' }}</p>
+    <p class="mb-4">
+      {{ texts?.formLabel ?? 'Value and Key form' }}
+    </p>
     <div class="flex gap-4 relative">
-      <div v-if="modelValue && modelValue.length !== 0" class="w-full">
-        <div
-          v-for="(item, index) in modelValue"
-          :key="index"
-          class="relative"
-        >
+      <div v-if="modelValue?.length !== 0" class="w-full">
+        <div v-for="(item, index) in modelValue" :key="index" class="relative">
           <X
-            class="absolute cursor-pointer right-0 top-[-18px] w-[16px] z-10"
+            v-if="modelValue.length > 1"
+            class="absolute cursor-pointer right-0 top-[-18px] w-4 z-10"
             @click="removeFields(index)"
           />
-          <div class="w-full mb-4 grid grid-cols-2 gap-x-4">
+          <div class="gap-x-4 grid grid-cols-2 mb-4 w-full">
             <div
               class="relative"
               :class="{
@@ -21,9 +20,9 @@
             >
               <FormFieldLabel
                 :is-placeholder="!item.key && hasFocus !== 'key' + index"
-                @click.native="handleLabelClick"
+                @click="handleLabelClick"
               >
-                {{ props.text?.key_label ? props.text?.key_label : 'Key' }}
+                {{ texts?.keyLabel ?? 'Key' }}
               </FormFieldLabel>
               <input
                 ref="inputRef"
@@ -31,7 +30,7 @@
                 class="form-control sm:min-w-[200px] w-full"
                 :class="{ 'sm:min-w-[416px]': long }"
                 :readonly="readonly"
-                type="text"
+                type="texts"
                 @blur="handleBlur"
                 @focus="handleFocus('key', index)"
                 @input="handleInput('key', index, $event)"
@@ -40,17 +39,14 @@
             <div
               class="relative"
               :class="{
-                'overflow-hidden':
-                  !item.value && hasFocus !== 'value' + index,
+                'overflow-hidden': !item.value && hasFocus !== 'value' + index,
               }"
             >
               <FormFieldLabel
                 :is-placeholder="!item.value && hasFocus !== 'value' + index"
-                @click.native="handleLabelClick"
+                @click="handleLabelClick"
               >
-                {{
-                  props.text?.value_label ? props.text?.value_label : 'Value'
-                }}
+                {{ texts?.valueLabel ?? 'Value' }}
               </FormFieldLabel>
               <input
                 ref="inputRef"
@@ -58,7 +54,7 @@
                 class="form-control sm:min-w-[200px] w-full"
                 :class="{ 'sm:min-w-[416px]': long }"
                 :readonly="readonly"
-                type="text"
+                type="texts"
                 @blur="handleBlur"
                 @focus="handleFocus('value', index)"
                 @input="handleInput('value', index, $event)"
@@ -69,8 +65,8 @@
       </div>
     </div>
     <div>
-      <button class="btn btn-primary me-1" type="button" @click="addFields">
-        {{ props.text?.add_field ? props.text?.add_field : 'Add field' }}
+      <button class="btn btn-primary me-1" type="button" @click="addField">
+        {{ texts?.addField ?? 'Add field' }}
       </button>
     </div>
   </div>
@@ -79,56 +75,64 @@
 <script setup lang="ts">
 import { Ref, ref, watch } from 'vue'
 import FormFieldLabel from '../FormFieldLabel.vue'
-import { KeyAndValueList } from './ValueTypes'
+import { KeyAndValueListValue } from './ValueTypes'
 import { X } from 'lucide-vue-next'
+import { LabelProps } from '../../types/InputFields'
 
-const props = withDefaults(
-  defineProps<{
-    modelValue: { key: string; value: string }[]
-    text?: { key_label: string; value_label: string; add_field: string, form_label: string } | null
-    readonly?: boolean
-    long?: boolean
-  }>(),
-  {
-    text: null,
-    readonly: false,
-    long: false,
-  }
-)
+const {
+  modelValue,
+  texts = null,
+  readonly = false,
+  long = false,
+} = defineProps<{
+  modelValue: KeyAndValueListValue
+  texts?: LabelProps | null
+  readonly?: boolean
+  long?: boolean
+}>()
+
 const emit = defineEmits(['update:modelValue'])
+
 const handleFocus = (type: string, index: number) => {
-  if (props.readonly) return
+  if (readonly) return
   hasFocus.value = type + index
 }
 const handleBlur = () => (hasFocus.value = '')
 
 const inputRef = ref<HTMLInputElement | undefined>()
-const value: Ref<KeyAndValueList> = ref([])
+const value: Ref<KeyAndValueListValue> = ref([])
 const hasFocus = ref('')
 
-const handleLabelClick = function (event: any) {
-  if (props.readonly) return
-  event.target.nextElementSibling.focus()
+const handleLabelClick = (event: Event) => {
+  if (readonly) return
+  ;((event.target as HTMLElement).nextElementSibling as HTMLElement).focus()
 }
 
-const handleInput = (type: string, index: number, event: Event) => {
-  (props.modelValue[index] as any)[type] = (event.target as HTMLInputElement).value
-  emit('update:modelValue', props.modelValue)
+const handleInput = (
+  type: keyof KeyAndValueListValue[number],
+  index: keyof KeyAndValueListValue,
+  event: Event
+) => {
+  ;(modelValue[index] as KeyAndValueListValue[number])[type] = (
+    event.target as HTMLInputElement
+  ).value
+  emit('update:modelValue', modelValue)
 }
 
-const addFields = () => {
-  props.modelValue.push({ key: '', value: '' })
+const addField = () => {
+  emit('update:modelValue', [...modelValue, { key: '', value: '' }])
 }
 
 const removeFields = (index: number) => {
-  if (props.modelValue.length > 1) {
-    props.modelValue.splice(index, 1)
-    emit('update:modelValue', props.modelValue)
+  if (modelValue.length > 1) {
+    const modelValueCopy = [...modelValue]
+    modelValueCopy.splice(index, 1)
+    emit('update:modelValue', modelValueCopy)
   }
 }
 
 watch(
-  () => props.modelValue,
+  () => modelValue,
   (n) => (value.value = n),
   { immediate: true }
 )

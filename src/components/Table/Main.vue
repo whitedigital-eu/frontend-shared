@@ -18,112 +18,34 @@
 
 <script setup lang="ts">
 import Tabulator from 'tabulator-tables'
-import { onMounted, ref, watch, onBeforeUnmount, PropType, nextTick } from 'vue'
+import { onMounted, ref, watch, onBeforeUnmount, nextTick } from 'vue'
 import { handleTableAjaxError } from '../../helpers/Errors'
-import createActionColumn, { CustomAction, renderIcons } from './ActionColumn'
-import { TableConfig } from './createTableConfig'
+import createActionColumn, { renderIcons } from './ActionColumn'
 import { ApiListResponse } from '../../types/ApiPlatform'
 import { COLLAPSE_ORDER, createColumn } from './Column'
 import { tableTranslations } from '../../helpers/Translations'
+import { TableProps } from './createTableConfig'
 
-const props = defineProps({
-  columns: {
-    type: Array as PropType<Tabulator.ColumnDefinition[]>,
-    required: true,
-  },
-  delete: {
-    default: true,
-    type: Boolean,
-  },
-  edit: {
-    default: true,
-    type: Boolean,
-  },
-  view: {
-    default: false,
-    type: Boolean,
-  },
-  created: {
-    default: true,
-    type: Boolean,
-  },
-  updated: {
-    default: true,
-    type: Boolean,
-  },
-  ajaxUrl: {
-    required: false,
-    type: String,
-    default: null,
-  },
-  primaryField: {
-    default: 'name',
-    type: String,
-  },
-  movableRows: {
-    type: Boolean,
-    required: false,
-    default: false,
-  },
-  disableOrderByDateColumns: {
-    type: Boolean,
-    required: false,
-    default: false,
-  },
-  selectionColumn: {
-    type: Boolean,
-    required: false,
-    default: false,
-  },
-  selectionCheckboxLabel: {
-    type: String,
-    required: false,
-    default: 'Atzīmē, lai veidotu darījumu',
-  },
-  columnData: {
-    type: Array,
-    required: false,
-    default: null,
-  },
-  page: {
-    type: Number,
-    required: false,
-    default: 1,
-  },
-  pageSize: {
-    type: Number,
-    required: false,
-    default: 30,
-  },
-  pageSizeParam: {
-    type: String,
-    required: false,
-    default: 'size',
-  },
-  config: {
-    type: Object as PropType<TableConfig>,
-    required: true,
-  },
-  canUpdateRecordFunc: {
-    type: Function as PropType<(cell: Tabulator.CellComponent) => boolean>,
-    required: false,
-    default: () => () => true,
-  },
-  tabulatorOptions: {
-    type: Object as PropType<Tabulator.Options>,
-    required: false,
-    default: () => ({}),
-  },
-  customActions: {
-    type: Array as PropType<CustomAction[]>,
-    required: false,
-    default: null,
-  },
-  paginationSizeSelector: {
-    type: Array as PropType<Array<number | boolean>>,
-    required: false,
-    default: () => [10, 30, 100],
-  },
+const props = withDefaults(defineProps<TableProps>(), {
+  delete: true,
+  edit: true,
+  view: false,
+  created: true,
+  updated: true,
+  ajaxUrl: null,
+  primaryField: 'name',
+  movableRows: false,
+  disableOrderByDateColumns: false,
+  selectionColumn: false,
+  selectionCheckboxLabel: 'Atzīmē, lai veidotu darījumu',
+  columnData: null,
+  page: 1,
+  pageSize: 30,
+  pageSizeParam: 'size',
+  canUpdateRecordFunc: () => true,
+  tabulatorOptions: null,
+  customActions: null,
+  paginationSizeSelector: () => [10, 30, 100],
 })
 
 const emit = defineEmits([
@@ -157,12 +79,12 @@ onMounted(() => {
 
 onBeforeUnmount(() => window.removeEventListener('resize', reInitTable))
 
-watch(
-  () => props.ajaxUrl,
-  () => {
-    reload()
-  }
-)
+const reload = () => {
+  tabulator.value.destroy()
+  initTabulator(true)
+}
+
+watch(() => props.ajaxUrl, reload)
 
 watch(totalEntryCount, (n, o) => {
   if (n !== o) emit('total-entry-count-changed', n)
@@ -470,11 +392,6 @@ const initTabulator = async (resetPage = false) => {
 }
 
 nextTick(renderIcons)
-
-const reload = () => {
-  tabulator.value.destroy()
-  initTabulator(true)
-}
 
 const refreshData = () => tabulator.value.setPage(tabulator.value.getPage())
 

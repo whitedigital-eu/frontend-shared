@@ -12,15 +12,15 @@
     <flatPickr
       ref="datepickerRef"
       v-model="value"
-      :config="config"
       class="form-control input"
-      @onChange="handleChange"
-      @onOpen="handleOpen"
-      @onClose="handleClose"
+      :config="config"
+      @on-change="handleChange"
+      @on-close="handleClose"
+      @on-open="handleOpen"
     />
     <X
       v-if="!isMobile"
-      class="cursor-pointer absolute right-[8px] top-[50%] translate-y-[-50%]"
+      class="absolute cursor-pointer right-2 top-[50%] translate-y-[-50%]"
       @click="clearInput"
     />
   </div>
@@ -40,8 +40,6 @@ import { areStringArraysEqual } from '../../helpers/Global'
 import { X } from 'lucide-vue-next'
 import useResponsivity from '../../composables/useResponsivity'
 
-dayjs.extend(LocalizedFormat)
-
 const props = withDefaults(
   defineProps<{
     modelValue?: string[] | string
@@ -54,6 +52,8 @@ const props = withDefaults(
 )
 
 const emit = defineEmits(['update:modelValue'])
+
+dayjs.extend(LocalizedFormat)
 
 const { isMobile } = useResponsivity()
 

@@ -1,20 +1,21 @@
 <template>
-  <div class="relative border-[1px] rounded-[6px]">
+  <div class="border relative rounded-md">
     <FormFieldLabel v-if="label">
       {{ label }}
     </FormFieldLabel>
     <VueSlider
       v-model="value"
-      :interval="20"
+      :disabled="readonly"
       drag-on-click
       :duration="0.1"
-      :marks="true"
-      :disabled="readonly"
+      :interval="20"
+      marks
     />
   </div>
 </template>
 
 <script setup>
+// TODO: convert ^ to TS
 import { ref, watch } from 'vue'
 import VueSlider from 'vue-slider-component'
 import 'vue-slider-component/theme/antd.css'

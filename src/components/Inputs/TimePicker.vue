@@ -1,7 +1,7 @@
 <template>
   <div class="time-picker">
     <input
-      class="form-control w-[70px]"
+      class="form-control w-20"
       :disabled="disabled"
       :max="max"
       min="0"

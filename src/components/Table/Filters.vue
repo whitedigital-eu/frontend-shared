@@ -2,15 +2,15 @@
   <div>
     <button
       v-if="isMobile && showMobileToggleButton"
-      class="btn btn-primary w-full mb-4"
+      class="btn btn-primary mb-4 w-full"
       @click="showFilters = !showFilters"
     >
       <span>{{ showFilters ? 'Paslēpt' : 'Parādīt' }} filtrus</span>
       <span v-show="showFilters">
-        <i data-lucide="chevron-down" class="h-4 w-4"> </i>
+        <i class="h-4 w-4" data-lucide="chevron-down"> </i>
       </span>
       <span v-show="!showFilters">
-        <i data-lucide="chevron-up" class="h-4 w-4"></i>
+        <i class="h-4 w-4" data-lucide="chevron-up"></i>
       </span>
     </button>
     <div
@@ -19,7 +19,7 @@
     >
       <form
         id="tabulator-html-filter-form"
-        class="xl:flex xl:flex-col sm:mr-auto items-start mb-4 w-full"
+        class="items-start mb-4 sm:mr-auto w-full xl:flex xl:flex-col"
         @submit.prevent="filter"
       >
         <div v-show="showFilters" class="flex flex-col grow">
@@ -29,63 +29,63 @@
           >
             <FilterInput
               v-for="(item, i) in filters.default"
-              :item="item"
               :key="i"
               :axios-instance="axiosInstance"
+              :item="item"
             />
             <button
               v-if="!noAdvancedFilters && toggleAdvancedFilters"
-              type="button"
               class="btn btn-primary h-10"
+              type="button"
               @click="showAdvancedFilters = !showAdvancedFilters"
             >
               Detalizēta meklēšana
-              <ChevronDown v-if="showAdvancedFilters" :size="20" class="ml-2" />
-              <ChevronUp v-if="!showAdvancedFilters" :size="20" class="ml-2" />
+              <ChevronDown v-if="showAdvancedFilters" class="ml-2" :size="20" />
+              <ChevronUp v-if="!showAdvancedFilters" class="ml-2" :size="20" />
             </button>
           </div>
           <div
             v-if="!noAdvancedFilters"
             v-show="showAdvancedFilters"
             id="advanced-filters"
-            class="flex flex-wrap gap-4 mt-4 mb-6"
+            class="flex flex-wrap gap-4 mb-6 mt-4"
           >
             <FilterInput
               v-for="(item, i) in filters.advanced"
-              :item="item"
               :key="i"
               :axios-instance="axiosInstance"
+              :item="item"
             />
           </div>
         </div>
         <div
-          class="flex flex-col sm:flex-row justify-between w-full"
+          class="flex flex-col justify-between sm:flex-row w-full"
           :class="{ 'mt-4': !showAdvancedFilters }"
         >
           <slot
-            name="action-buttons"
             :filter-function="filter"
+            name="action-buttons"
             :reset-filter-function="resetFilter"
             :show-filters="showFilters"
             :toggle-show-filters="toggleShowFilters"
           >
             <div
               v-show="showFilters"
-              class="xl:mt-0 flex gap-2 w-full sm:w-auto"
+              class="flex gap-2 sm:w-auto w-full xl:mt-0"
             >
               <button
-                type="submit"
-                class="btn btn-primary w-full sm:w-16 h-[38px] mt-2 sm:mt-0"
+                class="btn btn-primary h-[38px] mt-2 sm:mt-0 sm:w-16 w-full"
                 data-test="filters-search-btn"
+                type="submit"
                 @click.prevent="filter"
               >
                 Meklēt
               </button>
               <button
                 id="tabulator-html-filter-reset"
-                type="button"
-                class="btn btn-secondary w-full sm:w-32 h-[38px] mt-2 sm:mt-0"
+                class="btn btn-secondary h-[38px] mt-2 sm:mt-0 sm:w-32 w-full"
                 data-test="filters-reset-btn"
+                type="button"
                 @click="resetFilter"
               >
                 Dzēst filtrus
@@ -116,7 +116,7 @@ import { isNumericString } from '../../helpers/Global'
 const props = withDefaults(
   defineProps<{
     filters: Filters
-    axiosInstance?: AxiosInstance
+    axiosInstance?: AxiosInstance | null
     config?: TableConfig | null
     toggleAdvancedFilters?: boolean
     initialShowFiltersDesktop?: boolean
@@ -127,6 +127,7 @@ const props = withDefaults(
     toggleAdvancedFilters: false,
     initialShowFiltersDesktop: true,
     showMobileToggleButton: true,
+    axiosInstance: null,
   }
 )
 

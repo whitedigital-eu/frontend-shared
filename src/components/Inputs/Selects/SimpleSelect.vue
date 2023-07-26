@@ -5,47 +5,36 @@
     :allow-delete="allowDelete"
     :label="label"
     :readonly="props.readonly"
-    :settings="props.config"
+    :settings="props.config as unknown as RecursivePartial<TomSettings>"
     @create-new-item="(item) => emit('create-new-item', item)"
     @update:model-value="handleInput"
   />
 </template>
 
 <script setup lang="ts">
-import { PropType, ref, watch } from 'vue'
+import { ref, watch } from 'vue'
 import BaseSelect from './BaseSelect.vue'
 import { SimpleSelectValue } from '../ValueTypes'
+import { SimpleSelectConfig } from '../../../types/InputFields'
+import { RecursivePartial, TomSettings } from 'tom-select/src/types'
 
-const props = defineProps({
-  id: {
-    type: String,
-    required: true,
-  },
-  config: {
-    type: Object as PropType<any>,
-    required: true,
-  },
-  modelValue: {
-    type: [String, Array, null] as PropType<SimpleSelectValue>,
-    required: false,
-    default: '',
-  },
-  readonly: {
-    type: Boolean,
-    required: false,
-    default: false,
-  },
-  label: {
-    type: String,
-    required: false,
-    default: '',
-  },
-  allowDelete: {
-    type: Boolean,
-    required: false,
-    default: true,
-  },
-})
+const props = withDefaults(
+  defineProps<{
+    id: string
+    modelValue?: SimpleSelectValue
+    readonly?: boolean
+    label?: string
+    allowDelete?: boolean
+    config?: SimpleSelectConfig | null
+  }>(),
+  {
+    modelValue: '',
+    readonly: false,
+    label: '',
+    allowDelete: true,
+    config: null,
+  }
+)
 
 const emit = defineEmits<{
   'update:modelValue': [value: string | string[] | number]

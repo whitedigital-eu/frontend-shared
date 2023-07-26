@@ -1,4 +1,4 @@
-import Datepicker from './Datepicker.vue'
+import Datepicker from '../Datepicker.vue'
 import { fireEvent, render } from '@testing-library/vue'
 import { vi } from 'vitest'
 

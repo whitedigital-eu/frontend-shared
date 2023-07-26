@@ -4,11 +4,11 @@
     <TextList v-model="textArrayList" label="Text List" />
     <KeyAndValueList
       v-model="keyAndValueArrayList"
-      :text="{
-        key_label: 'title',
-        value_label: 'value',
-        add_field: 'Add field',
-        form_label: 'Forma',
+      :texts="{
+        keyLabel: 'title',
+        valueLabel: 'value',
+        addField: 'Add field',
+        formLabel: 'Forma',
       }"
     />
     <MultipleTextFields

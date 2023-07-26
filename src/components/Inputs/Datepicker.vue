@@ -12,17 +12,17 @@
     <FlatPickr
       ref="datepickerRef"
       v-model="value"
-      class="w-full form-control input"
+      class="form-control input w-full"
       :class="{ 'flatpickr-input-readonly': readonly }"
-      :disabled="readonly"
       :config="config"
-      @onChange="handleChange"
-      @onOpen="handleOpen"
-      @onClose="handleClose"
+      :disabled="readonly"
+      @on-change="handleChange"
+      @on-close="handleClose"
+      @on-open="handleOpen"
     />
     <X
       v-if="!isMobile"
-      class="cursor-pointer absolute right-[8px] top-[50%] translate-y-[-50%]"
+      class="absolute cursor-pointer right-[8px] top-[50%] translate-y-[-50%]"
       @click="clearInput"
     />
   </div>
@@ -41,20 +41,19 @@ import FormFieldLabel from '../FormFieldLabel.vue'
 import { DatepickerValue } from './ValueTypes'
 import useResponsivity from '../../composables/useResponsivity'
 
-dayjs.extend(LocalizedFormat)
+const {
+  modelValue = null,
+  label = null,
+  readonly = false,
+} = defineProps<{
+  modelValue?: DatepickerValue
+  label?: string | null
+  readonly?: boolean
+}>()
 
-const props = withDefaults(
-  defineProps<{
-    modelValue: DatepickerValue
-    label?: string | null
-    readonly?: boolean
-  }>(),
-  {
-    modelValue: null,
-    label: null,
-    readonly: false,
-  }
-)
+const emit = defineEmits(['update:modelValue'])
+
+dayjs.extend(LocalizedFormat)
 
 const { isMobile } = useResponsivity()
 
@@ -62,15 +61,13 @@ const createRandomId = () => Math.floor(100000 + Math.random() * 900000)
 
 const id = `datepicker-${createRandomId()}`
 
-const emit = defineEmits(['update:modelValue'])
-
 const datepickerRef = ref(null)
 
 const propValueToModelValue = (propValue: string | null) => {
   if (propValue === null || propValue === '') return ''
   if (!dayjs(propValue).isValid()) {
     console.error(
-      `Datepicker: props.modelValue is not a valid date string! props.modelValue: `,
+      `Datepicker: modelValue is not a valid date string! modelValue: `,
       propValue
     )
     return undefined
@@ -78,7 +75,7 @@ const propValueToModelValue = (propValue: string | null) => {
   return propValue
 }
 
-const value = ref<string | undefined>(propValueToModelValue(props.modelValue))
+const value = ref<string | undefined>(propValueToModelValue(modelValue))
 
 const isEmpty = computed(() => !value.value)
 const isOpen = ref(false)
@@ -113,7 +110,7 @@ const handleClose = () => (isOpen.value = false)
 const clearInput = () => emit('update:modelValue', null)
 
 watch(
-  () => props.modelValue,
+  () => modelValue,
   (n) => (value.value = propValueToModelValue(n)),
   { immediate: true }
 )

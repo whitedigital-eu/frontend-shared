@@ -10,18 +10,18 @@
             <li
               v-if="menu == 'devider'"
               :key="menu + menuKey"
-              class="side-nav__devider my-6"
+              class="my-6 side-nav__devider"
             ></li>
             <li v-else :key="menu + menuKey">
               <SideMenuTooltip
-                tag="a"
-                :content="menu.title"
-                :href="getSideMenuItemHref(menu)"
                 class="side-menu"
                 :class="{
                   'side-menu--active': isActive(menu),
                   'side-menu--open': menu.title === openMenuTitle,
                 }"
+                :content="menu.title"
+                :href="getSideMenuItemHref(menu)"
+                tag="a"
                 @click="linkTo(menu, router, $event)"
               >
                 <div class="side-menu__icon">
@@ -51,17 +51,17 @@
                     :key="subMenuKey"
                   >
                     <SideMenuTooltip
-                      tag="a"
+                      class="!pl-4 !xl:pl-8 side-menu"
+                      :class="{
+                        'side-menu--active': subMenu.name === route.name,
+                      }"
                       :content="subMenu.title"
                       :href="
                         subMenu.subMenu
                           ? 'javascript:;'
                           : router.resolve({ name: subMenu.name }).path
                       "
-                      class="side-menu !pl-4 !xl:pl-8"
-                      :class="{
-                        'side-menu--active': subMenu.name === route.name,
-                      }"
+                      tag="a"
                       @click="linkTo(subMenu, router, $event)"
                     >
                       <div class="side-menu__icon">

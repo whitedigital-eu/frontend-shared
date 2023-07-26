@@ -1,11 +1,12 @@
 <template>
   <label
+    class="absolute bg-white left-2 overflow-hidden px-1 py-[1px] rounded-lg text-ellipsis text-teal-900 text-xs top-0 w-auto whitespace-no-wrap"
+    :class="computedCssClasses"
     :data-role="isPlaceholder ? 'placeholder' : 'label'"
     data-testid="form-field-label"
-    :class="computedCssClasses"
     :style="{ transform: `translateY(${computedTranslateY})` }"
   >
-    <slot />
+    <slot></slot>
   </label>
 </template>
 
@@ -25,36 +26,18 @@ const computedTranslateY = computed(() => {
 
 const computedCssClasses = computed(() => {
   if (!props.isPlaceholder) return null
-  const cssClasses = ['placeholder', 'cursor-text']
-  if (props.placeholderCssClasses)
+  const cssClasses = [
+    'text-sm text-teal-700 opacity-[0.8] left-3 w-40 bg-transparent cursor-text',
+  ]
+  if (props.placeholderCssClasses) {
     cssClasses.push(...props.placeholderCssClasses)
+  }
   return cssClasses
 })
 </script>
 
 <style lang="scss" scoped>
 label {
-  position: absolute;
   transition: all 0.2s ease-in-out, background 1ms, visibility 0s;
-  top: 0;
-  left: 8px;
-  background: white;
-  padding: 1px 4px;
-  color: #164e63;
-  font-size: 12px;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
-  width: auto;
-  border-radius: 8px;
-
-  &.placeholder {
-    font-size: 14px;
-    color: #39687b;
-    opacity: 0.8;
-    left: 12px;
-    width: 170px;
-    background: transparent;
-  }
 }
 </style>

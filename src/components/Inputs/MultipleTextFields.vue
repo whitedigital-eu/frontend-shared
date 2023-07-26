@@ -13,14 +13,14 @@
         >
           <FormFieldLabel
             :is-placeholder="!props.modelValue[index] && hasFocus !== index"
-            @click.native="handleLabelClick"
+            @click="handleLabelClick"
           >
             {{ item }}
           </FormFieldLabel>
           <input
             ref="inputRef"
             v-model="value[index]"
-            class="form-control sm:min-w-[200px] w-full"
+            class="appearance-none block form-control sm:min-w-[200px] w-full"
             :class="{ 'sm:min-w-[416px]': long }"
             :readonly="readonly"
             type="text"
@@ -79,8 +79,6 @@ const handleInput = () => {
 
 <style lang="scss" scoped>
 input {
-  display: block;
-  appearance: none;
   transition: all 0.2s ease-in-out;
 }
 </style>

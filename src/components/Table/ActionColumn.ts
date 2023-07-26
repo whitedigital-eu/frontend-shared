@@ -4,8 +4,11 @@ import { nextTick } from 'vue'
 import { icons, createIcons } from 'lucide'
 import { COLLAPSE_ORDER } from './Column'
 import { Resource } from '../../types/Resource'
+import { TableProps } from './createTableConfig'
 
-interface IconSettings {
+type RemoveUndefined<T> = { [K in keyof T]-?: Exclude<T[K], undefined> }
+
+type IconSettings = {
   wrapperClass?: string
   title: string
   iconName: string
@@ -79,15 +82,6 @@ export const renderIcons = () => {
   })
 }
 
-type TableProps = {
-  edit: boolean
-  delete: boolean
-  view: boolean
-  movableRows: boolean
-  canUpdateRecordFunc: (cell: Tabulator.CellComponent) => boolean
-  customActions?: CustomAction[]
-}
-
 const computeActionColumnWidth = (props: TableProps) => {
   let res = 10
   if (props.edit) res += ACTION_ICON_TOTAL_WIDTH
@@ -100,7 +94,7 @@ const computeActionColumnWidth = (props: TableProps) => {
 }
 
 const createActionColumn = (
-  props: TableProps,
+  props: RemoveUndefined<TableProps>,
   clickHandlers: {
     edit: <R extends Resource<string, string>>(resource: R) => void
     delete: <R extends Resource<string, string>>(resource: R) => void

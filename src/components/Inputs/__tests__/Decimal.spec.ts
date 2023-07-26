@@ -1,23 +1,16 @@
-import Decimal from './Decimal.vue'
+import Decimal from '../Decimal.vue'
 import userEvent from '@testing-library/user-event'
 import { fireEvent, render } from '@testing-library/vue'
+import { DecimalProps } from '../PropTypes'
 
 const defaultLabel = 'Test label'
 
-// copied from Decimal.vue defineProps - important to keep in sync!!!
-// move to separate file when importing props in vue files is supported
-type Props = {
-  modelValue?: string | number | null
-  label?: string | null
-  readonly?: boolean
-  maxDecimals?: number | null
-}
-const defaultProps: Props = {
+const defaultProps: DecimalProps = {
   modelValue: '',
   label: defaultLabel,
 }
 
-const renderDecimal = (props?: Props) => {
+const renderDecimal = (props?: DecimalProps) => {
   const { getByRole, queryByTestId, emitted } = render(Decimal, {
     props: { ...defaultProps, ...props },
   })

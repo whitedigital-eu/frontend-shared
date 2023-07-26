@@ -13,7 +13,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, PropType, ref, watch, watchEffect } from 'vue'
+import { computed, ref, watch, watchEffect } from 'vue'
 import BaseSelect from './BaseSelect.vue'
 import { DataFetchingSelectConfig } from '../../../types/InputFields'
 import { AxiosInstance } from 'axios'
@@ -21,34 +21,20 @@ import { DataFetchingSelectValue } from '../ValueTypes'
 import type { RecursivePartial, TomSettings } from 'tom-select/src/types'
 import { SelectOption } from '../../../models/SelectOption'
 
-const props = defineProps({
-  id: {
-    type: String,
-    required: true,
-  },
-  config: {
-    type: Object as PropType<DataFetchingSelectConfig>,
-    required: true,
-  },
-  modelValue: {
-    type: [String, Array] as PropType<DataFetchingSelectValue>,
-    required: true,
-  },
-  label: {
-    type: String,
-    required: false,
-    default: '',
-  },
-  axiosInstance: {
-    type: Function as PropType<AxiosInstance>,
-    required: true,
-  },
-  allowDelete: {
-    type: Boolean,
-    required: false,
-    default: true,
-  },
-})
+const props = withDefaults(
+  defineProps<{
+    id: string
+    config: DataFetchingSelectConfig
+    modelValue: DataFetchingSelectValue
+    label?: string
+    axiosInstance: AxiosInstance
+    allowDelete?: boolean
+  }>(),
+  {
+    label: '',
+    allowDelete: true,
+  }
+)
 
 const emit = defineEmits<{
   'update:modelValue': [value: string | string[] | number]

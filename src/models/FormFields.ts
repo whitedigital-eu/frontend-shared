@@ -18,7 +18,7 @@ import {
   SliderValue,
   FlatpickrTimePickerValue,
   SimpleStringList,
-  KeyAndValueList,
+  KeyAndValueListValue,
   MultipleTextFieldList,
   MapCoordinateSelectorFieldValue,
 } from '../components/Inputs/ValueTypes'
@@ -31,7 +31,7 @@ export type FormFieldValue =
   | boolean
   | null
   | undefined
-  | KeyAndValueList
+  | KeyAndValueListValue
   | MapCoordinateSelectorFieldValue
 
 export abstract class FormField {
@@ -299,13 +299,13 @@ class TextArrayField extends FormField {
 }
 
 class KeyAndValueArrayField extends FormField {
-  public value: KeyAndValueList = []
+  public value: KeyAndValueListValue = []
 
   constructor(
     name: string,
     label: string,
     text: LabelProps,
-    value: KeyAndValueList = []
+    value: KeyAndValueListValue = []
   ) {
     super('key-and-value-list', name, label)
     this.value = value

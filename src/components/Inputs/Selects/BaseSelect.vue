@@ -51,7 +51,7 @@ type ModelValue = string | string[]
 
 const props = withDefaults(
   defineProps<{
-    settings?: RecursivePartial<TomSettings>
+    settings?: RecursivePartial<TomSettings> | null
     modelValue?: ModelValue
     id: string
     readonly?: boolean
@@ -60,8 +60,7 @@ const props = withDefaults(
     searchInputPlaceholder?: string
   }>(),
   {
-    //@ts-ignore
-    settings: {} as RecursivePartial<TomSettings>,
+    settings: () => ({} as RecursivePartial<TomSettings>),
     modelValue: '',
     readonly: false,
     label: null,

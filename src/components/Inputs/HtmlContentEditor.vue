@@ -8,7 +8,7 @@
       @focus="isFocused = true"
       @ready="(editor: ClassicEditor) => setupElfinder(editor, apiOrigin)"
     />
-    <div v-if="readonly" class="disabled-overlay"></div>
+    <div v-if="readonly" class="absolute bg-[#f3f5f6] inset-0 opacity-50"></div>
   </div>
 </template>
 
@@ -18,7 +18,6 @@ import { HtmlEditor } from './ckeditor/htmlEditors'
 import CKEditor from '@ckeditor/ckeditor5-vue'
 import { setupElfinder } from './ckeditor/setupElfinder'
 import { ClassicEditor } from '@ckeditor/ckeditor5-editor-classic'
-
 
 const {
   modelValue,
@@ -80,14 +79,5 @@ const isFocused = ref(false)
   h5 {
     @apply text-base font-medium;
   }
-}
-</style>
-
-<style scoped lang="scss">
-.disabled-overlay {
-  position: absolute;
-  inset: 0;
-  background: #f3f5f6;
-  opacity: 0.5;
 }
 </style>

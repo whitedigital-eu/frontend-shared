@@ -3,7 +3,7 @@
     <FormFieldLabel
       v-if="label"
       :is-placeholder="isEmpty && !hasFocus"
-      @click.native="handleLabelClick"
+      @click="handleLabelClick"
     >
       {{ props.label }}
     </FormFieldLabel>
@@ -11,7 +11,7 @@
       id="autocomplete-input"
       ref="inputRef"
       v-model="value"
-      class="form-control sm:min-w-[200px] w-full"
+      class="form-control sm:min-w-[200px] w-full block appearance-none"
       :class="{ 'sm:min-w-[416px]': long }"
       placeholder=""
       :readonly="readonly"
@@ -20,8 +20,8 @@
       @focus="handleFocus"
       @input="handleInput"
     />
-    <div id="map" class="map-container">
-      <div ref="map" class="map"></div>
+    <div id="map" class="w-full h-[400px]">
+      <div ref="map" class="w-full h-full"></div>
     </div>
   </div>
 </template>
@@ -164,17 +164,6 @@ watch(
 
 <style lang="scss" scoped>
 input {
-  display: block;
-  appearance: none;
   transition: all 0.2s ease-in-out;
-}
-.map-container {
-  width: 100%;
-  height: 400px;
-}
-
-.map {
-  width: 100%;
-  height: 100%;
 }
 </style>
