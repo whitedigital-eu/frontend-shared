@@ -30,7 +30,7 @@
                 class="form-control sm:min-w-[200px] w-full"
                 :class="{ 'sm:min-w-[416px]': long }"
                 :readonly="readonly"
-                type="texts"
+                type="text"
                 @blur="handleBlur"
                 @focus="handleFocus('key', index)"
                 @input="handleInput('key', index, $event)"
@@ -54,7 +54,7 @@
                 class="form-control sm:min-w-[200px] w-full"
                 :class="{ 'sm:min-w-[416px]': long }"
                 :readonly="readonly"
-                type="texts"
+                type="text"
                 @blur="handleBlur"
                 @focus="handleFocus('value', index)"
                 @input="handleInput('value', index, $event)"
@@ -113,7 +113,7 @@ const handleLabelClick = (event: Event) => {
 const handleInput = (
   type: keyof KeyAndValueListValue[number],
   index: keyof KeyAndValueListValue,
-  event: Event
+  event: Event,
 ) => {
   ;(modelValue[index] as KeyAndValueListValue[number])[type] = (
     event.target as HTMLInputElement
@@ -136,7 +136,7 @@ const removeFields = (index: number) => {
 watch(
   () => modelValue,
   (n) => (value.value = n),
-  { immediate: true }
+  { immediate: true },
 )
 </script>
 

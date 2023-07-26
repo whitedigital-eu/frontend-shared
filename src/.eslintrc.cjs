@@ -10,7 +10,6 @@ module.exports = {
   },
   extends: [
     'plugin:vuejs-accessibility/recommended',
-    'plugin:@typescript-eslint/recommended',
     'eslint:recommended',
     'prettier',
     'plugin:prettier/recommended',
@@ -24,7 +23,7 @@ module.exports = {
     ecmaVersion: 2020,
     sourceType: 'module',
   },
-  plugins: ['prettier', '@typescript-eslint', 'unused-imports', 'vuejs-accessibility'],
+  plugins: ['prettier', 'unused-imports', 'vuejs-accessibility'],
   rules: {
     'prettier/prettier': [
       'error',
