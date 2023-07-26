@@ -1,0 +1,16 @@
+{
+  "extends": "@vue/tsconfig/tsconfig.json",
+  "compilerOptions": {
+    "importHelpers": true,
+    "allowSyntheticDefaultImports": true,
+    "moduleResolution": "node",
+    "isolatedModules": false,
+    "sourceMap": true,
+    "lib": ["esnext", "dom", "dom.iterable"],
+    "plugins": [{ "name": "@vuedx/typescript-plugin-vue" }],
+    "strict": true,
+    "verbatimModuleSyntax": false,
+    "incremental": true,
+    "types": ["vite/client", "vitest", "jest"]
+  }
+}
