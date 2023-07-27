@@ -42,7 +42,7 @@ const props = withDefaults(defineProps<TableProps>(), {
   columnData: null,
   page: 1,
   pageSize: 30,
-  pageSizeParam: 'size',
+  pageSizeParam: 'itemsPerPage',
   canUpdateRecordFunc: () => true,
   tabulatorOptions: null,
   customActions: null,
@@ -94,7 +94,7 @@ watch(totalEntryCount, (n, o) => {
 const createTimestampColumn = (
   title: string,
   field: string,
-  hideLast: boolean
+  hideLast: boolean,
 ): Tabulator.ColumnDefinition =>
   createColumn({
     title: title,
@@ -108,12 +108,12 @@ const createTimestampColumn = (
 const createdColumn = createTimestampColumn(
   'IZVEIDOTS',
   props.config.sharedColumnNames.created,
-  true
+  true,
 )
 const updatedColumn = createTimestampColumn(
   'ATJAUNOTS',
   props.config.sharedColumnNames.updated,
-  false
+  false,
 )
 
 const actionColumn = createActionColumn(props, {
@@ -173,7 +173,7 @@ const waitForToggleCollapseElementsRendered = (): Promise<
       }
 
       const elements = document.querySelectorAll(
-        '.tabulator-responsive-collapse-toggle'
+        '.tabulator-responsive-collapse-toggle',
       )
       if (!elements.length) totalTimePassed += 100
       else {
@@ -221,7 +221,7 @@ const initTabulator = async (resetPage = false) => {
       emit(
         'cell-click',
         cell.getField(),
-        cell.getData() as Resource<string, string>
+        cell.getData() as Resource<string, string>,
       )
     },
     rowSelectionChanged(selectedRowData) {
@@ -232,7 +232,7 @@ const initTabulator = async (resetPage = false) => {
         const toggleCollapseElements =
           await waitForToggleCollapseElementsRendered()
         toggleCollapseElements.forEach((el) =>
-          el.addEventListener('click', setTableHeight, true)
+          el.addEventListener('click', setTableHeight, true),
         )
       } catch (e) {
         console.error(e)
@@ -257,15 +257,15 @@ const initTabulator = async (resetPage = false) => {
         }
 
         const footer = this.element.querySelector(
-          '.tabulator-footer'
+          '.tabulator-footer',
         ) as HTMLElement | null
         if (!footer) return
         const topFooterContainer = this.element.parentElement.querySelector(
-          '.tabulator-top-pagination-placeholder'
+          '.tabulator-top-pagination-placeholder',
         ) as HTMLElement
         const footerClone = footer.cloneNode(true) as HTMLElement
         const topPaginator = footerClone.querySelector(
-          '.tabulator-paginator'
+          '.tabulator-paginator',
         ) as HTMLElement
         topPaginator.innerHTML = ''
         topFooterContainer.innerHTML = ''
@@ -273,14 +273,15 @@ const initTabulator = async (resetPage = false) => {
 
         const elSelectorToMoveToTop =
           '.tabulator-paginator>label, .tabulator-paginator>.tabulator-page-size'
-        footer
-          .querySelectorAll(elSelectorToMoveToTop)
-          .forEach(function (this: HTMLElement, element) {
-            ;(
-              footer.querySelector('.tabulator-paginator') as HTMLElement
-            ).removeChild(element)
-            topPaginator.appendChild(element)
-          })
+        footer.querySelectorAll(elSelectorToMoveToTop).forEach(function (
+          this: HTMLElement,
+          element,
+        ) {
+          ;(
+            footer.querySelector('.tabulator-paginator') as HTMLElement
+          ).removeChild(element)
+          topPaginator.appendChild(element)
+        })
       })
     },
   }

@@ -37,6 +37,7 @@ import { AxiosInstance } from 'axios'
 import getLoadResourceFunctions from '../../../helpers/DataFetching'
 import { FileUploadValue } from '../ValueTypes'
 import { Resource } from '../../../types/Resource'
+//@ts-ignore
 import defaultPreviewTemplate from './preview-template.html?raw'
 
 const props = withDefaults(
@@ -61,7 +62,7 @@ const props = withDefaults(
     allowDownload: false,
     allowDelete: true,
     allowEdit: false,
-  }
+  },
 )
 
 const emit = defineEmits<{
@@ -73,7 +74,7 @@ const emit = defineEmits<{
 Dropzone.autoDiscover = false
 
 const { loadResource, loadAllResources } = getLoadResourceFunctions(
-  props.axiosInstance
+  props.axiosInstance,
 )
 
 type ApiPlatformFile = Resource<string, string> & {
@@ -119,7 +120,7 @@ const removeInitialFile = async (fileIri: string) => {
     try {
       await props.axiosInstance.delete(fileIri)
       initialFiles.value = initialFiles.value.filter(
-        (file) => file['@id'] !== fileIri
+        (file) => file['@id'] !== fileIri,
       )
     } catch (e) {
       console.error(e)
@@ -183,7 +184,7 @@ const initDropzone = () => {
       removeButton?.remove()
     } else {
       removeButton?.addEventListener('click', () =>
-        removeFileEvent(file, lastElement)
+        removeFileEvent(file, lastElement),
       )
     }
 
@@ -200,7 +201,7 @@ const initDropzone = () => {
       'sending',
       async (file: Dropzone.DropzoneFile, xhr: any, formData: FormData) => {
         formData.append('isPublic', Boolean(true).toString())
-      }
+      },
     )
   }
 }
@@ -212,7 +213,7 @@ const loadInitialFiles = async () => {
       initialFiles.value = [await loadResource<any>(props.modelValue as string)]
     } else {
       initialFiles.value = await loadAllResources<any>(
-        props.modelValue as string[]
+        props.modelValue as string[],
       )
     }
   } catch (e) {
@@ -234,7 +235,7 @@ const removeFileEvent = (file: Dropzone.DropzoneFile, element: Element) => {
     .then(() => {
       // File successfully deleted, remove it from the uploadedFileIris array.
       uploadedFileIris.value = uploadedFileIris.value.filter(
-        (fileIri: string) => fileIri !== removedFileIri
+        (fileIri: string) => fileIri !== removedFileIri,
       )
       element.remove()
     })

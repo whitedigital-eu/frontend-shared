@@ -1,17 +1,7 @@
 {
-  "extends": "@vue/tsconfig/tsconfig.json",
+  "extends": "./config/tsconfig.json",
   "compilerOptions": {
-    "importHelpers": true,
-    "allowSyntheticDefaultImports": true,
-    "moduleResolution": "node",
-    "isolatedModules": false,
-    "sourceMap": true,
-    "lib": ["esnext", "dom", "dom.iterable"],
-    "types": ["vite/client", "vitest", "jest"],
-    "plugins": [{ "name": "@vuedx/typescript-plugin-vue" }],
-    "strict": true,
-    "verbatimModuleSyntax": false,
-    "incremental": true,
+    "types": ["google.maps"],
     "allowJs": true
   },
   "include": ["**/*.d.ts", "**/*.ts", "**/*.vue", "**/*.d.ts"],
