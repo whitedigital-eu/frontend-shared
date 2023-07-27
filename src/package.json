@@ -1,6 +1,6 @@
 {
   "name": "@whitedigital-eu/wd-frontend-shared",
-  "version": "0.4.7",
+  "version": "0.4.11",
   "author": "Imants Liepiņš",
   "license": "MIT",
   "description": "Shared components, helpers, composables and types for vue frontend SPAs",
@@ -91,6 +91,7 @@
     "@vue/eslint-config-typescript": "^11.0.2",
     "@vue/test-utils": "^2.0.0-rc.18",
     "@vue/tsconfig": "^0.4.0",
+    "@whitedigital-eu/eslint-config-wd": "^1.0.3",
     "autoprefixer": "^10.4.2",
     "babel-plugin-dynamic-import-node": "^2.3.3",
     "c8": "^8.0.1",
@@ -123,6 +124,6 @@
     "vue-tsc": "1.6"
   },
   "peerDependencies": {
-    "vue": "^3.2.0"
+    "vue": "^3.3.0"
   }
 }

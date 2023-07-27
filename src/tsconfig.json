@@ -7,7 +7,7 @@
     "isolatedModules": false,
     "sourceMap": true,
     "lib": ["esnext", "dom", "dom.iterable"],
-    "types": ["vite/client", "jquery", "google.maps"],
+    "types": ["vite/client", "vitest", "jest"],
     "plugins": [{ "name": "@vuedx/typescript-plugin-vue" }],
     "strict": true,
     "verbatimModuleSyntax": false,
