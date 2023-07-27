@@ -10,7 +10,7 @@ export const resetFormDataErrors = <T extends FormData>(formData: T) => {
 const scrollFirstIncorrectFieldIntoView = (offsetTop = -100) => {
   nextTick(() => {
     const firstFieldWithError = document.querySelector(
-      '[data-has-error="true"]'
+      '[data-has-error="true"]',
     )
 
     if (firstFieldWithError) {
@@ -27,22 +27,25 @@ const scrollFirstIncorrectFieldIntoView = (offsetTop = -100) => {
 
 export const setFormDataErrors = <T extends FormData>(e: any, formData: T) => {
   if (!e.response) throw new Error(e)
+  console.info('Handling form error', e)
   if (e.response.status !== 422) return formData
   resetFormDataErrors(formData)
-  ;(
-    e.response.data as {
-      violations: Array<{ propertyPath: string; message: string }>
-    }
-  ).violations.forEach((violation) => {
-    formData[violation.propertyPath]?.errors?.push(violation.message)
-  })
-
-  // scrollFirstIncorrectFieldIntoView()
+  if (e.response?.data.violations) {
+    ;(
+      e.response.data as {
+        violations: Array<{ propertyPath: string; message: string }>
+      }
+    ).violations.forEach((violation) => {
+      formData[violation.propertyPath]?.errors?.push(violation.message)
+    })
+  } else if (e.response?.data?.['hydra:description']) {
+    showGlobalError(e.response?.data?.['hydra:description'])
+  }
 }
 
 export const handleTableAjaxError = (
   error: any,
-  apiErrorHandler?: TableConfig['tableErrorHandler']
+  apiErrorHandler?: TableConfig['tableErrorHandler'],
 ) => {
   const reader = error.body.getReader()
 

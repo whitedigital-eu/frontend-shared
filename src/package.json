@@ -1,10 +1,11 @@
 {
   "name": "@whitedigital-eu/wd-frontend-shared",
-  "version": "0.4.16",
+  "version": "0.4.27",
   "author": "Imants Liepiņš",
   "license": "MIT",
   "description": "Shared components, helpers, composables and types for vue frontend SPAs",
   "files": [
+    "site-tree",
     "config",
     "components",
     "composables",
@@ -52,6 +53,7 @@
     "@ckeditor/ckeditor5-special-characters": "^38.0.1",
     "@ckeditor/ckeditor5-theme-lark": "^38.0.1",
     "@ckeditor/ckeditor5-vue": "^5.1.0",
+    "@he-tree/vue": "^2.4.2",
     "@left4code/tw-starter": "^3.1.26",
     "@phudak/ckeditor5-emoji": "^1.1.1",
     "@types/dropzone": "^5.7.4",

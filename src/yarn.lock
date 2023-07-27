@@ -38,7 +38,7 @@
   resolved "https://registry.yarnpkg.com/@babel/parser/-/parser-7.22.7.tgz#df8cf085ce92ddbdbf668a7f186ce848c9036cae"
   integrity sha512-7NF8pOkHP5o2vpmGgNGcfAeCvOYhGLyA3Z4eBQkT1RJlWu47n63bCs93QfJ2hIAFCil7L5P2IWhs1oToVgrL0Q==
 
-"@babel/runtime@^7.12.5", "@babel/runtime@^7.15.4", "@babel/runtime@^7.21.0":
+"@babel/runtime@^7.12.5", "@babel/runtime@^7.15.4", "@babel/runtime@^7.21.0", "@babel/runtime@^7.7.7":
   version "7.22.6"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.22.6.tgz#57d64b9ae3cff1d67eb067ae117dac087f5bd438"
   integrity sha512-wDb5pWm4WDdF6LFUde3Jl8WzPA+3ZbxYqkC6xAXuD3irdEHN1k0NfTRrJD8ZD378SJ61miMLCqIOXYhd8x+AJQ==
@@ -797,6 +797,35 @@
   resolved "https://registry.yarnpkg.com/@eslint/js/-/js-8.44.0.tgz#961a5903c74139390478bdc808bcde3fc45ab7af"
   integrity sha512-Ag+9YM4ocKQx9AarydN0KY2j0ErMHNIocPDrVo8zAE44xLTjEtz81OdR68/cydGtk6m6jDb5Za3r2useMzYmSw==
 
+"@he-tree/dnd-utils@latest":
+  version "0.1.0-alpha.3"
+  resolved "https://registry.yarnpkg.com/@he-tree/dnd-utils/-/dnd-utils-0.1.0-alpha.3.tgz#172668981b52ece50259185db3df693460cd1960"
+  integrity sha512-0Tg+HC558lihvweGXQrAZziZSTfH5kDO8w1dVZpLCpUpDADn7Y9K4X6QlUCYCi9rqTteHnzaKdj45Dp7zJl6lw==
+  dependencies:
+    "@babel/runtime" "^7.7.7"
+    drag-event-service "^2.0.0"
+    helper-js "^3.1.2"
+
+"@he-tree/tree-utils@latest":
+  version "0.1.0-alpha.1"
+  resolved "https://registry.yarnpkg.com/@he-tree/tree-utils/-/tree-utils-0.1.0-alpha.1.tgz#72b6d73c29a43c29914025e2c4c9d22b59ffba53"
+  integrity sha512-AtiAsr3TrImPZUEEid8v88R+muS9v7vyp37jovo7DTVWPBvmoOeVKdbHAHKvF3S7T72ehYVVPdrcXudzsQgIGg==
+  dependencies:
+    "@babel/runtime" "^7.7.7"
+    drag-event-service "^2.0.0"
+    helper-js "^3.1.2"
+
+"@he-tree/vue@^2.4.2":
+  version "2.4.2"
+  resolved "https://registry.yarnpkg.com/@he-tree/vue/-/vue-2.4.2.tgz#9db05e0e01b0f35cc26760ba85c32936a611f2bf"
+  integrity sha512-yCPDYUx+SDHps4/IA7W1dhx8WIDAZhYGII9ioVOUL5JnYtzu6MB/sjndw4tjNhxRtsDT9MeOnfzgUgtNX9nZDA==
+  dependencies:
+    "@he-tree/dnd-utils" latest
+    "@he-tree/tree-utils" latest
+    "@virtual-list/vue" "^1.2.0"
+    helper-js "^3.1.2"
+    vue-demi latest
+
 "@humanwhocodes/config-array@^0.11.10":
   version "0.11.10"
   resolved "https://registry.yarnpkg.com/@humanwhocodes/config-array/-/config-array-0.11.10.tgz#5a3ffe32cc9306365fb3fd572596cd602d5e12d2"
@@ -1456,6 +1485,14 @@
   dependencies:
     "@typescript-eslint/types" "6.2.0"
     eslint-visitor-keys "^3.4.1"
+
+"@virtual-list/vue@^1.2.0":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@virtual-list/vue/-/vue-1.2.0.tgz#f0e1f6a5b97034e047b5812afb7d3c40838a894f"
+  integrity sha512-sTWCJAIU6NoRWU+6Nzw6TDJcwxnFgK3NmwGu4iDgV6Nhh/iaCEZDDhmChTV+CoXbShLfsgasQRhaVyC7SmkDDg==
+  dependencies:
+    helper-js "^3.1.0"
+    vue-demi latest
 
 "@vitejs/plugin-vue@^4.2.3":
   version "4.2.3"
@@ -2471,6 +2508,14 @@ domexception@^4.0.0:
   dependencies:
     webidl-conversions "^7.0.0"
 
+drag-event-service@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/drag-event-service/-/drag-event-service-2.0.0.tgz#7e9fd5beacdf9c3e7c502c717164a4fc284a696f"
+  integrity sha512-JVEnOEbbNDS3RrWd+tVVIDu2SHQZ9luhEFGSQ1hXMjl+ABw0PxhHmnkGjzPVE836Tsg+k7rkm5GM9Ln/UgbYpA==
+  dependencies:
+    "@babel/runtime" "^7.7.7"
+    helper-js "^3.0.0"
+
 dropzone@^5.7.6:
   version "5.9.3"
   resolved "https://registry.yarnpkg.com/dropzone/-/dropzone-5.9.3.tgz#b3070ae090fa48cbc04c17535635537ca72d70d6"
@@ -3264,6 +3309,13 @@ he@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/he/-/he-1.2.0.tgz#84ae65fa7eafb165fddb61566ae14baf05664f0f"
   integrity sha512-F/1DnUGPopORZi0ni+CvrCgHQ5FyEAHRLSApuYWMmrbSwoN2Mn/7k+Gl38gJnR7yyDZk6WLXwiGod1JOWNDKGw==
+
+helper-js@^3.0.0, helper-js@^3.1.0, helper-js@^3.1.2:
+  version "3.1.5"
+  resolved "https://registry.yarnpkg.com/helper-js/-/helper-js-3.1.5.tgz#ab81bbe99bd9807d00a9293060354c150707c2f2"
+  integrity sha512-CQ56onWqmWwJRUK55/aJ6EeJUV/eqoRiayG6bk2i0Bhs79U94M+aRdA2QLOUGXp/Hy5yAos+YQK1LQHRWiSOHw==
+  dependencies:
+    "@babel/runtime" "^7.7.7"
 
 html-encoding-sniffer@^3.0.0:
   version "3.0.0"
@@ -5524,7 +5576,7 @@ vue-component-type-helpers@1.8.4:
   resolved "https://registry.yarnpkg.com/vue-component-type-helpers/-/vue-component-type-helpers-1.8.4.tgz#302d85fac912519cdf0dd2fb51402e5215d85628"
   integrity sha512-6bnLkn8O0JJyiFSIF0EfCogzeqNXpnjJ0vW/SZzNHfe6sPx30lTtTXlE5TFs2qhJlAtDFybStVNpL73cPe3OMQ==
 
-vue-demi@>=0.14.5:
+vue-demi@>=0.14.5, vue-demi@latest:
   version "0.14.5"
   resolved "https://registry.yarnpkg.com/vue-demi/-/vue-demi-0.14.5.tgz#676d0463d1a1266d5ab5cba932e043d8f5f2fbd9"
   integrity sha512-o9NUVpl/YlsGJ7t+xuqJKx8EBGf1quRhCiT6D/J0pfwmk9zUwYkC7yrF4SZCe6fETvSM3UNL2edcbYrSyc4QHA==
