@@ -45,7 +45,6 @@ export type TableProps = {
   columnData?: Record<string, any>[] | null
   page?: number
   pageSize?: number
-  pageSizeParam?: string
   config: TableConfig
   canUpdateRecordFunc?: (cell: Tabulator.CellComponent) => boolean
   tabulatorOptions?: Tabulator.Options | null

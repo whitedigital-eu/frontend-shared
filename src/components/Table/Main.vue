@@ -42,7 +42,6 @@ const props = withDefaults(defineProps<TableProps>(), {
   columnData: null,
   page: 1,
   pageSize: 30,
-  pageSizeParam: 'itemsPerPage',
   canUpdateRecordFunc: () => true,
   tabulatorOptions: null,
   customActions: null,
@@ -197,14 +196,14 @@ const setTableHeight = (): void => {
 
 let tabulatorScrollTop = 0
 
+const PAGE_SIZE_PARAM = 'itemsPerPage' as const
+
 const initTabulator = async (resetPage = false) => {
   let options: Tabulator.Options = {
     paginationSizeSelector: props.paginationSizeSelector,
     paginationInitialPage: resetPage ? 1 : props.page,
     paginationSize: props.pageSize,
-    paginationDataSent: {
-      size: props.pageSizeParam as string,
-    },
+    paginationDataSent: { size: PAGE_SIZE_PARAM },
     layout: 'fitColumns',
     responsiveLayout: 'collapse',
     responsiveLayoutCollapseStartOpen: false,

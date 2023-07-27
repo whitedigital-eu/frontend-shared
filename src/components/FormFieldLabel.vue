@@ -1,6 +1,6 @@
 <template>
   <label
-    class="absolute bg-white left-2 overflow-hidden px-1 py-[1px] rounded-lg text-ellipsis text-teal-900 text-xs top-0 w-auto whitespace-no-wrap"
+    class="absolute bg-white left-2 overflow-hidden px-1 py-[1px] rounded-lg text-ellipsis text-teal-900 top-0 w-auto whitespace-no-wrap"
     :class="computedCssClasses"
     :data-role="isPlaceholder ? 'placeholder' : 'label'"
     data-testid="form-field-label"
@@ -25,9 +25,10 @@ const computedTranslateY = computed(() => {
 })
 
 const computedCssClasses = computed(() => {
-  if (!props.isPlaceholder) return null
+  if (!props.isPlaceholder) return ['text-xs']
+
   const cssClasses = [
-    'text-sm text-teal-700 opacity-[0.8] left-3 w-40 bg-transparent cursor-text',
+    '!text-[14px] text-teal-700 opacity-[0.8] left-3 w-40 bg-transparent cursor-text',
   ]
   if (props.placeholderCssClasses) {
     cssClasses.push(...props.placeholderCssClasses)
@@ -38,6 +39,9 @@ const computedCssClasses = computed(() => {
 
 <style lang="scss" scoped>
 label {
-  transition: all 0.2s ease-in-out, background 1ms, visibility 0s;
+  transition:
+    all 0.2s ease-in-out,
+    background 1ms,
+    visibility 0s;
 }
 </style>

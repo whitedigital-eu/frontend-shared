@@ -116,7 +116,7 @@ import { isNumericString } from '../../helpers/Global'
 const props = withDefaults(
   defineProps<{
     filters: Filters
-    axiosInstance?: AxiosInstance | null
+    axiosInstance?: AxiosInstance
     config?: TableConfig | null
     toggleAdvancedFilters?: boolean
     initialShowFiltersDesktop?: boolean
@@ -127,8 +127,7 @@ const props = withDefaults(
     toggleAdvancedFilters: false,
     initialShowFiltersDesktop: true,
     showMobileToggleButton: true,
-    axiosInstance: null,
-  }
+  },
 )
 
 const emit = defineEmits<{
@@ -143,11 +142,11 @@ const filter = () => {
 }
 
 const noAdvancedFilters = computed(
-  () => !props.filters.advanced || !props.filters.advanced.length
+  () => !props.filters.advanced || !props.filters.advanced.length,
 )
 
 const showAdvancedFilters = ref(
-  !noAdvancedFilters.value && !props.toggleAdvancedFilters
+  !noAdvancedFilters.value && !props.toggleAdvancedFilters,
 )
 
 const types = ['default', 'advanced'] as const
@@ -163,7 +162,7 @@ const resetFilter = () => {
 
 const createDateRangeQueryParamsArr = (
   value: [string, string],
-  searchProperty: string
+  searchProperty: string,
 ) => {
   if (value.length < 2) return
 
@@ -194,6 +193,8 @@ const filtersToQueryParams = () => {
               case 'audit-date':
                 console.warn('Deprecated!')
                 return props.config?.sharedColumnNames.created ?? 'created'
+              case 'activity-date':
+                return 'fromDate'
               default:
                 return item.name
             }
@@ -201,7 +202,7 @@ const filtersToQueryParams = () => {
 
           const paramsObj = createDateRangeQueryParamsArr(
             item.value as [string, string],
-            searchProperty
+            searchProperty,
           )
           if (paramsObj) Object.assign(objParams, paramsObj)
         } else if (item.toggleExact) {
@@ -226,7 +227,7 @@ const setFilterInitialValues = () => {
   for (const param in params) {
     types.forEach((type) => {
       const filterIndex = props.filters[type].findIndex(
-        (filter) => filter.name === param
+        (filter) => filter.name === param,
       )
       if (filterIndex === -1) return
 
@@ -251,7 +252,7 @@ watch(
       filterInitialValuesSet.value = true
     }
   },
-  { immediate: true }
+  { immediate: true },
 )
 
 const toggleShowFilters = () => {
