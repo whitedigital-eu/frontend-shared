@@ -12,13 +12,14 @@ export type SiteTreeWrite = NullableOptional<{
   metaTitle: string
   metaDescription: string
 }>
+
 export type SiteTreeRead = {
   '@context': string
   '@id': `/api/site_trees/${number}`
   '@type': string
   id: number
-  created: string
-  updated: string
+  createdAt: string
+  updatedAt: string
 } & Modify<
   NotNullableOptional<SiteTreeWrite>,
   {
@@ -35,8 +36,3 @@ export type SiteTreeRead = {
     level: number
     left: number
   }
-
-export type SiteTreeReadWithParent = Modify<
-  SiteTreeRead,
-  { parent: SiteTreeReadWithParent | null }
->

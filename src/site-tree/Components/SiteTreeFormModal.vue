@@ -26,8 +26,8 @@
     <template #footer>
       <CrudFormModalFooter
         v-if="siteTreeFormEl && siteTreeFormEl.formData"
+        :$t="projectSettings.global.$t"
         :is-loading="siteTreeFormEl.isLoading"
-        :project-settings="projectSettings"
         @cancel-click="emit('close')"
         @proceed-click="siteTreeFormEl.createOrUpdate"
       />

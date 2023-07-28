@@ -5,7 +5,7 @@
       type="button"
       @click="emit('cancel-click')"
     >
-      {{ projectSettings.global.$t('common.cancel') }}
+      {{ t('common.cancel') }}
     </button>
     <LoadingButton
       class="grow"
@@ -20,16 +20,16 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import LoadingButton from '../LoadingButton.vue'
-import { ProjectSettings } from '../Forms/shared'
+import { translateWithFallback } from '../../site-tree/Helpers/Translations'
 
 const {
   isLoading,
   iri = null,
-  projectSettings,
+  $t,
 } = defineProps<{
   isLoading: boolean
   iri?: string | null
-  projectSettings: ProjectSettings
+  $t?: (...args: any[]) => string
 }>()
 
 const emit = defineEmits<{
@@ -37,9 +37,7 @@ const emit = defineEmits<{
   'proceed-click': []
 }>()
 
-const buttonText = computed(() =>
-  iri
-    ? projectSettings.global.$t('common.save')
-    : projectSettings.global.$t('common.create'),
-)
+const t = translateWithFallback($t)
+
+const buttonText = computed(() => (iri ? t('common.save') : t('common.create')))
 </script>

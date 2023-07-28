@@ -25,6 +25,7 @@ import { setFormDataErrors } from '../../helpers/Errors'
 import { SiteTreeRead, SiteTreeWrite } from '../Types/SiteTree'
 import { getFormFieldValues } from '../../helpers/Global'
 import { ProjectSettings } from '../../components/Forms/shared'
+import useSiteTreeFormData from './useSiteTreeFormData'
 
 const {
   siteTree = null,
@@ -47,10 +48,11 @@ const emit = defineEmits<{
   finished: []
 }>()
 
-const { formData, formLayout } = projectSettings.siteTree.useSiteTreeFormData(
+const { formData, formLayout } = useSiteTreeFormData(
   siteTree,
   parent,
   showParentSelector,
+  projectSettings,
 )
 
 const isLoading = ref(false)

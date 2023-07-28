@@ -44,7 +44,7 @@ globalStore.loadRootSiteTrees().then(() => {
   const currentLanguageSiteTreeItem =
     globalStore.currentLanguageSiteTreeItem ??
     globalStore.rootSiteTrees.find(
-      (st: any) => st.slug === props.projectSettings.global.defaultLocale,
+      (st) => st.slug === props.projectSettings.global.defaultLocale,
     ) ??
     globalStore.rootSiteTrees[0]
 
@@ -53,7 +53,7 @@ globalStore.loadRootSiteTrees().then(() => {
     '',
     currentLanguageSiteTreeItem['@id'],
     globalStore.rootSiteTrees.map(
-      (st: any) => new SelectOptionTyped(st.slug.toUpperCase(), st['@id']),
+      (st) => new SelectOptionTyped(st.slug.toUpperCase(), st['@id']),
     ),
     false,
     false,
@@ -79,7 +79,7 @@ const handleSiteTreeCreated = async (
 
   languageSelectFormField.value!.config.options =
     globalStore.rootSiteTrees!.map(
-      (st: any) => new SelectOptionTyped(st.slug.toUpperCase(), st['@id']),
+      (st) => new SelectOptionTyped(st.slug.toUpperCase(), st['@id']),
     )
   languageSelectFormField.value!.value = createdSiteTree['@id']
 
