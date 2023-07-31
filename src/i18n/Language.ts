@@ -1,8 +1,7 @@
-import { createI18n } from 'vue-i18n'
+import { TranslationConfig } from '../types/TranslationTypes'
 import axios from 'axios'
 
 export const AVAILABLE_LOCALES = ['en', 'lv'] as const
-export const DEFAULT_LOCALE = 'lv'
 
 export const getUrlLocale = (
   noNull = false
@@ -37,28 +36,15 @@ export const switchLocale = (
   )}`
 }
 
-export const setupI18n = async () => {
-  const locale = getUrlLocale(true) as string
-  const messages = await loadLocale(locale)
-
-  return createI18n({
-    legacy: false,
-    locale: locale,
-    fallbackLocale: 'en',
-    messages,
-  })
-}
-
-export const loadLocale = async (locale: string) => {
-  //TODO this could be better
-  const response = await axios.get(
-    `${import.meta.env.VITE_API_BASE_URL}/api/translations/list/${locale}`,
-    {
+export const loadTranslations = (
+  config: TranslationConfig
+): Promise<TranslationConfig> => {
+  return axios
+    .get(config.localeJsonUrl, {
       headers: { accept: 'application/ld+json' },
-    }
-  )
-
-  return {
-    [locale]: response.data.translations,
-  }
+    })
+    .then((response) => {
+      config.translations = response.data.translations
+      return config
+    })
 }

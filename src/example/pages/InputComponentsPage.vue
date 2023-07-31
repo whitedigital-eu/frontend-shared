@@ -1,5 +1,6 @@
 <template>
   <form class="flex flex-col gap-4 mr-auto mt-4 w-[500px]">
+    {{ $t('admintest', 'menu') }}
     <Text v-model="fullName" label="Full name" />
     <TextList v-model="textArrayList" label="Text List" />
     <KeyAndValueList
@@ -118,6 +119,7 @@ import MultipleTextFields from '../../components/Inputs/MultipleTextFields.vue'
 import Map from '../../components/Inputs/MapAddressSelector.vue'
 import PlainTextarea from '../../components/Inputs/PlainTextarea.vue'
 
+import { useTranslation } from '../../i18n/Stores/useTranslation'
 const fullName = ref('')
 const price = ref('9912,22')
 const notes = ref('')
@@ -140,6 +142,8 @@ const mapDataArray = ref({
   lng: 10.0,
 })
 
+const { t } = useTranslation()
+
 const showSelect = ref(true)
 watch(showSelect, (n) => {
   if (!n) role2.value = ''
@@ -151,6 +155,10 @@ const roleOptions = [
   new SelectOption('User', 'ROLE_USER'),
   new SelectOption('Admin', 'ROLE_ADMIN'),
   new SelectOption('Super admin', 'ROLE_SUPER_ADMIN'),
+  new SelectOption(
+    t('admin', 'coolAdmin', 'select option'),
+    'ROLE_SUPER_ADMIN_TRANSLATE'
+  ),
 ]
 const userSelectConfig: DataFetchingSelectConfig = {
   requestUrlGenerator: (searchValue: string) =>

@@ -1,11 +1,13 @@
-import fs from 'fs'
 import { Glob } from 'glob'
 import { FileParser } from './FileParser'
-import { NestedJSON } from '../../Types/NestedJSON'
+import { hashText } from '../translation'
+import fs from 'fs'
 
-export class Exporter {
+export class FileExporter {
   private readonly pattern: string
-  private keyList: string[] = []
+  private keyList: {
+    [key: string]: { domain: string; text: string; context: string }
+  } = {}
   constructor(pattern: string) {
     this.pattern = pattern
   }
@@ -14,38 +16,19 @@ export class Exporter {
     const g3 = new Glob(this.pattern, { withFileTypes: true })
     g3.walkSync().forEach((path: any) => {
       const fileParser = new FileParser(path.fullpath())
-      this.keyList.push(...fileParser.parseFile())
+      fileParser.parseFile().forEach((tr) => {
+        if (tr != null) {
+          const hash = hashText(tr.domain, tr.text, tr.context)
+          this.keyList[hash] = tr
+        }
+      })
     })
 
     return this.keyList
   }
 
-  convertArrayToObject(arr: string[]): object {
-    const result: NestedJSON = {}
-
-    for (const item of arr) {
-      const keys = item.split('.')
-      let obj: NestedJSON | string = result
-
-      for (let i = 0; i < keys.length - 1; i++) {
-        const key = keys[i]
-        obj[key] = obj[key] || {}
-        obj = obj[key] as NestedJSON
-      }
-
-      const lastKey = keys[keys.length - 1]
-      obj[lastKey] = this.keyToTitle(item)
-    }
-
-    return result
-  }
-
   saveTranslations(file: string) {
-    const jsonString = JSON.stringify(
-      this.convertArrayToObject(this.exportKeys()),
-      null,
-      2
-    )
+    const jsonString = JSON.stringify(this.exportKeys(), null, 2)
 
     fs.writeFile(file, jsonString, (err) => {
       if (err) {
