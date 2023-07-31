@@ -5,7 +5,7 @@
       type="button"
       @click="emit('cancel-click')"
     >
-      {{ t('common.cancel') }}
+      {{ $t('common.cancel') }}
     </button>
     <LoadingButton
       class="grow"
@@ -25,11 +25,11 @@ import { translateWithFallback } from '../../site-tree/Helpers/Translations'
 const {
   isLoading,
   iri = null,
-  $t,
+  t,
 } = defineProps<{
   isLoading: boolean
   iri?: string | null
-  $t?: (...args: any[]) => string
+  t?: (...args: any[]) => string
 }>()
 
 const emit = defineEmits<{
@@ -37,7 +37,9 @@ const emit = defineEmits<{
   'proceed-click': []
 }>()
 
-const t = translateWithFallback($t)
+const $t = translateWithFallback(t)
 
-const buttonText = computed(() => (iri ? t('common.save') : t('common.create')))
+const buttonText = computed(() =>
+  iri ? $t('common.save') : $t('common.create'),
+)
 </script>
