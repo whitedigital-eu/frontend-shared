@@ -1,4 +1,4 @@
-import Slider from './Slider.vue'
+import Slider from '../Slider.vue'
 import { fireEvent, render } from '@testing-library/vue'
 
 // copied from Slider.vue defineProps - important to keep in sync!!!

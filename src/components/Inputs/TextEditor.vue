@@ -13,7 +13,7 @@
       @blur="isFocused = false"
       @focus="isFocused = true"
     />
-    <div v-if="readonly" class="disabled-overlay"></div>
+    <div v-if="readonly" class="absolute bg-[#f3f5f6] inset-0 opacity-50"></div>
   </div>
 </template>
 
@@ -35,16 +35,14 @@ const {
   readonly?: boolean
 }>()
 
-const emit = defineEmits<{
-  'update:modelValue': [internalValue: string | undefined]
-}>()
+const emit = defineEmits<{ 'update:modelValue': [value: string] }>()
 
 const CKEditorComponent = CKEditor.component
 
 const internalValue = ref(
   typeof modelValue === 'number'
     ? modelValue.toString()
-    : modelValue !== null
+    : modelValue !== null && typeof modelValue !== 'undefined'
     ? modelValue
     : ''
 )
@@ -56,14 +54,5 @@ const isFocused = ref(false)
 <style>
 .small .ck .ck .ck-content {
   min-height: 107px;
-}
-</style>
-
-<style scoped lang="scss">
-.disabled-overlay {
-  position: absolute;
-  inset: 0;
-  background: #f3f5f6;
-  opacity: 0.5;
 }
 </style>

@@ -1,15 +1,15 @@
 <template>
   <div>
     <label
-      class="form-label cursor-pointer mr-2"
+      class="cursor-pointer form-label mr-2 translate-y-0.5"
       @click="emit('update:modelValue', !value)"
       >{{ label }}</label
     >
     <input
       v-model="value"
-      type="checkbox"
       class="form-check-input"
       :readonly="readonly"
+      type="checkbox"
       @change="handleChange"
     />
   </div>
@@ -17,21 +17,15 @@
 
 <script setup lang="ts">
 import { ref, watch } from 'vue'
+import { CheckboxProps } from './PropTypes'
 
-const props = withDefaults(
-  defineProps<{
-    modelValue: boolean
-    readonly?: boolean
-    label?: string | null
-  }>(),
-  {
-    modelValue: false,
-    readonly: false,
-    label: null,
-  }
-)
+const {
+  modelValue = false,
+  readonly = false,
+  label = null,
+} = defineProps<CheckboxProps>()
 
-const emit = defineEmits(['update:modelValue'])
+const emit = defineEmits<{ 'update:modelValue': [value: boolean] }>()
 
 const value = ref(false)
 
@@ -41,14 +35,8 @@ const handleChange = (e: Event) => {
 }
 
 watch(
-  () => props.modelValue,
+  () => modelValue,
   (n) => (value.value = n as boolean),
   { immediate: true }
 )
 </script>
-
-<style lang="scss" scoped>
-label {
-  transform: translateY(2px);
-}
-</style>

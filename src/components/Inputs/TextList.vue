@@ -4,14 +4,14 @@
       <FormFieldLabel
         v-if="label"
         :is-placeholder="isEmpty && !hasFocus"
-        @click.native="handleLabelClick"
+        @click="handleLabelClick"
       >
         {{ props.label }}
       </FormFieldLabel>
       <input
         ref="inputRef"
         v-model="addValue"
-        class="form-control sm:min-w-[200px] w-full"
+        class="appearance-none block form-control sm:min-w-[200px] w-full"
         :class="{ 'sm:min-w-[416px]': long }"
         :readonly="readonly"
         type="text"
@@ -41,12 +41,12 @@
 <script setup lang="ts">
 import { computed, Ref, ref, watch } from 'vue'
 import FormFieldLabel from '../FormFieldLabel.vue'
-import { SimpleStringList } from './ValueTypes'
+import { StringListValue } from './ValueTypes'
 import { PlusIcon, X } from 'lucide-vue-next'
 
 const props = withDefaults(
   defineProps<{
-    modelValue: SimpleStringList
+    modelValue: StringListValue
     label?: string | null
     readonly?: boolean
     long?: boolean
@@ -58,7 +58,7 @@ const props = withDefaults(
   }
 )
 
-const emit = defineEmits(['update:modelValue'])
+const emit = defineEmits<{ 'update:modelValue': [value: StringListValue] }>()
 
 const handleFocus = () => {
   if (props.readonly) return
@@ -67,25 +67,22 @@ const handleFocus = () => {
 const handleBlur = () => (hasFocus.value = false)
 
 const inputRef = ref<HTMLInputElement | undefined>()
-const value: Ref<SimpleStringList> = ref([])
+const value: Ref<StringListValue> = ref([])
 const hasFocus = ref(false)
 const addValue = ref('')
 const isEmpty = computed(() => !addValue.value)
 
 const addNewValue = () => {
-  if (addValue.value.trim() === '') {
-    return
-  }
-  props.modelValue.push(addValue.value)
+  if (addValue.value.trim() === '') return
+  emit('update:modelValue', [...(props.modelValue as string[]), addValue.value])
   addValue.value = ''
-  emit('update:modelValue', props.modelValue)
 }
 
 const removeValue = (index: number) => {
-  if (index !== -1) {
-    props.modelValue.splice(index, 1)
-    emit('update:modelValue', props.modelValue)
-  }
+  if (index === -1) return
+  const newModelValue = [...(props.modelValue as string[])]
+  newModelValue.splice(index, 1)
+  emit('update:modelValue', newModelValue)
 }
 
 const handleLabelClick = () => {
@@ -102,8 +99,6 @@ watch(
 
 <style lang="scss" scoped>
 input {
-  display: block;
-  appearance: none;
   transition: all 0.2s ease-in-out;
 }
 </style>

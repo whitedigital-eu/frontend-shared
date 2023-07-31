@@ -4,34 +4,27 @@
   </component>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, inject, onMounted } from 'vue'
 import tippy, { roundArrow, animateFill } from 'tippy.js'
 
-const props = defineProps({
-  content: {
-    type: String,
-    required: true,
-  },
-  tag: {
-    type: String,
-    default: 'span',
-  },
-  options: {
-    type: Object,
-    default: () => ({}),
-  },
-  refKey: {
-    type: String,
-    default: null,
-  },
-})
+const {
+  content = '',
+  tag = 'span',
+  options = {},
+  refKey = null,
+} = defineProps<{
+  content?: string
+  tag?: string
+  options?: Record<any, any>
+  refKey?: string | null
+}>()
 
 const tippyRef = ref()
 const init = () => {
   tippy(tippyRef.value, {
     plugins: [animateFill],
-    content: props.content,
+    content: content,
     arrow: roundArrow,
     popperOptions: {
       modifiers: [
@@ -45,14 +38,14 @@ const init = () => {
     },
     animateFill: false,
     animation: 'shift-away',
-    ...props.options,
+    ...options,
   })
 }
 
 const bindInstance = () => {
-  if (props.refKey) {
-    const bind = inject(`bind[${props.refKey}]`)
-    if (bind) {
+  if (refKey) {
+    const bind = inject(`bind[${refKey}]`)
+    if (bind && typeof bind === 'function') {
       bind(tippyRef.value)
     }
   }

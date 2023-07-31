@@ -1,34 +1,9 @@
 {
-  "extends": "@vue/tsconfig/tsconfig.json",
+  "extends": "./config/tsconfig.json",
   "compilerOptions": {
-    "moduleResolution": "node",
-    "lib": [
-      "esnext",
-      "dom",
-      "dom.iterable"
-    ],
-    "types": [
-      "vite/client",
-      "vitest",
-      "jest",
-    ],
-    "plugins": [
-      {
-        "name": "@vuedx/typescript-plugin-vue"
-      }
-    ],
-    "strict": true,
-    "verbatimModuleSyntax": false,
+    "types": ["google.maps"],
     "allowJs": true
   },
-  "include": [
-    "**/*.d.ts",
-    "**/*.ts",
-    "**/*.vue",
-    "**/*.d.ts",
-  ],
-  "exclude": [
-    "node_modules",
-    "**/*.spec.ts",
-  ]
+  "include": ["**/*.d.ts", "**/*.ts", "**/*.vue", "**/*.d.ts"],
+  "exclude": ["node_modules", "**/*.spec.ts"]
 }

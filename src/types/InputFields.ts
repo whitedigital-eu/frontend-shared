@@ -1,6 +1,6 @@
 import { SelectOption } from '../models/SelectOption'
 
-export interface InputField {
+export type InputField = {
   type: string
   name: string
   label: string
@@ -8,12 +8,12 @@ export interface InputField {
   errors?: string[]
 }
 
-interface SimpleSelectConfig {
+export type SimpleSelectConfig = {
   options: SelectOption[]
   create?: boolean
 }
 
-interface DataFetchingSelectConfig {
+export type DataFetchingSelectConfig = {
   minSymbols?: number
   requestUrlGenerator: (searchValue: string) => string
   responseMapFunction: (resource: any) => SelectOption
@@ -21,11 +21,15 @@ interface DataFetchingSelectConfig {
   create?: boolean
 }
 
-interface LabelProps {
-  key_label?: string
-  value_label?: string
-  add_field?: string
-  form_label?: string
+export type LabelProps = {
+  keyLabel?: string
+  valueLabel?: string
+  addField?: string
+  formLabel?: string
 }
 
-export { SimpleSelectConfig, DataFetchingSelectConfig, LabelProps }
+export type MapProps = {
+  googleApiKey?: string
+  initialLat?: number
+  initialLng?: number
+}

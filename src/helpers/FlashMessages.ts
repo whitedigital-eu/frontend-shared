@@ -4,7 +4,7 @@ import StartToastifyInstance from 'toastify-js/src/toastify-es'
 import dom from '@left4code/tw-starter/dist/js/dom'
 
 const createToastifyConfig = (
-  element: Node
+  element: Node,
 ): StartToastifyInstance.Options => ({
   node: element,
   duration: 5000,
@@ -38,12 +38,12 @@ const getSuccessMessage = (methodName: string) => {
 export const showGlobalError = (description: string) => {
   const element = createToastifyElement(
     `
-        <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x-circle text-danger text-danger"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x-circle text-danger text-danger wd-error-message"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
         <div class="ml-4 mr-4">
             <div class="font-medium">${description}</div>
         </div>
     `,
-    'error-popup'
+    'error-popup',
   )
 
   StartToastifyInstance(createToastifyConfig(element)).showToast()
@@ -64,13 +64,13 @@ export const showSuccessMessage = (successMessage: string) => {
             <div class="font-medium">${successMessage}</div>
         </div>
     `,
-    'success-popup'
+    'success-popup',
   )
 
   if (activeSuccessToast) activeSuccessToast.hideToast()
 
   activeSuccessToast = StartToastifyInstance(
-    createToastifyConfig(successElement)
+    createToastifyConfig(successElement),
   ) as ToastifyInstance
 
   activeSuccessToast.showToast()

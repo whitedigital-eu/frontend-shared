@@ -2,6 +2,7 @@ import {
   DataFetchingSelectConfig,
   SimpleSelectConfig,
   LabelProps,
+  MapProps,
 } from '../types/InputFields'
 import { SelectOption } from './SelectOption'
 import dayjs from 'dayjs'
@@ -16,8 +17,10 @@ import {
   FileUploadValue,
   SliderValue,
   FlatpickrTimePickerValue,
-  SimpleStringList,
-  KeyAndValueList,
+  StringListValue,
+  KeyAndValueListValue,
+  MultipleTextFieldListValue,
+  MapCoordinateSelectorFieldValue,
 } from '../components/Inputs/ValueTypes'
 
 export type FormFieldValue =
@@ -28,7 +31,8 @@ export type FormFieldValue =
   | boolean
   | null
   | undefined
-  | KeyAndValueList
+  | KeyAndValueListValue
+  | MapCoordinateSelectorFieldValue
 
 export abstract class FormField {
   public errors?: string[]
@@ -41,6 +45,8 @@ export abstract class FormField {
     public type: string,
     public name: string,
     public label: string,
+    public labelArray?: string[],
+    public mapData?: MapProps,
     public text?: LabelProps
   ) {
     this.formatter = (x) => x
@@ -191,16 +197,29 @@ class DateTimeField extends FormField {
 class FileUploadField extends FormField {
   public value: FileUploadValue
   public allowDownload = false
+  public allowEdit = false
+  public allowDelete = true
+  public hostUrl = ''
 
   constructor(
     name: string,
     label: string,
     value?: FileUploadValue,
-    config?: { allowDownload: boolean }
+    config?: {
+      allowDownload?: boolean
+      allowEdit?: boolean
+      allowDelete?: boolean
+      hostUrl?: string
+    }
   ) {
     super('file-upload', name, label)
     this.value = value
-    if (config) this.allowDownload = config.allowDownload
+    if (config) {
+      this.allowDownload = config.allowDownload ?? this.allowDownload
+      this.allowEdit = config.allowEdit ?? this.allowEdit
+      this.allowDelete = config.allowDelete ?? this.allowDelete
+      this.hostUrl = config.hostUrl ?? this.hostUrl
+    }
   }
 }
 
@@ -271,26 +290,74 @@ class PublicFileUploadField extends FileUploadField {
 }
 
 class TextArrayField extends FormField {
-  public value: SimpleStringList = []
+  public value: StringListValue = []
 
-  constructor(name: string, label: string, value: SimpleStringList = []) {
+  constructor(name: string, label: string, value: StringListValue = []) {
     super('text-list', name, label)
     this.value = value
   }
 }
 
 class KeyAndValueArrayField extends FormField {
-  public value: KeyAndValueList = []
+  public value: KeyAndValueListValue = []
 
   constructor(
     name: string,
     label: string,
     text: LabelProps,
-    value: KeyAndValueList = []
+    value: KeyAndValueListValue = []
   ) {
     super('key-and-value-list', name, label)
     this.value = value
     this.text = text
+  }
+}
+
+class MultipleTextFields extends FormField {
+  public value: MultipleTextFieldListValue = []
+
+  constructor(
+    name: string,
+    label: string,
+    labelArray: string[],
+    value: MultipleTextFieldListValue = []
+  ) {
+    super('multiple-text-fields', name, label, labelArray)
+    this.labelArray = labelArray
+    this.value = value
+  }
+}
+
+class MapCoordinateSelectorField extends FormField {
+  public value: MapCoordinateSelectorFieldValue = {
+    address: '',
+    lat: 0,
+    lng: 0,
+  }
+
+  constructor(
+    name: string,
+    label: string,
+    mapData: MapProps,
+    value: MapCoordinateSelectorFieldValue = { address: '', lat: 0, lng: 0 }
+  ) {
+    super('map-coordinate-selector', name, label)
+    this.mapData = mapData
+    this.value = value
+  }
+}
+
+export class PlainTextareaField extends FormField {
+  value: Exclude<TextValue, number>
+  constructor(
+    name: string,
+    label: string,
+    value?: TextValue,
+    readonly = false
+  ) {
+    super('plain-textarea', name, label)
+    this.value = typeof value === 'number' ? value.toString() : value
+    this.readonly = readonly
   }
 }
 
@@ -314,6 +381,8 @@ export {
   PublicFileUploadField,
   TextArrayField,
   KeyAndValueArrayField,
+  MultipleTextFields,
+  MapCoordinateSelectorField,
 }
 
 // START OF NEW TYPED FIELDS!
@@ -375,6 +444,8 @@ export type AnyFormField =
   | TextareaField
   | TextArrayField
   | KeyAndValueArrayField
+  | MultipleTextFields
+  | MapCoordinateSelectorField
   | HtmlContentField
   | SimpleSelectField
   | DataFetchingSelectField

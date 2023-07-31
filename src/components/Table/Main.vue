@@ -18,125 +18,47 @@
 
 <script setup lang="ts">
 import Tabulator from 'tabulator-tables'
-import { onMounted, ref, watch, onBeforeUnmount, PropType, nextTick } from 'vue'
+import { onMounted, ref, watch, onBeforeUnmount, nextTick } from 'vue'
 import { handleTableAjaxError } from '../../helpers/Errors'
-import createActionColumn, { CustomAction, renderIcons } from './ActionColumn'
-import { TableConfig } from './createTableConfig'
+import createActionColumn, { renderIcons } from './ActionColumn'
 import { ApiListResponse } from '../../types/ApiPlatform'
 import { COLLAPSE_ORDER, createColumn } from './Column'
 import { tableTranslations } from '../../helpers/Translations'
+import { TableProps } from './createTableConfig'
+import { Resource } from '../../types/Resource'
 
-const props = defineProps({
-  columns: {
-    type: Array as PropType<Tabulator.ColumnDefinition[]>,
-    required: true,
-  },
-  delete: {
-    default: true,
-    type: Boolean,
-  },
-  edit: {
-    default: true,
-    type: Boolean,
-  },
-  view: {
-    default: false,
-    type: Boolean,
-  },
-  created: {
-    default: true,
-    type: Boolean,
-  },
-  updated: {
-    default: true,
-    type: Boolean,
-  },
-  ajaxUrl: {
-    required: false,
-    type: String,
-    default: null,
-  },
-  primaryField: {
-    default: 'name',
-    type: String,
-  },
-  movableRows: {
-    type: Boolean,
-    required: false,
-    default: false,
-  },
-  disableOrderByDateColumns: {
-    type: Boolean,
-    required: false,
-    default: false,
-  },
-  selectionColumn: {
-    type: Boolean,
-    required: false,
-    default: false,
-  },
-  selectionCheckboxLabel: {
-    type: String,
-    required: false,
-    default: 'Atzīmē, lai veidotu darījumu',
-  },
-  columnData: {
-    type: Array,
-    required: false,
-    default: null,
-  },
-  page: {
-    type: Number,
-    required: false,
-    default: 1,
-  },
-  pageSize: {
-    type: Number,
-    required: false,
-    default: 30,
-  },
-  pageSizeParam: {
-    type: String,
-    required: false,
-    default: 'size',
-  },
-  config: {
-    type: Object as PropType<TableConfig>,
-    required: true,
-  },
-  canUpdateRecordFunc: {
-    type: Function as PropType<(cell: Tabulator.CellComponent) => boolean>,
-    required: false,
-    default: () => () => true,
-  },
-  tabulatorOptions: {
-    type: Object as PropType<Tabulator.Options>,
-    required: false,
-    default: () => ({}),
-  },
-  customActions: {
-    type: Array as PropType<CustomAction[]>,
-    required: false,
-    default: null,
-  },
-  paginationSizeSelector: {
-    type: Array as PropType<Array<number | boolean>>,
-    required: false,
-    default: () => [10, 30, 100],
-  },
+const props = withDefaults(defineProps<TableProps>(), {
+  delete: true,
+  edit: true,
+  view: false,
+  created: true,
+  updated: true,
+  ajaxUrl: null,
+  primaryField: 'name',
+  movableRows: false,
+  disableOrderByDateColumns: false,
+  selectionColumn: false,
+  selectionCheckboxLabel: 'Atzīmē, lai veidotu darījumu',
+  columnData: null,
+  page: 1,
+  pageSize: 30,
+  canUpdateRecordFunc: () => true,
+  tabulatorOptions: null,
+  customActions: null,
+  paginationSizeSelector: () => [10, 30, 100],
 })
 
-const emit = defineEmits([
-  'edit-click',
-  'delete-click',
-  'view-click',
-  'move-row',
-  'set:filters',
-  'row-selection-changed',
-  'cell-click',
-  'pagination-changed',
-  'total-entry-count-changed',
-])
+const emit = defineEmits<{
+  'edit-click': [resource: Resource<string, string>]
+  'delete-click': [resource: Resource<string, string>]
+  'view-click': [resource: Resource<string, string>]
+  'move-row': [row: Tabulator.RowComponent]
+  'set:filters': [response: ApiListResponse]
+  'row-selection-changed': [selectedRowData: Resource<string, string>[]]
+  'cell-click': [field: string, resource: Resource<string, string>]
+  'pagination-changed': [page: number, pageSize: number]
+  'total-entry-count-changed': [totalEntryCount: number | null]
+}>()
 
 const table = ref()
 const tabulator = ref()
@@ -157,12 +79,12 @@ onMounted(() => {
 
 onBeforeUnmount(() => window.removeEventListener('resize', reInitTable))
 
-watch(
-  () => props.ajaxUrl,
-  () => {
-    reload()
-  }
-)
+const reload = () => {
+  tabulator.value.destroy()
+  initTabulator(true)
+}
+
+watch(() => props.ajaxUrl, reload)
 
 watch(totalEntryCount, (n, o) => {
   if (n !== o) emit('total-entry-count-changed', n)
@@ -171,7 +93,7 @@ watch(totalEntryCount, (n, o) => {
 const createTimestampColumn = (
   title: string,
   field: string,
-  hideLast: boolean
+  hideLast: boolean,
 ): Tabulator.ColumnDefinition =>
   createColumn({
     title: title,
@@ -185,12 +107,12 @@ const createTimestampColumn = (
 const createdColumn = createTimestampColumn(
   'IZVEIDOTS',
   props.config.sharedColumnNames.created,
-  true
+  true,
 )
 const updatedColumn = createTimestampColumn(
   'ATJAUNOTS',
   props.config.sharedColumnNames.updated,
-  false
+  false,
 )
 
 const actionColumn = createActionColumn(props, {
@@ -250,7 +172,7 @@ const waitForToggleCollapseElementsRendered = (): Promise<
       }
 
       const elements = document.querySelectorAll(
-        '.tabulator-responsive-collapse-toggle'
+        '.tabulator-responsive-collapse-toggle',
       )
       if (!elements.length) totalTimePassed += 100
       else {
@@ -274,14 +196,14 @@ const setTableHeight = (): void => {
 
 let tabulatorScrollTop = 0
 
+const PAGE_SIZE_PARAM = 'itemsPerPage' as const
+
 const initTabulator = async (resetPage = false) => {
   let options: Tabulator.Options = {
     paginationSizeSelector: props.paginationSizeSelector,
     paginationInitialPage: resetPage ? 1 : props.page,
     paginationSize: props.pageSize,
-    paginationDataSent: {
-      size: props.pageSizeParam as string,
-    },
+    paginationDataSent: { size: PAGE_SIZE_PARAM },
     layout: 'fitColumns',
     responsiveLayout: 'collapse',
     responsiveLayoutCollapseStartOpen: false,
@@ -295,7 +217,11 @@ const initTabulator = async (resetPage = false) => {
       emit('move-row', row)
     },
     cellClick: function (e, cell) {
-      emit('cell-click', cell.getField(), cell.getData())
+      emit(
+        'cell-click',
+        cell.getField(),
+        cell.getData() as Resource<string, string>,
+      )
     },
     rowSelectionChanged(selectedRowData) {
       emit('row-selection-changed', selectedRowData)
@@ -305,7 +231,7 @@ const initTabulator = async (resetPage = false) => {
         const toggleCollapseElements =
           await waitForToggleCollapseElementsRendered()
         toggleCollapseElements.forEach((el) =>
-          el.addEventListener('click', setTableHeight, true)
+          el.addEventListener('click', setTableHeight, true),
         )
       } catch (e) {
         console.error(e)
@@ -330,15 +256,15 @@ const initTabulator = async (resetPage = false) => {
         }
 
         const footer = this.element.querySelector(
-          '.tabulator-footer'
+          '.tabulator-footer',
         ) as HTMLElement | null
         if (!footer) return
         const topFooterContainer = this.element.parentElement.querySelector(
-          '.tabulator-top-pagination-placeholder'
+          '.tabulator-top-pagination-placeholder',
         ) as HTMLElement
         const footerClone = footer.cloneNode(true) as HTMLElement
         const topPaginator = footerClone.querySelector(
-          '.tabulator-paginator'
+          '.tabulator-paginator',
         ) as HTMLElement
         topPaginator.innerHTML = ''
         topFooterContainer.innerHTML = ''
@@ -346,14 +272,15 @@ const initTabulator = async (resetPage = false) => {
 
         const elSelectorToMoveToTop =
           '.tabulator-paginator>label, .tabulator-paginator>.tabulator-page-size'
-        footer
-          .querySelectorAll(elSelectorToMoveToTop)
-          .forEach(function (this: HTMLElement, element) {
-            ;(
-              footer.querySelector('.tabulator-paginator') as HTMLElement
-            ).removeChild(element)
-            topPaginator.appendChild(element)
-          })
+        footer.querySelectorAll(elSelectorToMoveToTop).forEach(function (
+          this: HTMLElement,
+          element,
+        ) {
+          ;(
+            footer.querySelector('.tabulator-paginator') as HTMLElement
+          ).removeChild(element)
+          topPaginator.appendChild(element)
+        })
       })
     },
   }
@@ -470,11 +397,6 @@ const initTabulator = async (resetPage = false) => {
 }
 
 nextTick(renderIcons)
-
-const reload = () => {
-  tabulator.value.destroy()
-  initTabulator(true)
-}
 
 const refreshData = () => tabulator.value.setPage(tabulator.value.getPage())
 

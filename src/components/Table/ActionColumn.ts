@@ -4,28 +4,31 @@ import { nextTick } from 'vue'
 import { icons, createIcons } from 'lucide'
 import { COLLAPSE_ORDER } from './Column'
 import { Resource } from '../../types/Resource'
+import { TableProps } from './createTableConfig'
 
-interface IconSettings {
+type RemoveUndefined<T> = { [K in keyof T]-?: Exclude<T[K], undefined> }
+
+type IconSettings = {
   wrapperClass?: string
   title: string
   iconName: string
 }
 
-const iconWrapperClass = 'mr-3 last:mr-0'
+const iconWrapperClass = 'wd-table-btn mr-3 last:mr-0'
 
 const iconSettings: Record<string, IconSettings> = {
   edit: {
-    wrapperClass: iconWrapperClass,
+    wrapperClass: `${iconWrapperClass} wd-table-btn-edit`,
     title: 'Rediģēt',
     iconName: 'check-square',
   },
   delete: {
-    wrapperClass: `text-danger ${iconWrapperClass}`,
+    wrapperClass: `text-danger ${iconWrapperClass} wd-table-btn-delete`,
     title: 'Dzēst',
     iconName: 'trash-2',
   },
   view: {
-    wrapperClass: iconWrapperClass,
+    wrapperClass: `${iconWrapperClass} wd-table-btn-view`,
     title: 'Apskatīt',
     iconName: 'eye',
   },
@@ -79,15 +82,6 @@ export const renderIcons = () => {
   })
 }
 
-type TableProps = {
-  edit: boolean
-  delete: boolean
-  view: boolean
-  movableRows: boolean
-  canUpdateRecordFunc: (cell: Tabulator.CellComponent) => boolean
-  customActions?: CustomAction[]
-}
-
 const computeActionColumnWidth = (props: TableProps) => {
   let res = 10
   if (props.edit) res += ACTION_ICON_TOTAL_WIDTH
@@ -100,7 +94,7 @@ const computeActionColumnWidth = (props: TableProps) => {
 }
 
 const createActionColumn = (
-  props: TableProps,
+  props: RemoveUndefined<TableProps>,
   clickHandlers: {
     edit: <R extends Resource<string, string>>(resource: R) => void
     delete: <R extends Resource<string, string>>(resource: R) => void

@@ -3,20 +3,20 @@
     <FormFieldLabel
       v-if="label"
       :is-placeholder="isEmpty && !hasFocus"
-      @click.native="handleLabelClick"
+      @click="handleLabelClick"
     >
       {{ props.label }}
     </FormFieldLabel>
     <input
       ref="inputRef"
       v-model="value"
-      type="text"
-      class="form-control w-full sm:min-w-[200px]"
+      class="form-control sm:min-w-[200px] w-full"
       :class="{ 'sm:min-w-[416px]': long }"
       :readonly="readonly"
-      @input="handleInput"
-      @focus="handleFocus"
+      type="text"
       @blur="handleBlur"
+      @focus="handleFocus"
+      @input="handleInput"
     />
   </div>
 </template>
@@ -38,10 +38,10 @@ const props = withDefaults(
     label: null,
     readonly: false,
     long: false,
-  }
+  },
 )
 
-const emit = defineEmits(['update:modelValue'])
+const emit = defineEmits<{ 'update:modelValue': [value: string] }>()
 
 const handleFocus = () => {
   if (props.readonly) return
@@ -67,7 +67,7 @@ const handleLabelClick = () => {
 watch(
   () => props.modelValue,
   (n) => (value.value = n as string),
-  { immediate: true }
+  { immediate: true },
 )
 </script>
 

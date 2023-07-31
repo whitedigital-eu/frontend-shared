@@ -1,8 +1,8 @@
 <template>
   <!-- BEGIN: Mobile Menu -->
-  <div class="mobile-menu md:hidden">
+  <div class="md:hidden mobile-menu">
     <div class="mobile-menu-bar">
-      <a href="" class="flex mr-auto">
+      <a class="flex mr-auto" href="">
         <!--        <img-->
         <!--          alt="Enigma Tailwind HTML Admin Template"-->
         <!--          class="w-6"-->
@@ -10,14 +10,14 @@
         <!--        />-->
       </a>
       <BarChart2Icon
-        class="w-8 h-8 text-white transform -rotate-90"
+        class="-rotate-90 h-8 text-white transform w-8"
         @click="toggleMobileMenu"
       />
     </div>
     <transition @enter="enter" @leave="leave">
       <ul
         v-if="activeMobileMenu"
-        class="border-t border-white/[0.08] py-5 hidden"
+        class="border-t border-white/[0.08] hidden py-5"
       >
         <!-- BEGIN: First Child -->
         <template v-for="(menu, menuKey) in formattedMenu">
@@ -28,12 +28,12 @@
           ></li>
           <li v-else :key="menu + menuKey">
             <a
-              href="javascript:;"
               class="menu"
               :class="{
                 'menu--active': menu.active,
                 'menu--open': menu.activeDropdown,
               }"
+              href="javascript:;"
               @click="linkTo(menu, router)"
             >
               <div class="menu__icon">
@@ -58,9 +58,9 @@
                   :key="subMenuKey"
                 >
                   <a
-                    href="javascript:;"
                     class="menu"
                     :class="{ 'menu--active': subMenu.active }"
+                    href="javascript:;"
                     @click="linkTo(subMenu, router)"
                   >
                     <div class="menu__icon">
@@ -87,9 +87,9 @@
                         :key="lastSubMenuKey"
                       >
                         <a
-                          href="javascript:;"
                           class="menu"
                           :class="{ 'menu--active': lastSubMenu.active }"
+                          href="javascript:;"
                           @click="linkTo(lastSubMenu, router)"
                         >
                           <div class="menu__icon">
@@ -119,7 +119,6 @@
 <script setup>
 import { computed, onMounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-//@ts-ignore
 import {
   activeMobileMenu,
   toggleMobileMenu,

@@ -13,18 +13,18 @@
         ref="flatpickr"
         v-model="value"
         :class="inputClass"
-        step="60"
         :config="config"
-        @on-open="handleOpen"
+        step="60"
         @on-close="handleClose"
+        @on-open="handleOpen"
       />
       <X
         v-if="!isMobile"
-        class="cursor-pointer absolute right-[8px] top-[50%] translate-y-[-50%]"
+        class="absolute cursor-pointer right-[8px] top-[50%] translate-y-[-50%]"
         @click="clearInput"
       />
     </div>
-    <input v-else v-model="value" type="time" step="60" :class="inputClass" />
+    <input v-else v-model="value" :class="inputClass" step="60" type="time" />
   </div>
 </template>
 
@@ -42,34 +42,29 @@ import FormFieldLabel from '../FormFieldLabel.vue'
 import { FlatpickrTimePickerValue } from './ValueTypes'
 import useResponsivity from '../../composables/useResponsivity'
 
-dayjs.extend(LocalizedFormat)
+const {
+  modelValue = null,
+  label = null,
+  id = null,
+} = defineProps<{
+  modelValue?: FlatpickrTimePickerValue
+  label?: string | null
+  id?: string | null
+}>()
 
-const props = withDefaults(
-  defineProps<{
-    modelValue: FlatpickrTimePickerValue
-    label?: string | null
-    id?: string | null
-  }>(),
-  {
-    modelValue: null,
-    label: null,
-    id: null,
-  }
-)
+const emit = defineEmits<{ 'update:modelValue': [value: string | null] }>()
+
+dayjs.extend(LocalizedFormat)
 
 const { isMobile } = useResponsivity()
 
 const computedId = computed(() => {
-  if (!props.id) {
-    console.warn('props.id should be defined! props.id: ', props.id)
+  if (!id) {
+    console.warn('id should be defined! id: ', id)
     return `datepicker-1234`
   }
-  return `datepicker-${props.id}`
+  return `datepicker-${id}`
 })
-
-const emit = defineEmits<{
-  (e: 'update:modelValue', value: string | null): void
-}>()
 
 const flatpickr = ref(null)
 
@@ -79,7 +74,7 @@ const isOpen = ref(false)
 
 const isEmpty = computed(() => !value.value)
 
-const inputClass = ref('form-control input w-full')
+const inputClass = 'form-control input w-full'
 
 const handleLabelClick = () => {
   if (!flatpickr.value) return
@@ -107,8 +102,8 @@ const parseModelValue = () => {
   let minutes = 0
   const timeRegex = /^([01]?[0-9]|2[0-3]):[0-5][0-9]$/ // H:mm or HH:mm
 
-  if (props.modelValue && timeRegex.test(props.modelValue)) {
-    const [hoursStr, minutesStr] = props.modelValue.split(':')
+  if (modelValue && timeRegex.test(modelValue)) {
+    const [hoursStr, minutesStr] = modelValue.split(':')
     hours = parseInt(hoursStr)
     minutes = parseInt(minutesStr)
   }
@@ -125,13 +120,13 @@ const setValueFromModelValue = () => {
 }
 
 onMounted(() => {
-  if (props.modelValue) setValueFromModelValue()
+  if (modelValue) setValueFromModelValue()
 })
 
 let emitted = false
 
 watch(
-  () => props.modelValue,
+  () => modelValue,
   () => {
     if (emitted) {
       emitted = false

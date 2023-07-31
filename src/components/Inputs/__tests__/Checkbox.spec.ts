@@ -1,20 +1,14 @@
 import { fireEvent, render } from '@testing-library/vue'
-import Checkbox from './Checkbox.vue'
+import Checkbox from '../Checkbox.vue'
+import { CheckboxProps } from '../PropTypes'
 
-// copied from Checkbox.vue defineProps - important to keep in sync!!!
-// move to separate file when importing props in vue files is supported
-type Props = {
-  modelValue?: boolean
-  readonly?: boolean
-  label?: string | null
-}
-const defaultProps: Props = {
+const defaultProps: CheckboxProps = {
   modelValue: false,
   readonly: false,
   label: null,
 }
 
-const renderCheckbox = (props?: Props) => {
+const renderCheckbox = (props?: CheckboxProps) => {
   const { getByRole, emitted } = render(Checkbox, {
     props: { ...defaultProps, ...props },
   })

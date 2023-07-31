@@ -1,54 +1,54 @@
 <template>
   <!-- BEGIN: Top Bar -->
   <div
-    class="top-bar-boxed h-[70px] md:h-[65px] z-[51] border-b border-white/[0.08] -mt-7 md:mt-0 -mx-3 sm:-mx-8 md:-mx-0 px-3 md:border-b-0 relative md:fixed md:inset-x-0 md:top-0 sm:px-8 md:px-10 md:pt-10 md:bg-gradient-to-b md:from-slate-100 md:to-transparent dark:md:from-darkmode-700"
+    class="-mt-7 -mx-3 border-b border-white/[0.08] dark:md:from-darkmode-700 h-[70px] md:-mx-0 md:bg-gradient-to-b md:border-b-0 md:fixed md:from-slate-100 md:h-[65px] md:inset-x-0 md:mt-0 md:pt-10 md:px-10 md:to-transparent md:top-0 px-3 relative sm:-mx-8 sm:px-8 top-bar-boxed z-[51]"
   >
-    <div class="h-full flex items-center">
+    <div class="flex h-full items-center">
       <!-- BEGIN: Logo -->
-      <a href="" class="logo -intro-x hidden md:flex xl:w-[180px] block">
+      <a class="-intro-x block hidden logo md:flex xl:w-[180px]" href="">
         <!--        <img alt="..." class="logo__image w-6" src="@/assets/images/logo.svg" />-->
-        <span class="logo__text text-white text-lg ml-3">WD</span>
+        <span class="logo__text ml-3 text-lg text-white">WD</span>
       </a>
       <!-- END: Logo -->
       <!-- BEGIN: Breadcrumb -->
       <nav aria-label="breadcrumb" class="-intro-x h-[45px]">
         <ol class="breadcrumb breadcrumb-light">
           <li class="breadcrumb-item"><a href="#">Application</a></li>
-          <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
+          <li aria-current="page" class="active breadcrumb-item">Dashboard</li>
         </ol>
       </nav>
       <!-- END: Breadcrumb -->
       <!-- BEGIN: Account Menu -->
-      <Dropdown class="intro-x w-8 h-8">
+      <Dropdown class="h-8 intro-x w-8">
         <DropdownToggle
-          tag="div"
-          role="button"
-          class="w-8 h-8 rounded-full overflow-hidden shadow-lg image-fit zoom-in scale-110"
           ref="dropdownToggle"
+          class="h-8 image-fit overflow-hidden rounded-full scale-110 shadow-lg w-8 zoom-in"
+          role="button"
+          tag="div"
         >
           <img alt="..." />
         </DropdownToggle>
         <DropdownMenu class="w-56">
           <DropdownContent
-            class="bg-primary/80 before:block before:absolute before:bg-black before:inset-0 before:rounded-md before:z-[-1] text-white"
+            class="before:absolute before:bg-black before:block before:inset-0 before:rounded-md before:z-[-1] bg-primary/80 text-white"
           >
-            <DropdownHeader tag="div" class="!font-normal">
+            <DropdownHeader class="!font-normal" tag="div">
               <div class="font-medium">Jānis Bērziņš</div>
-              <div class="text-xs text-white/60 mt-0.5 dark:text-slate-500">
+              <div class="dark:text-slate-500 mt-0.5 text-white/60 text-xs">
                 Galvenais izmeklētājs
               </div>
             </DropdownHeader>
             <DropdownDivider class="border-white/[0.08]" />
             <DropdownItem class="dropdown-item hover:bg-white/5">
-              <LockIcon class="w-4 h-4 mr-2" />
+              <LockIcon class="h-4 mr-2 w-4" />
               Mainīt paroli
             </DropdownItem>
             <DropdownItem class="dropdown-item hover:bg-white/5">
-              <HelpCircleIcon class="w-4 h-4 mr-2" />
+              <HelpCircleIcon class="h-4 mr-2 w-4" />
               KiberKuba lietotāja instrukcija
             </DropdownItem>
             <DropdownItem class="dropdown-item hover:bg-white/5">
-              <FolderIcon class="w-4 h-4 mr-2" />
+              <FolderIcon class="h-4 mr-2 w-4" />
               Dokumentu paraugi
             </DropdownItem>
             <DropdownDivider class="border-white/[0.08]" />
@@ -56,7 +56,7 @@
               class="dropdown-item hover:bg-white/5"
               @click="handleLogOff"
             >
-              <ToggleRightIcon class="w-4 h-4 mr-2" />
+              <ToggleRightIcon class="h-4 mr-2 w-4" />
               Atteikties
             </DropdownItem>
           </DropdownContent>
@@ -76,6 +76,4 @@ const dropdownToggle = ref()
 const handleLogOff = () => {
   dropdownToggle.value.$el.click()
 }
-
-const reloadPage = () => window.location.reload()
 </script>

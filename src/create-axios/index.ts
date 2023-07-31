@@ -40,6 +40,4 @@ const createAxiosWithInterceptors = (
   return instance
 }
 
-export const requestTimeoutMs = 5000
-
 export default createAxiosWithInterceptors
