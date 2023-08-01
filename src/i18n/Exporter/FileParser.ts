@@ -6,7 +6,7 @@ export class FileParser {
   }
 
   validateTranslate(text: string) {
-    const pattern = /^[a-zA-Z0-9]+(\.[a-zA-Z0-9]+)*$/
+    const pattern = /^[a-zA-Z0-9]+$/
     return pattern.test(text)
   }
 
@@ -15,7 +15,7 @@ export class FileParser {
   }
 
   getTranslateKeys(
-    content: string
+    content: string,
   ): ({ domain: string; context: string; text: string } | null)[] {
     const translateRegex =
       /\bt\([']([^']+)[']\s*,\s*[']([^']+)[']?(?:\s*,\s*[']([^']+)['])?\)/g
@@ -35,7 +35,7 @@ export class FileParser {
           !this.validateTranslate(keyMatch[2])
         ) {
           throw new ValidationError(
-            `\x1b[41mTranslation key validation failed '${keyMatch[0]}' @ ${this.fileName}\x1b[0m`
+            `\x1b[41mTranslation key validation failed '${keyMatch[0]}' @ ${this.fileName}\x1b[0m`,
           )
         }
 
