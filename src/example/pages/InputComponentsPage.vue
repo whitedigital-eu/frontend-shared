@@ -1,6 +1,6 @@
 <template>
   <form class="flex flex-col gap-4 mr-auto mt-4 w-[500px]">
-    {{ $t('admintest', 'menu') }}
+    {{ $t('translation', 'test', 'Context') }}
     <Text v-model="fullName" label="Full name" />
     <TextList v-model="textArrayList" label="Text List" />
     <KeyAndValueList
@@ -157,7 +157,7 @@ const roleOptions = [
   new SelectOption('Super admin', 'ROLE_SUPER_ADMIN'),
   new SelectOption(
     t('admin', 'coolAdmin', 'select option'),
-    'ROLE_SUPER_ADMIN_TRANSLATE'
+    'ROLE_SUPER_ADMIN_TRANSLATE',
   ),
 ]
 const userSelectConfig: DataFetchingSelectConfig = {
