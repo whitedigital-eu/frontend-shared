@@ -1,43 +1,43 @@
 import { TranslationConfig } from '../types/TranslationTypes'
 import axios from 'axios'
 
-export const AVAILABLE_LOCALES = ['en', 'lv'] as const
-
 export const getUrlLocale = (
-  noNull = false
+  availableLocales: string[],
+  noNull = false,
 ): typeof noNull extends true ? string : string | null => {
   const path = window.location.pathname
   const slug = path.split('/')[1]
-  if (AVAILABLE_LOCALES.includes(slug as (typeof AVAILABLE_LOCALES)[number])) {
+  if (availableLocales.includes(slug as (typeof availableLocales)[number])) {
     return slug
   }
-  return noNull ? AVAILABLE_LOCALES[0] : null
+  return noNull ? availableLocales[0] : null
 }
 
 export const switchLocale = (
-  locale: (typeof AVAILABLE_LOCALES)[number],
-  goToHomepage = false
+  availableLocales: string[],
+  locale: (typeof availableLocales)[number],
+  goToHomepage = false,
 ) => {
-  if (!AVAILABLE_LOCALES.includes(locale)) return
+  if (!availableLocales.includes(locale)) return
 
   if (goToHomepage) {
     location.href = `/${locale}`
     return
   }
 
-  if (!getUrlLocale()) {
+  if (!getUrlLocale(availableLocales)) {
     location.href = `/${locale}${window.location.pathname}`
     return
   }
 
   location.href = `/${locale}${window.location.pathname.replace(
-    `/${getUrlLocale()}`,
-    ''
+    `/${getUrlLocale(availableLocales)}`,
+    '',
   )}`
 }
 
 export const loadTranslations = (
-  config: TranslationConfig
+  config: TranslationConfig,
 ): Promise<TranslationConfig> => {
   return axios
     .get(config.localeJsonUrl, {

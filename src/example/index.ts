@@ -23,10 +23,7 @@ import { createPinia } from 'pinia'
 
 const config: TranslationConfig = {
   translations: {},
-  contentLocales: [],
-  localeJsonUrl: `https://goldwork.local.io/api/translations/list/${getUrlLocale(
-    true
-  )}`,
+  localeJsonUrl: `/api/translations/list/${getUrlLocale(['lv', 'en'], true)}`,
 }
 
 const pinia = createPinia()
