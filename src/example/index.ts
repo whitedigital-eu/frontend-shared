@@ -16,9 +16,24 @@ dayjs.extend(isToday)
 dayjs.extend(isYesterday)
 
 import './css/app.css'
+import translation from '../i18n/translation'
+import { TranslationConfig } from '../types/TranslationTypes'
+import { getUrlLocale, loadTranslations } from '../i18n/Language'
+import { createPinia } from 'pinia'
 
-const app = createApp(App).use(router)
+const config: TranslationConfig = {
+  translations: {},
+  localeJsonUrl: `/api/translations/list/${getUrlLocale(['lv', 'en'], true)}`,
+}
 
-globalComponents(app)
+const pinia = createPinia()
 
-app.mount('#app')
+loadTranslations(config).then((translationConfig) => {
+  const app = createApp(App)
+    .use(router)
+    .use(pinia)
+    .use(translation, translationConfig)
+  globalComponents(app)
+
+  app.mount('#app')
+})
