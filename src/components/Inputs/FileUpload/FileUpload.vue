@@ -119,12 +119,12 @@ const removeInitialFile = async (fileIri: string) => {
     deletingFileIri.value = fileIri
     try {
       await props.axiosInstance.delete(fileIri)
+    } catch (e) {
+      console.warn(e)
+    } finally {
       initialFiles.value = initialFiles.value.filter(
         (file) => file['@id'] !== fileIri,
       )
-    } catch (e) {
-      console.error(e)
-    } finally {
       deletingFileIri.value = null
     }
   })
