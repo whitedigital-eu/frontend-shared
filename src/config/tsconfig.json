@@ -10,7 +10,6 @@
     "plugins": [{ "name": "@vuedx/typescript-plugin-vue" }],
     "strict": true,
     "verbatimModuleSyntax": false,
-    "incremental": true,
     "types": ["vite/client", "vitest", "jest"]
   }
 }
