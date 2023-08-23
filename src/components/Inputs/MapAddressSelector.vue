@@ -98,8 +98,8 @@ const initMap = () => {
   if (mapElement && props.mapData) {
     const mapOptions: google.maps.MapOptions = {
       center: new google.maps.LatLng(
-          props.modelValue?.lat ?? props.mapData.initialLat,
-          props.modelValue?.lng ?? props.mapData.initialLng
+        props.modelValue?.address ? props.modelValue?.lat : props.mapData.initialLat,
+        props.modelValue?.address ? props.modelValue?.lng : props.mapData.initialLng
       ),
       zoom: 12,
     }
