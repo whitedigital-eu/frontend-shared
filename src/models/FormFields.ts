@@ -47,7 +47,7 @@ export abstract class FormField {
     public label: string,
     public labelArray?: string[],
     public mapData?: MapProps,
-    public text?: LabelProps
+    public text?: LabelProps,
   ) {
     this.formatter = (x) => x
   }
@@ -64,7 +64,7 @@ class TextField extends FormField {
     name: string,
     label: string,
     value?: TextValue,
-    readonly = false
+    readonly = false,
   ) {
     super('text', name, label)
     this.value = typeof value === 'number' ? value.toString() : value
@@ -81,7 +81,7 @@ class DecimalField extends FormField {
     label: string,
     value?: Exclude<DecimalValue, string>,
     readonly = false,
-    config: Record<string, any> = {}
+    config: Record<string, any> = {},
   ) {
     super('decimal', name, label)
     this.value = value
@@ -96,7 +96,7 @@ class TextareaField extends FormField {
   constructor(
     name: string,
     label: string,
-    value?: Exclude<TextEditorValue, number>
+    value?: Exclude<TextEditorValue, number>,
   ) {
     super('textarea', name, label)
     this.value = value
@@ -109,7 +109,7 @@ class HtmlContentField extends FormField {
   constructor(
     name: string,
     label: string,
-    value?: Exclude<TextEditorValue, number>
+    value?: Exclude<TextEditorValue, number>,
   ) {
     super('html-content', name, label)
     this.value = value
@@ -128,7 +128,7 @@ class SimpleSelectField extends FormField {
     options: SelectOption[] = [],
     readonly = false,
     create = false,
-    allowDelete = true
+    allowDelete = true,
   ) {
     super('simple-select', name, label)
     this.value = value
@@ -149,7 +149,7 @@ class DataFetchingSelectField extends FormField {
     value: DataFetchingSelectValue = '',
     config: DataFetchingSelectConfig,
     readonly = false,
-    allowDelete = true
+    allowDelete = true,
   ) {
     super('data-fetching-select', name, label)
     this.value = value
@@ -174,7 +174,7 @@ class TimeField extends FormField {
     name: string,
     label: string,
     public value: FlatpickrTimePickerValue,
-    readonly = false
+    readonly = false,
   ) {
     super('time', name, label)
     this.readonly = readonly
@@ -188,7 +188,7 @@ class DateTimeField extends FormField {
     public value: DateTimePickerValue = dayjs().toISOString(),
     public config:
       | { hoursStep?: number; minutesStep?: number }
-      | undefined = undefined
+      | undefined = undefined,
   ) {
     super('date-time', name, label)
   }
@@ -210,7 +210,7 @@ class FileUploadField extends FormField {
       allowEdit?: boolean
       allowDelete?: boolean
       hostUrl?: string
-    }
+    },
   ) {
     super('file-upload', name, label)
     this.value = value
@@ -225,21 +225,32 @@ class FileUploadField extends FormField {
 
 class CheckboxField extends FormField {
   value: boolean
+  readonly = false
 
-  constructor(name: string, label: string, value?: boolean | undefined) {
+  constructor(
+    name: string,
+    label: string,
+    value?: boolean | undefined,
+    readonly = false,
+  ) {
     super('checkbox', name, label)
     this.value = value ?? false
+    this.readonly = readonly
   }
 }
 
 class SliderField extends FormField {
-  constructor(name: string, label: string, public value: SliderValue) {
+  constructor(
+    name: string,
+    label: string,
+    public value: SliderValue,
+  ) {
     super('slider', name, label)
   }
 }
 
 const isSelectField = (
-  maybeSelectField: any
+  maybeSelectField: any,
 ): maybeSelectField is DataFetchingSelectField | SimpleSelectField => {
   return (
     maybeSelectField.type === 'simple-select' ||
@@ -254,7 +265,7 @@ class TimeWithCurrentField extends FormField {
     name: string,
     label: string,
     value: FlatpickrTimePickerValue = null,
-    readonly = false
+    readonly = false,
   ) {
     super('time-with-current', name, label)
     this.value = value
@@ -305,7 +316,7 @@ class KeyAndValueArrayField extends FormField {
     name: string,
     label: string,
     text: LabelProps,
-    value: KeyAndValueListValue = []
+    value: KeyAndValueListValue = [],
   ) {
     super('key-and-value-list', name, label)
     this.value = value
@@ -320,7 +331,7 @@ class MultipleTextFields extends FormField {
     name: string,
     label: string,
     labelArray: string[],
-    value: MultipleTextFieldListValue = []
+    value: MultipleTextFieldListValue = [],
   ) {
     super('multiple-text-fields', name, label, labelArray)
     this.labelArray = labelArray
@@ -339,7 +350,7 @@ class MapCoordinateSelectorField extends FormField {
     name: string,
     label: string,
     mapData: MapProps,
-    value: MapCoordinateSelectorFieldValue = { address: '', lat: 0, lng: 0 }
+    value: MapCoordinateSelectorFieldValue = { address: '', lat: 0, lng: 0 },
   ) {
     super('map-coordinate-selector', name, label)
     this.mapData = mapData
@@ -353,7 +364,7 @@ export class PlainTextareaField extends FormField {
     name: string,
     label: string,
     value?: TextValue,
-    readonly = false
+    readonly = false,
   ) {
     super('plain-textarea', name, label)
     this.value = typeof value === 'number' ? value.toString() : value
@@ -392,7 +403,10 @@ export type SimpleSelectConfigTyped<T extends string> = {
 }
 
 export class SelectOptionTyped<T extends string, V extends string> {
-  constructor(public text: T, public value: V) {}
+  constructor(
+    public text: T,
+    public value: V,
+  ) {}
 }
 
 export class SimpleSelectFieldTS<T extends string> extends FormField {
@@ -407,7 +421,7 @@ export class SimpleSelectFieldTS<T extends string> extends FormField {
     options: SelectOptionTyped<string, T>[] = [],
     readonly = false,
     create = false,
-    allowDelete = true
+    allowDelete = true,
   ) {
     super('simple-select', name, label)
     this.value = value
@@ -429,7 +443,7 @@ export class SimpleSelectFieldTM<T extends string> extends FormField {
     options: SelectOptionTyped<string, T>[] = [],
     readonly = false,
     create = false,
-    allowDelete = true
+    allowDelete = true,
   ) {
     super('simple-select', name, label)
     this.value = value

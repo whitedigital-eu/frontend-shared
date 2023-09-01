@@ -5,7 +5,7 @@ export type IsoDateString =
 export type IriString<
   AnyResourceString extends string,
   ResourceString extends AnyResourceString,
-> = `/api/${ResourceString}` | `/api/${ResourceString}/${number}`
+> = `${string}/${ResourceString}` | `${string}/${ResourceString}/${number}`
 
 export interface Resource<
   AnyResourceString extends string,

@@ -14,7 +14,7 @@
       </div>
     </div>
     <div
-      class="absolute dz-actions flex flex-row flex-wrap justify-end right-1 text-white top-1 w-full z-30"
+      class="absolute bg-[rgba(0,0,0,0.5)] dz-actions flex flex-row flex-wrap gap-2 justify-end p-1.5 right-0 rounded-md text-white top-0 z-30"
     >
       <button v-if="allowEdit" dz-edit type="button">
         <FileEditIcon
@@ -69,7 +69,7 @@ const props = withDefaults(
     allowEdit?: boolean
     hostUrl: string
   }>(),
-  { allowDownload: false }
+  { allowDownload: false },
 )
 
 const emit = defineEmits<{

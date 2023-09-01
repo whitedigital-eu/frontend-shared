@@ -28,12 +28,19 @@ const config: TranslationConfig = {
 
 const pinia = createPinia()
 
-loadTranslations(config).then((translationConfig) => {
-  const app = createApp(App)
-    .use(router)
-    .use(pinia)
-    .use(translation, translationConfig)
-  globalComponents(app)
+const app = createApp(App).use(router).use(pinia)
+globalComponents(app)
 
-  app.mount('#app')
-})
+loadTranslations(config)
+  .then((translationConfig) => {
+    app.use(translation, translationConfig)
+    app.mount('#app')
+  })
+  .catch((e) => {
+    console.warn('Could not load translations!', e)
+    app.use(translation, {
+      translations: {},
+      localeJsonUrl: '',
+    })
+    app.mount('#app')
+  })

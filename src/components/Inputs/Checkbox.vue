@@ -2,13 +2,14 @@
   <div>
     <label
       class="cursor-pointer form-label mr-2 translate-y-0.5"
-      @click="emit('update:modelValue', !value)"
-      >{{ label }}</label
+      @click="!readonly && emit('update:modelValue', !value)"
     >
+      {{ label }}
+    </label>
     <input
       v-model="value"
       class="form-check-input"
-      :readonly="readonly"
+      :disabled="readonly"
       type="checkbox"
       @change="handleChange"
     />
@@ -37,6 +38,6 @@ const handleChange = (e: Event) => {
 watch(
   () => modelValue,
   (n) => (value.value = n as boolean),
-  { immediate: true }
+  { immediate: true },
 )
 </script>

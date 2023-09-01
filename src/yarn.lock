@@ -4427,15 +4427,15 @@ lru-cache@^6.0.0:
   resolved "https://registry.yarnpkg.com/lru-cache/-/lru-cache-10.0.0.tgz#b9e2a6a72a129d81ab317202d93c7691df727e61"
   integrity sha512-svTf/fzsKHffP42sujkO/Rjs37BCIsQVRCeNYIm9WN8rgT7ffoUnRtZCqU+6BqcSBdv8gwJeTz8knJpgACeQMw==
 
-lucide-vue-next@^0.224.0:
-  version "0.224.0"
-  resolved "https://registry.yarnpkg.com/lucide-vue-next/-/lucide-vue-next-0.224.0.tgz#ac71b5f81101e5a985575fff87fe38e344d2e02e"
-  integrity sha512-BKNNL9/aeLr76ZYgIIFgNcmnuxiYj4Mnud6NJpSwM7ENv8SqveMpRX/K2309EP4LlF9xxbLpqirxzUhkhvanFQ==
+lucide-vue-next@^0.263.0:
+  version "0.263.0"
+  resolved "https://registry.yarnpkg.com/lucide-vue-next/-/lucide-vue-next-0.263.0.tgz#a1c785137e8fa417e2716aa55fdae0c0f96da2a2"
+  integrity sha512-kLcNHF35cqXJjxdVznUJLyMYBKWmMpF//LR6DHlajfk4Rcg7Kv1TT792zZNtx6PS6DhtGKRYa2qQF1MgcNUcXw==
 
-lucide@^0.224.0:
-  version "0.224.0"
-  resolved "https://registry.yarnpkg.com/lucide/-/lucide-0.224.0.tgz#56e96d9170b51a68747b573c76eafdfdfd4e0f3f"
-  integrity sha512-vmNr/0qo4ORYfUrEdNF+FT1ubicyJX/8BKnqAOxzrmpxz3rkdIcR7KZ1rzHtdbbTW/0CE5tqUWfqqItUfsVQbg==
+lucide@^0.263.0:
+  version "0.263.0"
+  resolved "https://registry.yarnpkg.com/lucide/-/lucide-0.263.0.tgz#70e08e80e7d9d9ccf77870db2d468070eca5518f"
+  integrity sha512-Z3CXtFWyZdPDG8i5TOZjP0dXfVK1T6tUdoAFdsdWW32HAJJ0eErN3frh2rt366qaM7fApduNpzCZJqlIdoAjsQ==
 
 lz-string@^1.5.0:
   version "1.5.0"
@@ -5697,6 +5697,7 @@ stop-iteration-iterator@^1.0.0:
     internal-slot "^1.0.4"
 
 "string-width-cjs@npm:string-width@^4.2.0", string-width@^4.1.0, string-width@^4.2.0, string-width@^4.2.3:
+  name string-width-cjs
   version "4.2.3"
   resolved "https://registry.yarnpkg.com/string-width/-/string-width-4.2.3.tgz#269c7117d27b05ad2e536830a8ec895ef9c6d010"
   integrity sha512-wKyQRQpjJ0sIp62ErSZdGsjMJWsap5oRNihHhu6G7JVO/9jIB6UyevL+tXuOqrng8j/cxKTWyWUwvSTriiZz/g==

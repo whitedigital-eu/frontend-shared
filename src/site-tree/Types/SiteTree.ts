@@ -15,7 +15,7 @@ export type SiteTreeWrite = NullableOptional<{
 
 export type SiteTreeRead = {
   '@context': string
-  '@id': `/api/site_trees/${number}`
+  '@id': string
   '@type': string
   id: number
   createdAt: string

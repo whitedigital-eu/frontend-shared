@@ -33,6 +33,7 @@
       label="Html content"
     />
     <Checkbox v-model="isActive" label="Is active" />
+    <Checkbox v-model="isBlocked" label="Is blocked" readonly />
     <Slider v-model="probability" label="Probability" />
     <SimpleSelect
       id="role-select"
@@ -124,6 +125,7 @@ const fullName = ref('')
 const price = ref('9912,22')
 const notes = ref('')
 const isActive = ref(false)
+const isBlocked = ref(true)
 const probability = ref(60)
 const role = ref('')
 const role2 = ref('')
