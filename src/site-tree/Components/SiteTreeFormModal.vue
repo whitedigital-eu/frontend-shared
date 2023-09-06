@@ -68,6 +68,6 @@ const siteTreeFormEl = ref<{
 
 <style lang="scss">
 .site-tree-form-modal .modal-body {
-  min-height: calc(100vh - 250px);
+  min-height: 450px;
 }
 </style>
