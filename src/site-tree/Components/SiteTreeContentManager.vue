@@ -10,7 +10,7 @@
       @click:save="updateSiteTreeItem"
     >
       <template #default="{ isLoading, createOrUpdate }">
-        <div v-if="siteTreeForm" class="flex gap-4 items-center justify-end">
+        <div v-if="siteTreeForm" class="flex gap-4 items-top justify-end">
           <FormInput
             :form-field="siteTreeForm.siteTreeActive"
             :project-settings="projectSettings"
@@ -19,30 +19,32 @@
             :form-field="siteTreeForm.siteTreeVisible"
             :project-settings="projectSettings"
           />
-          <button
-            class="btn btn-primary"
-            :disabled="isLoading || loadingState"
-            @click="createOrUpdate"
-          >
-            <Icon class="mr-3" name="Save" size="15" />
-            <span>
-              {{ projectSettings.global.$t('form.common.save') }}
-            </span>
-          </button>
-          <button
-            class="btn btn-primary"
-            :disabled="isLoading || loadingState"
-            @click="
-              () => {
-                createOrUpdate().then(() => router.back())
-              }
-            "
-          >
-            <Icon class="mr-3" name="Save" size="15" />
-            <span>
-              {{ projectSettings.global.$t('form.common.saveAndClose') }}
-            </span>
-          </button>
+          <div class="flex flex-col gap-4">
+            <button
+              class="btn btn-primary"
+              :disabled="isLoading || loadingState"
+              @click="createOrUpdate"
+            >
+              <Icon class="mr-3" name="Save" size="15" />
+              <span>
+                {{ projectSettings.global.$t('form.common.save') }}
+              </span>
+            </button>
+            <button
+              class="btn btn-primary"
+              :disabled="isLoading || loadingState"
+              @click="
+                () => {
+                  createOrUpdate().then(() => router.back())
+                }
+              "
+            >
+              <Icon class="mr-3" name="Save" size="15" />
+              <span>
+                {{ projectSettings.global.$t('form.common.saveAndClose') }}
+              </span>
+            </button>
+          </div>
         </div>
       </template>
     </component>

@@ -16,6 +16,10 @@
       </button>
       <router-link
         class="inline-block max-w-[300px] overflow-hidden text-ellipsis whitespace-nowrap"
+        :class="{
+          'opacity-50 pointer-events-none cursor-default':
+            !siteTreeContentRepository,
+        }"
         :to="{ name: 'SITE_TREE_CONTENT', params: { id: node.id } }"
       >
         {{ node.title }}
@@ -79,8 +83,9 @@
 import Icon from '../../components/Icons/Icon.vue'
 import SiteTreeNode from '../Models/SiteTreeNode'
 import { ProjectSettings } from '../../components/Forms/shared'
+import { computed } from 'vue'
 
-defineProps<{
+const props = defineProps<{
   node: SiteTreeNode
   hasChildren: boolean
   isOpen: boolean
@@ -95,4 +100,11 @@ const emit = defineEmits<{
   'click:add': []
   'click:delete': []
 }>()
+
+const siteTreeContentRepository = computed(() => {
+  if (!props.node) return null
+  return props.projectSettings.siteTree.siteTreeTypeToRepository(
+    props.node.type,
+  )
+})
 </script>

@@ -45,7 +45,7 @@ export type ProjectSettings = {
     ) => Promise<SelectOptionTyped<string, SiteTreeRead['@id']>[]>
     siteTreeTypeToRepository: (...args: any[]) => {
       list: (...args: any[]) => Promise<any>
-    }
+    } | null
     siteTreeTypeToComponent: (...args: any[]) => any
   }
   form: {
