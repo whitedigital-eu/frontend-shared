@@ -81,11 +81,14 @@ const handleSiteTreeCreated = async (
   siteTreeActive: boolean,
   siteTreeVisible: boolean,
 ) => {
+  if (!languageSelectFormField.value) return
+
   await globalStore.loadRootSiteTrees()
 
   const options = globalStore.rootSiteTrees!.map(
     (st) => new SelectOptionTyped(st.slug.toUpperCase(), st['@id']),
   )
+
   if (!languageSelectFormField.value.config) {
     languageSelectFormField.value.config = {
       options,
