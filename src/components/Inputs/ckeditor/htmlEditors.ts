@@ -177,4 +177,8 @@ HtmlEditor.defaultConfig = {
     uploadUrl:
       'https://example.com/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images&responseType=json',
   },
+  // to fix a bug where the embedded content is not shown. source: https://stackoverflow.com/questions/57490383/ckeditor5-how-to-insert-youtube-video
+  mediaEmbed: {
+    previewsInData: true,
+  },
 }

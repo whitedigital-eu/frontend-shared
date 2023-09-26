@@ -1,11 +1,17 @@
 <template>
   <div class="flex gap-2 items-center z-[1]">
+    <span class="text-lg uppercase whitespace-nowrap">
+      {{ projectSettings.global.$t('admin.siteTree.siteTree') }}:
+    </span>
     <FormInput
-      v-if="languageSelectFormField"
+      v-if="languageSelectFormField && globalStore.rootSiteTrees?.length"
       css-classes="!my-0 w-28"
       :form-field="languageSelectFormField"
       :project-settings="projectSettings"
     />
+    <em v-else>
+      {{ projectSettings.global.$t('admin.menu.noLocalesAddedText') }}
+    </em>
     <button
       class="btn btn-sm"
       :title="projectSettings.global.$t('admin.menu.addLocaleButtonText')"
@@ -51,7 +57,7 @@ globalStore.loadRootSiteTrees().then(() => {
   languageSelectFormField.value = new SimpleSelectFieldTS<SiteTreeRead['@id']>(
     'lang',
     '',
-    currentLanguageSiteTreeItem['@id'],
+    currentLanguageSiteTreeItem?.['@id'] ?? '',
     globalStore.rootSiteTrees.map(
       (st) => new SelectOptionTyped(st.slug.toUpperCase(), st['@id']),
     ),
@@ -77,11 +83,21 @@ const handleSiteTreeCreated = async (
 ) => {
   await globalStore.loadRootSiteTrees()
 
-  languageSelectFormField.value!.config.options =
-    globalStore.rootSiteTrees!.map(
-      (st) => new SelectOptionTyped(st.slug.toUpperCase(), st['@id']),
-    )
-  languageSelectFormField.value!.value = createdSiteTree['@id']
+  const options = globalStore.rootSiteTrees!.map(
+    (st) => new SelectOptionTyped(st.slug.toUpperCase(), st['@id']),
+  )
+  if (!languageSelectFormField.value.config) {
+    languageSelectFormField.value.config = {
+      options,
+    }
+  } else {
+    languageSelectFormField.value.config.options =
+      globalStore.rootSiteTrees!.map(
+        (st) => new SelectOptionTyped(st.slug.toUpperCase(), st['@id']),
+      )
+  }
+
+  languageSelectFormField.value.value = createdSiteTree['@id']
 
   await router.push({
     name: 'SITE_TREE_CONTENT',

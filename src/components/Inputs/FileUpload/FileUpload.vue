@@ -105,6 +105,7 @@ const options: Dropzone.DropzoneOptions = {
     'X-Requested-With': null,
   },
   addRemoveLinks: false,
+  withCredentials: true,
   ...dropzoneTranslations,
   previewTemplate: defaultPreviewTemplate,
 }

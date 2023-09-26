@@ -66,9 +66,18 @@
                 </template>
               </Draggable>
             </template>
-            <p v-else>No sections added yet!</p>
+            <li v-else>
+              <em>
+                {{
+                  projectSettings.global.$t('admin.menu.noSectionsAddedText')
+                }}!
+              </em>
+            </li>
           </ul>
-          <Loader v-else />
+          <Loader v-else-if="!globalStore.rootSiteTrees" />
+          <em v-else>
+            {{ projectSettings.global.$t('admin.menu.noLocalesAddedText') }}!
+          </em>
         </div>
       </div>
       <div class="basis-[360px]">
@@ -288,7 +297,7 @@ const onDeletionConfirmed = async () => {
     console.error(e)
   } finally {
     siteTreeToDelete.value = null
-    await loadSiteTree()
+    await Promise.all([loadSiteTree(), globalStore.loadRootSiteTrees()])
   }
 }
 
