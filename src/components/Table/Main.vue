@@ -312,6 +312,8 @@ const initTabulator = async (resetPage = false) => {
       pageLoaded: (pageno: number) => {
         if (!tabulator.value) return
         emit('pagination-changed', pageno, tabulator.value.getPageSize())
+        // to prevent not all entries showing when changing page and page size, see https://whitedigital.myjetbrains.com/youtrack/issue/ZWL-292/CMS-uznemumi-bug
+        reInitTable()
       },
       ajaxSorting: true,
       ajaxRequesting: function (url, params) {
