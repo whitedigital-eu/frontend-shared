@@ -48,6 +48,7 @@ import {
 import { PageBreak } from '@ckeditor/ckeditor5-page-break'
 import { RemoveFormat } from '@ckeditor/ckeditor5-remove-format'
 import { Font } from '@ckeditor/ckeditor5-font'
+import { GeneralHtmlSupport } from '@ckeditor/ckeditor5-html-support'
 
 export class TextEditor extends ClassicEditor {}
 
@@ -124,6 +125,7 @@ HtmlEditor.builtinPlugins = [
   PageBreak,
   RemoveFormat,
   Font,
+  GeneralHtmlSupport,
 ]
 
 HtmlEditor.defaultConfig = {
@@ -180,5 +182,16 @@ HtmlEditor.defaultConfig = {
   // to fix a bug where the embedded content is not shown. source: https://stackoverflow.com/questions/57490383/ckeditor5-how-to-insert-youtube-video
   mediaEmbed: {
     previewsInData: true,
+  },
+  //https://ckeditor.com/docs/ckeditor5/latest/features/html/general-html-support.html#enabling-all-html-features
+  htmlSupport: {
+    allow: [
+      {
+        name: /.*/,
+        attributes: true,
+        classes: true,
+        styles: true,
+      },
+    ],
   },
 }

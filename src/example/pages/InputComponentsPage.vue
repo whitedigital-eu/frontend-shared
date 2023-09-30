@@ -169,8 +169,8 @@ const userSelectConfig: DataFetchingSelectConfig = {
 }
 
 const htmlContent = ref(`
-<h2>Heading 1</h2>
-<h3>Heading 2</h3>
+<h2 class="test-class">Heading 1</h2>
+<h3 style="color:red">Heading 2</h3>
 <h4>Heading 3</h4>
 <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium ad alias blanditiis consectetur consequuntur delectus deleniti, est et fugit illum incidunt nemo, quam quas quo sint, tempore temporibus vel velit. </p>
 <ul>
