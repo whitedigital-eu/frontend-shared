@@ -53,7 +53,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { SiteTreeRead } from '../Types/SiteTree'
 import { ProjectSettings } from '../../components/Forms/shared'
 import Loader from '../../components/Loader.vue'
@@ -67,6 +67,10 @@ const props = defineProps<{
   siteTreeActive?: boolean
   siteTreeVisible?: boolean
   projectSettings: ProjectSettings
+}>()
+
+const emit = defineEmits<{
+  'site-tree-item-loaded': [siteTreeItem: SiteTreeRead | null]
 }>()
 
 const router = useRouter()
@@ -137,16 +141,21 @@ const updateSiteTreeItem = async () => {
   try {
     loadingState.value = true
     if (siteTreeItem.value) {
-      await props.projectSettings.siteTree.siteTreeRepository.update(
-        siteTreeItem.value.id,
-        {
-          isActive: siteTreeForm.value?.siteTreeActive.value,
-          isVisible: siteTreeForm.value?.siteTreeVisible.value,
-        },
-      )
+      siteTreeItem.value =
+        await props.projectSettings.siteTree.siteTreeRepository.update(
+          siteTreeItem.value.id,
+          {
+            isActive: siteTreeForm.value?.siteTreeActive.value,
+            isVisible: siteTreeForm.value?.siteTreeVisible.value,
+          },
+        )
     }
   } finally {
     loadingState.value = false
   }
 }
+
+watch(siteTreeItem, (n) => {
+  emit('site-tree-item-loaded', n)
+})
 </script>

@@ -353,7 +353,7 @@ const initTabulator = async (resetPage = false) => {
             ? titleCell.appendChild(col.title)
             : (titleCell.innerHTML = '<strong>' + col.title + '</strong>')
 
-          if (col.value) {
+          if (col.value !== null && typeof col.value !== 'undefined') {
             col.value instanceof HTMLElement
               ? valueCell.appendChild(col.value)
               : (valueCell.innerHTML = col.value ?? '')
