@@ -35,6 +35,11 @@ export type ProjectSettings = {
         data: Record<string, any>,
         config?: AxiosRequestConfig,
       ) => Promise<SiteTreeRead>
+      moveToPosition: (
+        iriOrId: string | number,
+        position: number,
+        config?: AxiosRequestConfig,
+      ) => Promise<SiteTreeRead>
     }
     siteTreeTypeToLabel: (...args: any[]) => string
     getSiteTreeTypeSelectOptions: (

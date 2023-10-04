@@ -26,12 +26,12 @@
             </div>
           </div>
           <ul v-if="globalStore.currentLanguageSiteTreeItem">
-            <template v-if="baseSiteTreeModel.length">
+            <div v-if="baseSiteTreeModel.length" class="pl-6">
               <Draggable
                 v-model="baseSiteTreeModel"
                 :indent="24"
                 virtualization
-                @dragend="handleDragEnd"
+                @drop="handleSiteTreeItemDrop"
               >
                 <template
                   #default="{
@@ -65,7 +65,7 @@
                   />
                 </template>
               </Draggable>
-            </template>
+            </div>
             <li v-else>
               <em>
                 {{
@@ -182,8 +182,8 @@
 </template>
 
 <script lang="ts" setup>
-import { nextTick, ref, watch } from 'vue'
-import { Draggable, walkTreeData } from '@he-tree/vue'
+import { nextTick, ref, watch, computed } from 'vue'
+import { Draggable, walkTreeData, dragContext } from '@he-tree/vue'
 import '@he-tree/vue/style/default.css'
 import SiteTreeItem from './SiteTreeItem.vue'
 import { useClipboard } from '@vueuse/core'
@@ -210,8 +210,10 @@ const siteTreeInitialParent = ref<SiteTreeFactory | SiteTreeNode | null>(null)
 const siteTreeToEdit = ref<SiteTreeNode | null>(null)
 const siteTreeToDelete = ref<SiteTreeNode | null>(null)
 
-const currentLangSiteTree = ref<SiteTreeFactory | null>(null)
-const baseSiteTreeModel = ref<SiteTreeFactory[]>([])
+const currentLangSiteTree = ref<SiteTreeNode | null>(null)
+const baseSiteTreeModel = ref<SiteTreeNode[]>([])
+
+const siteTreeItemPositions = ref<Record<string, number>>({})
 
 const loadSiteTree = async () => {
   await globalStore.loadRootSiteTrees()
@@ -222,6 +224,9 @@ const loadSiteTree = async () => {
         globalStore.currentLanguageSiteTreeItem,
         props.projectSettings.global.clientBaseUrl,
       )
+      walkTreeData(currentLangSiteTree.value, (node, i) => {
+        siteTreeItemPositions.value[(node as SiteTreeNode)['@id']] = i
+      })
     }
   } catch (e) {
     console.error(e)
@@ -303,28 +308,69 @@ const onDeletionConfirmed = async () => {
 
 const siteTreeFormKey = ref(0)
 
-// TODO: change position as well, when BE allows it
-const handleDragEnd = async () => {
-  const promises: Promise<SiteTreeRead>[] = []
-  walkTreeData(baseSiteTreeModel.value, (node, i, parent) => {
-    if (
-      parent &&
-      (node as SiteTreeNode).parent?.['@id'] !== (parent as SiteTreeNode)['@id']
-    ) {
-      promises.push(
-        props.projectSettings.siteTree.siteTreeRepository.update(
-          (node as SiteTreeNode)['@id'],
-          {
-            parent: (parent as SiteTreeNode)['@id'] as SiteTreeRead['@id'],
-          },
-        ),
-      )
+const shouldSaveSiteTreeChanges = ref(false)
+const handleSiteTreeItemDrop = () => (shouldSaveSiteTreeChanges.value = true)
+
+type SiteTreeChangedData = {
+  node: SiteTreeNode
+  position: number
+  newParent: SiteTreeNode | null
+}
+const siteTreeChangedData = computed<SiteTreeChangedData | null>(() => {
+  const draggedNode: SiteTreeNode = dragContext.dragNode?.data
+  let res: SiteTreeChangedData | null = null
+  let returnNull = false
+
+  walkTreeData(baseSiteTreeModel.value, (n, i, p) => {
+    if (returnNull) return
+    const node = n as SiteTreeNode
+    const parent = (p as SiteTreeNode) || null
+
+    // there is a node that looks like {} - probably because it is still in dragged state - skip saving changes for now.
+    if (!node?.['@id']) {
+      returnNull = true
+      return
+    }
+
+    if (node['@id'] === draggedNode?.['@id']) {
+      res = {
+        node: node,
+        position: i,
+        newParent:
+          parent && n && node.parent?.['@id'] !== parent['@id'] ? parent : null,
+      }
     }
   })
-  if (!promises.length) return
+
+  return returnNull ? null : res
+})
+
+watch(
+  siteTreeChangedData,
+  (n) => {
+    if (n && shouldSaveSiteTreeChanges.value) {
+      shouldSaveSiteTreeChanges.value = false
+      saveSiteTreeChanges()
+    }
+  },
+  { deep: true },
+)
+
+const saveSiteTreeChanges = async () => {
+  if (!siteTreeChangedData.value || !siteTreeItemPositions.value) return
 
   try {
-    await Promise.all(promises)
+    if (siteTreeChangedData.value.newParent) {
+      await props.projectSettings.siteTree.siteTreeRepository.update(
+        siteTreeChangedData.value.node['@id'],
+        { parent: siteTreeChangedData.value.newParent['@id'] },
+      )
+    }
+
+    await props.projectSettings.siteTree.siteTreeRepository.moveToPosition(
+      siteTreeChangedData.value.node['@id'],
+      siteTreeChangedData.value.position,
+    )
   } catch (e) {
     console.error(e)
   } finally {
