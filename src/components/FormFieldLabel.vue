@@ -1,6 +1,6 @@
 <template>
   <label
-    class="absolute bg-white left-2 overflow-hidden px-1 py-[1px] rounded-lg text-ellipsis text-teal-900 top-0 w-auto whitespace-no-wrap"
+    class="absolute overflow-hidden px-1 py-[1px] rounded-lg text-ellipsis top-0 whitespace-nowrap"
     :class="computedCssClasses"
     :data-role="isPlaceholder ? 'placeholder' : 'label'"
     data-testid="form-field-label"
@@ -24,12 +24,14 @@ const computedTranslateY = computed(() => {
   return props.titleOffsetTop ?? '-14px'
 })
 
-const computedCssClasses = computed(() => {
-  if (!props.isPlaceholder) return ['text-xs']
+const labelClasses = 'text-xs w-auto text-teal-900 left-2 bg-white'
+const placeholderClasses =
+  '!text-[14px] text-teal-800 opacity-[0.8] left-3 w-40 bg-transparent cursor-text'
 
-  const cssClasses = [
-    '!text-[14px] text-teal-700 opacity-[0.8] left-3 w-40 bg-transparent cursor-text',
-  ]
+const computedCssClasses = computed(() => {
+  if (!props.isPlaceholder) return labelClasses
+
+  const cssClasses = [placeholderClasses]
   if (props.placeholderCssClasses) {
     cssClasses.push(...props.placeholderCssClasses)
   }
