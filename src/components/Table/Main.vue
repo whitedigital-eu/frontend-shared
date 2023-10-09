@@ -1,12 +1,21 @@
 <template>
   <div class="overflow-x-auto relative scrollbar-hidden" data-test="table">
-    <div class="tabulator tabulator-top-pagination-placeholder"></div>
-    <div
-      v-if="totalEntryCount"
-      class="sm:absolute table-total-entry-count"
-      data-test="table-total-entry-count"
-    >
-      <span>(Kopējais ierakstu skaits: {{ totalEntryCount }})</span>
+    <div class="flex flex-wrap gap-x-4 gap-y-2 items-baseline mb-2">
+      <div class="tabulator tabulator-top-pagination-placeholder"></div>
+      <div
+        v-if="totalEntryCount"
+        class="table-total-entry-count"
+        data-test="table-total-entry-count"
+      >
+        <span>(Kopējais ierakstu skaits: {{ totalEntryCount }})</span>
+      </div>
+      <div class="flex-1">
+        <slot
+          name="header-right"
+          :table-api-response="tableApiResponse"
+          :tabulator="tabulator"
+        ></slot>
+      </div>
     </div>
     <div
       id="tabulator"
@@ -198,6 +207,8 @@ let tabulatorScrollTop = 0
 
 const PAGE_SIZE_PARAM = 'itemsPerPage' as const
 
+const tableApiResponse = ref<ApiListResponse | null>(null)
+
 const initTabulator = async (resetPage = false) => {
   let options: Tabulator.Options = {
     paginationSizeSelector: props.paginationSizeSelector,
@@ -287,6 +298,8 @@ const initTabulator = async (resetPage = false) => {
       ajaxURL: props.ajaxUrl,
       ajaxConfig: props.config.ajaxConfig,
       ajaxResponse: (url, params, response: ApiListResponse) => {
+        tableApiResponse.value = response
+
         const page = response['hydra:view']['hydra:last']
           ? response['hydra:view']['hydra:last'].split('page=')[1]
           : 1
@@ -447,8 +460,6 @@ $page-entry-count-switcher-width: 201px;
   }
 
   .tabulator-paginator {
-    padding: 4px 0 8px 0;
-
     & > button {
       &:first-child {
         margin-left: auto;

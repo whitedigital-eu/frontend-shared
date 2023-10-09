@@ -7,6 +7,7 @@ export type HydraMapping = {
 }
 
 export type ApiListResponse = {
+  'hydra:meta'?: Record<string, unknown>
   'hydra:search'?: {
     'hydra:mapping'?: HydraMapping[]
   }
