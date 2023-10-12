@@ -43,7 +43,6 @@ const props = withDefaults(defineProps<TableProps>(), {
   created: true,
   updated: true,
   ajaxUrl: null,
-  primaryField: 'name',
   movableRows: false,
   disableOrderByDateColumns: false,
   selectionColumn: false,
@@ -58,15 +57,62 @@ const props = withDefaults(defineProps<TableProps>(), {
 })
 
 const emit = defineEmits<{
+  /**
+   * Emitted on edit action button click
+   * @arg resource - the resource rendered in the clicked row
+   */
   'edit-click': [resource: Resource<string, string>]
+  /**
+   * Emitted on delete action button click
+   * @arg resource - the resource rendered in the clicked row
+   */
   'delete-click': [resource: Resource<string, string>]
+  /**
+   * Emitted on view action button click
+   * @arg resource - the resource rendered in the clicked row
+   */
   'view-click': [resource: Resource<string, string>]
+  /**
+   * Emitted when a row has been moved
+   * @arg row - tabulator row component of the row that was moved
+   * @see https://tabulator.info/docs/4.9/components
+   */
   'move-row': [row: Tabulator.RowComponent]
+  /**
+   * Emitted when table data has been loaded for the first time
+   * @arg response - the full API response of the ajax request that loads the data
+   */
   'set:filters': [response: ApiListResponse]
+  /**
+   * Emitted when a row (or all rows) has been selected or deselected
+   * @arg selectedRowData - the resource rendered in the selected row
+   */
   'row-selection-changed': [selectedRowData: Resource<string, string>[]]
+  /**
+   * Emitted when any table cell is clicked
+   * @arg field - the name of the field of the clicked cell (as defined in `props.columns`)
+   * @arg resource - the resource rendered in the row of the clicked column
+   */
   'cell-click': [field: string, resource: Resource<string, string>]
+  /**
+   * Emitted after a table page is loaded
+   * @arg page - he number of the currently displayed page
+   * @arg pageSize - the amount of entries displayed in the page
+   */
   'pagination-changed': [page: number, pageSize: number]
+  /**
+   * Emitted every time new data is loaded into the table
+   * @arg totalEntryCount - the total number of available items as returned by the API
+   */
   'total-entry-count-changed': [totalEntryCount: number | null]
+}>()
+
+defineSlots<{
+  /** a slot in the top right side of the table on desktop, which collapses on mobile */
+  'header-right'(props: {
+    tableApiResponse: ApiListResponse | null
+    tabulator: Tabulator | undefined
+  }): any
 }>()
 
 const table = ref()
@@ -418,10 +464,16 @@ const updateData = (data: any) => {
 const getActiveRows = () => tabulator.value.rowManager.activeRows
 
 defineExpose({
+  /** Destroy and reinitialize the tabulator instance */
   reload,
+  /** Directly passed to tabulator function `updateOrAddData`
+   * @see https://tabulator.info/docs/4.9/update */
   updateData,
+  /** Get active rows directly from tabulator */
   getActiveRows,
+  /** Reload the table data (without reinitializing tabulator) */
   refreshData,
+  /** The tabulator instance */
   instance: tabulator,
 })
 </script>

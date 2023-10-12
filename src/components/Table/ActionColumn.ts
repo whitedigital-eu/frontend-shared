@@ -53,7 +53,7 @@ const createIcon = (
   wrapper: HTMLElement,
   clickHandler: () => void,
   settings: IconSettings,
-  dataTest = ''
+  dataTest = '',
 ) => {
   const element = dom(`
     <a
@@ -99,7 +99,7 @@ const createActionColumn = (
     edit: <R extends Resource<string, string>>(resource: R) => void
     delete: <R extends Resource<string, string>>(resource: R) => void
     view: <R extends Resource<string, string>>(resource: R) => void
-  }
+  },
 ): Tabulator.ColumnDefinition => {
   return {
     title: 'DARBĪBAS',
@@ -114,14 +114,14 @@ const createActionColumn = (
       const data = cell.getData() as Resource<string, string>
 
       const wrapper = dom(
-        `<div class="flex lg:justify-start items-center"></div>`
+        `<div class="flex lg:justify-start items-center"></div>`,
       )
 
       if (props.movableRows) {
         wrapper.append(
           dom(
-            `<i data-lucide="move" class="mr-2" style="height: ${ACTION_ICON_SIZE}px; width: ${ACTION_ICON_SIZE}px;"></i>`
-          )[0]
+            `<i data-lucide="move" class="mr-2" style="height: ${ACTION_ICON_SIZE}px; width: ${ACTION_ICON_SIZE}px;"></i>`,
+          )[0],
         )
       }
 
@@ -130,7 +130,7 @@ const createActionColumn = (
           wrapper,
           () => clickHandlers.edit(data),
           iconSettings.edit,
-          'table-edit-btn'
+          'table-edit-btn',
         )
       }
 
@@ -139,7 +139,7 @@ const createActionColumn = (
           wrapper,
           () => clickHandlers.delete(data),
           iconSettings.delete,
-          'table-delete-btn'
+          'table-delete-btn',
         )
       }
 
@@ -148,7 +148,7 @@ const createActionColumn = (
           wrapper,
           () => clickHandlers.view(data),
           iconSettings.view,
-          'table-view-btn'
+          'table-view-btn',
         )
       }
 
@@ -163,7 +163,7 @@ const createActionColumn = (
                 wrapper,
                 () => a.clickHandler(data),
                 a.settings,
-                a.dataTest
+                a.dataTest,
               )
             }
           }
