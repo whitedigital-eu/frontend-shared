@@ -1,17 +1,11 @@
 import Datepicker from '../Datepicker.vue'
 import { fireEvent, render } from '@testing-library/vue'
 import { vi } from 'vitest'
+import { DatepickerProps } from '../PropTypes'
 
 vi.mock('../../composables/useResponsivity', () => ({ default: () => false }))
 
-// copied from Datepicker.vue defineProps - important to keep in sync!!!
-// move to separate file when importing props in vue files is supported
-type Props = {
-  modelValue?: string | null
-  label?: string | null
-}
-
-const renderDatepicker = (props?: Props) => {
+const renderDatepicker = (props?: DatepickerProps) => {
   const { queryByTestId, getByRole, emitted, container } = render(Datepicker, {
     props,
   })
@@ -33,7 +27,7 @@ const renderDatepicker = (props?: Props) => {
 }
 
 describe('Datepicker', () => {
-  const modelValueTestCases: [Props['modelValue'], string][] = [
+  const modelValueTestCases: [DatepickerProps['modelValue'], string][] = [
     [undefined, ''],
     [null, ''],
     ['Test', ''],
@@ -50,19 +44,16 @@ describe('Datepicker', () => {
       const labelEl = getLabel()
 
       expect(labelEl.getAttribute('data-role')).toBe(
-        renderedValue ? 'label' : 'placeholder'
+        renderedValue ? 'label' : 'placeholder',
       )
 
       expect((await getInput()).value).toBe(renderedValue)
-    }
+    },
   )
 
-  const labelTestCases: Array<[Props['label'], string] | [Props['label']]> = [
-    [undefined],
-    [null],
-    [''],
-    ['Test label', 'Test label'],
-  ]
+  const labelTestCases: Array<
+    [DatepickerProps['label'], string] | [DatepickerProps['label']]
+  > = [[undefined], [null], [''], ['Test label', 'Test label']]
   test.each(labelTestCases)(
     'if label prop ir {0}, label is rendered if {0} is truthy, and rendered label value is {1}',
     async (label, renderedLabel) => {
@@ -71,7 +62,7 @@ describe('Datepicker', () => {
       const labelEl = await getLabel()
       if (!label) expect(labelEl).toBeNull()
       else expect(labelEl.textContent).toBe(renderedLabel)
-    }
+    },
   )
 
   test('when clicking on input or placeholder, datepicker opens, and when clicking on date, it closes and date is emitted', async () => {
@@ -90,7 +81,7 @@ describe('Datepicker', () => {
 
     //click on day - calendar closes and date is emitted
     await fireEvent.click(
-      await getCalendarDayContainer().querySelector('.flatpickr-day')
+      await getCalendarDayContainer().querySelector('.flatpickr-day'),
     )
     expect(await getCalendarDayContainer()).toBeNull()
     expect(getUpdates()).toHaveLength(1)
@@ -102,7 +93,7 @@ describe('Datepicker', () => {
 
     //click on day - calendar closes and date is emitted
     await fireEvent.click(
-      await getCalendarDayContainer().querySelector('.flatpickr-day')
+      await getCalendarDayContainer().querySelector('.flatpickr-day'),
     )
     expect(await getCalendarDayContainer()).toBeNull()
     expect(getUpdates()).toHaveLength(2)

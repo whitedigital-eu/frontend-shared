@@ -57,35 +57,49 @@ export abstract class FormField {
   }
 }
 
+export type TextFieldConfig = Partial<{
+  readonly: boolean
+  wrapperAttributes: Record<string, unknown>
+  labelAttributes: Record<string, unknown>
+  inputAttributes: Record<string, unknown>
+}>
+
 class TextField extends FormField {
   value: Exclude<TextValue, number>
+  config?: TextFieldConfig
 
   constructor(
     name: string,
     label: string,
     value?: TextValue,
-    readonly = false,
+    config?: TextFieldConfig,
   ) {
     super('text', name, label)
     this.value = typeof value === 'number' ? value.toString() : value
-    this.readonly = readonly
+    this.config = config
   }
 }
 
+export type DecimalFieldConfig = Partial<{
+  readonly: boolean
+  maxDecimals: number
+  wrapperAttributes: Record<string, unknown>
+  labelAttributes: Record<string, unknown>
+  inputAttributes: Record<string, unknown>
+}>
+
 class DecimalField extends FormField {
   public value: Exclude<DecimalValue, string>
-  public config: Record<string, any>
+  public config?: DecimalFieldConfig
 
   constructor(
     name: string,
     label: string,
     value?: Exclude<DecimalValue, string>,
-    readonly = false,
-    config: Record<string, any> = {},
+    config?: DecimalFieldConfig,
   ) {
     super('decimal', name, label)
     this.value = value
-    this.readonly = readonly
     this.config = config
   }
 }

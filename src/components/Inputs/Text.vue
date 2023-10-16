@@ -1,18 +1,23 @@
 <template>
-  <div class="relative" :class="{ 'overflow-hidden': isEmpty && !hasFocus }">
+  <div
+    class="relative"
+    :class="{ 'overflow-hidden': isEmpty && !hasFocus }"
+    v-bind="config.wrapperAttributes"
+  >
     <FormFieldLabel
       v-if="label"
+      v-bind="config.labelAttributes"
       :is-placeholder="isEmpty && !hasFocus"
       @click="handleLabelClick"
     >
       {{ props.label }}
     </FormFieldLabel>
     <input
+      v-bind="config.inputAttributes"
       ref="inputRef"
       v-model="value"
       class="form-control sm:min-w-[200px] w-full"
-      :class="{ 'sm:min-w-[416px]': long }"
-      :readonly="readonly"
+      :readonly="config.readonly"
       type="text"
       @blur="handleBlur"
       @focus="handleFocus"
@@ -24,27 +29,23 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
 import FormFieldLabel from '../FormFieldLabel.vue'
-import { TextValue } from './ValueTypes'
+import { TextProps } from './PropTypes'
 
-const props = withDefaults(
-  defineProps<{
-    modelValue?: TextValue
-    label?: string | null
-    readonly?: boolean
-    long?: boolean
-  }>(),
-  {
-    modelValue: '',
-    label: null,
+const props = withDefaults(defineProps<TextProps>(), {
+  modelValue: '',
+  label: null,
+  config: () => ({
     readonly: false,
-    long: false,
-  },
-)
+    wrapperAttributes: {},
+    labelAttributes: {},
+    inputAttributes: {},
+  }),
+})
 
 const emit = defineEmits<{ 'update:modelValue': [value: string] }>()
 
 const handleFocus = () => {
-  if (props.readonly) return
+  if (props.config.readonly) return
   hasFocus.value = true
 }
 const handleBlur = () => (hasFocus.value = false)
@@ -60,7 +61,7 @@ const handleInput = (e: Event) => {
 }
 
 const handleLabelClick = () => {
-  if (props.readonly) return
+  if (props.config.readonly) return
   inputRef.value?.focus()
 }
 

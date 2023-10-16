@@ -1,15 +1,8 @@
 import Slider from '../Slider.vue'
 import { fireEvent, render } from '@testing-library/vue'
+import { SliderProps } from '../PropTypes'
 
-// copied from Slider.vue defineProps - important to keep in sync!!!
-// move to separate file when importing props in vue files is supported
-type Props = {
-  modelValue?: number
-  readonly?: boolean
-  label?: string | null
-}
-
-const renderSlider = (props?: Props) => {
+const renderSlider = (props?: SliderProps) => {
   const { container, emitted, getByText } = render(Slider, { props })
 
   const getSliderDot = () => container.querySelector('.vue-slider-dot')
@@ -43,11 +36,11 @@ describe('Slider', () => {
       })
 
       expect(getSliderDot().getAttribute('style')).toContain(
-        `left: ${sliderDotProgress}%`
+        `left: ${sliderDotProgress}%`,
       )
       expect(getSliderDotTooltip().textContent).toBe(sliderValue)
       expect(getUpdates()).toBeUndefined()
-    }
+    },
   )
 
   it.each([20, 40, 60, 80, 100])(
@@ -58,11 +51,11 @@ describe('Slider', () => {
 
       await fireEvent.click(getByText(valueToClick.toString()))
       expect(getSliderDot().getAttribute('style')).toContain(
-        `left: ${valueToClick}%`
+        `left: ${valueToClick}%`,
       )
       expect(getSliderDotTooltip().textContent).toBe(valueToClick.toString())
       expect(getUpdates().length).toBe(1)
       expect(getUpdates()[0][0]).toBe(valueToClick)
-    }
+    },
   )
 })

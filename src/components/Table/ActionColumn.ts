@@ -61,7 +61,7 @@ const iconSettings: Record<string, IconSettings> = {
   },
 }
 
-// either object of settings, or function that renders the action icon
+/** either object of settings, or function that renders the action icon */
 export type CustomAction =
   | {
       shouldShow: (data: any) => boolean

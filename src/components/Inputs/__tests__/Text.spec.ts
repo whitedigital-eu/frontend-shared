@@ -1,21 +1,14 @@
 import Text from '../Text.vue'
 import { render, within } from '@testing-library/vue'
 import userEvent from '@testing-library/user-event'
+import { TextProps } from '../PropTypes'
 
-// copied from Decimal.vue defineProps - important to keep in sync!!!
-// move to separate file when importing props in vue files is supported
-type Props = {
-  modelValue?: string | number | null
-  label?: string | null
-  readonly?: boolean
-  long?: boolean
-}
-const defaultProps: Props = {
+const defaultProps: TextProps = {
   modelValue: '',
   label: 'Label text',
 }
 
-const renderText = (props?: Props) => {
+const renderText = (props?: TextProps) => {
   const { emitted, findByRole, queryByTestId } = render(Text, {
     props: { ...defaultProps, ...props },
   })
@@ -55,19 +48,14 @@ describe('Text', () => {
   })
 
   test('input is readonly if readonly prop is true', async () => {
-    const { getInput } = renderText({ readonly: true })
+    const { getInput } = renderText({ config: { readonly: true } })
     expect((await getInput()).readOnly).toBe(true)
   })
 
-  test('input is long if long prop is true', async () => {
-    const { getInput } = renderText({ long: true })
-    expect((await getInput()).classList.contains('sm:min-w-[416px]')).toBe(true)
-  })
-
-  test('input is not long if long prop is not true', async () => {
-    const { getInput } = renderText({ long: false })
-    expect((await getInput()).classList.contains('sm:min-w-[416px]')).toBe(
-      false
-    )
+  test('input attributes get applied to input element', async () => {
+    const { getInput } = renderText({
+      config: { inputAttributes: { class: 'test-class' } },
+    })
+    expect((await getInput()).classList.contains('test-class')).toBe(true)
   })
 })

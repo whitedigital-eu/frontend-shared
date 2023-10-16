@@ -1,18 +1,24 @@
 <template>
-  <div class="relative" :class="{ 'overflow-hidden': labelIsPlaceholder }">
+  <div
+    class="relative"
+    :class="{ 'overflow-hidden': labelIsPlaceholder }"
+    v-bind="config.wrapperAttributes"
+  >
     <FormFieldLabel
       v-if="label"
+      v-bind="config.labelAttributes"
       :is-placeholder="labelIsPlaceholder"
       @click="handleLabelClick"
     >
       {{ label }}
     </FormFieldLabel>
     <input
+      v-bind="config.inputAttributes"
       ref="inputRef"
       v-model="value"
       class="form-control sm:min-w-[200px] w-full"
       inputmode="decimal"
-      :readonly="readonly"
+      :readonly="config.readonly"
       type="text"
       @blur="handleBlur"
       @focus="handleFocus"
@@ -30,8 +36,13 @@ import { DecimalProps } from './PropTypes'
 const {
   modelValue = '',
   label = null,
-  readonly = false,
-  maxDecimals = 2,
+  config = {
+    readonly: false,
+    maxDecimals: 2,
+    wrapperAttributes: {},
+    labelAttributes: {},
+    inputAttributes: {},
+  },
 } = defineProps<DecimalProps>()
 
 const emit = defineEmits<{ 'update:modelValue': [value: number | null] }>()
@@ -61,19 +72,19 @@ const transformValue = (value: string): string => {
 
   transformedValue = transformedValue.replace('.', decSeparator)
   if (!transformedValue.includes(decSeparator)) {
-    return maxDecimals! === 0
+    return config.maxDecimals === 0
       ? transformedValue
-      : `${transformedValue},${'0'.repeat(maxDecimals!)}`
+      : `${transformedValue},${'0'.repeat(config.maxDecimals!)}`
   }
 
   const decimal = transformedValue.split(decSeparator)[1]
 
   transformedValue =
-    decimal.length > maxDecimals!
-      ? transformedValue.slice(0, maxDecimals! - decimal.length)
+    decimal.length > config.maxDecimals!
+      ? transformedValue.slice(0, config.maxDecimals! - decimal.length)
       : transformedValue.padEnd(
-          transformedValue.length + (maxDecimals! - decimal.length),
-          '0'
+          transformedValue.length + (config.maxDecimals! - decimal.length),
+          '0',
         )
 
   return transformedValue
@@ -105,7 +116,7 @@ const value = ref(valuePropToValue(modelValue))
 const hasFocus = ref(false)
 const isEmpty = computed(() => !value.value)
 const labelIsPlaceholder = computed<boolean>(
-  () => label !== null && isEmpty.value && !hasFocus.value
+  () => label !== null && isEmpty.value && !hasFocus.value,
 )
 
 const allowedKeys = [
@@ -126,7 +137,7 @@ const handleKeydown = (e: KeyboardEvent) => {
   const valueSplitByDecSeparator = e.target.value.split(decSeparator)
   const hasDecSeparator = valueSplitByDecSeparator.length === 2
   const allowToEnterDecSeparator =
-    !hasDecSeparator && e.target.value.length && maxDecimals !== 0
+    !hasDecSeparator && e.target.value.length && config.maxDecimals !== 0
 
   const invalidCharacter =
     (isNaN(Number(e.key)) &&
@@ -144,9 +155,9 @@ const handleKeydown = (e: KeyboardEvent) => {
   const caretBeforeDecSeparator = isCaretBeforeDecSeparator(e.target)
 
   const tooManyDecimals =
-    maxDecimals !== undefined &&
+    config.maxDecimals !== undefined &&
     hasDecSeparator &&
-    valueSplitByDecSeparator[1].length === maxDecimals
+    valueSplitByDecSeparator[1].length === config.maxDecimals
 
   if (!textSelected && !caretBeforeDecSeparator && tooManyDecimals) {
     e.preventDefault()
@@ -167,7 +178,7 @@ watch(
     if (newValue === valuePropToValue(value.value)) return
 
     value.value = newValue
-  }
+  },
 )
 </script>
 

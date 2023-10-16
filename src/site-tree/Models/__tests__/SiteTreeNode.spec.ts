@@ -1,5 +1,4 @@
 import SiteTreeNode from '../SiteTreeNode'
-import { SiteTreeType } from '../../Types/SiteTree'
 
 describe('SiteTreeNode', () => {
   let rootNode: SiteTreeNode
@@ -10,12 +9,12 @@ describe('SiteTreeNode', () => {
       '/api/site-tree/1',
       'Root Node',
       'root-node',
-      SiteTreeType.html,
+      'html',
       true,
       true,
       'Root Meta Title',
       'Root Meta Description',
-      null
+      null,
     )
     rootNode.baseUrl = 'https://www.example.com/'
   })
@@ -23,7 +22,7 @@ describe('SiteTreeNode', () => {
   it('should initialize correctly', () => {
     expect(rootNode.title).toBe('Root Node')
     expect(rootNode.slug).toBe('root-node')
-    expect(rootNode.type).toBe(SiteTreeType.html)
+    expect(rootNode.type).toBe('html')
     expect(rootNode.isActive).toBe(true)
     expect(rootNode.isVisible).toBe(true)
     expect(rootNode.metaTitle).toBe('Root Meta Title')
@@ -38,12 +37,12 @@ describe('SiteTreeNode', () => {
       '/api/site-tree/2',
       'Child Node',
       'child-node',
-      SiteTreeType.html,
+      'html',
       true,
       true,
       'Child Meta Title',
       'Child Meta Description',
-      rootNode
+      rootNode,
     )
 
     rootNode.addChild(childNode)
@@ -59,12 +58,12 @@ describe('SiteTreeNode', () => {
       '/api/site-tree/2',
       'Child Node',
       'child-node',
-      SiteTreeType.html,
+      'html',
       true,
       true,
       'Child Meta Title',
       'Child Meta Description',
-      rootNode
+      rootNode,
     )
 
     rootNode.addChild(childNode)
@@ -81,12 +80,12 @@ describe('SiteTreeNode', () => {
       '/api/site-tree/2',
       'Child Node',
       'child-node',
-      SiteTreeType.html,
+      'html',
       true,
       true,
       'Child Meta Title',
       'Child Meta Description',
-      rootNode
+      rootNode,
     )
 
     rootNode.addChild(childNode)

@@ -7,8 +7,12 @@
       <Text
         v-model="item.value"
         class="grow"
+        :config="{
+          inputAttributes: {
+            class: { 'sm:min-w-[416px]': isMultisearchInput },
+          },
+        }"
         :label="item.label"
-        :long="isMultisearchInput"
       />
       <label v-if="item.toggleExact" class="flex mt-1">
         <span>Meklēt precīzi </span>
@@ -101,7 +105,7 @@ const { item, axiosInstance = null } = defineProps<{
 }>()
 
 const isDataFetchingSelectConfig = (
-  x: SimpleSelectConfig | DataFetchingSelectConfig | null
+  x: SimpleSelectConfig | DataFetchingSelectConfig | null,
 ): x is DataFetchingSelectConfig => {
   return (
     x !== null &&
@@ -113,12 +117,12 @@ const isDataFetchingSelectConfig = (
 }
 
 const castToDataFetchingSelect = (
-  x: SimpleSelectConfig | DataFetchingSelectConfig | null
+  x: SimpleSelectConfig | DataFetchingSelectConfig | null,
 ) => {
   if (isDataFetchingSelectConfig(x)) return x
   else {
     console.error(
-      'Property to be cast to DataFetchingSelectConfig is not DataFetchingSelectConfig!!!'
+      'Property to be cast to DataFetchingSelectConfig is not DataFetchingSelectConfig!!!',
     )
     return x as DataFetchingSelectConfig
   }
@@ -137,6 +141,6 @@ const doubleWidthClass = `sm:w-[416px]` // based on doubleWidth
 const containerClass = computed(() =>
   isDateRangeInput.value || isMultisearchInput.value
     ? doubleWidthClass
-    : standardWidthClass
+    : standardWidthClass,
 )
 </script>
