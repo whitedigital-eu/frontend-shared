@@ -29,7 +29,7 @@
 import Tabulator from 'tabulator-tables'
 import { onMounted, ref, watch, onBeforeUnmount, nextTick } from 'vue'
 import { handleTableAjaxError } from '../../helpers/Errors'
-import createActionColumn, { renderIcons } from './ActionColumn'
+import createActionColumn from './ActionColumn'
 import { ApiListResponse } from '../../types/ApiPlatform'
 import { COLLAPSE_ORDER, createColumn } from './Column'
 import { tableTranslations } from '../../helpers/Translations'
@@ -420,8 +420,6 @@ const initTabulator = async (resetPage = false) => {
           table.appendChild(row)
         })
 
-        nextTick(renderIcons)
-
         return table
       },
     }
@@ -452,8 +450,6 @@ const initTabulator = async (resetPage = false) => {
 
   tabulator.value = await new Tabulator(table.value, options)
 }
-
-nextTick(renderIcons)
 
 const refreshData = () => tabulator.value.setPage(tabulator.value.getPage())
 

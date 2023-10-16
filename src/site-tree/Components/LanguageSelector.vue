@@ -1,5 +1,5 @@
 <template>
-  <div class="flex gap-2 items-center z-[1]">
+  <div class="flex gap-2 items-center z-[1]" v-bind="$attrs">
     <span class="text-lg uppercase whitespace-nowrap">
       {{ projectSettings.global.$t('admin.siteTree.siteTree') }}:
     </span>

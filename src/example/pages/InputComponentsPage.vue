@@ -123,7 +123,23 @@ import PlainTextarea from '../../components/Inputs/PlainTextarea.vue'
 import { useTranslation } from '../../i18n/Stores/useTranslation'
 const fullName = ref('')
 const price = ref('9912,22')
-const notes = ref('')
+const notes = ref(`
+<h2 class="test-class">Heading 1</h2>
+<h3 style="color:red">Heading 2</h3>
+<h4>Heading 3</h4>
+<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium ad alias blanditiis consectetur consequuntur delectus deleniti, est et fugit illum incidunt nemo, quam quas quo sint, tempore temporibus vel velit. </p>
+<ul>
+  <li>Stuff</li>
+  <li>And</li>
+  <li>Things</li>
+</ul>
+<ol>
+   <li>Stuff</li>
+   <li>And</li>
+   <li>Things</li>
+</ol>
+<a href="www.example.com">Example link</a>
+`)
 const isActive = ref(false)
 const isBlocked = ref(true)
 const probability = ref(60)
