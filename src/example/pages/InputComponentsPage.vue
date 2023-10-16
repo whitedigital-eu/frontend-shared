@@ -2,6 +2,15 @@
   <form class="flex flex-col gap-4 mr-auto mt-4 w-[500px]">
     {{ $t('translation', 'test', 'Context') }}
     <Text v-model="fullName" label="Full name" />
+    <Text
+      v-model="favouriteFood"
+      :config="{
+        wrapperAttributes: { 'data-test': 'input-wrapper' },
+        labelAttributes: { style: 'background-color: gainsboro' },
+        inputAttributes: { class: 'text-red-500' },
+      }"
+      label="Favourite food"
+    />
     <TextList v-model="textArrayList" label="Text List" />
     <KeyAndValueList
       v-model="keyAndValueArrayList"
@@ -25,7 +34,7 @@
         'sunday',
       ]"
     />
-    <Decimal v-model="price" />
+    <Decimal v-model="price" :config="{ maxDecimals: 2 }" label="Price" />
     <TextEditor v-model="notes" label="Notes" />
     <HtmlContentEditor
       v-model="htmlContent"
@@ -122,6 +131,7 @@ import PlainTextarea from '../../components/Inputs/PlainTextarea.vue'
 
 import { useTranslation } from '../../i18n/Stores/useTranslation'
 const fullName = ref('')
+const favouriteFood = ref('Pasta')
 const price = ref('9912,22')
 const notes = ref(`
 <h2 class="test-class">Heading 1</h2>
