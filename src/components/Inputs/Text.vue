@@ -13,12 +13,14 @@
       {{ props.label }}
     </FormFieldLabel>
     <input
-      v-bind="config.inputAttributes"
+      v-bind="{
+        type: 'text',
+        ...config.inputAttributes,
+      }"
       ref="inputRef"
       v-model="value"
       class="form-control sm:min-w-[200px] w-full"
       :readonly="config.readonly"
-      type="text"
       @blur="handleBlur"
       @focus="handleFocus"
       @input="handleInput"
@@ -56,7 +58,7 @@ const hasFocus = ref(false)
 const isEmpty = computed(() => !value.value)
 
 const handleInput = (e: Event) => {
-  const targetValue: string = (e.target as HTMLInputElement).value
+  const targetValue = (e.target as HTMLInputElement).value
   emit('update:modelValue', targetValue)
 }
 
@@ -67,7 +69,9 @@ const handleLabelClick = () => {
 
 watch(
   () => props.modelValue,
-  (n) => (value.value = n as string),
+  (n) => {
+    value.value = typeof n === 'number' ? n.toString() : n === null ? '' : n
+  },
   { immediate: true },
 )
 </script>

@@ -11,6 +11,11 @@
       }"
       label="Favourite food"
     />
+    <Text
+      v-model="count"
+      :config="{ inputAttributes: { type: 'number' } }"
+      label="Count"
+    />
     <TextList v-model="textArrayList" label="Text List" />
     <KeyAndValueList
       v-model="keyAndValueArrayList"
@@ -132,7 +137,8 @@ import PlainTextarea from '../../components/Inputs/PlainTextarea.vue'
 import { useTranslation } from '../../i18n/Stores/useTranslation'
 const fullName = ref('')
 const favouriteFood = ref('Pasta')
-const price = ref('9912,22')
+const count = ref(0)
+const price = ref('5')
 const notes = ref(`
 <h2 class="test-class">Heading 1</h2>
 <h3 style="color:red">Heading 2</h3>

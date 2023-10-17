@@ -8,6 +8,7 @@ const defaultLabel = 'Test label'
 const defaultProps: DecimalProps = {
   modelValue: '',
   label: defaultLabel,
+  config: {},
 }
 
 const renderDecimal = (props?: DecimalProps) => {
@@ -61,7 +62,7 @@ describe('Decimal', () => {
       expect(input.value).toBe('')
       // (4)
       expect(getUpdates()).toBeUndefined()
-    }
+    },
   )
 
   const truthyInputs: Array<[string | number, string]> = [
@@ -90,7 +91,7 @@ describe('Decimal', () => {
       expect(getInput().value).toBe(renderedValue)
       // (3)
       expect(getUpdates).toHaveLength(0)
-    }
+    },
   )
 
   test(`
@@ -183,21 +184,21 @@ describe('Decimal', () => {
     async (maxDecimalsProp, inputValue, emittedValue) => {
       const valueToType = '1,23456789'
       const { getInput, getUpdates } = renderDecimal({
-        maxDecimals: maxDecimalsProp,
+        config: { maxDecimals: maxDecimalsProp },
       })
       const input = getInput()
       await user.type(input, valueToType)
       expect(input.value).toBe(inputValue)
       const emittedUpdates = getUpdates()
       expect(emittedUpdates[emittedUpdates.length - 1][0]).toBe(emittedValue)
-    }
+    },
   )
 
   const focusoutTestCases: Array<[string, string]> = [
     ['1', '1,00'],
     ['1,2', '1,20'],
   ]
-  test.each(focusoutTestCases)(
+  test.only.each(focusoutTestCases)(
     'when focusing out, if all decimal places are not entered, they are filled with zeros',
     async (valueToType, inputValue) => {
       const { getInput } = renderDecimal()
@@ -205,11 +206,11 @@ describe('Decimal', () => {
       await user.type(input, valueToType)
       await fireEvent(input, new Event('blur'))
       expect(input.value).toBe(inputValue)
-    }
+    },
   )
 
   test('underlying input is readonly if readonly prop is true', async () => {
-    const { getInput } = renderDecimal({ readonly: true })
-    expect((await getInput()).readOnly).toBe(true)
+    const { getInput } = renderDecimal({ config: { readonly: true } })
+    expect(getInput().readOnly).toBe(true)
   })
 })

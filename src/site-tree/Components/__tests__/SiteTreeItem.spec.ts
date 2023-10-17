@@ -1,5 +1,6 @@
 import { render } from '@testing-library/vue'
 import SiteTreeItem from '../SiteTreeItem.vue'
+import { mockProjectSettings } from '../../TestUtils/mocks'
 
 describe('SiteTreeItem', () => {
   it('correctly renders a hidden, invisible item', () => {
@@ -14,6 +15,7 @@ describe('SiteTreeItem', () => {
         },
         hasChildren: false,
         isOpen: false,
+        projectSettings: mockProjectSettings,
       },
     })
 
@@ -34,6 +36,7 @@ describe('SiteTreeItem', () => {
         },
         hasChildren: false,
         isOpen: false,
+        projectSettings: mockProjectSettings,
       },
     })
 
@@ -54,6 +57,7 @@ describe('SiteTreeItem', () => {
         },
         hasChildren: false,
         isOpen: false,
+        projectSettings: mockProjectSettings,
       },
     })
 

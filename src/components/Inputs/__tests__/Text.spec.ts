@@ -38,13 +38,13 @@ describe('Text', () => {
 
   it('renders label if provided', async () => {
     const { getLabel } = renderText()
-    const { getByText } = within(await getLabel())
+    const { getByText } = within(getLabel())
     expect(getByText('Label text')).toBeTruthy()
   })
 
   it('does not render label if not provided', async () => {
     const { getLabel } = renderText({ label: null })
-    expect(await getLabel()).toBeNull()
+    expect(getLabel()).toBeNull()
   })
 
   test('input is readonly if readonly prop is true', async () => {

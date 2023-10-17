@@ -16,7 +16,7 @@ describe('SiteTreeNode', () => {
       'Root Meta Description',
       null,
     )
-    rootNode.baseUrl = 'https://www.example.com/'
+    rootNode.baseUrl = 'https://www.example.com'
   })
 
   it('should initialize correctly', () => {
