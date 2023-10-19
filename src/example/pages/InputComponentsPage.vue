@@ -107,6 +107,8 @@
         />
       </div>
     </div>
+
+    <HeartbeatPopup bg-class="bg-red-500" />
   </form>
 </template>
 
@@ -133,8 +135,9 @@ import KeyAndValueList from '../../components/Inputs/KeyAndValueList.vue'
 import MultipleTextFields from '../../components/Inputs/MultipleTextFields.vue'
 import Map from '../../components/Inputs/MapAddressSelector.vue'
 import PlainTextarea from '../../components/Inputs/PlainTextarea.vue'
-
 import { useTranslation } from '../../i18n/Stores/useTranslation'
+import HeartbeatPopup from '../../components/Heartbeat/HeartbeatPopup.vue'
+
 const fullName = ref('')
 const favouriteFood = ref('Pasta')
 const count = ref(0)

@@ -10,4 +10,5 @@ export {
   Clipboard,
   X,
   Save,
+  AlertCircle,
 } from 'lucide-vue-next'

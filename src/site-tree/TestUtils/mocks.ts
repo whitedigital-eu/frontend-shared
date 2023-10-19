@@ -1,7 +1,8 @@
 import { ProjectSettings } from '../../components/Forms/shared'
 import { AxiosRequestConfig } from 'axios'
+import { SiteTreeRead } from '../Types/SiteTree'
 
-export const mockSiteTreeRead = {
+export const mockSiteTreeRead: SiteTreeRead = {
   '@context': 'context',
   id: 1,
   '@type': 'site_tree',
@@ -82,14 +83,14 @@ export const mockProjectSettings: ProjectSettings = {
   siteTree: {
     siteTreeRepository: {
       get: async (iriOrId: string | number, config?: AxiosRequestConfig) =>
-        mockSiteTreeRead,
+        new Promise((resolve) => resolve(mockSiteTreeRead)),
       create: async (data: Record<string, any>, config?: AxiosRequestConfig) =>
-        mockSiteTreeRead,
+        new Promise((resolve) => resolve(mockSiteTreeRead)),
       update: async (
         iriOrId: string | number,
         data: Record<string, any>,
         config?: AxiosRequestConfig,
-      ) => mockSiteTreeRead,
+      ) => new Promise((resolve) => resolve(mockSiteTreeRead)),
       delete: async (iriOrId: string | number) => {
         console.log('delete called')
       },
@@ -97,31 +98,31 @@ export const mockProjectSettings: ProjectSettings = {
         iriOrId: string | number | null | undefined,
         data: Record<string, any>,
         config?: AxiosRequestConfig,
-      ) => mockSiteTreeRead,
+      ) => new Promise((resolve) => resolve(mockSiteTreeRead)),
       moveToPosition: async (
         iriOrId: string | number,
         position: number,
         config?: AxiosRequestConfig,
-      ) => mockSiteTreeRead,
+      ) => new Promise((resolve) => resolve(mockSiteTreeRead)),
     },
     siteTreeTypeToLabel: (...args: any[]) => 'Mock Label',
     getSiteTreeTypeSelectOptions: (...args: any[]) => [
       {
-        label: 'Option 1',
-        value: 'value1',
+        text: 'HTML',
+        value: 'html',
       },
       {
-        label: 'Option 2',
-        value: 'value2',
+        text: 'Redirect',
+        value: 'redirect',
       },
     ],
     getSiteTreeSelectOptions: async (...args: any[]) => [
       {
-        label: 'Option A',
+        text: 'Option A',
         value: mockSiteTreeRead['@id'],
       },
       {
-        label: 'Option B',
+        text: 'Option B',
         value: mockSiteTreeRead['@id'],
       },
     ],

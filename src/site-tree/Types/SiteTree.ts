@@ -27,7 +27,7 @@ export type SiteTreeRead = {
     slug: string
     type: string
     root: undefined
-    parent: never
+    parent: undefined
     children: SiteTreeRead[]
     isActive: boolean
     isVisible: boolean

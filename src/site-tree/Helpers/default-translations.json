@@ -2,6 +2,11 @@
   "common": {
     "cancel": "Atcelt",
     "save": "Saglabāt",
-    "delete": "Dzēst"
+    "delete": "Dzēst",
+    "heartbeat": {
+      "textLine1": "Iznākusi jauna sistēmas versija!",
+      "textLine2": "Lūdzu pārlādējiet lapu!",
+      "buttonText": "Pārlādēt lapu"
+    }
   }
 }
