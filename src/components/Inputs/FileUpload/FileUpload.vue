@@ -51,6 +51,7 @@ const props = withDefaults(
     hostUrl?: string
     allowDelete?: boolean
     allowEdit?: boolean
+    dropzoneOptions?: Dropzone.DropzoneOptions
   }>(),
   {
     //@ts-ignore
@@ -62,6 +63,7 @@ const props = withDefaults(
     allowDownload: false,
     allowDelete: true,
     allowEdit: false,
+    dropzoneOptions: () => ({}),
   },
 )
 
@@ -108,6 +110,7 @@ const options: Dropzone.DropzoneOptions = {
   withCredentials: true,
   ...dropzoneTranslations,
   previewTemplate: defaultPreviewTemplate,
+  ...props.dropzoneOptions,
 }
 
 const singleFileUpload = ref(false)
@@ -290,5 +293,10 @@ onMounted(() => {
 
 .dz-details {
   padding-bottom: 0 !important;
+}
+d .dropzone .dz-preview.dz-error .dz-error-message {
+  top: 92px;
+  padding-left: 8px;
+  padding-right: 8px;
 }
 </style>

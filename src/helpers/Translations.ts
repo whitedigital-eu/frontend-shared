@@ -15,7 +15,7 @@ export const tableTranslations = {
 export const dropzoneTranslations = {
   dictDefaultMessage: 'Drop files here to upload',
   dictFileTooBig:
-    'Fails netiks augšupielādēts, jo tā izmērs ({{filesize}}MB) pārsniedz maksimālo atļauto ({{maxFilesize}}MB).',
+    'Faila izmērs ({{filesize}}MB) pārsniedz maksimālo atļauto ({{maxFilesize}}MB)!',
   dictInvalidFileType: 'Šāda tipa failus nedrīkst augšupielādēt.',
   dictResponseError: 'Serveris atbildēja ar kodu {{statusCode}}.',
   dictCancelUpload: 'Atcelt augšupielādi',
