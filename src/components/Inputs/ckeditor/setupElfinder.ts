@@ -4,10 +4,7 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 // elfinder folder hash of the destination folder to be uploaded in this CKeditor 5
 const uploadTargetHash = 'l1_Lw'
 
-// elFinder connector URL
-const connectorUrl = '/api/efconnect'
-
-export const setupElfinder = (editor: ClassicEditor, apiOrigin: string) => {
+export const setupElfinder = (editor: ClassicEditor, url: string) => {
   const ckf = editor.commands.get('ckfinder'),
     fileRepo = editor.plugins.get('FileRepository'),
     ntf = editor.plugins.get('Notification'),
@@ -21,7 +18,7 @@ export const setupElfinder = (editor: ClassicEditor, apiOrigin: string) => {
           {
             title: i18('Inserting image failed'),
             namespace: 'ckfinder',
-          }
+          },
         )
         return
       }
@@ -69,7 +66,7 @@ export const setupElfinder = (editor: ClassicEditor, apiOrigin: string) => {
                       reject(
                         JSON.stringify(_fm) + ' - ' + err
                           ? err
-                          : 'errFolderNotFound'
+                          : 'errFolderNotFound',
                       )
                     })
                 })
@@ -77,7 +74,7 @@ export const setupElfinder = (editor: ClassicEditor, apiOrigin: string) => {
                   reject(
                     JSON.stringify(_fm) + ' - ' + err
                       ? err
-                      : 'errFolderNotFound'
+                      : 'errFolderNotFound',
                   )
                 })
             }
@@ -99,7 +96,7 @@ export const setupElfinder = (editor: ClassicEditor, apiOrigin: string) => {
               // dialog title
               title: 'File Manager',
               // connector URL
-              url: apiOrigin + connectorUrl,
+              url,
               // start folder setting
               startPathHash: open ? open : void 0,
               // Set to do not use browser history to un-use location.hash
@@ -123,7 +120,7 @@ export const setupElfinder = (editor: ClassicEditor, apiOrigin: string) => {
                     trigger: (action: 'unselectall') => void
                   }
                   convAbsUrl: (url: string) => string
-                }
+                },
               ) => {
                 const imgs: string[] = []
                 fm.getUI('cwd').trigger('unselectall')
@@ -166,12 +163,12 @@ export const setupElfinder = (editor: ClassicEditor, apiOrigin: string) => {
   // Make uploader
   const uploder = function (
     this: any,
-    loader: { file: Promise<any> | { then: () => void } }
+    loader: { file: Promise<any> | { then: () => void } },
   ) {
     const upload = function (
       file: any,
       resolve: (arg: { default: any }) => any,
-      reject: (reason: string) => any
+      reject: (reason: string) => any,
     ) {
       getfm(!!uploadTargetHash)
         .then((fm: any) => {
@@ -181,7 +178,7 @@ export const setupElfinder = (editor: ClassicEditor, apiOrigin: string) => {
             'upload',
             { files: [file], target: uploadTargetHash },
             void 0,
-            uploadTargetHash
+            uploadTargetHash,
           )
             .done((data: { added: Array<Record<string, any>> }) => {
               if (data.added && data.added.length) {
@@ -198,8 +195,8 @@ export const setupElfinder = (editor: ClassicEditor, apiOrigin: string) => {
               } else {
                 reject(
                   fm.i18n(
-                    'error' in data && data.error ? data.error : 'errUpload'
-                  )
+                    'error' in data && data.error ? data.error : 'errUpload',
+                  ),
                 )
                 fmNode.dialogelfinder('close')
               }
@@ -212,8 +209,8 @@ export const setupElfinder = (editor: ClassicEditor, apiOrigin: string) => {
                     ? error === 'userabort'
                       ? 'errAbort'
                       : error
-                    : 'errUploadNoFiles'
-                )
+                    : 'errUploadNoFiles',
+                ),
               )
             })
         })

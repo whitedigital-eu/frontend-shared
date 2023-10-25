@@ -2,7 +2,8 @@
   <Teleport to="body">
     <div
       v-show="shouldShow"
-      class="bg-white border border-[#DEE2E6] fixed min-w-[100vw] right-0 rounded-lg shadow-xl sm:min-w-[550px] sm:right-14 sm:top-20 top-0 z-[1]"
+      class="bg-white border border-[#DEE2E6] fixed min-w-[100vw] right-0 rounded-lg shadow-xl sm:min-w-[550px] sm:right-14 sm:top-20 top-0 z-[51]"
+      v-bind="$attrs"
     >
       <div class="pl-6 pr-14 py-6 relative">
         <div class="flex flex-wrap gap-4 items-center justify-between">

@@ -6,14 +6,14 @@
       :editor="HtmlEditor"
       @blur="isFocused = false"
       @focus="isFocused = true"
-      @ready="(editor: ClassicEditor) => setupElfinder(editor, apiOrigin)"
+      @ready="(editor: ClassicEditor) => setupElfinder(editor, connectionUrl)"
     />
     <div v-if="readonly" class="absolute bg-[#f3f5f6] inset-0 opacity-50"></div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { HtmlEditor } from './ckeditor/htmlEditors'
 import CKEditor from '@ckeditor/ckeditor5-vue'
 import { setupElfinder } from './ckeditor/setupElfinder'
@@ -24,17 +24,37 @@ const {
   label = '',
   small = false,
   readonly = false,
+  apiUrl,
+  apiOrigin,
 } = defineProps<{
   modelValue: string | number | null | undefined
   label?: string
   small?: boolean
   readonly?: boolean
-  apiOrigin: string
+  /**
+   * The API origin
+   * @example https://example.com
+   * @deprecated Use `apiUrl` instead
+   */
+  apiOrigin?: string
+  /**
+   * The full elfinder API URL
+   * @example https://example.com/api/efconnect
+   */
+  apiUrl?: string
 }>()
 
 const emit = defineEmits<{
   'update:modelValue': [content: string | undefined]
 }>()
+
+const defaultUrlSuffix = '/api/efconnect'
+
+const connectionUrl = computed(() => {
+  if (apiUrl) return apiUrl
+  if (apiOrigin) return apiOrigin + defaultUrlSuffix
+  return ''
+})
 
 const CKEditorComponent = CKEditor.component
 
@@ -43,7 +63,7 @@ const internalValue = ref(
     ? modelValue.toString()
     : modelValue !== null
     ? modelValue
-    : ''
+    : '',
 )
 watch(internalValue, (n) => emit('update:modelValue', n))
 
