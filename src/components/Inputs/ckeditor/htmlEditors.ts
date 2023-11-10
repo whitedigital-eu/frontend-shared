@@ -49,6 +49,8 @@ import { PageBreak } from '@ckeditor/ckeditor5-page-break'
 import { RemoveFormat } from '@ckeditor/ckeditor5-remove-format'
 import { Font } from '@ckeditor/ckeditor5-font'
 import { GeneralHtmlSupport } from '@ckeditor/ckeditor5-html-support'
+//@ts-ignore
+import { HtmlEmbed } from '@ckeditor/ckeditor5-html-embed'
 
 export class TextEditor extends ClassicEditor {}
 
@@ -126,6 +128,7 @@ HtmlEditor.builtinPlugins = [
   RemoveFormat,
   Font,
   GeneralHtmlSupport,
+  HtmlEmbed,
 ]
 
 HtmlEditor.defaultConfig = {
@@ -159,6 +162,7 @@ HtmlEditor.defaultConfig = {
       'numberedList',
       'bulletedList',
       'mediaEmbed',
+      'htmlEmbed',
       'insertTable',
       'tableColumn',
       'tableRow',
@@ -193,5 +197,10 @@ HtmlEditor.defaultConfig = {
         styles: true,
       },
     ],
+  },
+  /** @see https://ckeditor.com/docs/ckeditor5/latest/api/module_html-embed_htmlembedconfig-HtmlEmbedConfig.html */
+  //@ts-ignore
+  htmlEmbed: {
+    showPreviews: true,
   },
 }
