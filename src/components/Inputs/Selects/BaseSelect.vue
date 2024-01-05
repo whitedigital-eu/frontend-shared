@@ -22,7 +22,9 @@
     >
       <option value=""></option>
       <option
-        v-for="(option, i) in settings.options as Array<RecursivePartial<{text: string, value: string}>>"
+        v-for="(option, i) in settings.options as Array<
+          RecursivePartial<{ text: string; value: string }>
+        >"
         :key="i"
         :selected="isOptionSelected(option.value ?? '')"
         :value="option.value"
@@ -60,13 +62,13 @@ const props = withDefaults(
     searchInputPlaceholder?: string
   }>(),
   {
-    settings: () => ({} as RecursivePartial<TomSettings>),
+    settings: () => ({}) as RecursivePartial<TomSettings>,
     modelValue: '',
     readonly: false,
     label: null,
     allowDelete: true,
     searchInputPlaceholder: '',
-  }
+  },
 )
 
 const emit = defineEmits<{
@@ -104,7 +106,7 @@ const createNewItem = (e: Event) => {
 
 const renderCreateButton: TomTemplate = (
   data: TomOption,
-  escape: (str: string) => string
+  escape: (str: string) => string,
 ) => {
   const escapedInput = escape(data.input)
 
@@ -131,7 +133,7 @@ const iconMapping = {
 } as const
 
 const isKeyOfIconMapping = (
-  maybeKeyOfIconMapping: string
+  maybeKeyOfIconMapping: string,
 ): maybeKeyOfIconMapping is keyof typeof iconMapping => {
   return maybeKeyOfIconMapping in iconMapping
 }
@@ -206,7 +208,7 @@ const settings: RecursivePartial<TomSettings> = {
     option_create: renderCreateButton,
     no_results: function (data: TomOption, escape: (str: string) => string) {
       return `<div class="no-results">Netika atrasti rezultāti vaicājumam "${escape(
-        data.input
+        data.input,
       )}"</div>`
     },
   },
@@ -219,6 +221,7 @@ const isOptionSelected = (value: string) => {
 }
 
 const init = () => {
+  //@ts-ignore
   model.value = new TomSelect(selectRef.value, settings)
 }
 
@@ -230,11 +233,11 @@ watch(
     model.value.clearOptions()
     model.value.addOptions(options)
     if (options?.length) model.value.refreshOptions(false)
-  }
+  },
 )
 watch(
   () => props.modelValue,
-  (value) => model.value.setValue(value, true)
+  (value) => model.value.setValue(value, true),
 )
 watch(
   () => props.modelValue,
@@ -242,13 +245,13 @@ watch(
     (isEmpty.value =
       !props.modelValue ||
       (!!props.modelValue && props.modelValue.length === 0)),
-  { immediate: true }
+  { immediate: true },
 )
 watch(
   () => props.readonly,
   (n) => {
     n ? model.value.disable() : model.value.enable()
-  }
+  },
 )
 
 onBeforeUnmount(() => {

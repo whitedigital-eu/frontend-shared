@@ -7,6 +7,11 @@ export type IriString<
   ResourceString extends AnyResourceString,
 > = `${string}/${ResourceString}` | `${string}/${ResourceString}/${number}`
 
+export type GuidIriString<
+  AnyResourceString extends string,
+  ResourceString extends AnyResourceString,
+> = `/api/${ResourceString}` | `/api/${ResourceString}/${string}`
+
 export interface Resource<
   AnyResourceString extends string,
   ResourceString extends AnyResourceString,
@@ -15,6 +20,16 @@ export interface Resource<
   '@id': IriString<AnyResourceString, ResourceString>
   '@type': string
   id: number
+}
+
+export type GuidResource<
+  AnyResourceString extends string,
+  ResourceString extends AnyResourceString,
+> = {
+  '@context': string
+  '@id': GuidIriString<AnyResourceString, ResourceString>
+  '@type': string
+  id: string
 }
 
 export interface CrudResource<

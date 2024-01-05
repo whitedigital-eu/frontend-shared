@@ -25,7 +25,15 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script
+  setup
+  lang="ts"
+  generic="
+    ResourceInstance extends
+      | Resource<string, string>
+      | GuidResource<string, string>
+  "
+>
 import Tabulator from 'tabulator-tables'
 import { onMounted, ref, watch, onBeforeUnmount, nextTick } from 'vue'
 import { handleTableAjaxError } from '../../helpers/Errors'
@@ -34,44 +42,55 @@ import { ApiListResponse } from '../../types/ApiPlatform'
 import { COLLAPSE_ORDER, createColumn } from './Column'
 import { tableTranslations } from '../../helpers/Translations'
 import { TableProps } from './createTableConfig'
-import { Resource } from '../../types/Resource'
+import { GuidResource, Resource } from '../../types/Resource'
 
-const props = withDefaults(defineProps<TableProps>(), {
-  delete: true,
-  edit: true,
-  view: false,
-  created: true,
-  updated: true,
-  ajaxUrl: null,
-  movableRows: false,
-  disableOrderByDateColumns: false,
-  selectionColumn: false,
-  selectionCheckboxLabel: 'Atzīmē, lai veidotu darījumu',
-  columnData: null,
-  page: 1,
-  pageSize: 30,
-  canUpdateRecordFunc: () => true,
-  tabulatorOptions: null,
-  customActions: null,
-  paginationSizeSelector: () => [10, 30, 100],
-})
+/*
+ * Since only props can be generic (in other words, it is not possible to pass just a generic, without a prop),
+ * we need the fake resourceType prop which is used only to get the generic type.
+ * @see https://github.com/vuejs/core/pull/7963#issuecomment-1762516240
+ * The prop must also be optional, otherwise there is a typescript error.
+ * TODO: improve this in the future if possible.
+ * */
+const props = withDefaults(
+  defineProps<TableProps & { resourceType?: ResourceInstance }>(),
+  {
+    delete: true,
+    edit: true,
+    view: false,
+    created: true,
+    updated: true,
+    ajaxUrl: null,
+    movableRows: false,
+    disableOrderByDateColumns: false,
+    selectionColumn: false,
+    selectionCheckboxLabel: 'Atzīmē, lai veidotu darījumu',
+    columnData: null,
+    page: 1,
+    pageSize: 30,
+    canUpdateRecordFunc: () => true,
+    tabulatorOptions: null,
+    customActions: null,
+    paginationSizeSelector: () => [10, 30, 100],
+    resourceType: undefined,
+  },
+)
 
 const emit = defineEmits<{
   /**
    * Emitted on edit action button click
    * @arg resource - the resource rendered in the clicked row
    */
-  'edit-click': [resource: Resource<string, string>]
+  'edit-click': [resource: ResourceInstance]
   /**
    * Emitted on delete action button click
    * @arg resource - the resource rendered in the clicked row
    */
-  'delete-click': [resource: Resource<string, string>]
+  'delete-click': [resource: ResourceInstance]
   /**
    * Emitted on view action button click
    * @arg resource - the resource rendered in the clicked row
    */
-  'view-click': [resource: Resource<string, string>]
+  'view-click': [resource: ResourceInstance]
   /**
    * Emitted when a row has been moved
    * @arg row - tabulator row component of the row that was moved
@@ -87,13 +106,13 @@ const emit = defineEmits<{
    * Emitted when a row (or all rows) has been selected or deselected
    * @arg selectedRowData - the resource rendered in the selected row
    */
-  'row-selection-changed': [selectedRowData: Resource<string, string>[]]
+  'row-selection-changed': [selectedRowData: ResourceInstance[]]
   /**
    * Emitted when any table cell is clicked
    * @arg field - the name of the field of the clicked cell (as defined in `props.columns`)
    * @arg resource - the resource rendered in the row of the clicked column
    */
-  'cell-click': [field: string, resource: Resource<string, string>]
+  'cell-click': [field: string, resource: ResourceInstance]
   /**
    * Emitted after a table page is loaded
    * @arg page - he number of the currently displayed page
@@ -170,7 +189,7 @@ const updatedColumn = createTimestampColumn(
   false,
 )
 
-const actionColumn = createActionColumn(props, {
+const actionColumn = createActionColumn<ResourceInstance>(props, {
   edit: (resource) => emit('edit-click', resource),
   delete: (resource) => emit('delete-click', resource),
   view: (resource) => emit('view-click', resource),
@@ -274,11 +293,7 @@ const initTabulator = async (resetPage = false) => {
       emit('move-row', row)
     },
     cellClick: function (e, cell) {
-      emit(
-        'cell-click',
-        cell.getField(),
-        cell.getData() as Resource<string, string>,
-      )
+      emit('cell-click', cell.getField(), cell.getData() as ResourceInstance)
     },
     rowSelectionChanged(selectedRowData) {
       emit('row-selection-changed', selectedRowData)

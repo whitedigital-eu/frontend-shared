@@ -1,7 +1,7 @@
 import { CheckSquare, Trash2, Eye, createElement, Move } from 'lucide'
 import { COLLAPSE_ORDER } from './Column'
-import { Resource } from '../../types/Resource'
 import { TableProps } from './createTableConfig'
+import { GuidResource, Resource } from '../../types/Resource'
 
 type RemoveUndefined<T> = { [K in keyof T]-?: Exclude<T[K], undefined> }
 
@@ -104,12 +104,16 @@ const computeActionColumnWidth = (props: TableProps) => {
   return res > ACTION_COLUMN_MIN_WIDTH ? res : ACTION_COLUMN_MIN_WIDTH
 }
 
-const createActionColumn = (
+const createActionColumn = <
+  ResourceInstance extends
+    | Resource<string, string>
+    | GuidResource<string, string>,
+>(
   props: RemoveUndefined<TableProps>,
   clickHandlers: {
-    edit: <R extends Resource<string, string>>(resource: R) => void
-    delete: <R extends Resource<string, string>>(resource: R) => void
-    view: <R extends Resource<string, string>>(resource: R) => void
+    edit: (resource: ResourceInstance) => void
+    delete: (resource: ResourceInstance) => void
+    view: (resource: ResourceInstance) => void
   },
 ): Tabulator.ColumnDefinition => {
   return {
@@ -122,7 +126,7 @@ const createActionColumn = (
     headerHozAlign: 'right',
     responsive: COLLAPSE_ORDER.never,
     formatter(cell: Tabulator.CellComponent) {
-      const data = cell.getData() as Resource<string, string>
+      const data = cell.getData() as ResourceInstance
 
       const wrapper = document.createElement('div')
       wrapper.classList.add('flex', 'lg:justify-start', 'items-center')
