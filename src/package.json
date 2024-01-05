@@ -1,6 +1,6 @@
 {
   "name": "@whitedigital-eu/wd-frontend-shared",
-  "version": "0.5.16",
+  "version": "0.5.17",
   "author": "Imants Liepiņš",
   "license": "MIT",
   "description": "Shared components, helpers, composables and types for vue frontend SPAs",
@@ -82,8 +82,8 @@
     "toastify-js": "^1.9.3",
     "tom-select": "^2.2.2",
     "ts-node": "^10.9.1",
-    "vue": "^3.4.5",
-    "vue-flatpickr-component": "^9.0.6",
+    "vue": "~3.3.0",
+    "vue-flatpickr-component": "^11.0.3",
     "vue-google-autocomplete": "^1.1.4",
     "vue-slider-component": "4.0.0-beta.5"
   },
