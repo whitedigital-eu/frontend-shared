@@ -114,16 +114,20 @@ export const setupElfinder = (editor: ClassicEditor, connectorUrl: string) => {
                   getUI: (dir: 'cwd') => {
                     trigger: (action: 'unselectall') => void
                   }
+                  isSameOrigin: (url: string) => boolean
                   convAbsUrl: (url: string) => string
                 },
               ) => {
                 const imgs: string[] = []
                 fm.getUI('cwd').trigger('unselectall')
                 $.each(files, function (i: any, f: any) {
+                  const url = fm.isSameOrigin(f.url)
+                    ? f.url.replace(window.origin, '')
+                    : fm.convAbsUrl(f.url)
                   if (f && f.mime.match(/^image\//i)) {
-                    imgs.push(fm.convAbsUrl(f.url))
+                    imgs.push(url)
                   } else {
-                    editor.execute('link', fm.convAbsUrl(f.url))
+                    editor.execute('link', url)
                   }
                 })
                 if (imgs.length) {
@@ -186,7 +190,9 @@ export const setupElfinder = (editor: ClassicEditor, connectorUrl: string) => {
                   fm.url(data.added[0].hash, { async: true })
                     .done(function (url: string) {
                       resolve({
-                        default: fm.convAbsUrl(url),
+                        default: fm.isSameOrigin(url)
+                          ? url.replace(window.origin, '')
+                          : fm.convAbsUrl(url),
                       })
                       fmNode.dialogelfinder('close')
                     })
