@@ -135,6 +135,10 @@ export const setupElfinder = (editor: ClassicEditor, url: string) => {
                   insertImages(imgs)
                 }
               },
+                themes: {
+                    default : 'https://cdnjs.cloudflare.com/ajax/libs/elfinder/2.1.65/css/theme.min.css'
+                },
+                theme: 'default'
             })
             .elfinder('instance')
           done()
