@@ -1,6 +1,6 @@
 {
   "name": "@whitedigital-eu/wd-frontend-shared",
-  "version": "0.5.19",
+  "version": "0.5.24",
   "author": "Imants Liepiņš",
   "license": "MIT",
   "description": "Shared components, helpers, composables and types for vue frontend SPAs",
@@ -48,9 +48,9 @@
     "@ckeditor/ckeditor5-ckfinder": "^38.0.1",
     "@ckeditor/ckeditor5-font": "^38.0.1",
     "@ckeditor/ckeditor5-horizontal-line": "^38.0.1",
+    "@ckeditor/ckeditor5-html-embed": "^38.0.1",
     "@ckeditor/ckeditor5-html-support": "^38.0.1",
     "@ckeditor/ckeditor5-page-break": "^38.0.1",
-    "@ckeditor/ckeditor5-html-embed": "^38.0.1",
     "@ckeditor/ckeditor5-paste-from-office": "^38.0.1",
     "@ckeditor/ckeditor5-remove-format": "^38.0.1",
     "@ckeditor/ckeditor5-source-editing": "^38.0.1",

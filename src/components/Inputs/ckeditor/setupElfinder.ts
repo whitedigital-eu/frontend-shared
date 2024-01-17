@@ -4,7 +4,7 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 // elfinder folder hash of the destination folder to be uploaded in this CKeditor 5
 const uploadTargetHash = 'l1_Lw'
 
-export const setupElfinder = (editor: ClassicEditor, url: string) => {
+export const setupElfinder = (editor: ClassicEditor, connectorUrl: string) => {
   const ckf = editor.commands.get('ckfinder'),
     fileRepo = editor.plugins.get('FileRepository'),
     ntf = editor.plugins.get('Notification'),
@@ -25,7 +25,7 @@ export const setupElfinder = (editor: ClassicEditor, url: string) => {
       editor.execute('imageInsert', { source: urls })
     },
     // To get elFinder instance
-    getfm = (open = false) => {
+    getfm = (open?: string) => {
       return new Promise((resolve, reject) => {
         // Execute when the elFinder instance is created
         const done = () => {
@@ -34,21 +34,22 @@ export const setupElfinder = (editor: ClassicEditor, url: string) => {
             if (!Object.keys(_fm.files()).length) {
               // when initial request
               _fm.one('open', () => {
-                _fm.file(open)
-                  ? resolve(_fm)
-                  : reject(JSON.stringify(_fm) + ' - ' + 'errFolderNotFound')
+                //@ts-ignore
+                _fm.file(open) ? resolve(_fm) : reject(_fm, 'errFolderNotFound')
               })
             } else {
               // elFinder has already been initialized
               new Promise((res, rej) => {
                 if (_fm.file(open)) {
-                  res(true)
+                  //@ts-ignore
+                  res()
                 } else {
                   // To acquire target folder information
                   _fm
                     .request({ cmd: 'parents', target: open })
                     .done(() => {
-                      _fm.file(open) ? res(true) : rej()
+                      //@ts-ignore
+                      _fm.file(open) ? res() : rej()
                     })
                     .fail(() => {
                       rej()
@@ -62,20 +63,14 @@ export const setupElfinder = (editor: ClassicEditor, url: string) => {
                     .done(() => {
                       resolve(_fm)
                     })
-                    .fail((err: unknown) => {
-                      reject(
-                        JSON.stringify(_fm) + ' - ' + err
-                          ? err
-                          : 'errFolderNotFound',
-                      )
+                    .fail((err: any) => {
+                      //@ts-ignore
+                      reject(_fm, err ? err : 'errFolderNotFound')
                     })
                 })
                 .catch((err) => {
-                  reject(
-                    JSON.stringify(_fm) + ' - ' + err
-                      ? err
-                      : 'errFolderNotFound',
-                  )
+                  //@ts-ignore
+                  reject(_fm, err ? err : 'errFolderNotFound')
                 })
             }
           } else {
@@ -96,7 +91,7 @@ export const setupElfinder = (editor: ClassicEditor, url: string) => {
               // dialog title
               title: 'File Manager',
               // connector URL
-              url,
+              url: connectorUrl,
               // start folder setting
               startPathHash: open ? open : void 0,
               // Set to do not use browser history to un-use location.hash
@@ -135,10 +130,11 @@ export const setupElfinder = (editor: ClassicEditor, url: string) => {
                   insertImages(imgs)
                 }
               },
-                themes: {
-                    default : 'https://cdnjs.cloudflare.com/ajax/libs/elfinder/2.1.65/css/theme.min.css'
-                },
-                theme: 'default'
+              themes: {
+                default:
+                  'https://cdnjs.cloudflare.com/ajax/libs/elfinder/2.1.65/css/theme.min.css',
+              },
+              theme: 'default',
             })
             .elfinder('instance')
           done()
@@ -174,7 +170,7 @@ export const setupElfinder = (editor: ClassicEditor, url: string) => {
       resolve: (arg: { default: any }) => any,
       reject: (reason: string) => any,
     ) {
-      getfm(!!uploadTargetHash)
+      getfm(uploadTargetHash)
         .then((fm: any) => {
           const fmNode = fm.getUI()
           fmNode.dialogelfinder('open')
@@ -184,27 +180,25 @@ export const setupElfinder = (editor: ClassicEditor, url: string) => {
             void 0,
             uploadTargetHash,
           )
-            .done((data: { added: Array<Record<string, any>> }) => {
-              if (data.added && data.added.length) {
-                fm.url(data.added[0].hash, { async: true })
-                  .done(function (url: string) {
-                    resolve({
-                      default: fm.convAbsUrl(url),
+            .done(
+              (data: { added: Array<Record<string, any>>; error?: any }) => {
+                if (data.added && data.added.length) {
+                  fm.url(data.added[0].hash, { async: true })
+                    .done(function (url: string) {
+                      resolve({
+                        default: fm.convAbsUrl(url),
+                      })
+                      fmNode.dialogelfinder('close')
                     })
-                    fmNode.dialogelfinder('close')
-                  })
-                  .fail(function () {
-                    reject('errFileNotFound')
-                  })
-              } else {
-                reject(
-                  fm.i18n(
-                    'error' in data && data.error ? data.error : 'errUpload',
-                  ),
-                )
-                fmNode.dialogelfinder('close')
-              }
-            })
+                    .fail(function () {
+                      reject('errFileNotFound')
+                    })
+                } else {
+                  reject(fm.i18n(data.error ? data.error : 'errUpload'))
+                  fmNode.dialogelfinder('close')
+                }
+              },
+            )
             .fail((err: Error) => {
               const error = fm.parseError(err)
               reject(
@@ -218,7 +212,19 @@ export const setupElfinder = (editor: ClassicEditor, url: string) => {
               )
             })
         })
-        .catch(reject)
+        //@ts-ignore
+        .catch((fm, err) => {
+          const error = fm.parseError(err)
+          reject(
+            fm.i18n(
+              error
+                ? error === 'userabort'
+                  ? 'errAbort'
+                  : error
+                : 'errUploadNoFiles',
+            ),
+          )
+        })
     }
 
     this.upload = function () {

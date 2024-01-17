@@ -10,7 +10,7 @@ export type IriString<
 export type GuidIriString<
   AnyResourceString extends string,
   ResourceString extends AnyResourceString,
-> = `/api/${ResourceString}` | `/api/${ResourceString}/${string}`
+> = `${string}/${ResourceString}` | `${string}/${ResourceString}/${string}`
 
 export interface Resource<
   AnyResourceString extends string,

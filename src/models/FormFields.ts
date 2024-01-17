@@ -386,6 +386,19 @@ export class PlainTextareaField extends FormField {
   }
 }
 
+class CollectionField<ValueType> extends FormField {
+  //@ts-ignore
+  value: ValueType[] | null | undefined
+  constructor(
+    name: string,
+    label: string,
+    value?: ValueType[] | null | undefined,
+  ) {
+    super('collection', name, label)
+    this.value = value
+  }
+}
+
 export {
   TextField,
   TextareaField,
@@ -408,6 +421,7 @@ export {
   KeyAndValueArrayField,
   MultipleTextFields,
   MapCoordinateSelectorField,
+  CollectionField,
 }
 
 // START OF NEW TYPED FIELDS!
@@ -490,3 +504,4 @@ export type AnyFormField =
   | SimpleSelectFieldTM<any>
   | GovernmentIdField
   | PublicFileUploadField
+  | CollectionField<any>
