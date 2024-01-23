@@ -4,6 +4,11 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 // elfinder folder hash of the destination folder to be uploaded in this CKeditor 5
 const uploadTargetHash = 'l1_Lw'
 
+const removeOriginFromURL = (url: string) => {
+  const parsedUrl = new URL(url)
+  return parsedUrl.pathname
+}
+
 export const setupElfinder = (editor: ClassicEditor, connectorUrl: string) => {
   const ckf = editor.commands.get('ckfinder'),
     fileRepo = editor.plugins.get('FileRepository'),
@@ -120,7 +125,7 @@ export const setupElfinder = (editor: ClassicEditor, connectorUrl: string) => {
                 const imgs: string[] = []
                 fm.getUI('cwd').trigger('unselectall')
                 $.each(files, function (i: any, f: any) {
-                  const url = f.url.replace(window.origin, '')
+                  const url = removeOriginFromURL(f.url)
                   if (f && f.mime.match(/^image\//i)) {
                     imgs.push(url)
                   } else {
@@ -187,7 +192,7 @@ export const setupElfinder = (editor: ClassicEditor, connectorUrl: string) => {
                   fm.url(data.added[0].hash, { async: true })
                     .done(function (url: string) {
                       resolve({
-                        default: url.replace(window.origin, ''),
+                        default: removeOriginFromURL(url),
                       })
                       fmNode.dialogelfinder('close')
                     })
