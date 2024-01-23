@@ -4,7 +4,6 @@ import {
   LabelProps,
   MapProps,
 } from '../types/InputFields'
-import { SelectOption } from './SelectOption'
 import dayjs from 'dayjs'
 import {
   TextValue,
@@ -426,11 +425,14 @@ export {
 
 // START OF NEW TYPED FIELDS!
 export type SimpleSelectConfigTyped<T extends string> = {
-  options: SelectOptionTyped<string, T>[]
+  options: SelectOption<string, T>[]
   create?: boolean
 }
 
-export class SelectOptionTyped<T extends string, V extends string> {
+export class SelectOption<
+  T extends string = string,
+  V extends string = string,
+> {
   constructor(
     public text: T,
     public value: V,
@@ -446,7 +448,7 @@ export class SimpleSelectFieldTS<T extends string> extends FormField {
     name: string,
     label: string,
     value?: null | undefined | T,
-    options: SelectOptionTyped<string, T>[] = [],
+    options: SelectOption<string, T>[] = [],
     readonly = false,
     create = false,
     allowDelete = true,
@@ -468,7 +470,7 @@ export class SimpleSelectFieldTM<T extends string> extends FormField {
     name: string,
     label: string,
     value?: null | undefined | T[],
-    options: SelectOptionTyped<string, T>[] = [],
+    options: SelectOption<string, T>[] = [],
     readonly = false,
     create = false,
     allowDelete = true,

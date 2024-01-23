@@ -5,7 +5,7 @@
     :allow-delete="allowDelete"
     :label="label"
     :readonly="props.readonly"
-    :settings="props.config as unknown as RecursivePartial<TomSettings>"
+    :settings="props.config"
     @create-new-item="(item) => emit('create-new-item', item)"
     @update:model-value="handleInput"
   />
@@ -15,8 +15,9 @@
 import { ref, watch } from 'vue'
 import BaseSelect from './BaseSelect.vue'
 import { SimpleSelectValue } from '../ValueTypes'
-import { SimpleSelectConfig } from '../../../types/InputFields'
 import { RecursivePartial, TomSettings } from 'tom-select/src/types'
+import { Modify } from '../../../site-tree/Types/Shared'
+import { SelectOption } from '../../../models/FormFields'
 
 const props = withDefaults(
   defineProps<{
@@ -25,7 +26,10 @@ const props = withDefaults(
     readonly?: boolean
     label?: string
     allowDelete?: boolean
-    config?: SimpleSelectConfig | null
+    config?: Modify<
+      RecursivePartial<TomSettings>,
+      { options: SelectOption[] }
+    > | null
   }>(),
   {
     modelValue: '',
@@ -33,7 +37,7 @@ const props = withDefaults(
     label: '',
     allowDelete: true,
     config: null,
-  }
+  },
 )
 
 const emit = defineEmits<{
@@ -50,6 +54,6 @@ const handleInput = (value: string | string[] | number) => {
 watch(
   () => props.modelValue,
   (n) => (value.value = n),
-  { immediate: true }
+  { immediate: true },
 )
 </script>

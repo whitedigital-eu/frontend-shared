@@ -23,7 +23,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from 'vue'
 import TomSelect from 'tom-select'
-import { SelectOption } from '../../models/SelectOption'
+import { SelectOption } from '../../models/FormFields'
 
 const props = defineProps<{
   modelValue: string | number
@@ -101,7 +101,7 @@ watch(
     const newVal: string = formatTimeInput(n)
     if (newVal !== value.value) value.value = newVal
   },
-  { immediate: true }
+  { immediate: true },
 )
 </script>
 

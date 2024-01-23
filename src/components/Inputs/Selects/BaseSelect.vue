@@ -18,13 +18,10 @@
       class="tom-select"
       :disabled="props.readonly"
       :multiple="multiple"
-      :placeholder="!(isEmpty && !isOpen) ? searchInputPlaceholder : ''"
     >
       <option value=""></option>
       <option
-        v-for="(option, i) in settings.options as Array<
-          RecursivePartial<{ text: string; value: string }>
-        >"
+        v-for="(option, i) in settings.options"
         :key="i"
         :selected="isOptionSelected(option.value ?? '')"
         :value="option.value"
@@ -37,9 +34,8 @@
 
 <script setup lang="ts">
 import { computed, ref, onMounted, watch, onBeforeUnmount } from 'vue'
-//@ts-ignore
 import TomSelect from 'tom-select'
-import 'tom-select/dist/css/tom-select.bootstrap5.min.css'
+import 'tom-select/dist/css/tom-select.css'
 import FormFieldLabel from '../../FormFieldLabel.vue'
 import { createElement, Users, Phone, Video, Mail } from 'lucide'
 import type {
@@ -48,12 +44,18 @@ import type {
   TomSettings,
   TomTemplate,
 } from 'tom-select/src/types'
+import _ from 'lodash'
+import { SelectOption } from '../../../models/FormFields'
+import { Modify } from '../../../site-tree/Types/Shared'
 
 type ModelValue = string | string[]
 
 const props = withDefaults(
   defineProps<{
-    settings?: RecursivePartial<TomSettings> | null
+    settings?: Modify<
+      RecursivePartial<TomSettings>,
+      { options: SelectOption[] }
+    > | null
     modelValue?: ModelValue
     id: string
     readonly?: boolean
@@ -62,7 +64,11 @@ const props = withDefaults(
     searchInputPlaceholder?: string
   }>(),
   {
-    settings: () => ({}) as RecursivePartial<TomSettings>,
+    settings: () =>
+      ({}) as Modify<
+        RecursivePartial<TomSettings>,
+        { options: SelectOption[] }
+      >,
     modelValue: '',
     readonly: false,
     label: null,
@@ -165,7 +171,7 @@ const createPlugins = () => {
     plugins.clear_button = {
       title: 'Dzēst',
       html: function (data: { className: string; title: string }) {
-        return `<span class="text-xl -mt-[2px] ${data.className}" title="${data.title}">&#10005;</span>`
+        return `<span class="text-xl !right-2 ${data.className}" title="${data.title}">&#10005;</span>`
       },
     }
   }
@@ -181,8 +187,7 @@ const createPlugins = () => {
   return plugins
 }
 
-const settings: RecursivePartial<TomSettings> = {
-  ...props.settings,
+const defaultSettings: RecursivePartial<TomSettings> = {
   plugins: createPlugins(),
   maxItems: multiple.value ? undefined : 1,
   maxOptions: 250,
@@ -214,6 +219,11 @@ const settings: RecursivePartial<TomSettings> = {
   },
 }
 
+const settings: RecursivePartial<TomSettings> = _.merge(
+  { ...defaultSettings },
+  props.settings,
+)
+
 const isOptionSelected = (value: string) => {
   return multiple.value
     ? (props.modelValue as string[]).includes(value)
@@ -221,7 +231,6 @@ const isOptionSelected = (value: string) => {
 }
 
 const init = () => {
-  //@ts-ignore
   model.value = new TomSelect(selectRef.value, settings)
 }
 
@@ -264,5 +273,9 @@ onBeforeUnmount(() => {
 <style>
 .ts-control {
   min-height: 38px;
+}
+
+.ts-select {
+  background-color: white;
 }
 </style>

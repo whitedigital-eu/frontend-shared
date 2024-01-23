@@ -19,7 +19,8 @@ import { DataFetchingSelectConfig } from '../../../types/InputFields'
 import { AxiosInstance } from 'axios'
 import { DataFetchingSelectValue } from '../ValueTypes'
 import type { RecursivePartial, TomSettings } from 'tom-select/src/types'
-import { SelectOption } from '../../../models/SelectOption'
+import { SelectOption } from '../../../models/FormFields'
+import { Modify } from '../../../site-tree/Types/Shared'
 
 const props = withDefaults(
   defineProps<{
@@ -33,7 +34,7 @@ const props = withDefaults(
   {
     label: '',
     allowDelete: true,
-  }
+  },
 )
 
 const emit = defineEmits<{
@@ -43,10 +44,13 @@ const emit = defineEmits<{
 
 const minSymbolsForSearch = 3
 const searchInputPlaceholder = computed(
-  () => `Ievadiet vismaz ${minSymbolsForSearch} simbolus!`
+  () => `Ievadiet vismaz ${minSymbolsForSearch} simbolus!`,
 )
 
-const settings: RecursivePartial<TomSettings> = {
+const settings: Modify<
+  RecursivePartial<TomSettings>,
+  { options: SelectOption[] }
+> = {
   shouldLoad: (query: string) => query.length >= minSymbolsForSearch,
   async load(searchValue: string, callback: (options: SelectOption[]) => void) {
     const requestUrl = props.config.requestUrlGenerator(searchValue)
@@ -56,13 +60,14 @@ const settings: RecursivePartial<TomSettings> = {
     ].map(props.config.responseMapFunction)
     callback(options)
   },
+  options: [],
 }
 
 const baseSelectKey = ref(0)
 
 watchEffect(() => {
   if (props.config.options) {
-    settings.options = props.config.options as RecursivePartial<SelectOption[]>
+    settings.options = props.config.options
     baseSelectKey.value++
   }
   if (props.config.create) {
@@ -80,6 +85,6 @@ const handleInput = (value: string | string[] | number) => {
 watch(
   () => props.modelValue,
   (n) => (value.value = n),
-  { immediate: true }
+  { immediate: true },
 )
 </script>

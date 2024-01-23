@@ -1,6 +1,5 @@
 import { FormData } from '../types/FormData'
-import { SelectOption } from '../models/SelectOption'
-import { isSelectField } from '../models/FormFields'
+import { isSelectField, SelectOption } from '../models/FormFields'
 
 const notSelectFieldError =
   'Trying to set config options of field which is not a select field!'
@@ -8,7 +7,7 @@ const notSelectFieldError =
 export const setSelectOptions = async <T extends FormData>(
   formData: T,
   fieldName: string,
-  optionsPromise: Promise<SelectOption[]>
+  optionsPromise: Promise<SelectOption[]>,
 ) => {
   const field = formData[fieldName]
   if (isSelectField(field)) {
@@ -20,7 +19,7 @@ export const setSelectOptions = async <T extends FormData>(
 export const setSelectOptionsWithFirstAsValue = async <T extends FormData>(
   formData: T,
   fieldName: string,
-  optionsPromise: Promise<SelectOption[]>
+  optionsPromise: Promise<SelectOption[]>,
 ) => {
   const options = await optionsPromise
   const field = formData[fieldName]

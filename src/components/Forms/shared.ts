@@ -1,6 +1,6 @@
-import { SelectOptionTyped } from '../../models/FormFields'
 import { SiteTreeRead } from '../../site-tree/Types/SiteTree'
 import { AxiosRequestConfig } from 'axios'
+import { SelectOption } from '../../models/FormFields'
 
 export type ProjectSettings = {
   global: {
@@ -42,12 +42,10 @@ export type ProjectSettings = {
       ) => Promise<SiteTreeRead>
     }
     siteTreeTypeToLabel: (...args: any[]) => string
-    getSiteTreeTypeSelectOptions: (
-      ...args: any[]
-    ) => SelectOptionTyped<string, string>[]
+    getSiteTreeTypeSelectOptions: (...args: any[]) => SelectOption[]
     getSiteTreeSelectOptions: (
       ...args: any[]
-    ) => Promise<SelectOptionTyped<string, SiteTreeRead['@id']>[]>
+    ) => Promise<SelectOption<string, SiteTreeRead['@id']>[]>
     siteTreeTypeToRepository: (...args: any[]) => {
       list: (...args: any[]) => Promise<any>
     } | null

@@ -30,7 +30,7 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
-import { SelectOptionTyped, SimpleSelectFieldTS } from '../../models/FormFields'
+import { SelectOption, SimpleSelectFieldTS } from '../../models/FormFields'
 import { SiteTreeRead } from '../Types/SiteTree'
 import SiteTreeFormModal from './SiteTreeFormModal.vue'
 import Icon from '../../components/Icons/Icon.vue'
@@ -59,7 +59,7 @@ globalStore.loadRootSiteTrees().then(() => {
     '',
     currentLanguageSiteTreeItem?.['@id'] ?? '',
     globalStore.rootSiteTrees.map(
-      (st) => new SelectOptionTyped(st.slug.toUpperCase(), st['@id']),
+      (st) => new SelectOption(st.slug.toUpperCase(), st['@id']),
     ),
     false,
     false,
@@ -86,7 +86,7 @@ const handleSiteTreeCreated = async (
   await globalStore.loadRootSiteTrees()
 
   const options = globalStore.rootSiteTrees!.map(
-    (st) => new SelectOptionTyped(st.slug.toUpperCase(), st['@id']),
+    (st) => new SelectOption(st.slug.toUpperCase(), st['@id']),
   )
 
   if (!languageSelectFormField.value.config) {
@@ -96,7 +96,7 @@ const handleSiteTreeCreated = async (
   } else {
     languageSelectFormField.value.config.options =
       globalStore.rootSiteTrees!.map(
-        (st) => new SelectOptionTyped(st.slug.toUpperCase(), st['@id']),
+        (st) => new SelectOption(st.slug.toUpperCase(), st['@id']),
       )
   }
 

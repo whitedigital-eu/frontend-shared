@@ -127,7 +127,6 @@ import DateTimePicker from '../../components/Inputs/DateTimePicker.vue'
 import FileUpload from '../../components/Inputs/FileUpload/FileUpload.vue'
 import RangeDatepicker from '../../components/Inputs/RangeDatepicker.vue'
 import FlatpickrTimePicker from '../../components/Inputs/FlatpickrTimePicker.vue'
-import { SelectOption } from '../../models/SelectOption'
 import { DataFetchingSelectConfig } from '../../types/InputFields'
 import HtmlContentEditor from '../../components/Inputs/HtmlContentEditor.vue'
 import TextList from '../../components/Inputs/TextList.vue'
@@ -137,6 +136,7 @@ import Map from '../../components/Inputs/MapAddressSelector.vue'
 import PlainTextarea from '../../components/Inputs/PlainTextarea.vue'
 import { useTranslation } from '../../i18n/Stores/useTranslation'
 import HeartbeatPopup from '../../components/Heartbeat/HeartbeatPopup.vue'
+import { SelectOption } from '../../models/FormFields'
 
 const fullName = ref('')
 const favouriteFood = ref('Pasta')
