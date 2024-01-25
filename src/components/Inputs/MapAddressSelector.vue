@@ -21,16 +21,26 @@
       @input="handleInput"
     />
     <div id="map" class="w-full h-[400px]">
-      <div ref="map" class="w-full h-full"></div>
+      <GoogleMap ref="mapRef"
+        :api-key="mapData?.googleApiKey"
+        :center="center"
+        class="h-full w-full"
+        :zoom="12"
+      >
+        <Marker
+          :options="{ position: center, draggable: true }"
+          ref="markerRef"
+          @dragend="onMarkerDragEnd" />
+      </GoogleMap>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, ref, onMounted } from 'vue'
+import { computed, ref, watch } from 'vue'
+import { GoogleMap, Marker } from 'vue3-google-map'
 import FormFieldLabel from '../FormFieldLabel.vue'
-import { watch } from 'vue'
-import {MapCoordinateSelectorFieldValue} from "./ValueTypes";
+import { MapCoordinateSelectorFieldValue } from "./ValueTypes";
 
 const props = withDefaults(
   defineProps<{
@@ -57,6 +67,13 @@ const emit = defineEmits<{
   'update:modelValue': [value: MapCoordinateSelectorFieldValue]
 }>()
 
+const mapRef = ref<typeof GoogleMap|null>(null)
+const markerRef = ref<typeof Marker|null>(null)
+
+const center = computed(() =>
+    props.mapData ? ({ lat: props.mapData.initialLat, lng: props.mapData.initialLng }) : undefined
+)
+
 const handleFocus = () => {
   if (props.readonly) return
   hasFocus.value = true
@@ -77,68 +94,23 @@ const handleLabelClick = () => {
   inputRef.value?.focus()
 }
 
-let googleMap: google.maps.Map | null = null
-let marker: google.maps.Marker | null = null
-
-const loadGoogleMapsAPI = () => {
-  const existingScript = document.querySelector(`script[src="https://maps.googleapis.com/maps/api/js?key=${props.mapData?.googleApiKey}&libraries=places"]`);
-  if (existingScript) {
-    initMap();
-    return;
-  }
-  const script = document.createElement('script');
-  script.src = `https://maps.googleapis.com/maps/api/js?key=${props.mapData?.googleApiKey}&libraries=places`;
-  script.onload = initMap;
-  document.head.appendChild(script);
-};
-
-const initMap = () => {
-  const mapElement = document.getElementById('map')
-
-  if (mapElement && props.mapData) {
-    const mapOptions: google.maps.MapOptions = {
-      center: new google.maps.LatLng(
-        props.modelValue?.address ? props.modelValue?.lat : props.mapData.initialLat,
-        props.modelValue?.address ? props.modelValue?.lng : props.mapData.initialLng
-      ),
-      zoom: 12,
-    }
-
-    googleMap = new google.maps.Map(mapElement, mapOptions)
-    marker = new google.maps.Marker({
-      position: mapOptions.center,
-      map: googleMap,
-      draggable: true,
-    })
-
-    marker.addListener('dragend', onMarkerDragEnd)
-
-    if (inputRef.value) {
-      const autocomplete = new google.maps.places.Autocomplete(inputRef.value)
-      autocomplete.setFields(['formatted_address', 'geometry'])
-      autocomplete.addListener('place_changed', onPlaceChanged)
-    }
-  }
-}
-const onPlaceChanged = () => {
-  value.value = (<HTMLInputElement>document.getElementById('autocomplete-input')).value
-  handleAddressAutocomplete()
-}
-
 const handleAddressAutocomplete = () => {
+  if(!markerRef.value || !mapRef.value){
+    console.error('Marker or map not found', markerRef.value, mapRef.value)
+    return
+  }
+
   const geocoder = new google.maps.Geocoder()
   geocoder.geocode({ address: value.value }, (results, status) => {
     if (
-      status === google.maps.GeocoderStatus.OK &&
-        results &&
-      results?.length > 0
+      status === google.maps.GeocoderStatus.OK && results && results?.length > 0
     ) {
       const location = results[0].geometry.location
       const address = results[0].formatted_address
       const position = {address: address, lat: location.lat(), lng: location.lng() }
       emit('update:modelValue', position)
-      marker?.setPosition(location)
-      googleMap?.setCenter(location)
+      markerRef.value!.marker.setPosition(location)
+      mapRef.value!.map.setCenter(location)
     }
   })
 }
@@ -149,18 +121,27 @@ const onMarkerDragEnd = (event: google.maps.MapMouseEvent) => {
   emit('update:modelValue', position);
 };
 
-onMounted(() => {
-  inputRef.value = document.getElementById(
-    'autocomplete-input'
-  ) as HTMLInputElement
-  if (props.mapData) loadGoogleMapsAPI()
-})
-
 watch(
     () => props.modelValue?.address,
     (n) => (value.value = n as string),
     { immediate: true }
 )
+
+watch(() => mapRef.value?.ready, async(n) => {
+  if(!n || !mapRef.value || !inputRef.value) return
+
+  const placesApi = await mapRef.value.api.importLibrary("places")
+
+  if (!placesApi) return
+
+  new placesApi.Autocomplete(inputRef.value!, {
+    types: ["address"],
+    fields: ["formatted_address", "geometry"],
+  }).addListener('place_changed', () => {
+    value.value = inputRef.value!.value
+    handleAddressAutocomplete()
+  })
+})
 </script>
 
 <style lang="scss" scoped>

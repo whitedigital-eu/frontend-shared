@@ -83,7 +83,7 @@
       v-model="mapDataArray"
       label="Input address"
       :map-data="{
-        googleApiKey: 'AIzaSyCAIwTPctnSM2PWcbK6cMdlZaSgEYIKp5U',
+        googleApiKey: googleMapsApiKey,
         initialLat: 56.946285,
         initialLng: 24.105078,
       }"
@@ -222,4 +222,7 @@ const htmlContent = ref(`
 `)
 
 const textareaValue = ref('Lorem ipsum dolor sit amet...')
+
+// @ts-ignore
+const googleMapsApiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY as string
 </script>
