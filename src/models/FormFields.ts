@@ -80,7 +80,6 @@ class TextField extends FormField {
 }
 
 export type DecimalFieldConfig = Partial<{
-  readonly: boolean
   maxDecimals: number
   wrapperAttributes: Record<string, unknown>
   labelAttributes: Record<string, unknown>

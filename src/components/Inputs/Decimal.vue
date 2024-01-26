@@ -18,7 +18,6 @@
       v-model="value"
       class="form-control sm:min-w-[200px] w-full"
       inputmode="decimal"
-      :readonly="config.readonly"
       type="text"
       @blur="handleBlur"
       @focus="handleFocus"
@@ -37,7 +36,6 @@ const {
   modelValue = '',
   label = null,
   config = {
-    readonly: false,
     maxDecimals: 2,
     wrapperAttributes: {},
     labelAttributes: {},
@@ -169,7 +167,15 @@ const handleInput = (e: Event) => {
   emitUpdate(targetValue)
 }
 
-const handleLabelClick = () => inputRef.value?.focus()
+const handleLabelClick = () => {
+  if(config.inputAttributes &&
+      (('readonly' in config.inputAttributes && config.inputAttributes.readonly)
+          || ('disabled' in config.inputAttributes && config.inputAttributes.disabled))
+  ) {
+    return
+  }
+  inputRef.value?.focus()
+}
 
 watch(
   () => modelValue,
