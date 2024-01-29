@@ -8,6 +8,7 @@ import isToday from 'dayjs/plugin/isToday'
 import isYesterday from 'dayjs/plugin/isYesterday'
 import router from './router'
 import globalComponents from './global-components/'
+import 'vue3-toastify/dist/index.css'
 
 dayjs.locale('lv')
 dayjs.extend(isSameOrBefore)

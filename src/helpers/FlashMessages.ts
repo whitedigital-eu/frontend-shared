@@ -2,6 +2,7 @@
 import StartToastifyInstance from 'toastify-js/src/toastify-es'
 //@ts-ignore
 import dom from '@left4code/tw-starter/dist/js/dom'
+import { CheckCircle, createElement, XCircle } from "lucide";
 
 const createToastifyConfig = (
   element: Node,
@@ -35,10 +36,20 @@ const getSuccessMessage = (methodName: string) => {
   )
 }
 
-export const showGlobalError = (description: string) => {
+const createIcon = (icon: typeof CheckCircle, classes: string) => {
+  const iconEl = createElement(icon)
+  iconEl.setAttribute('height', '24')
+  iconEl.setAttribute('width', '24')
+  iconEl.setAttribute('class', `lucide block mx-auto ${classes}`)
+  iconEl.setAttribute('stroke', 'currentColor')
+  iconEl.setAttribute('stroke-width', '2')
+  return iconEl
+}
+
+export const showGlobalError = (description: string, options?: { iconClasses?: string }) => {
   const element = createToastifyElement(
     `
-        <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x-circle text-danger text-danger wd-error-message"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
+        ${createIcon(XCircle, options?.iconClasses ?? 'text-danger').outerHTML}
         <div class="ml-4 mr-4">
             <div class="font-medium">${description}</div>
         </div>
@@ -56,10 +67,10 @@ type ToastifyInstance = {
 
 let activeSuccessToast: ToastifyInstance | null = null
 
-export const showSuccessMessage = (successMessage: string) => {
+export const showSuccessMessage = (successMessage: string, options?: { iconClasses?: string }) => {
   const successElement = createToastifyElement(
-    `
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide block mx-auto"><path class="text-success" d="M22 11.08V12a10 10 0 11-5.93-9.14"></path><polyline class="text-success" points="22 4 12 14.01 9 11.01"></polyline></svg>
+      `
+        ${createIcon(CheckCircle, options?.iconClasses ?? 'text-success').outerHTML}
         <div class="ml-4 mr-4">
             <div class="font-medium">${successMessage}</div>
         </div>
@@ -76,7 +87,7 @@ export const showSuccessMessage = (successMessage: string) => {
   activeSuccessToast.showToast()
 }
 
-export const showWriteRequestSuccess = (methodName: string) => {
+export const showWriteRequestSuccess = (methodName: string, options?: { iconClasses?: string }) => {
   const successMessage = getSuccessMessage(methodName)
-  showSuccessMessage(successMessage)
+  showSuccessMessage(successMessage, options)
 }
