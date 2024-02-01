@@ -287,10 +287,21 @@ class TimeWithCurrentField extends FormField {
 
 class SignatureField extends FormField {
   public value: string | null
+  public editMode = false
 
-  constructor(name: string, label: string, value = '') {
+  constructor(
+    name: string,
+    label: string,
+    value = '',
+    config?: {
+      editMode?: boolean
+    },
+  ) {
     super('signature', name, label)
     this.value = value
+    if (config) {
+      this.editMode = config.editMode ?? this.editMode
+    }
   }
 }
 
