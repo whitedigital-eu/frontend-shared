@@ -71,6 +71,7 @@ const emit = defineEmits<{
   'update:modelValue': [value: string[] | string]
   'remove-file': [fileIri: string, callback: () => void]
   'edit-file': [fileIri: string]
+  'on-error': [dz: Dropzone, file: Dropzone.DropzoneFile]
 }>()
 
 Dropzone.autoDiscover = false
@@ -178,6 +179,12 @@ const initDropzone = () => {
     }
 
     uploadedFileIris.value = [...uploadedFileIris.value, getFileIri(file)]
+  })
+
+  model.value.on('error', (file: Dropzone.DropzoneFile) => {
+    if (model.value) {
+      emit('on-error', model.value, file)
+    }
   })
 
   model.value.on('addedfile', async (file: Dropzone.DropzoneFile) => {
