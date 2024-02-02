@@ -2,6 +2,7 @@ import { CheckSquare, Trash2, Eye, createElement, Move } from 'lucide'
 import { COLLAPSE_ORDER } from './Column'
 import { TableProps } from './createTableConfig'
 import { GuidResource, Resource } from '../../types/Resource'
+import { Modify } from '../../site-tree/Types/Shared'
 
 type RemoveUndefined<T> = { [K in keyof T]-?: Exclude<T[K], undefined> }
 
@@ -109,7 +110,12 @@ const createActionColumn = <
     | Resource<string, string>
     | GuidResource<string, string>,
 >(
-  props: RemoveUndefined<TableProps>,
+  props: Modify<
+    RemoveUndefined<TableProps>,
+    {
+      initialSort: Tabulator.Sorter[] | undefined
+    }
+  >,
   clickHandlers: {
     edit: (resource: ResourceInstance) => void
     delete: (resource: ResourceInstance) => void

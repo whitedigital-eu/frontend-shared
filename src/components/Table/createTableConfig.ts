@@ -94,6 +94,11 @@ export type TableProps = {
    */
   pageSize?: number
   /**
+   * Tabulator initialSort parameter - the initial sort order of the table.
+   * @see https://tabulator.info/docs/4.9/sort#initial
+   */
+  initialSort?: Tabulator.Sorter[]
+  /**
    * Various table configuration options
    */
   config: TableConfig

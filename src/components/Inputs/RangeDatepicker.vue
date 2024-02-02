@@ -41,11 +41,12 @@ import { X } from 'lucide-vue-next'
 import useResponsivity from '../../composables/useResponsivity'
 
 const props = withDefaults(
-  defineProps<{ modelValue?: string[] | string; label?: string }>(),
-  { modelValue: () => [], label: '' }
+  // TODO: remove '' from allowed values, use null instead
+  defineProps<{ modelValue?: string[] | null | ''; label?: string }>(),
+  { modelValue: () => [], label: '' },
 )
 
-const emit = defineEmits<{ 'update:modelValue': [value: string[]] }>()
+const emit = defineEmits<{ 'update:modelValue': [value: string[] | null] }>()
 
 dayjs.extend(LocalizedFormat)
 
@@ -53,7 +54,7 @@ const { isMobile } = useResponsivity()
 
 const datepickerRef = ref(null)
 
-const value = ref<string | string[]>('')
+const value = ref<typeof props.modelValue>(null)
 
 const isEmpty = computed(() => !value.value || value.value.length === 0)
 const isOpen = ref(false)
@@ -72,11 +73,11 @@ const config: any = {
 
 const handleChange = (selectedDates: Date[]) => {
   const newVal = selectedDates.map((date: Date) =>
-    dayjs(date).format('YYYY-MM-DD')
+    dayjs(date).format('YYYY-MM-DD'),
   )
   if (
     newVal.length < 2 ||
-    areStringArraysEqual(newVal, props.modelValue as string[])
+    (props.modelValue && areStringArraysEqual(newVal, props.modelValue))
   ) {
     return
   }
@@ -95,8 +96,8 @@ const handleClose = () => (isOpen.value = false)
 watch(
   () => props.modelValue,
   (n) => (value.value = n),
-  { immediate: true }
+  { immediate: true },
 )
 
-const clearInput = () => emit('update:modelValue', [])
+const clearInput = () => emit('update:modelValue', null)
 </script>

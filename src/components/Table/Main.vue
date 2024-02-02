@@ -43,7 +43,6 @@ import { COLLAPSE_ORDER, createColumn } from './Column'
 import { tableTranslations } from '../../helpers/Translations'
 import { TableProps } from './createTableConfig'
 import { GuidResource, Resource } from '../../types/Resource'
-
 /*
  * Since only props can be generic (in other words, it is not possible to pass just a generic, without a prop),
  * we need the fake resourceType prop which is used only to get the generic type.
@@ -67,6 +66,7 @@ const props = withDefaults(
     columnData: null,
     page: 1,
     pageSize: 30,
+    initialSort: undefined,
     canUpdateRecordFunc: () => true,
     tabulatorOptions: null,
     customActions: null,
@@ -117,8 +117,13 @@ const emit = defineEmits<{
    * Emitted after a table page is loaded
    * @arg page - he number of the currently displayed page
    * @arg pageSize - the amount of entries displayed in the page
+   * @arg sortingQueryObject - the sorting query object that can be passed to the API or saved in the URL
    */
-  'pagination-changed': [page: number, pageSize: number]
+  'page-loaded': [
+    page: number,
+    pageSize: number,
+    sortingQueryObject: Record<string, Tabulator.SortDirection> | null,
+  ]
   /**
    * Emitted every time new data is loaded into the table
    * @arg totalEntryCount - the total number of available items as returned by the API
@@ -274,11 +279,28 @@ const PAGE_SIZE_PARAM = 'itemsPerPage' as const
 
 const tableApiResponse = ref<ApiListResponse | null>(null)
 
+/** the tabulator type for this is wrong */
+type Sorter = {
+  column?: Tabulator.ColumnComponent
+  field: string
+  dir: Tabulator.SortDirection
+}
+
+const transformSorters = (sorters: Sorter[]) => {
+  if (sorters.length > 0) {
+    const key = `order[${sorters[0]['field']}]`
+    const value = sorters[0]['dir']
+    return { key, value }
+  }
+  return null
+}
+
 const initTabulator = async (resetPage = false) => {
   let options: Tabulator.Options = {
     paginationSizeSelector: props.paginationSizeSelector,
     paginationInitialPage: resetPage ? 1 : props.page,
     paginationSize: props.pageSize,
+    initialSort: props.initialSort,
     paginationDataSent: { size: PAGE_SIZE_PARAM },
     layout: 'fitColumns',
     responsiveLayout: 'collapse',
@@ -358,7 +380,7 @@ const initTabulator = async (resetPage = false) => {
       ...options,
       ajaxURL: props.ajaxUrl,
       ajaxConfig: props.config.ajaxConfig,
-      ajaxResponse: (url, params, response: ApiListResponse) => {
+      ajaxResponse: (_url, _params, response: ApiListResponse) => {
         tableApiResponse.value = response
 
         const page = response['hydra:view']['hydra:last']
@@ -381,18 +403,35 @@ const initTabulator = async (resetPage = false) => {
       },
       pageLoaded: (pageno: number) => {
         if (!tabulator.value) return
-        emit('pagination-changed', pageno, tabulator.value.getPageSize())
+        const transformedSorters = transformSorters(
+          tabulator.value.getSorters() as unknown as Sorter[],
+        )
+        emit(
+          'page-loaded',
+          pageno,
+          tabulator.value.getPageSize(),
+          transformedSorters
+            ? { [transformedSorters.key]: transformedSorters.value }
+            : null,
+        )
         // to prevent not all entries showing when changing page and page size, see https://whitedigital.myjetbrains.com/youtrack/issue/ZWL-292/CMS-uznemumi-bug
         reInitTable()
       },
       ajaxSorting: true,
-      ajaxRequesting: function (url, params) {
-        if (params.sorters.length > 0) {
-          params[`order[${params.sorters[0]['field']}]`] =
-            params.sorters[0]['dir']
+      ajaxRequesting: function (
+        _url,
+        params: Record<string, unknown> & { sorters: Sorter[] },
+      ) {
+        const sortersTransformed = transformSorters(params.sorters)
+
+        if (sortersTransformed) {
+          params[sortersTransformed.key] = sortersTransformed.value
         }
+
+        //@ts-expect-error must be deleted although it is readonly
         delete params.sorters
-        return params
+
+        return true
       },
       ajaxLoaderLoading: `
         <div class="flex items-center justify-center" data-test="table-loading-indicator">
