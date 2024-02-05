@@ -131,7 +131,7 @@ const props = withDefaults(
 )
 
 const emit = defineEmits<{
-  'update:query-params': [data: ReturnType<typeof filtersToQueryParams>]
+  'update:query-params': [data: ReturnType<typeof filtersToQueryParams> | null]
 }>()
 
 const { isMobile } = useResponsivity()
@@ -157,7 +157,7 @@ const resetFilter = () => {
       props.filters[type].forEach((item) => (item.value = ''))
     }
   })
-  emit('update:query-params', {})
+  emit('update:query-params', null)
 }
 
 const createDateRangeQueryParamsArr = (
