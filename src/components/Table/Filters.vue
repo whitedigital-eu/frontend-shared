@@ -1,18 +1,21 @@
 <template>
   <div>
-    <button
+    <slot
       v-if="isMobile && showMobileToggleButton"
-      class="btn btn-primary mb-4 w-full"
-      @click="showFilters = !showFilters"
+      name="mobile-toggle-button"
+      :show-filters="showFilters"
+      :toggle-show-filters="toggleShowFilters"
     >
-      <span>{{ showFilters ? 'Paslēpt' : 'Parādīt' }} filtrus</span>
-      <span v-show="showFilters">
-        <i class="h-4 w-4" data-lucide="chevron-down"> </i>
-      </span>
-      <span v-show="!showFilters">
-        <i class="h-4 w-4" data-lucide="chevron-up"></i>
-      </span>
-    </button>
+      <button class="btn btn-primary mb-4 w-full" @click="toggleShowFilters">
+        <span>{{ showFilters ? 'Paslēpt' : 'Parādīt' }} filtrus</span>
+        <span v-show="showFilters">
+          <i class="h-4 w-4" data-lucide="chevron-down"> </i>
+        </span>
+        <span v-show="!showFilters">
+          <i class="h-4 w-4" data-lucide="chevron-up"></i>
+        </span>
+      </button>
+    </slot>
     <div
       class="flex flex-col sm:flex-row sm:items-end xl:items-start"
       data-test="filters"
@@ -132,6 +135,20 @@ const props = withDefaults(
 
 const emit = defineEmits<{
   'update:query-params': [data: ReturnType<typeof filtersToQueryParams> | null]
+}>()
+
+defineSlots<{
+  default: {}
+  'mobile-toggle-button': {
+    showFilters: boolean
+    toggleShowFilters: () => void
+  }
+  'action-buttons': {
+    filterFunction: () => void
+    resetFilterFunction: () => void
+    showFilters: boolean
+    toggleShowFilters: () => void
+  }
 }>()
 
 const { isMobile } = useResponsivity()
