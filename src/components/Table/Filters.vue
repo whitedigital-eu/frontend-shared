@@ -275,4 +275,6 @@ watch(
 const toggleShowFilters = () => {
   showFilters.value = !showFilters.value
 }
+
+defineExpose({ toggleShowFilters, filter, resetFilter })
 </script>

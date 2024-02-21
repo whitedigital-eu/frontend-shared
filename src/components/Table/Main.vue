@@ -7,7 +7,7 @@
         class="table-total-entry-count"
         data-test="table-total-entry-count"
       >
-        <span>(Kopējais ierakstu skaits: {{ totalEntryCount }})</span>
+        <span>(Kopā: {{ totalEntryCount }})</span>
       </div>
       <div class="flex-1">
         <slot
