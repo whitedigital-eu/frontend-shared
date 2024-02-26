@@ -1,19 +1,21 @@
 <template>
-  <div class="flex gap-4">
+  <div class="flex flex-wrap gap-x-4 gap-y-2">
     <Datepicker v-model="dateValue" class="grow" :label="label" />
-    <TimePicker
-      v-model="hoursValue"
-      :disabled="!value && (value as unknown as number) !== 0"
-      :step="config?.hoursStep"
-      type="hours"
-    />
-    <span class="leading-9">:</span>
-    <TimePicker
-      v-model="minutesValue"
-      :disabled="!value || !hoursValue"
-      :step="config?.minutesStep"
-      type="minutes"
-    />
+    <div class="flex flex-1 flex-nowrap gap-4">
+      <TimePicker
+        v-model="hoursValue"
+        :disabled="!value && (value as unknown as number) !== 0"
+        :step="config?.hoursStep"
+        type="hours"
+      />
+      <span class="leading-9">:</span>
+      <TimePicker
+        v-model="minutesValue"
+        :disabled="!value || !hoursValue"
+        :step="config?.minutesStep"
+        type="minutes"
+      />
+    </div>
   </div>
 </template>
 
@@ -44,10 +46,10 @@ const formatTimeInput = (value: string) => {
 
 const dateValue = ref<string | null>(modelValue)
 const hoursValue = ref(
-  modelValue ? formatTimeInput(dayjs(modelValue).format('H')) : ''
+  modelValue ? formatTimeInput(dayjs(modelValue).format('H')) : '',
 )
 const minutesValue = ref(
-  modelValue ? formatTimeInput(dayjs(modelValue).format('mm')) : ''
+  modelValue ? formatTimeInput(dayjs(modelValue).format('mm')) : '',
 )
 
 const value = ref<string | null>(modelValue)
@@ -88,6 +90,6 @@ watch(
     if (modelValue === value.value) return
 
     setDateHoursAndMinutes()
-  }
+  },
 )
 </script>
