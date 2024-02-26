@@ -38,5 +38,5 @@ export type MapProps = {
 }
 
 export type PhoneNumberFieldConfig = {
-  vueTelInputProps?: VueTelInputProps
+  vueTelInputProps?: Partial<VueTelInputProps>
 }
