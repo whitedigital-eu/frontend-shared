@@ -15,9 +15,7 @@
 import { ref, watch } from 'vue'
 import BaseSelect from './BaseSelect.vue'
 import { SimpleSelectValue } from '../ValueTypes'
-import { RecursivePartial, TomSettings } from 'tom-select/src/types'
-import { Modify } from '../../../site-tree/Types/Shared'
-import { SelectOption } from '../../../models/FormFields'
+import { SimpleSelectConfig } from '../../../types/InputFields'
 
 const props = withDefaults(
   defineProps<{
@@ -26,10 +24,7 @@ const props = withDefaults(
     readonly?: boolean
     label?: string
     allowDelete?: boolean
-    config?: Modify<
-      RecursivePartial<TomSettings>,
-      { options: SelectOption[] }
-    > | null
+    config?: SimpleSelectConfig | null
   }>(),
   {
     modelValue: '',

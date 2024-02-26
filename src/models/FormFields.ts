@@ -3,6 +3,7 @@ import {
   SimpleSelectConfig,
   LabelProps,
   MapProps,
+  PhoneNumberFieldConfig,
 } from '../types/InputFields'
 import dayjs from 'dayjs'
 import {
@@ -169,6 +170,22 @@ class DataFetchingSelectField extends FormField {
     this.config = { ...defaultConfig, ...config }
     this.readonly = readonly
     this.allowDelete = allowDelete
+  }
+}
+
+class PhoneNumberField extends FormField {
+  public value: string | null | undefined
+  config?: PhoneNumberFieldConfig
+
+  constructor(
+    name: string,
+    label: string,
+    value: string | null | undefined = '',
+    config?: PhoneNumberFieldConfig,
+  ) {
+    super('phone-number', name, label)
+    this.value = value
+    this.config = config
   }
 }
 
@@ -414,6 +431,7 @@ export {
   HtmlContentField,
   SimpleSelectField,
   DataFetchingSelectField,
+  PhoneNumberField,
   DateField,
   TimeField,
   DateTimeField,
@@ -517,3 +535,4 @@ export type AnyFormField =
   | GovernmentIdField
   | PublicFileUploadField
   | CollectionField<any>
+  | PhoneNumberField
