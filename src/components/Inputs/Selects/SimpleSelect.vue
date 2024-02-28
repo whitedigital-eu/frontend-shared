@@ -2,35 +2,28 @@
   <BaseSelect
     :id="props.id"
     v-model="value"
-    :allow-delete="allowDelete"
+    :config="props.config"
     :label="label"
-    :readonly="props.readonly"
-    :settings="props.config"
     @create-new-item="(item) => emit('create-new-item', item)"
     @update:model-value="handleInput"
   />
 </template>
 
-<script setup lang="ts">
+<script setup lang="ts" generic="T extends string">
 import { ref, watch } from 'vue'
 import BaseSelect from './BaseSelect.vue'
-import { SimpleSelectValue } from '../ValueTypes'
-import { SimpleSelectConfig } from '../../../types/InputFields'
+import { SelectConfig } from '../../../types/InputFields'
 
 const props = withDefaults(
   defineProps<{
     id: string
-    modelValue?: SimpleSelectValue
-    readonly?: boolean
+    modelValue?: T | T[] | null
     label?: string
-    allowDelete?: boolean
-    config?: SimpleSelectConfig | null
+    config?: SelectConfig<T> | null
   }>(),
   {
-    modelValue: '',
-    readonly: false,
+    modelValue: null,
     label: '',
-    allowDelete: true,
     config: null,
   },
 )
@@ -40,7 +33,7 @@ const emit = defineEmits<{
   'create-new-item': [itemName: string | undefined]
 }>()
 
-const value = ref()
+const value = ref<T | T[] | null>()
 
 const handleInput = (value: string | string[] | number) => {
   emit('update:modelValue', value)

@@ -3,37 +3,33 @@
     :id="id"
     :key="baseSelectKey"
     v-model="value"
-    :allow-delete="allowDelete"
+    :config="computedConfig"
     :label="label"
     :search-input-placeholder="searchInputPlaceholder"
-    :settings="settings"
     @create-new-item="(item) => emit('create-new-item', item)"
     @update:model-value="handleInput"
   />
 </template>
 
-<script setup lang="ts">
-import { computed, ref, watch, watchEffect } from 'vue'
+<script setup lang="ts" generic="T extends string">
+import { computed, ref, watch } from 'vue'
 import BaseSelect from './BaseSelect.vue'
 import { DataFetchingSelectConfig } from '../../../types/InputFields'
 import { AxiosInstance } from 'axios'
-import { DataFetchingSelectValue } from '../ValueTypes'
-import type { RecursivePartial, TomSettings } from 'tom-select/src/types'
 import { SelectOption } from '../../../models/FormFields'
-import { Modify } from '../../../site-tree/Types/Shared'
+import _ from 'lodash'
 
 const props = withDefaults(
   defineProps<{
     id: string
-    config: DataFetchingSelectConfig
-    modelValue: DataFetchingSelectValue
+    config: DataFetchingSelectConfig<T>
+    modelValue?: T | T[] | null
     label?: string
     axiosInstance: AxiosInstance
-    allowDelete?: boolean
   }>(),
   {
+    modelValue: null,
     label: '',
-    allowDelete: true,
   },
 )
 
@@ -42,41 +38,47 @@ const emit = defineEmits<{
   'create-new-item': [itemName: string | undefined]
 }>()
 
-const minSymbolsForSearch = 3
-const searchInputPlaceholder = computed(
-  () => `Ievadiet vismaz ${minSymbolsForSearch} simbolus!`,
-)
+const defaultMinSymbolsForSearch = 3
+const searchInputPlaceholder = `Ievadiet vismaz ${defaultMinSymbolsForSearch} simbolus!`
 
-const settings: Modify<
-  RecursivePartial<TomSettings>,
-  { options: SelectOption[] }
-> = {
-  shouldLoad: (query: string) => query.length >= minSymbolsForSearch,
-  async load(searchValue: string, callback: (options: SelectOption[]) => void) {
-    const requestUrl = props.config.requestUrlGenerator(searchValue)
-    const res = await props.axiosInstance.get(requestUrl)
-    const options: { value: string; text: string }[] = res.data[
-      'hydra:member'
-    ].map(props.config.responseMapFunction)
-    callback(options)
-  },
-  options: [],
-}
+const computedConfig = computed(() =>
+  _.merge(
+    {
+      readonly: false,
+      allowDelete: true,
+      create: false,
+      tomSelectSettings: {
+        shouldLoad: (query: string) =>
+          query.length >= defaultMinSymbolsForSearch,
+        async load(
+          searchValue: string,
+          callback: (options: SelectOption[]) => void,
+        ) {
+          const requestUrl = props.config.requestUrlGenerator(searchValue)
+          const res = await props.axiosInstance.get(requestUrl)
+          const options: { value: string; text: string }[] = res.data[
+            'hydra:member'
+          ].map(props.config.responseMapFunction)
+          callback(options)
+        },
+        options: [],
+      },
+    },
+    props.config,
+  ),
+)
 
 const baseSelectKey = ref(0)
 
-watchEffect(() => {
-  if (props.config.options) {
-    settings.options = props.config.options
-    baseSelectKey.value++
-  }
-  if (props.config.create) {
-    settings.create = props.config.create
-    baseSelectKey.value++
-  }
-})
+watch(
+  [
+    () => computedConfig.value.tomSelectSettings.options,
+    () => computedConfig.value.tomSelectSettings.create,
+  ],
+  () => baseSelectKey.value++,
+)
 
-const value = ref()
+const value = ref<T | T[] | null>()
 
 const handleInput = (value: string | string[] | number) => {
   emit('update:modelValue', value)

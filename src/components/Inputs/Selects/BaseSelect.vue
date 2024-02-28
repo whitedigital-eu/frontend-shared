@@ -6,7 +6,7 @@
       :is-placeholder="isEmpty && !isOpen"
       :placeholder-css-classes="[
         '!cursor-pointer',
-        readonly ? '!z-[1]' : 'z-[2]',
+        computedConfig.readonly ? '!z-[1]' : 'z-[2]',
       ]"
       @click="handleLabelClick"
     >
@@ -16,7 +16,7 @@
       :id="selectId"
       ref="selectRef"
       class="tom-select"
-      :disabled="props.readonly"
+      :disabled="computedConfig.readonly"
       :multiple="multiple"
     >
       <option value=""></option>
@@ -32,7 +32,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup lang="ts" generic="T extends string">
 import { computed, ref, onMounted, watch, onBeforeUnmount } from 'vue'
 import TomSelect from 'tom-select'
 import 'tom-select/dist/css/tom-select.css'
@@ -45,35 +45,23 @@ import type {
   TomTemplate,
 } from 'tom-select/src/types'
 import _ from 'lodash'
-import { SelectOption } from '../../../models/FormFields'
-import { Modify } from '../../../site-tree/Types/Shared'
+import { SelectConfig } from '../../../types/InputFields'
 
-type ModelValue = string | string[]
+type ModelValue = T | T[] | null
 
 const props = withDefaults(
   defineProps<{
-    settings?: Modify<
-      RecursivePartial<TomSettings>,
-      { options: SelectOption[] }
-    > | null
+    config?: SelectConfig<T> | null
     modelValue?: ModelValue
     id: string
-    readonly?: boolean
     label?: string | null
-    allowDelete?: boolean
     searchInputPlaceholder?: string
   }>(),
   {
-    settings: () =>
-      ({}) as Modify<
-        RecursivePartial<TomSettings>,
-        { options: SelectOption[] }
-      >,
-    modelValue: '',
-    readonly: false,
+    modelValue: null,
     label: null,
-    allowDelete: true,
     searchInputPlaceholder: '',
+    config: null,
   },
 )
 
@@ -81,6 +69,17 @@ const emit = defineEmits<{
   'update:modelValue': [value: string | string[] | number]
   'create-new-item': [itemName: string | undefined]
 }>()
+
+const defaultConfig: SelectConfig<T> = {
+  readonly: false,
+  allowDelete: true,
+  create: false,
+  tomSelectSettings: {},
+}
+
+const computedConfig = computed(() =>
+  _.merge({ ...defaultConfig }, props.config ?? {}),
+)
 
 const selectRef = ref()
 const model = ref()
@@ -91,7 +90,7 @@ const isOpen = ref(false)
 const isEmpty = ref(false)
 
 const handleLabelClick = () => {
-  if (!model.value || props.readonly || isOpen.value) return
+  if (!model.value || computedConfig.value.readonly || isOpen.value) return
   model.value.open()
 }
 
@@ -159,7 +158,7 @@ const createPlugins = () => {
   const plugins: TomSettings['plugins'] = {
     dropdown_input: {},
   }
-  if (props.allowDelete) {
+  if (computedConfig.value.allowDelete) {
     plugins.clear_button = {
       title: 'Dzēst',
       html: function (data: { className: string; title: string }) {
@@ -172,8 +171,8 @@ const createPlugins = () => {
     plugins.remove_button = { title: 'Noņemt vērtību' }
   }
 
-  if (props.settings) {
-    Object.assign(plugins, props.settings.plugins)
+  if (computedConfig.value.tomSelectSettings) {
+    Object.assign(plugins, computedConfig.value.tomSelectSettings.plugins)
   }
 
   return plugins
@@ -211,9 +210,8 @@ const defaultSettings: RecursivePartial<TomSettings> = {
   },
 }
 
-const settings: RecursivePartial<TomSettings> = _.merge(
-  { ...defaultSettings },
-  props.settings,
+const settings = computed(() =>
+  _.merge({ ...defaultSettings }, computedConfig.value.tomSelectSettings),
 )
 
 const isOptionSelected = (value: string) => {
@@ -223,13 +221,13 @@ const isOptionSelected = (value: string) => {
 }
 
 const init = () => {
-  model.value = new TomSelect(selectRef.value, settings)
+  model.value = new TomSelect(selectRef.value, settings.value)
 }
 
 onMounted(init)
 
 watch(
-  () => props.settings?.options,
+  () => computedConfig.value.tomSelectSettings?.options,
   (options) => {
     model.value.clearOptions()
     model.value.addOptions(options)
@@ -249,7 +247,7 @@ watch(
   { immediate: true },
 )
 watch(
-  () => props.readonly,
+  () => computedConfig.value.readonly,
   (n) => {
     n ? model.value.disable() : model.value.enable()
   },

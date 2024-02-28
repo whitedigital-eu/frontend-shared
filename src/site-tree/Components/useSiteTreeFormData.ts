@@ -3,7 +3,7 @@ import slugify from 'slugify'
 import { ProjectSettings } from '../../components/Forms/shared'
 import {
   CheckboxField,
-  SimpleSelectFieldTS,
+  SimpleSelectField,
   TextField,
 } from '../../models/FormFields'
 import { SiteTreeRead } from '../Types/SiteTree'
@@ -14,12 +14,12 @@ import useFormData from '../../composables/useFormData'
 export type SiteTreeFormData = {
   title: TextField
   slug: TextField
-  type: SimpleSelectFieldTS<SiteTreeRead['type']>
+  type: SimpleSelectField<SiteTreeRead['type']>
   metaTitle: TextField
   metaDescription: TextField
   isActive: CheckboxField
   isVisible: CheckboxField
-  parent?: SimpleSelectFieldTS<SiteTreeRead['@id']>
+  parent?: SimpleSelectField<SiteTreeRead['@id']>
 }
 
 export default function useSiteTreeFormData(
@@ -36,12 +36,14 @@ export default function useSiteTreeFormData(
       projectSettings.global.$t('form.table.title'),
     ),
     slug: new TextField('slug', projectSettings.global.$t('form.table.slug')),
-    type: new SimpleSelectFieldTS<SiteTreeRead['type']>(
+    type: new SimpleSelectField<SiteTreeRead['type']>(
       'type',
       projectSettings.global.$t('form.table.type'),
       typeSelectOptions[0].value,
-      typeSelectOptions,
-      !!siteTree,
+      {
+        tomSelectSettings: { options: typeSelectOptions },
+        readonly: !!siteTree,
+      },
     ),
     metaTitle: new TextField(
       'metaTitle',
@@ -65,11 +67,15 @@ export default function useSiteTreeFormData(
     if (siteTree) {
       fillFormDataFrom(formData, siteTree)
     } else if (showParentSelector) {
-      baseFormData.parent = new SimpleSelectFieldTS(
+      baseFormData.parent = new SimpleSelectField(
         'parent',
         'Parent section',
         parent,
-        await projectSettings.siteTree.getSiteTreeSelectOptions(),
+        {
+          tomSelectSettings: {
+            options: await projectSettings.siteTree.getSiteTreeSelectOptions(),
+          },
+        },
       )
     }
     return formData

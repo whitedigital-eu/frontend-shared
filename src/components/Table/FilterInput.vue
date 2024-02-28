@@ -27,7 +27,7 @@
       :id="`filter-${item.label}`"
       v-model="item.value"
       class="w-full"
-      :config="item.config as SimpleSelectConfig"
+      :config="item.config as SelectConfig"
       :label="item.label"
       :required="false"
     />
@@ -41,7 +41,7 @@
       v-model="item.value"
       :axios-instance="axiosInstance"
       class="w-full"
-      :config="castToDataFetchingSelect(item.config)"
+      :config="item.config"
       :label="item.label"
     />
     <Datepicker
@@ -68,7 +68,10 @@
     >
       <label class="mb-2 mr-2">{{ item.label }}</label>
       <div v-if="item.config" class="flex gap-4">
-        <div v-for="option in item.config.options" :key="option.value">
+        <div
+          v-for="option in item.config?.tomSelectSettings?.options ?? []"
+          :key="option.value"
+        >
           <input
             v-model="item.value"
             :name="item.name"
@@ -93,10 +96,7 @@ import DataFetchingSelect from '../../components/Inputs/Selects/DataFetchingSele
 import Checkbox from '../../components/Inputs/Checkbox.vue'
 import { Filter } from '../../types/Filters'
 import { AxiosInstance } from 'axios'
-import {
-  DataFetchingSelectConfig,
-  SimpleSelectConfig,
-} from '../../types/InputFields'
+import { DataFetchingSelectConfig, SelectConfig } from '../../types/InputFields'
 import { computed } from 'vue'
 
 const { item, axiosInstance = null } = defineProps<{
@@ -105,7 +105,7 @@ const { item, axiosInstance = null } = defineProps<{
 }>()
 
 const isDataFetchingSelectConfig = (
-  x: SimpleSelectConfig | DataFetchingSelectConfig | null,
+  x: SelectConfig | DataFetchingSelectConfig | null,
 ): x is DataFetchingSelectConfig => {
   return (
     x !== null &&
@@ -114,18 +114,6 @@ const isDataFetchingSelectConfig = (
     'responseMapFunction' in x &&
     typeof x.responseMapFunction === 'function'
   )
-}
-
-const castToDataFetchingSelect = (
-  x: SimpleSelectConfig | DataFetchingSelectConfig | null,
-) => {
-  if (isDataFetchingSelectConfig(x)) return x
-  else {
-    console.error(
-      'Property to be cast to DataFetchingSelectConfig is not DataFetchingSelectConfig!!!',
-    )
-    return x as DataFetchingSelectConfig
-  }
 }
 
 const isDateRangeInput = computed(() => item.type === 'date-range')

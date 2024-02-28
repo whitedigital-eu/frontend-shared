@@ -1,9 +1,9 @@
 import {
-  DataFetchingSelectConfig,
-  SimpleSelectConfig,
+  SelectConfig,
   LabelProps,
   MapProps,
   PhoneNumberFieldConfig,
+  DataFetchingSelectConfig,
 } from '../types/InputFields'
 import dayjs from 'dayjs'
 import {
@@ -11,8 +11,6 @@ import {
   DecimalValue,
   TextEditorValue,
   DatepickerValue,
-  DataFetchingSelectValue,
-  SimpleSelectValue,
   DateTimePickerValue,
   FileUploadValue,
   SliderValue,
@@ -129,47 +127,53 @@ class HtmlContentField extends FormField {
   }
 }
 
-class SimpleSelectField extends FormField {
-  public value: SimpleSelectValue
-  config: SimpleSelectConfig
-  public allowDelete: boolean
+export class SimpleSelectField<T extends string | string[]> extends FormField {
+  public value: T | null | undefined
+  config: SelectConfig<T extends string ? T : T[number]>
 
   constructor(
     name: string,
     label: string,
-    value?: SimpleSelectValue,
-    options: SelectOption[] = [],
-    readonly = false,
-    create = false,
-    allowDelete = true,
+    value?: T | null,
+    config: SelectConfig<T extends string ? T : T[number]> = {},
   ) {
     super('simple-select', name, label)
     this.value = value
-    this.config = { options, create }
-    this.readonly = readonly
-    this.allowDelete = allowDelete
+    this.config = config
+  }
+
+  setOptions(
+    options: SelectOption<string, T extends string ? T : T[number]>[],
+  ) {
+    if (!this.config.tomSelectSettings) {
+      this.config.tomSelectSettings = {}
+    }
+    this.config.tomSelectSettings.options = options
   }
 }
 
-class DataFetchingSelectField extends FormField {
-  public value: DataFetchingSelectValue
-  config: DataFetchingSelectConfig
-  public allowDelete: boolean
+class DataFetchingSelectField<T extends string | string[]> extends FormField {
+  public value: T | null | undefined
+  config: DataFetchingSelectConfig<T extends string ? T : T[number]>
 
   constructor(
     name: string,
     label: string,
-    value: DataFetchingSelectValue = '',
-    config: DataFetchingSelectConfig,
-    readonly = false,
-    allowDelete = true,
+    value: T | null | undefined,
+    config: DataFetchingSelectConfig<T extends string ? T : T[number]>,
   ) {
     super('data-fetching-select', name, label)
     this.value = value
-    const defaultConfig: Partial<DataFetchingSelectConfig> = { minSymbols: 3 }
-    this.config = { ...defaultConfig, ...config }
-    this.readonly = readonly
-    this.allowDelete = allowDelete
+    this.config = config
+  }
+
+  setOptions(
+    options: SelectOption<string, T extends string ? T : T[number]>[],
+  ) {
+    if (!this.config.tomSelectSettings) {
+      this.config.tomSelectSettings = {}
+    }
+    this.config.tomSelectSettings.options = options
   }
 }
 
@@ -280,7 +284,9 @@ class SliderField extends FormField {
 
 const isSelectField = (
   maybeSelectField: any,
-): maybeSelectField is DataFetchingSelectField | SimpleSelectField => {
+): maybeSelectField is
+  | DataFetchingSelectField<any>
+  | SimpleSelectField<any> => {
   return (
     maybeSelectField.type === 'simple-select' ||
     maybeSelectField.type === 'data-fetching-select'
@@ -429,7 +435,6 @@ export {
   TextField,
   TextareaField,
   HtmlContentField,
-  SimpleSelectField,
   DataFetchingSelectField,
   PhoneNumberField,
   DateField,
@@ -451,12 +456,6 @@ export {
   CollectionField,
 }
 
-// START OF NEW TYPED FIELDS!
-export type SimpleSelectConfigTyped<T extends string> = {
-  options: SelectOption<string, T>[]
-  create?: boolean
-}
-
 export class SelectOption<
   T extends string = string,
   V extends string = string,
@@ -467,50 +466,6 @@ export class SelectOption<
   ) {}
 }
 
-export class SimpleSelectFieldTS<T extends string> extends FormField {
-  public value: null | undefined | T
-  config: SimpleSelectConfigTyped<T>
-  public allowDelete: boolean
-
-  constructor(
-    name: string,
-    label: string,
-    value?: null | undefined | T,
-    options: SelectOption<string, T>[] = [],
-    readonly = false,
-    create = false,
-    allowDelete = true,
-  ) {
-    super('simple-select', name, label)
-    this.value = value
-    this.config = { options, create }
-    this.readonly = readonly
-    this.allowDelete = allowDelete
-  }
-}
-
-export class SimpleSelectFieldTM<T extends string> extends FormField {
-  public value: null | undefined | T[]
-  config: SimpleSelectConfigTyped<T>
-  public allowDelete: boolean
-
-  constructor(
-    name: string,
-    label: string,
-    value?: null | undefined | T[],
-    options: SelectOption<string, T>[] = [],
-    readonly = false,
-    create = false,
-    allowDelete = true,
-  ) {
-    super('simple-select', name, label)
-    this.value = value
-    this.config = { options, create }
-    this.readonly = readonly
-    this.allowDelete = allowDelete
-  }
-}
-
 export type AnyFormField =
   | TextField
   | TextareaField
@@ -519,8 +474,8 @@ export type AnyFormField =
   | MultipleTextFields
   | MapCoordinateSelectorField
   | HtmlContentField
-  | SimpleSelectField
-  | DataFetchingSelectField
+  | SimpleSelectField<any>
+  | DataFetchingSelectField<any>
   | DateField
   | TimeField
   | DateTimeField
@@ -530,8 +485,6 @@ export type AnyFormField =
   | DecimalField
   | TimeWithCurrentField
   | SignatureField
-  | SimpleSelectFieldTS<any>
-  | SimpleSelectFieldTM<any>
   | GovernmentIdField
   | PublicFileUploadField
   | CollectionField<any>

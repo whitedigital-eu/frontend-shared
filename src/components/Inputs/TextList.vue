@@ -55,7 +55,7 @@ const props = withDefaults(
     label: null,
     readonly: false,
     long: false,
-  }
+  },
 )
 
 const emit = defineEmits<{ 'update:modelValue': [value: StringListValue] }>()
@@ -93,7 +93,7 @@ const handleLabelClick = () => {
 watch(
   () => props.modelValue,
   (n) => (value.value = n),
-  { immediate: true }
+  { immediate: true },
 )
 </script>
 

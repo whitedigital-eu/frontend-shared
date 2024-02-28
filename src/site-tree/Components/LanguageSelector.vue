@@ -30,7 +30,7 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
-import { SelectOption, SimpleSelectFieldTS } from '../../models/FormFields'
+import { SelectOption, SimpleSelectField } from '../../models/FormFields'
 import { SiteTreeRead } from '../Types/SiteTree'
 import SiteTreeFormModal from './SiteTreeFormModal.vue'
 import Icon from '../../components/Icons/Icon.vue'
@@ -42,7 +42,7 @@ const props = defineProps<{ projectSettings: ProjectSettings }>()
 const router = useRouter()
 const globalStore = props.projectSettings.global.useGlobalStore()
 
-const languageSelectFormField = ref<SimpleSelectFieldTS<SiteTreeRead['@id']>>()
+const languageSelectFormField = ref<SimpleSelectField<SiteTreeRead['@id']>>()
 
 globalStore.loadRootSiteTrees().then(() => {
   if (!globalStore.rootSiteTrees) return
@@ -54,16 +54,18 @@ globalStore.loadRootSiteTrees().then(() => {
     ) ??
     globalStore.rootSiteTrees[0]
 
-  languageSelectFormField.value = new SimpleSelectFieldTS<SiteTreeRead['@id']>(
+  languageSelectFormField.value = new SimpleSelectField<SiteTreeRead['@id']>(
     'lang',
     '',
     currentLanguageSiteTreeItem?.['@id'] ?? '',
-    globalStore.rootSiteTrees.map(
-      (st) => new SelectOption(st.slug.toUpperCase(), st['@id']),
-    ),
-    false,
-    false,
-    false,
+    {
+      tomSelectSettings: {
+        options: globalStore.rootSiteTrees.map(
+          (st) => new SelectOption(st.slug.toUpperCase(), st['@id']),
+        ),
+      },
+      allowDelete: false,
+    },
   )
 })
 
@@ -85,20 +87,11 @@ const handleSiteTreeCreated = async (
 
   await globalStore.loadRootSiteTrees()
 
-  const options = globalStore.rootSiteTrees!.map(
-    (st) => new SelectOption(st.slug.toUpperCase(), st['@id']),
+  languageSelectFormField.value.setOptions(
+    globalStore.rootSiteTrees!.map(
+      (st) => new SelectOption(st.slug.toUpperCase(), st['@id']),
+    ),
   )
-
-  if (!languageSelectFormField.value.config) {
-    languageSelectFormField.value.config = {
-      options,
-    }
-  } else {
-    languageSelectFormField.value.config.options =
-      globalStore.rootSiteTrees!.map(
-        (st) => new SelectOption(st.slug.toUpperCase(), st['@id']),
-      )
-  }
 
   languageSelectFormField.value.value = createdSiteTree['@id']
 

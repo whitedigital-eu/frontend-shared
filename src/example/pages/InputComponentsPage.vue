@@ -1,124 +1,139 @@
 <template>
-  <div class="flex gap-4 mt-8 flex-wrap">
-    <form class="flex flex-col gap-4 basis-[500px]">
+  <div class="flex flex-wrap gap-4 mt-8">
+    <form class="basis-[500px] flex flex-col gap-4">
       {{ $t('translation', 'test', 'Context') }}
       <Text v-model="fullName" label="Full name" />
       <Text
-          v-model="favouriteFood"
-          :config="{
-        wrapperAttributes: { 'data-test': 'input-wrapper' },
-        labelAttributes: { style: 'background-color: gainsboro' },
-        inputAttributes: { class: 'text-red-500' },
-      }"
-          label="Favourite food"
+        v-model="favouriteFood"
+        :config="{
+          wrapperAttributes: { 'data-test': 'input-wrapper' },
+          labelAttributes: { style: 'background-color: gainsboro' },
+          inputAttributes: { class: 'text-red-500' },
+        }"
+        label="Favourite food"
       />
       <Text
-          v-model="count"
-          :config="{ inputAttributes: { type: 'number' } }"
-          label="Count"
+        v-model="count"
+        :config="{ inputAttributes: { type: 'number' } }"
+        label="Count"
       />
       <TextList v-model="textArrayList" label="Text List" />
       <KeyAndValueList
-          v-model="keyAndValueArrayList"
-          :texts="{
-        keyLabel: 'title',
-        valueLabel: 'value',
-        addField: 'Add field',
-        formLabel: 'Forma',
-      }"
+        v-model="keyAndValueArrayList"
+        :texts="{
+          keyLabel: 'title',
+          valueLabel: 'value',
+          addField: 'Add field',
+          formLabel: 'Forma',
+        }"
       />
       <MultipleTextFields
-          v-model="multipleTextArrayList"
-          label="Work times"
-          :label-array="[
-        'monday',
-        'tuesday',
-        'wednesday',
-        'thursday',
-        'friday',
-        'saturday',
-        'sunday',
-      ]"
+        v-model="multipleTextArrayList"
+        label="Work times"
+        :label-array="[
+          'monday',
+          'tuesday',
+          'wednesday',
+          'thursday',
+          'friday',
+          'saturday',
+          'sunday',
+        ]"
       />
       <Decimal v-model="price" :config="{ maxDecimals: 2 }" label="Price" />
     </form>
-    <form class="flex flex-col gap-4 basis-[500px]">
+    <form class="basis-[500px] flex flex-col gap-4">
       <TextEditor v-model="notes" label="Notes" />
       <HtmlContentEditor
-          v-model="htmlContent"
-          api-origin="/"
-          label="Html content"
+        v-model="htmlContent"
+        api-origin="/"
+        label="Html content"
       />
       <Checkbox v-model="isActive" label="Is active" />
       <Checkbox v-model="isBlocked" label="Is blocked" readonly />
     </form>
-    <form class="flex flex-col gap-4 basis-[500px]">
+    <form class="basis-[500px] flex flex-col gap-4">
       <Slider v-model="probability" label="Probability" />
       <SimpleSelect
-          id="role-select"
-          v-model="role"
-          :config="{ options: roleOptions }"
-          label="Select role"
+        id="role-select"
+        v-model="role"
+        :config="{ tomSelectSettings: { options: roleOptions } }"
+        label="Select role"
       />
       <DataFetchingSelect
-          id="user-select"
-          v-model="user"
-          :axios-instance="axiosInstance"
-          :config="userSelectConfig"
-          label="Select user"
+        id="user-select"
+        v-model="user"
+        :axios-instance="axiosInstance"
+        :config="userSelectConfig"
+        label="Select user"
       />
       <Datepicker v-model="dateOfBirth" label="Date of birth" />
       <DateTimePicker v-model="eventStartTime" label="Event starts at" />
       <RangeDatepicker v-model="eventDuration" label="Event duration" />
       <FileUpload
-          v-model="profilePicture"
-          allow-download
-          allow-edit
-          :axios-instance="axiosInstance"
-          endpoint-url="/api/storage_items"
-          label="Profile picture"
+        v-model="profilePicture"
+        allow-download
+        allow-edit
+        :axios-instance="axiosInstance"
+        endpoint-url="/api/storage_items"
+        label="Profile picture"
       />
 
       <FlatpickrTimePicker
-          id="flatpickr-time-picker"
-          v-model="attendanceTime"
-          label="Flatpickr time picker"
+        id="flatpickr-time-picker"
+        v-model="attendanceTime"
+        label="Flatpickr time picker"
       />
       <Map
-          v-model="mapDataArray"
-          label="Input address"
-          :map-data="{
-        googleApiKey: googleMapsApiKey,
-        initialLat: 56.946285,
-        initialLng: 24.105078,
-      }"
+        v-model="mapDataArray"
+        label="Input address"
+        :map-data="{
+          googleApiKey: googleMapsApiKey,
+          initialLat: 56.946285,
+          initialLng: 24.105078,
+        }"
       />
       <PlainTextarea v-model="textareaValue" label="Plain textarea" />
 
       <div class="mb-[300px]">
         <button
-            class="btn btn-primary"
-            type="button"
-            @click="showSelect = !showSelect"
+          class="btn btn-primary"
+          type="button"
+          @click="showSelect = !showSelect"
         >
           Show/hide select
         </button>
         <div v-if="showSelect">
           <SimpleSelect
-              id="role-select-2"
-              v-model="role2"
-              :config="{ options: roleOptions }"
-              label="Select role"
+            id="role-select-2"
+            v-model="role2"
+            :config="{ tomSelectSettings: { options: roleOptions } }"
+            label="Select role"
           />
         </div>
       </div>
     </form>
-    <div class="flex gap-4 flex-wrap items-start">
-      <button class="btn btn-primary" @click="showHeartbeatPopup = !showHeartbeatPopup">Toggle heartbeat popup</button>
-      <HeartbeatPopup bg-class="bg-red-500" v-if="showHeartbeatPopup" />
+    <div class="flex flex-wrap gap-4 items-start">
+      <button
+        class="btn btn-primary"
+        @click="showHeartbeatPopup = !showHeartbeatPopup"
+      >
+        Toggle heartbeat popup
+      </button>
+      <HeartbeatPopup v-if="showHeartbeatPopup" bg-class="bg-red-500" />
 
-      <button class="btn btn-success" @click="showSuccessMessage('Changes saved!')">Show success message</button>
-      <button class="btn btn-danger" @click="showGlobalError('Something went wrong!')">Show error message</button>
+      <button
+        class="btn btn-success"
+        @click="showSuccessMessage('Changes saved!')"
+      >
+        Show success message
+      </button>
+      <button
+        class="btn btn-danger"
+        @click="showGlobalError('Something went wrong!')"
+      >
+        Show error message
+      </button>
     </div>
   </div>
 </template>
@@ -148,7 +163,10 @@ import PlainTextarea from '../../components/Inputs/PlainTextarea.vue'
 import { useTranslation } from '../../i18n/Stores/useTranslation'
 import HeartbeatPopup from '../../components/Heartbeat/HeartbeatPopup.vue'
 import { SelectOption } from '../../models/FormFields'
-import {showGlobalError, showSuccessMessage} from "../../helpers/FlashMessages";
+import {
+  showGlobalError,
+  showSuccessMessage,
+} from '../../helpers/FlashMessages'
 
 const fullName = ref('')
 const favouriteFood = ref('Pasta')

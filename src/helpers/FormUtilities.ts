@@ -11,7 +11,7 @@ export const setSelectOptions = async <T extends FormData>(
 ) => {
   const field = formData[fieldName]
   if (isSelectField(field)) {
-    field.config.options = await optionsPromise
+    field.setOptions(await optionsPromise)
   } else {
     console.error(notSelectFieldError)
   }
@@ -25,7 +25,7 @@ export const setSelectOptionsWithFirstAsValue = async <T extends FormData>(
   const field = formData[fieldName]
 
   if (isSelectField(field)) {
-    field.config.options = options
+    field.setOptions(options)
   } else {
     console.error(notSelectFieldError)
   }

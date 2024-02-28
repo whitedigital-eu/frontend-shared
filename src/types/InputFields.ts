@@ -11,18 +11,24 @@ export type InputField = {
   errors?: string[]
 }
 
-export type SimpleSelectConfig = Modify<
+export type TomSettingsTyped<T extends string> = Modify<
   RecursivePartial<TomSettings>,
-  { options: SelectOption[] }
+  { options?: SelectOption<string, T>[] }
 >
 
-export type DataFetchingSelectConfig = {
-  minSymbols?: number
-  requestUrlGenerator: (searchValue: string) => string
-  responseMapFunction: (resource: any) => SelectOption
-  options?: SelectOption[]
-  create?: boolean
-}
+export type SelectConfig<T extends string = string> = Partial<{
+  tomSelectSettings: TomSettingsTyped<T>
+  readonly: boolean
+  create: boolean
+  allowDelete: boolean
+}>
+
+export type DataFetchingSelectConfig<T extends string = string> =
+  SelectConfig<T> & {
+    minSymbols?: number
+    requestUrlGenerator: (searchValue: string) => string
+    responseMapFunction: (resource: any) => SelectOption
+  }
 
 export type LabelProps = {
   keyLabel?: string
