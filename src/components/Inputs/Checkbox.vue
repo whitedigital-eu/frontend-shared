@@ -1,7 +1,12 @@
 <template>
   <div>
     <label
-      class="cursor-pointer form-label mr-2 translate-y-0.5"
+      class="form-label mr-2 translate-y-0.5"
+      :class="
+        readonly
+          ? 'opacity-50 cursor-not-allowed'
+          : 'opacity-100 cursor-pointer'
+      "
       @click="!readonly && emit('update:modelValue', !value)"
     >
       {{ label }}

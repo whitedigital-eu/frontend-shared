@@ -13,9 +13,18 @@
       ref="datepickerRef"
       v-model="value"
       class="form-control input w-full"
-      :class="{ 'flatpickr-input-readonly': readonly }"
-      :config="config"
-      :disabled="readonly"
+      :class="{ '!bg-[#f3f5f6]': computedConfig.readonly }"
+      :config="{
+        altInput: true,
+        altFormat: 'D-m-y',
+        dateFormat: 'Z',
+        enableTime: false,
+        time_24hr: true,
+        locale: locales.lv,
+        static: true,
+        formatDate: (date: Date) => dayjs(date).format('LL'),
+      }"
+      :disabled="computedConfig.readonly"
       @on-change="handleChange"
       @on-close="handleClose"
       @on-open="handleOpen"
@@ -34,20 +43,22 @@ import FlatPickr from 'vue-flatpickr-component'
 import 'flatpickr/dist/flatpickr.css'
 import locales from 'flatpickr/dist/l10n/'
 import { X } from 'lucide-vue-next'
-
 import dayjs from 'dayjs'
 import LocalizedFormat from 'dayjs/plugin/localizedFormat'
 import FormFieldLabel from '../FormFieldLabel.vue'
 import useResponsivity from '../../composables/useResponsivity'
 import { DatepickerProps } from './PropTypes'
+import _ from 'lodash'
 
 const {
   modelValue = null,
   label = null,
-  readonly = false,
+  config,
 } = defineProps<DatepickerProps>()
 
 const emit = defineEmits<{ 'update:modelValue': [value: string | null] }>()
+
+const computedConfig = computed(() => _.merge({ readonly: false }, config))
 
 dayjs.extend(LocalizedFormat)
 
@@ -75,18 +86,6 @@ const value = ref(propValueToModelValue(modelValue))
 
 const isEmpty = computed(() => !value.value)
 const isOpen = ref(false)
-
-// WARNING: 'any' type is needed here due to vue-flatpickr-component having wrong type definitions
-const config: any = {
-  altInput: true,
-  altFormat: 'D-m-y',
-  dateFormat: 'Z',
-  enableTime: false,
-  time_24hr: true,
-  locale: locales.lv,
-  static: true,
-  formatDate: (date: Date) => dayjs(date).format('LL'),
-}
 
 const handleChange = (selectedDates: Date[]) => {
   const emitValue = selectedDates.length
@@ -133,9 +132,3 @@ const addCloseButtonToDatepicker = () => {
 
 onMounted(addCloseButtonToDatepicker)
 </script>
-
-<style lang="scss">
-.flatpickr-input-readonly {
-  background: #f3f5f6 !important;
-}
-</style>

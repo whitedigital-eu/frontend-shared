@@ -1,5 +1,6 @@
 import { DatepickerValue, DecimalValue, TextValue } from './ValueTypes'
 import { DecimalFieldConfig, TextFieldConfig } from '../../models/FormFields'
+import { DateFieldConfig } from '../../types/InputFields'
 
 export type DecimalProps = {
   modelValue?: DecimalValue
@@ -28,5 +29,5 @@ export type SliderProps = {
 export type DatepickerProps = {
   modelValue?: DatepickerValue
   label?: string | null
-  readonly?: boolean
+  config?: DateFieldConfig
 }

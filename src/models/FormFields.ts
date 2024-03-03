@@ -195,10 +195,17 @@ class PhoneNumberField extends FormField {
 
 class DateField extends FormField {
   public value: DatepickerValue
+  config?: { readonly?: boolean }
 
-  constructor(name: string, label: string, value?: DatepickerValue) {
+  constructor(
+    name: string,
+    label: string,
+    value?: DatepickerValue,
+    config?: { readonly?: boolean },
+  ) {
     super('date', name, label)
     this.value = value
+    this.config = config
   }
 }
 

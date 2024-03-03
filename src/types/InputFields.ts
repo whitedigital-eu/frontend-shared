@@ -46,3 +46,5 @@ export type MapProps = {
 export type PhoneNumberFieldConfig = {
   vueTelInputProps?: Partial<VueTelInputProps>
 }
+
+export type DateFieldConfig = { readonly?: boolean }
