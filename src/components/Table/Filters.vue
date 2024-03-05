@@ -17,6 +17,7 @@
       </button>
     </slot>
     <div
+      v-show="showFilters"
       class="flex flex-col sm:flex-row sm:items-end xl:items-start"
       data-test="filters"
     >
@@ -25,7 +26,7 @@
         class="items-start mb-4 sm:mr-auto w-full xl:flex xl:flex-col"
         @submit.prevent="filter"
       >
-        <div v-show="showFilters" class="flex flex-col grow">
+        <div class="flex flex-col grow">
           <div
             class="flex flex-wrap gap-4"
             :class="{ 'mb-6': noAdvancedFilters }"
