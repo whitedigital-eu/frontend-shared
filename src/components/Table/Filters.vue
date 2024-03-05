@@ -17,6 +17,7 @@
       </button>
     </slot>
     <div
+      v-show="showFilters"
       class="flex flex-col sm:flex-row sm:items-end xl:items-start"
       data-test="filters"
     >
