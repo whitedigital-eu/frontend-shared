@@ -2,18 +2,18 @@
   <div
     class="relative"
     :class="{ 'overflow-hidden': labelIsPlaceholder }"
-    v-bind="config.wrapperAttributes"
+    v-bind="computedConfig.wrapperAttributes"
   >
     <FormFieldLabel
       v-if="label"
-      v-bind="config.labelAttributes"
+      v-bind="computedConfig.labelAttributes"
       :is-placeholder="labelIsPlaceholder"
       @click="handleLabelClick"
     >
       {{ label }}
     </FormFieldLabel>
     <input
-      v-bind="config.inputAttributes"
+      v-bind="computedConfig.inputAttributes"
       ref="inputRef"
       v-model="value"
       class="form-control sm:min-w-[200px] w-full"
@@ -31,19 +31,23 @@
 import { computed, ref, watch } from 'vue'
 import FormFieldLabel from '../FormFieldLabel.vue'
 import { DecimalProps } from './PropTypes'
+import _ from 'lodash'
 
-const {
-  modelValue = '',
-  label = null,
-  config = {
-    maxDecimals: 2,
-    wrapperAttributes: {},
-    labelAttributes: {},
-    inputAttributes: {},
-  },
-} = defineProps<DecimalProps>()
+const { modelValue = '', label = null, config } = defineProps<DecimalProps>()
 
 const emit = defineEmits<{ 'update:modelValue': [value: number | null] }>()
+
+const computedConfig = computed(() =>
+  _.merge(
+    {
+      maxDecimals: 2,
+      wrapperAttributes: {},
+      labelAttributes: {},
+      inputAttributes: {},
+    },
+    config,
+  ),
+)
 
 const decSeparator = ','
 
@@ -70,18 +74,22 @@ const transformValue = (value: string): string => {
 
   transformedValue = transformedValue.replace('.', decSeparator)
   if (!transformedValue.includes(decSeparator)) {
-    return config.maxDecimals === 0
+    return computedConfig.value.maxDecimals === 0
       ? transformedValue
-      : `${transformedValue},${'0'.repeat(config.maxDecimals!)}`
+      : `${transformedValue},${'0'.repeat(computedConfig.value.maxDecimals)}`
   }
 
   const decimal = transformedValue.split(decSeparator)[1]
 
   transformedValue =
-    decimal.length > config.maxDecimals!
-      ? transformedValue.slice(0, config.maxDecimals! - decimal.length)
+    decimal.length > computedConfig.value.maxDecimals
+      ? transformedValue.slice(
+          0,
+          computedConfig.value.maxDecimals - decimal.length,
+        )
       : transformedValue.padEnd(
-          transformedValue.length + (config.maxDecimals! - decimal.length),
+          transformedValue.length +
+            (computedConfig.value.maxDecimals - decimal.length),
           '0',
         )
 
@@ -135,7 +143,9 @@ const handleKeydown = (e: KeyboardEvent) => {
   const valueSplitByDecSeparator = e.target.value.split(decSeparator)
   const hasDecSeparator = valueSplitByDecSeparator.length === 2
   const allowToEnterDecSeparator =
-    !hasDecSeparator && e.target.value.length && config.maxDecimals !== 0
+    !hasDecSeparator &&
+    e.target.value.length &&
+    computedConfig.value.maxDecimals !== 0
 
   const invalidCharacter =
     (isNaN(Number(e.key)) &&
@@ -153,9 +163,9 @@ const handleKeydown = (e: KeyboardEvent) => {
   const caretBeforeDecSeparator = isCaretBeforeDecSeparator(e.target)
 
   const tooManyDecimals =
-    config.maxDecimals !== undefined &&
+    computedConfig.value.maxDecimals !== undefined &&
     hasDecSeparator &&
-    valueSplitByDecSeparator[1].length === config.maxDecimals
+    valueSplitByDecSeparator[1].length === computedConfig.value.maxDecimals
 
   if (!textSelected && !caretBeforeDecSeparator && tooManyDecimals) {
     e.preventDefault()
@@ -168,9 +178,12 @@ const handleInput = (e: Event) => {
 }
 
 const handleLabelClick = () => {
-  if(config.inputAttributes &&
-      (('readonly' in config.inputAttributes && config.inputAttributes.readonly)
-          || ('disabled' in config.inputAttributes && config.inputAttributes.disabled))
+  if (
+    computedConfig.value.inputAttributes &&
+    (('readonly' in computedConfig.value.inputAttributes &&
+      computedConfig.value.inputAttributes.readonly) ||
+      ('disabled' in computedConfig.value.inputAttributes &&
+        computedConfig.value.inputAttributes.disabled))
   ) {
     return
   }

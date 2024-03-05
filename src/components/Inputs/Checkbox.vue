@@ -1,7 +1,14 @@
 <template>
   <div>
+    <input
+      v-model="value"
+      class="form-check-input"
+      :disabled="readonly"
+      type="checkbox"
+      @change="handleChange"
+    />
     <label
-      class="form-label mr-2 translate-y-0.5"
+      class="form-label ml-2 translate-y-0.5"
       :class="
         readonly
           ? 'opacity-50 cursor-not-allowed'
@@ -11,13 +18,6 @@
     >
       {{ label }}
     </label>
-    <input
-      v-model="value"
-      class="form-check-input"
-      :disabled="readonly"
-      type="checkbox"
-      @change="handleChange"
-    />
   </div>
 </template>
 
