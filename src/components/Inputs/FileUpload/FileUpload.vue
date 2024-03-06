@@ -27,7 +27,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup lang="ts" generic="T extends string | string[]">
 import { ref, onMounted, watch, computed } from 'vue'
 import Dropzone from 'dropzone'
 import { dropzoneTranslations } from '../../../helpers/Translations'
@@ -35,14 +35,14 @@ import FormFieldLabel from '../../FormFieldLabel.vue'
 import FilePreview from './FilePreview.vue'
 import { AxiosInstance } from 'axios'
 import getLoadResourceFunctions from '../../../helpers/DataFetching'
-import { FileUploadValue } from '../ValueTypes'
 import { Resource } from '../../../types/Resource'
 //@ts-ignore
 import defaultPreviewTemplate from './preview-template.html?raw'
+import useResponsivity from '../../../composables/useResponsivity'
 
 const props = withDefaults(
   defineProps<{
-    modelValue?: FileUploadValue
+    modelValue?: T | null
     label?: string
     axiosInstance: AxiosInstance
     setPublic?: boolean
@@ -76,6 +76,7 @@ const emit = defineEmits<{
 
 Dropzone.autoDiscover = false
 
+const { isMobile } = useResponsivity()
 const { loadResource, loadAllResources } = getLoadResourceFunctions(
   props.axiosInstance,
 )
@@ -149,11 +150,15 @@ const newValue = computed(() => {
   return [...uploadedFileIris.value, ...initialFileIris]
 })
 
-const dropFilesMessage = computed(() => {
-  return singleFileUpload.value
-    ? 'Nometiet failu šeit!'
-    : 'Nometiet failus šeit!'
-})
+const dropFilesMessage = computed(() =>
+  isMobile.value
+    ? singleFileUpload.value
+      ? 'Nometiet failu šeit!'
+      : 'Nometiet failus šeit!'
+    : singleFileUpload.value
+      ? 'Spiediet šeit, lai augšupielādētu failu'
+      : 'Spiediet šeit, lai augšupielādētu failus',
+)
 
 const anyFiles = computed(() => {
   return singleFileUpload.value ? !!props.modelValue : props.modelValue?.length

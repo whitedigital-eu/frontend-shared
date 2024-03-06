@@ -12,7 +12,6 @@ import {
   TextEditorValue,
   DatepickerValue,
   DateTimePickerValue,
-  FileUploadValue,
   SliderValue,
   FlatpickrTimePickerValue,
   StringListValue,
@@ -234,8 +233,8 @@ class DateTimeField extends FormField {
   }
 }
 
-class FileUploadField extends FormField {
-  public value: FileUploadValue
+class FileUploadField<T extends string | string[]> extends FormField {
+  public value: T | null | undefined
   public allowDownload = false
   public allowEdit = false
   public allowDelete = true
@@ -244,7 +243,7 @@ class FileUploadField extends FormField {
   constructor(
     name: string,
     label: string,
-    value?: FileUploadValue,
+    value?: T | null,
     config?: {
       allowDownload?: boolean
       allowEdit?: boolean
@@ -345,10 +344,12 @@ class GovernmentIdField extends FormField {
   }
 }
 
-class PublicFileUploadField extends FileUploadField {
+class PublicFileUploadField<
+  T extends string | string[],
+> extends FileUploadField<T> {
   public setPublic = true
 
-  constructor(name: string, label: string, value: string | string[] = '') {
+  constructor(name: string, label: string, value?: T | null) {
     super(name, label, value)
   }
 }
@@ -486,13 +487,13 @@ export type AnyFormField =
   | DateField
   | TimeField
   | DateTimeField
-  | FileUploadField
+  | FileUploadField<any>
   | CheckboxField
   | SliderField
   | DecimalField
   | TimeWithCurrentField
   | SignatureField
   | GovernmentIdField
-  | PublicFileUploadField
+  | PublicFileUploadField<any>
   | CollectionField<any>
   | PhoneNumberField
