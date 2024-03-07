@@ -1,6 +1,6 @@
 {
   "name": "@whitedigital-eu/wd-frontend-shared",
-  "version": "0.8.12",
+  "version": "0.8.13",
   "author": "Imants Liepiņš",
   "license": "MIT",
   "description": "Shared components, helpers, composables and types for vue frontend SPAs",

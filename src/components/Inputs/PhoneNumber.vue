@@ -7,6 +7,7 @@ import { VueTelInput } from 'vue-tel-input'
 import 'vue-tel-input/vue-tel-input.css'
 import _ from 'lodash'
 import { PhoneNumberFieldConfig } from '../../types/InputFields'
+import { ref, watch } from 'vue'
 
 const props = withDefaults(
   defineProps<{
@@ -19,7 +20,22 @@ const props = withDefaults(
   },
 )
 
-const value = defineModel<string | null>()
+const removeWhitespace = (value: string | null) => {
+  return value ? value.replace(/\s/g, '') : value
+}
+
+const modelValue = defineModel<string | null>({ required: true })
+
+const value = ref<string | null>(null)
+watch(
+  modelValue,
+  (n) => {
+    if (removeWhitespace(value.value) !== n) value.value = n
+  },
+  { immediate: true },
+)
+
+watch(value, (n) => (modelValue.value = removeWhitespace(n)))
 
 const vueTelInputProps = _.merge(
   {
