@@ -4,7 +4,9 @@
       v-if="label"
       class="z-[1]"
       :is-placeholder="!isMobile && isEmpty && !isOpen"
-      :placeholder-css-classes="['!cursor-pointer']"
+      :placeholder-css-classes="[
+        computedConfig.readonly ? '!cursor-not-allowed' : '!cursor-pointer',
+      ]"
       @click="handleLabelClick"
     >
       {{ label }}
@@ -13,25 +15,20 @@
       ref="datepickerRef"
       v-model="value"
       class="form-control input w-full"
-      :class="{ '!bg-[#f3f5f6]': computedConfig.readonly }"
-      :config="{
-        altInput: true,
-        altFormat: 'D-m-y',
-        dateFormat: 'Z',
-        enableTime: false,
-        time_24hr: true,
-        locale: locales.lv,
-        static: true,
-        formatDate: (date: Date) => dayjs(date).format('LL'),
+      :class="{
+        '!bg-[#f3f5f6]': computedConfig.readonly,
+        'cursor-not-allowed': computedConfig.readonly,
       }"
+      :config="computedConfig.flatpickrConfig"
       :disabled="computedConfig.readonly"
       @on-change="handleChange"
       @on-close="handleClose"
       @on-open="handleOpen"
     />
     <X
-      v-if="!isMobile"
-      class="absolute cursor-pointer right-[8px] top-[50%] translate-y-[-50%]"
+      v-if="!isMobile && !computedConfig.readonly && !isEmpty"
+      class="absolute right-2 top-[50%] translate-y-[-50%]"
+      :class="computedConfig.readonly ? 'cursor-not-allowed' : 'cursor-pointer'"
       @click="clearInput"
     />
   </div>
@@ -58,7 +55,24 @@ const {
 
 const emit = defineEmits<{ 'update:modelValue': [value: string | null] }>()
 
-const computedConfig = computed(() => _.merge({ readonly: false }, config))
+const computedConfig = computed(() =>
+  _.merge(
+    {
+      readonly: false,
+      flatpickrConfig: {
+        altInput: true,
+        altFormat: 'D-m-y',
+        dateFormat: 'Z',
+        enableTime: false,
+        time_24hr: true,
+        locale: locales.lv,
+        static: true,
+        formatDate: (date: Date) => dayjs(date).format('LL'),
+      },
+    },
+    config,
+  ),
+)
 
 dayjs.extend(LocalizedFormat)
 

@@ -4,6 +4,7 @@ import {
   MapProps,
   PhoneNumberFieldConfig,
   DataFetchingSelectConfig,
+  DateFieldConfig,
 } from '../types/InputFields'
 import dayjs from 'dayjs'
 import {
@@ -194,17 +195,17 @@ class PhoneNumberField extends FormField {
 
 class DateField extends FormField {
   public value: DatepickerValue
-  config?: { readonly?: boolean }
+  config: DateFieldConfig
 
   constructor(
     name: string,
     label: string,
     value?: DatepickerValue,
-    config?: { readonly?: boolean },
+    config?: DateFieldConfig,
   ) {
     super('date', name, label)
     this.value = value
-    this.config = config
+    this.config = config ?? {}
   }
 }
 

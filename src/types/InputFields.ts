@@ -47,4 +47,7 @@ export type PhoneNumberFieldConfig = {
   vueTelInputProps?: Partial<VueTelInputProps>
 }
 
-export type DateFieldConfig = { readonly?: boolean }
+export type DateFieldConfig = {
+  readonly?: boolean
+  flatpickrConfig?: Partial<import('flatpickr/dist/types/options').BaseOptions>
+}
