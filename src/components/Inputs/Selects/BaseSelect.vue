@@ -81,8 +81,8 @@ const computedConfig = computed(() =>
   _.merge({ ...defaultConfig }, props.config ?? {}),
 )
 
-const selectRef = ref()
-const model = ref()
+const selectRef = ref<HTMLSelectElement>()
+const model = ref<TomSelect>()
 const selectId = computed(() => `tom-select-${props.id}`)
 const multiple = computed(() => Array.isArray(props.modelValue))
 
@@ -221,6 +221,7 @@ const isOptionSelected = (value: string) => {
 }
 
 const init = () => {
+  if (!selectRef.value) return
   model.value = new TomSelect(selectRef.value, settings.value)
 }
 
@@ -229,14 +230,18 @@ onMounted(init)
 watch(
   () => computedConfig.value.tomSelectSettings?.options,
   (options) => {
+    if (!model.value) return
     model.value.clearOptions()
-    model.value.addOptions(options)
+    model.value.addOptions(options ?? [])
     if (options?.length) model.value.refreshOptions(false)
   },
 )
 watch(
   () => props.modelValue,
-  (value) => model.value.setValue(value, true),
+  (value) => {
+    if (!model.value) return
+    value === null ? model.value.clear() : model.value.setValue(value, true)
+  },
 )
 watch(
   () => props.modelValue,
@@ -249,11 +254,13 @@ watch(
 watch(
   () => computedConfig.value.readonly,
   (n) => {
+    if (!model.value) return
     n ? model.value.disable() : model.value.enable()
   },
 )
 
 onBeforeUnmount(() => {
+  if (!model.value) return
   model.value.clearActiveItems()
   model.value.clearOptions()
   model.value.destroy()
