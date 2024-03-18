@@ -1,6 +1,7 @@
 <template>
   <BaseSelect
     :id="props.id"
+    :key="baseSelectKey"
     v-model="value"
     :config="props.config"
     :label="label"
@@ -38,6 +39,16 @@ const value = ref<T | T[] | null>()
 const handleInput = (value: string | string[] | number) => {
   emit('update:modelValue', value)
 }
+
+const baseSelectKey = ref(0)
+
+watch(
+  [
+    () => props.config?.tomSelectSettings?.options,
+    () => props.config?.tomSelectSettings?.create,
+  ],
+  () => baseSelectKey.value++,
+)
 
 watch(
   () => props.modelValue,

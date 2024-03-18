@@ -54,12 +54,26 @@
     </form>
     <form class="basis-[500px] flex flex-col gap-4">
       <Slider v-model="probability" label="Probability" />
-      <SimpleSelect
-        id="role-select"
-        v-model="role"
-        :config="{ tomSelectSettings: { options: roleOptions } }"
-        label="Select role"
-      />
+      <div class="flex gap-4 items-center">
+        <SimpleSelect
+          id="role-select"
+          v-model="role"
+          class="basis-[200px]"
+          :config="roleSelectConfig"
+          label="Select role"
+        />
+        <button
+          class="btn btn-primary"
+          type="button"
+          @click="
+            () => {
+              roleSelectConfig.tomSelectSettings.options = otherRoleOptions
+            }
+          "
+        >
+          Change select options
+        </button>
+      </div>
       <DataFetchingSelect
         id="user-select"
         v-model="user"
@@ -147,7 +161,6 @@ import TextEditor from '../../components/Inputs/TextEditor.vue'
 import Checkbox from '../../components/Inputs/Checkbox.vue'
 import Slider from '../../components/Inputs/Slider.vue'
 import SimpleSelect from '../../components/Inputs/Selects/SimpleSelect.vue'
-import DataFetchingSelect from '../../components/Inputs/Selects/DataFetchingSelect.vue'
 import Datepicker from '../../components/Inputs/Datepicker.vue'
 import DateTimePicker from '../../components/Inputs/DateTimePicker.vue'
 import FileUpload from '../../components/Inputs/FileUpload/FileUpload.vue'
@@ -167,6 +180,7 @@ import {
   showGlobalError,
   showSuccessMessage,
 } from '../../helpers/FlashMessages'
+import DataFetchingSelect from '../../components/Inputs/Selects/DataFetchingSelect.vue'
 
 const fullName = ref('')
 const favouriteFood = ref('Pasta')
@@ -218,7 +232,7 @@ watch(showSelect, (n) => {
 
 const axiosInstance = axios.create()
 
-const roleOptions = [
+const roleOptions: SelectOption[] = [
   new SelectOption('User', 'ROLE_USER'),
   new SelectOption('Admin', 'ROLE_ADMIN'),
   new SelectOption('Super admin', 'ROLE_SUPER_ADMIN'),
@@ -227,6 +241,12 @@ const roleOptions = [
     'ROLE_SUPER_ADMIN_TRANSLATE',
   ),
 ]
+const otherRoleOptions: SelectOption[] = [
+  new SelectOption('Test role', 'ROLE_TEST'),
+]
+
+const roleSelectConfig = ref({ tomSelectSettings: { options: roleOptions } })
+
 const userSelectConfig: DataFetchingSelectConfig = {
   requestUrlGenerator: (searchValue: string) =>
     `https://randomuser.me/api?name=${searchValue}`,
