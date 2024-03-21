@@ -56,6 +56,6 @@ export type ProjectSettings = {
     getComponentAttributes: (...args: any[]) => any
     getEventHandlers: (...args: any[]) => any
     inputTypeToComponent: Record<string, any>
-    referenceInputTypes: string[]
+    referenceInputTypes?: string[]
   }
 }

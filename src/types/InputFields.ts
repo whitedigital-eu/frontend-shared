@@ -19,7 +19,6 @@ export type TomSettingsTyped<T extends string> = Modify<
 export type SelectConfig<T extends string = string> = Partial<{
   tomSelectSettings: TomSettingsTyped<T>
   readonly: boolean
-  create: boolean
   allowDelete: boolean
 }>
 

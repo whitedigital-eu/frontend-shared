@@ -46,7 +46,6 @@ const computedConfig = computed(() =>
     {
       readonly: false,
       allowDelete: true,
-      create: false,
       tomSelectSettings: {
         shouldLoad: (query: string) =>
           query.length >= defaultMinSymbolsForSearch,

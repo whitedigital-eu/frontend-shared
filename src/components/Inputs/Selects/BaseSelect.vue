@@ -73,8 +73,7 @@ const emit = defineEmits<{
 const defaultConfig: SelectConfig<T> = {
   readonly: false,
   allowDelete: true,
-  create: false,
-  tomSelectSettings: {},
+  tomSelectSettings: { create: false },
 }
 
 const computedConfig = computed(() =>

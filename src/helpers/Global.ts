@@ -104,11 +104,17 @@ export const isNumericString = (maybeNumber: string) => {
 export const createRandomNumber = (min = 1000, max = 10000) =>
   Math.floor(min + Math.random() * (max - min))
 
+export const defaultReferenceInputTypes = [
+  'simple-select',
+  'data-fetching-select',
+  'file-upload',
+]
+
 export const getFormFieldValues = <
   T extends Record<string, { value: any; type: string }>,
 >(
   formData: T,
-  referenceInputTypes: string[] = [],
+  referenceInputTypes = defaultReferenceInputTypes,
   propertiesToExclude: Array<keyof T> = [],
 ) => {
   const res = {} as {
