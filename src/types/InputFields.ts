@@ -40,9 +40,7 @@ export type FileUploadConfig = {
   allowEdit?: boolean
   dropzoneOptions?: Dropzone.DropzoneOptions
   readonly?: boolean
-  beforeUploadedFileDeletion?:
-    | (<T extends string>(fileIri: T) => Promise<any>)
-    | null
+  beforeUploadedFileDeletion?: ((fileIri: any) => Promise<any>) | null
 }
 
 export type LabelProps = {
