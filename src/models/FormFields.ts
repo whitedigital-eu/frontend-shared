@@ -5,6 +5,7 @@ import {
   PhoneNumberFieldConfig,
   DataFetchingSelectConfig,
   DateFieldConfig,
+  FileUploadConfig,
 } from '../types/InputFields'
 import dayjs from 'dayjs'
 import {
@@ -236,30 +237,17 @@ class DateTimeField extends FormField {
 
 class FileUploadField<T extends string | string[]> extends FormField {
   public value: T | null | undefined
-  public allowDownload = false
-  public allowEdit = false
-  public allowDelete = true
-  public hostUrl = ''
+  public config: FileUploadConfig
 
   constructor(
     name: string,
     label: string,
-    value?: T | null,
-    config?: {
-      allowDownload?: boolean
-      allowEdit?: boolean
-      allowDelete?: boolean
-      hostUrl?: string
-    },
+    value: T | null,
+    config: FileUploadConfig,
   ) {
     super('file-upload', name, label)
     this.value = value
-    if (config) {
-      this.allowDownload = config.allowDownload ?? this.allowDownload
-      this.allowEdit = config.allowEdit ?? this.allowEdit
-      this.allowDelete = config.allowDelete ?? this.allowDelete
-      this.hostUrl = config.hostUrl ?? this.hostUrl
-    }
+    this.config = config
   }
 }
 
@@ -348,10 +336,13 @@ class GovernmentIdField extends FormField {
 class PublicFileUploadField<
   T extends string | string[],
 > extends FileUploadField<T> {
-  public setPublic = true
-
-  constructor(name: string, label: string, value?: T | null) {
-    super(name, label, value)
+  constructor(
+    name: string,
+    label: string,
+    value: T | null,
+    config: FileUploadConfig,
+  ) {
+    super(name, label, value, { ...config, setPublic: true })
   }
 }
 

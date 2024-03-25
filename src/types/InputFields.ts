@@ -2,6 +2,7 @@ import { SelectOption } from '../models/FormFields'
 import { Modify } from '../site-tree/Types/Shared'
 import { RecursivePartial, TomSettings } from 'tom-select/src/types'
 import { VueTelInputProps } from 'vue-tel-input'
+import { AxiosInstance } from 'axios'
 
 export type InputField = {
   type: string
@@ -28,6 +29,21 @@ export type DataFetchingSelectConfig<T extends string = string> =
     requestUrlGenerator: (searchValue: string) => string
     responseMapFunction: (resource: any) => SelectOption
   }
+
+export type FileUploadConfig = {
+  axiosInstance: AxiosInstance
+  hostUrl: string
+  setPublic?: boolean
+  endpointUrl?: string
+  allowDownload?: boolean
+  allowDelete?: boolean
+  allowEdit?: boolean
+  dropzoneOptions?: Dropzone.DropzoneOptions
+  readonly?: boolean
+  beforeUploadedFileDeletion?:
+    | (<T extends string>(fileIri: T) => Promise<any>)
+    | null
+}
 
 export type LabelProps = {
   keyLabel?: string
