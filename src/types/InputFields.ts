@@ -1,4 +1,5 @@
 import { SelectOption } from '../models/FormFields'
+import { AxiosInstance } from 'axios'
 
 export type InputField = {
   type: string
@@ -19,6 +20,21 @@ export type DataFetchingSelectConfig = {
   responseMapFunction: (resource: any) => SelectOption
   options?: SelectOption[]
   create?: boolean
+}
+
+export type FileUploadConfig = {
+  axiosInstance: AxiosInstance
+  hostUrl: string
+  setPublic?: boolean
+  endpointUrl?: string
+  allowDownload?: boolean
+  allowDelete?: boolean
+  allowEdit?: boolean
+  dropzoneOptions?: Dropzone.DropzoneOptions
+  readonly?: boolean
+  beforeUploadedFileDeletion?:
+    | (<T extends string>(fileIri: T) => Promise<any>)
+    | null
 }
 
 export type LabelProps = {

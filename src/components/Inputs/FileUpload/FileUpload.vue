@@ -13,57 +13,46 @@
         <FilePreview
           v-for="file in initialFiles"
           :key="file.id"
-          :allow-delete="allowDelete"
-          :allow-download="allowDownload"
-          :allow-edit="allowEdit"
+          :config="computedConfig"
           :disabled="deletingFileIri === file['@id']"
           :file="createFileForPreview(file)"
-          :host-url="hostUrl"
           @edit-file="emit('edit-file', file['@id'])"
           @remove-file="removeInitialFile(file['@id'])"
         />
       </template>
+      <div
+        v-if="computedConfig.readonly || isAddingFile || isRemovingFile"
+        class="absolute bg-[#f3f5f6] inset-0 opacity-50 z-[31]"
+      ></div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted, watch, computed } from 'vue'
-import Dropzone from 'dropzone'
+import Dropzone, { DropzoneOptions } from 'dropzone'
 import { dropzoneTranslations } from '../../../helpers/Translations'
 import FormFieldLabel from '../../FormFieldLabel.vue'
 import FilePreview from './FilePreview.vue'
-import { AxiosInstance } from 'axios'
 import getLoadResourceFunctions from '../../../helpers/DataFetching'
 import { FileUploadValue } from '../ValueTypes'
 import { Resource } from '../../../types/Resource'
 //@ts-ignore
 import defaultPreviewTemplate from './preview-template.html?raw'
+import useResponsivity from '../../../composables/useResponsivity'
+import { FileUploadConfig } from '../../../types/InputFields'
+import _ from 'lodash'
 
 const props = withDefaults(
   defineProps<{
     modelValue?: FileUploadValue
     label?: string
-    axiosInstance: AxiosInstance
-    setPublic?: boolean
-    endpointUrl?: string
-    allowDownload?: boolean
-    hostUrl?: string
-    allowDelete?: boolean
-    allowEdit?: boolean
-    dropzoneOptions?: Dropzone.DropzoneOptions
+    config: FileUploadConfig
   }>(),
   {
     //@ts-ignore
     modelValue: [] as string[],
     label: '',
-    setPublic: false,
-    endpointUrl: '/api/storage',
-    hostUrl: '',
-    allowDownload: false,
-    allowDelete: true,
-    allowEdit: false,
-    dropzoneOptions: () => ({}),
   },
 )
 
@@ -76,8 +65,25 @@ const emit = defineEmits<{
 
 Dropzone.autoDiscover = false
 
+const computedConfig = computed(() =>
+  _.merge(
+    {
+      allowDownload: false,
+      allowEdit: false,
+      allowDelete: true,
+      setPublic: false,
+      endpointUrl: '/api/storage',
+      dropzoneOptions: {},
+      readonly: false,
+    },
+    props.config,
+  ),
+)
+
+const { isMobile } = useResponsivity()
 const { loadResource, loadAllResources } = getLoadResourceFunctions(
-  props.axiosInstance,
+  // eslint-disable-next-line vue/no-ref-object-destructure
+  computedConfig.value.axiosInstance,
 )
 
 type ApiPlatformFile = Resource<string, string> & {
@@ -88,42 +94,50 @@ type ApiPlatformFile = Resource<string, string> & {
     | { sourceUrl: string; originalName: string }
   )
 
-const fileUploadRef = ref()
+const fileUploadRef = ref<HTMLElement>()
 const model = ref<Dropzone | null>(null)
 const uploadedFileIris = ref<string[]>([])
 const initialFiles = ref<ApiPlatformFile[] | null>(null)
 const deletingFileIri = ref<string | null>(null)
 
-const options: Dropzone.DropzoneOptions = {
-  url: (props.axiosInstance.defaults.baseURL ?? '') + props.endpointUrl,
-  thumbnailWidth: 150,
-  maxFilesize: 50,
-  // these headers are set to null to fix a CORS issue; source: https://github.com/dropzone/dropzone/pull/685
-  headers: {
-    //@ts-ignore
-    Accept: null,
-    //@ts-ignore
-    'Cache-Control': null,
-    //@ts-ignore
-    'X-Requested-With': null,
-  },
-  addRemoveLinks: false,
-  withCredentials: true,
-  ...dropzoneTranslations,
-  previewTemplate: defaultPreviewTemplate,
-  ...props.dropzoneOptions,
-}
+const options = computed<DropzoneOptions>(() => {
+  const res: DropzoneOptions = {
+    url:
+      (computedConfig.value.axiosInstance.defaults.baseURL ?? '') +
+      computedConfig.value.endpointUrl,
+    thumbnailWidth: 150,
+    maxFilesize: 50,
+    // these headers are set to null to fix a CORS issue; source: https://github.com/dropzone/dropzone/pull/685
+    headers: {
+      Accept: null as unknown as string,
+      'Cache-Control': null as unknown as string,
+      'X-Requested-With': null as unknown as string,
+    },
+    addRemoveLinks: false,
+    withCredentials: true,
+    ...dropzoneTranslations,
+    previewTemplate: defaultPreviewTemplate,
+    ...computedConfig.value.dropzoneOptions,
+  }
 
-const singleFileUpload = ref(false)
+  if (singleFileUpload.value) {
+    res.maxFiles = 1
+  }
 
-if (singleFileUpload.value) options.maxFiles = 1
+  return res
+})
+
+const singleFileUpload = computed(() => !Array.isArray(props.modelValue))
 
 const removeInitialFile = async (fileIri: string) => {
   emit('remove-file', fileIri, async () => {
     if (!initialFiles.value) return
+
+    isRemovingFile.value = true
     deletingFileIri.value = fileIri
+
     try {
-      await props.axiosInstance.delete(fileIri)
+      await computedConfig.value.axiosInstance.delete(fileIri)
     } catch (e) {
       console.warn(e)
     } finally {
@@ -131,6 +145,7 @@ const removeInitialFile = async (fileIri: string) => {
         (file) => file['@id'] !== fileIri,
       )
       deletingFileIri.value = null
+      isRemovingFile.value = false
     }
   })
 }
@@ -155,9 +170,9 @@ const dropFilesMessage = computed(() => {
     : 'Nometiet failus šeit!'
 })
 
-const anyFiles = computed(() => {
-  return singleFileUpload.value ? !!props.modelValue : props.modelValue?.length
-})
+const anyFiles = computed(() =>
+  singleFileUpload.value ? !!props.modelValue : props.modelValue?.length,
+)
 
 watch(newValue, (n) => emit('update:modelValue', n))
 
@@ -165,33 +180,44 @@ const getFileIri = (file: Dropzone.DropzoneFile) => {
   if (file.xhr) return JSON.parse(file.xhr.response)['@id']
 }
 
+const isAddingFile = ref(false)
+
 const initDropzone = () => {
-  model.value = new Dropzone(fileUploadRef.value, options)
+  if (!fileUploadRef.value) return
+
+  model.value = new Dropzone(fileUploadRef.value, options.value)
   model.value.on('success', (file: Dropzone.DropzoneFile) => {
+    isAddingFile.value = false
+
     if (!model.value) return
 
     if (singleFileUpload.value) {
       if (model.value.files.length > 1) {
         model.value.removeFile(model.value.files[0])
       }
-      if (initialFiles.value && initialFiles.value.length > 0)
+      if (initialFiles.value && initialFiles.value.length > 0) {
         initialFiles.value = []
+      }
     }
 
     uploadedFileIris.value = [...uploadedFileIris.value, getFileIri(file)]
   })
 
   model.value.on('error', (file: Dropzone.DropzoneFile) => {
+    isAddingFile.value = false
+
     if (model.value) {
       emit('on-error', model.value, file)
     }
   })
 
   model.value.on('addedfile', async (file: Dropzone.DropzoneFile) => {
+    isAddingFile.value = true
+
     const elements = document.querySelectorAll('.dz-preview')
     const lastElement = elements[elements.length - 1]
     const removeButton = lastElement.querySelector('[dz-remove]')
-    if (!props.allowDelete) {
+    if (!computedConfig.value.allowDelete) {
       removeButton?.remove()
     } else {
       removeButton?.addEventListener('click', () =>
@@ -200,17 +226,17 @@ const initDropzone = () => {
     }
 
     const editButton = lastElement.querySelector('[dz-edit]')
-    if (!props.allowEdit) {
+    if (!computedConfig.value.allowEdit) {
       editButton?.remove()
     } else {
       editButton?.addEventListener('click', () => editFileEvent(file))
     }
   })
 
-  if (props.setPublic) {
+  if (computedConfig.value.setPublic) {
     model.value.on(
       'sending',
-      async (file: Dropzone.DropzoneFile, xhr: any, formData: FormData) => {
+      async (_file: Dropzone.DropzoneFile, _xhr: any, formData: FormData) => {
         formData.append('isPublic', Boolean(true).toString())
       },
     )
@@ -237,23 +263,39 @@ const editFileEvent = (file: Dropzone.DropzoneFile) => {
   emit('edit-file', fileIri)
 }
 
+const isRemovingFile = ref(false)
+
 // file remove for not linked yet
-const removeFileEvent = (file: Dropzone.DropzoneFile, element: Element) => {
+const removeFileEvent = async (
+  file: Dropzone.DropzoneFile,
+  element: Element,
+) => {
   const removedFileIri = getFileIri(file)
 
-  props.axiosInstance
-    .delete(removedFileIri)
-    .then(() => {
-      // File successfully deleted, remove it from the uploadedFileIris array.
-      uploadedFileIris.value = uploadedFileIris.value.filter(
-        (fileIri: string) => fileIri !== removedFileIri,
-      )
-      element.remove()
-    })
-    .catch((error) => {
-      // Handle any errors that occurred during the delete request, if necessary.
-      console.error('Error deleting file:', error)
-    })
+  isRemovingFile.value = true
+
+  if (computedConfig.value?.beforeUploadedFileDeletion) {
+    try {
+      await computedConfig.value.beforeUploadedFileDeletion(removedFileIri)
+    } catch (e) {
+      console.error(e)
+    }
+  }
+
+  try {
+    await computedConfig.value.axiosInstance.delete(removedFileIri)
+
+    // File successfully deleted, remove it from the uploadedFileIris array.
+    uploadedFileIris.value = uploadedFileIris.value.filter(
+      (fileIri: string) => fileIri !== removedFileIri,
+    )
+    element.remove()
+  } catch (e) {
+    // Handle any errors that occurred during the delete request, if necessary.
+    console.error('Error deleting file:', e)
+  } finally {
+    isRemovingFile.value = false
+  }
 }
 
 const createFileForPreview = (file: ApiPlatformFile) =>
@@ -270,7 +312,6 @@ const createFileForPreview = (file: ApiPlatformFile) =>
       }
 
 onMounted(() => {
-  singleFileUpload.value = !Array.isArray(props.modelValue)
   initDropzone()
   loadInitialFiles()
 })
@@ -301,7 +342,8 @@ onMounted(() => {
 .dz-details {
   padding-bottom: 0 !important;
 }
-d .dropzone .dz-preview.dz-error .dz-error-message {
+
+.dropzone .dz-preview.dz-error .dz-error-message {
   top: 92px;
   padding-left: 8px;
   padding-right: 8px;

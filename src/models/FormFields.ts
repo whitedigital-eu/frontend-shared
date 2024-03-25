@@ -3,6 +3,7 @@ import {
   SimpleSelectConfig,
   LabelProps,
   MapProps,
+  FileUploadConfig,
 } from '../types/InputFields'
 import dayjs from 'dayjs'
 import {
@@ -13,7 +14,6 @@ import {
   DataFetchingSelectValue,
   SimpleSelectValue,
   DateTimePickerValue,
-  FileUploadValue,
   SliderValue,
   FlatpickrTimePickerValue,
   StringListValue,
@@ -206,32 +206,19 @@ class DateTimeField extends FormField {
   }
 }
 
-class FileUploadField extends FormField {
-  public value: FileUploadValue
-  public allowDownload = false
-  public allowEdit = false
-  public allowDelete = true
-  public hostUrl = ''
+class FileUploadField<T extends string | string[]> extends FormField {
+  public value: T | null
+  public config: FileUploadConfig
 
   constructor(
     name: string,
     label: string,
-    value?: FileUploadValue,
-    config?: {
-      allowDownload?: boolean
-      allowEdit?: boolean
-      allowDelete?: boolean
-      hostUrl?: string
-    },
+    value: T | null,
+    config: FileUploadConfig,
   ) {
     super('file-upload', name, label)
     this.value = value
-    if (config) {
-      this.allowDownload = config.allowDownload ?? this.allowDownload
-      this.allowEdit = config.allowEdit ?? this.allowEdit
-      this.allowDelete = config.allowDelete ?? this.allowDelete
-      this.hostUrl = config.hostUrl ?? this.hostUrl
-    }
+    this.config = config
   }
 }
 
@@ -315,11 +302,16 @@ class GovernmentIdField extends FormField {
   }
 }
 
-class PublicFileUploadField extends FileUploadField {
-  public setPublic = true
-
-  constructor(name: string, label: string, value: string | string[] = '') {
-    super(name, label, value)
+class PublicFileUploadField<
+  T extends string | string[],
+> extends FileUploadField<T> {
+  constructor(
+    name: string,
+    label: string,
+    value: T | null,
+    config: FileUploadConfig,
+  ) {
+    super(name, label, value, { ...config, setPublic: true })
   }
 }
 
@@ -506,7 +498,7 @@ export type AnyFormField =
   | DateField
   | TimeField
   | DateTimeField
-  | FileUploadField
+  | FileUploadField<any>
   | CheckboxField
   | SliderField
   | DecimalField
@@ -515,5 +507,5 @@ export type AnyFormField =
   | SimpleSelectFieldTS<any>
   | SimpleSelectFieldTM<any>
   | GovernmentIdField
-  | PublicFileUploadField
+  | PublicFileUploadField<any>
   | CollectionField<any>
