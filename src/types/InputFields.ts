@@ -3,6 +3,7 @@ import { Modify } from '../site-tree/Types/Shared'
 import { RecursivePartial, TomSettings } from 'tom-select/src/types'
 import { VueTelInputProps } from 'vue-tel-input'
 import { AxiosInstance } from 'axios'
+import { DropzoneOptions } from 'dropzone'
 
 export type InputField = {
   type: string
@@ -38,7 +39,7 @@ export type FileUploadConfig = {
   allowDownload?: boolean
   allowDelete?: boolean
   allowEdit?: boolean
-  dropzoneOptions?: Dropzone.DropzoneOptions
+  dropzoneOptions?: DropzoneOptions
   readonly?: boolean
   beforeUploadedFileDeletion?: ((fileIri: any) => Promise<any>) | null
 }
