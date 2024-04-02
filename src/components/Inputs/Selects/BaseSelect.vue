@@ -73,6 +73,7 @@ const emit = defineEmits<{
 const defaultConfig: SelectConfig<T> = {
   readonly: false,
   allowDelete: true,
+  openInstantly: false,
   tomSelectSettings: { create: false },
 }
 
@@ -222,6 +223,9 @@ const isOptionSelected = (value: string) => {
 const init = () => {
   if (!selectRef.value) return
   model.value = new TomSelect(selectRef.value, settings.value)
+  if (computedConfig.value.openInstantly) {
+    model.value.open()
+  }
 }
 
 onMounted(init)

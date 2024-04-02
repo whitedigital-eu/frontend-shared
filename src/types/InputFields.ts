@@ -22,6 +22,7 @@ export type SelectConfig<T extends string = string> = Partial<{
   tomSelectSettings: TomSettingsTyped<T>
   readonly: boolean
   allowDelete: boolean
+  openInstantly: boolean
 }>
 
 export type DataFetchingSelectConfig<T extends string = string> =
