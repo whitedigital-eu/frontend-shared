@@ -12,6 +12,7 @@ export type CheckboxProps = {
   modelValue?: boolean
   readonly?: boolean
   label?: string | null
+  readonlyLabelClasses?: string | string[] | Record<string, unknown>
 }
 
 export type TextProps = {

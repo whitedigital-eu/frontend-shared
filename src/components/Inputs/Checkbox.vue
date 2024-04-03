@@ -9,11 +9,7 @@
     />
     <label
       class="form-label ml-2 translate-y-0.5"
-      :class="
-        readonly
-          ? 'opacity-50 cursor-not-allowed'
-          : 'opacity-100 cursor-pointer'
-      "
+      :class="readonly ? readonlyLabelClasses : 'opacity-100 cursor-pointer'"
       @click="!readonly && emit('update:modelValue', !value)"
     >
       {{ label }}
@@ -29,6 +25,7 @@ const {
   modelValue = false,
   readonly = false,
   label = null,
+  readonlyLabelClasses = 'opacity-50 cursor-not-allowed',
 } = defineProps<CheckboxProps>()
 
 const emit = defineEmits<{ 'update:modelValue': [value: boolean] }>()
