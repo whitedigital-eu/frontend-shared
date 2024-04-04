@@ -40,7 +40,7 @@ import dayjs from 'dayjs'
 import LocalizedFormat from 'dayjs/plugin/localizedFormat'
 import FormFieldLabel from '../FormFieldLabel.vue'
 import { FlatpickrTimePickerValue } from './ValueTypes'
-import useResponsivity from '../../composables/useResponsivity'
+import useIsMobile from '../../composables/useIsMobile'
 
 const {
   modelValue = null,
@@ -56,7 +56,7 @@ const emit = defineEmits<{ 'update:modelValue': [value: string | null] }>()
 
 dayjs.extend(LocalizedFormat)
 
-const { isMobile } = useResponsivity()
+const { isMobile } = useIsMobile()
 
 const computedId = computed(() => {
   if (!id) {
@@ -134,7 +134,7 @@ watch(
     }
 
     setValueFromModelValue()
-  }
+  },
 )
 
 watch(
@@ -142,6 +142,6 @@ watch(
   (n) => {
     emit('update:modelValue', n)
     emitted = true
-  }
+  },
 )
 </script>

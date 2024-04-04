@@ -43,9 +43,9 @@ import { X } from 'lucide-vue-next'
 import dayjs from 'dayjs'
 import LocalizedFormat from 'dayjs/plugin/localizedFormat'
 import FormFieldLabel from '../FormFieldLabel.vue'
-import useResponsivity from '../../composables/useResponsivity'
 import { DatepickerProps } from './PropTypes'
 import _ from 'lodash'
+import useIsMobile from '../../composables/useIsMobile'
 
 const {
   modelValue = null,
@@ -76,7 +76,7 @@ const computedConfig = computed(() =>
 
 dayjs.extend(LocalizedFormat)
 
-const { isMobile } = useResponsivity()
+const { isMobile } = useIsMobile()
 
 const createRandomId = () => Math.floor(100000 + Math.random() * 900000)
 

@@ -112,10 +112,10 @@ import 'flatpickr/dist/flatpickr.css'
 import { Filters } from '../../types/Filters'
 import dayjs from 'dayjs'
 import { AxiosInstance } from 'axios'
-import useResponsivity from '../../composables/useResponsivity'
 import { TableConfig } from './createTableConfig'
 import { ChevronUp, ChevronDown } from 'lucide-vue-next'
 import { isNumericString } from '../../helpers/Global'
+import useIsMobile from '../../composables/useIsMobile'
 
 const props = withDefaults(
   defineProps<{
@@ -152,7 +152,7 @@ defineSlots<{
   }
 }>()
 
-const { isMobile } = useResponsivity()
+const { isMobile } = useIsMobile()
 const showFilters = ref(!isMobile.value && props.initialShowFiltersDesktop)
 
 const filter = () => {

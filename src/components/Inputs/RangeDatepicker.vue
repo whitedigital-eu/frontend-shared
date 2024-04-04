@@ -38,7 +38,7 @@ import LocalizedFormat from 'dayjs/plugin/localizedFormat'
 import FormFieldLabel from '../FormFieldLabel.vue'
 import { areStringArraysEqual } from '../../helpers/Global'
 import { X } from 'lucide-vue-next'
-import useResponsivity from '../../composables/useResponsivity'
+import useIsMobile from '../../composables/useIsMobile'
 
 const props = withDefaults(
   // TODO: remove '' from allowed values, use null instead
@@ -50,7 +50,7 @@ const emit = defineEmits<{ 'update:modelValue': [value: string[] | null] }>()
 
 dayjs.extend(LocalizedFormat)
 
-const { isMobile } = useResponsivity()
+const { isMobile } = useIsMobile()
 
 const datepickerRef = ref(null)
 

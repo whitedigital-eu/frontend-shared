@@ -7,7 +7,7 @@
     >
       <FormFieldLabel v-if="label">{{ label }}</FormFieldLabel>
       <div class="dz-message">
-        <span v-if="!anyFiles">{{ dropFilesMessage }}</span>
+        <span>{{ dropFilesMessage }}</span>
       </div>
       <template v-if="initialFiles">
         <FilePreview
@@ -38,9 +38,9 @@ import getLoadResourceFunctions from '../../../helpers/DataFetching'
 import { Resource } from '../../../types/Resource'
 //@ts-ignore
 import defaultPreviewTemplate from './preview-template.html?raw'
-import useResponsivity from '../../../composables/useResponsivity'
 import { FileUploadConfig } from '../../../types/InputFields'
 import _ from 'lodash'
+import useIsMobile from '../../../composables/useIsMobile'
 
 const props = withDefaults(
   defineProps<{
@@ -79,7 +79,7 @@ const computedConfig = computed(() =>
   ),
 )
 
-const { isMobile } = useResponsivity()
+const { isMobile } = useIsMobile()
 const { loadResource, loadAllResources } = getLoadResourceFunctions(
   // eslint-disable-next-line vue/no-ref-object-destructure
   computedConfig.value.axiosInstance,
@@ -166,11 +166,11 @@ const newValue = computed(() => {
 const dropFilesMessage = computed(() =>
   isMobile.value
     ? singleFileUpload.value
-      ? 'Nometiet failu šeit!'
-      : 'Nometiet failus šeit!'
-    : singleFileUpload.value
       ? 'Spiediet šeit, lai augšupielādētu failu'
-      : 'Spiediet šeit, lai augšupielādētu failus',
+      : 'Spiediet šeit, lai augšupielādētu failus'
+    : singleFileUpload.value
+      ? 'Nometiet failu šeit!'
+      : 'Nometiet failus šeit!',
 )
 
 const anyFiles = computed(() =>
@@ -350,5 +350,14 @@ onMounted(() => {
   top: 92px;
   padding-left: 8px;
   padding-right: 8px;
+}
+
+// Do not hide the message when any files uploaded. Adapted from: https://github.com/dropzone/dropzone/issues/524
+.dropzone.dz-started .dz-message {
+  display: block;
+}
+
+.dropzone.dz-max-files-reached .dz-message {
+  display: none;
 }
 </style>
