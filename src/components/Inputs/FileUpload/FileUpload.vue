@@ -177,7 +177,11 @@ const anyFiles = computed(() =>
   singleFileUpload.value ? !!props.modelValue : props.modelValue?.length,
 )
 
-watch(newValue, (n) => emit('update:modelValue', n))
+watch(newValue, (n, o) => {
+  if (n.length === o.length) return
+
+  emit('update:modelValue', n)
+})
 
 const getFileIri = (file: Dropzone.DropzoneFile) => {
   if (file.xhr) return JSON.parse(file.xhr.response)['@id']
