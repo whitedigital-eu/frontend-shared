@@ -458,7 +458,7 @@ export {
 
 export class SelectOption<
   T extends string = string,
-  V extends string = string,
+  V extends string | number = string,
 > {
   constructor(
     public text: T,
