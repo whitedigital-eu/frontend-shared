@@ -130,13 +130,13 @@ class HtmlContentField extends FormField {
 
 export class SimpleSelectField<T extends string | string[]> extends FormField {
   public value: T | null | undefined
-  config: SelectConfig<T extends string ? T : T[number]>
+  config: SelectConfig<T extends unknown[] ? T[number] : T>
 
   constructor(
     name: string,
     label: string,
     value?: T | null,
-    config: SelectConfig<T extends string ? T : T[number]> = {},
+    config: SelectConfig<T extends unknown[] ? T[number] : T> = {},
   ) {
     super('simple-select', name, label)
     this.value = value
@@ -144,7 +144,7 @@ export class SimpleSelectField<T extends string | string[]> extends FormField {
   }
 
   setOptions(
-    options: SelectOption<string, T extends string ? T : T[number]>[],
+    options: SelectOption<string, T extends unknown[] ? T[number] : T>[],
   ) {
     if (!this.config.tomSelectSettings) {
       this.config.tomSelectSettings = {}
@@ -458,7 +458,7 @@ export {
 
 export class SelectOption<
   T extends string = string,
-  V extends string | number = string,
+  V extends string | number = string | number,
 > {
   constructor(
     public text: T,

@@ -32,7 +32,7 @@
   </div>
 </template>
 
-<script setup lang="ts" generic="T extends string">
+<script setup lang="ts" generic="T extends string | number">
 import { computed, ref, onMounted, watch, onBeforeUnmount } from 'vue'
 import TomSelect from 'tom-select'
 import 'tom-select/dist/css/tom-select.css'
@@ -243,7 +243,9 @@ watch(
   () => props.modelValue,
   (value) => {
     if (!model.value) return
-    value === null ? model.value.clear() : model.value.setValue(value, true)
+    value === null
+      ? model.value.clear()
+      : model.value.setValue(value as string | string[], true)
   },
 )
 watch(
@@ -251,7 +253,7 @@ watch(
   () =>
     (isEmpty.value =
       !props.modelValue ||
-      (!!props.modelValue && props.modelValue.length === 0)),
+      (!!props.modelValue && (props.modelValue as string).length === 0)),
   { immediate: true },
 )
 watch(

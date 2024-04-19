@@ -49,7 +49,7 @@
         item.type === 'date' &&
         (item.value === '' || !Array.isArray(item.value))
       "
-      v-model="item.value"
+      v-model="item.value as string | null"
       class="w-full"
       :label="item.label"
     />
@@ -58,7 +58,7 @@
         item.type === 'date-range' &&
         (item.value === '' || Array.isArray(item.value))
       "
-      v-model="item.value"
+      v-model="item.value as string[] | null"
       class="w-full"
       :label="item.label"
     />

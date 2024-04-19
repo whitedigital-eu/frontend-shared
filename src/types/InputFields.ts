@@ -13,24 +13,26 @@ export type InputField = {
   errors?: string[]
 }
 
-export type TomSettingsTyped<T extends string> = Modify<
+export type TomSettingsTyped<T extends string | number> = Modify<
   RecursivePartial<TomSettings>,
   { options?: SelectOption<string, T>[] }
 >
 
-export type SelectConfig<T extends string = string> = Partial<{
-  tomSelectSettings: TomSettingsTyped<T>
-  readonly: boolean
-  allowDelete: boolean
-  openInstantly: boolean
-}>
+export type SelectConfig<T extends string | number = string | number> =
+  Partial<{
+    tomSelectSettings: TomSettingsTyped<T>
+    readonly: boolean
+    allowDelete: boolean
+    openInstantly: boolean
+  }>
 
-export type DataFetchingSelectConfig<T extends string = string> =
-  SelectConfig<T> & {
-    minSymbols?: number
-    requestUrlGenerator: (searchValue: string) => string
-    responseMapFunction: (resource: any) => SelectOption
-  }
+export type DataFetchingSelectConfig<
+  T extends string | number = string | number,
+> = SelectConfig<T> & {
+  minSymbols?: number
+  requestUrlGenerator: (searchValue: string) => string
+  responseMapFunction: (resource: any) => SelectOption
+}
 
 export type FileUploadConfig = {
   axiosInstance: AxiosInstance

@@ -179,7 +179,7 @@ const resetFilter = () => {
 }
 
 const createDateRangeQueryParamsArr = (
-  value: [string, string],
+  value: [string, string | number],
   searchProperty: string,
 ) => {
   if (value.length < 2) return
@@ -194,7 +194,7 @@ const createDateRangeQueryParamsArr = (
 }
 
 const filtersToQueryParams = () => {
-  const objParams: Record<string, string | string[] | number> = {}
+  const objParams: Record<string, string | string[] | number | number[]> = {}
 
   types.forEach((type) => {
     if (props.filters[type]) {
@@ -219,7 +219,7 @@ const filtersToQueryParams = () => {
           })()
 
           const paramsObj = createDateRangeQueryParamsArr(
-            item.value as [string, string],
+            item.value as [string, string | number],
             searchProperty,
           )
           if (paramsObj) Object.assign(objParams, paramsObj)

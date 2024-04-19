@@ -42,7 +42,7 @@ export type ProjectSettings = {
       ) => Promise<SiteTreeRead>
     }
     siteTreeTypeToLabel: (...args: any[]) => string
-    getSiteTreeTypeSelectOptions: (...args: any[]) => SelectOption[]
+    getSiteTreeTypeSelectOptions: (...args: any[]) => SelectOption<any, any>[]
     getSiteTreeSelectOptions: (
       ...args: any[]
     ) => Promise<SelectOption<string, SiteTreeRead['@id']>[]>

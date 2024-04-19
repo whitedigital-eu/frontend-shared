@@ -10,7 +10,7 @@
   />
 </template>
 
-<script setup lang="ts" generic="T extends string">
+<script setup lang="ts" generic="T extends string | number">
 import { ref, watch } from 'vue'
 import BaseSelect from './BaseSelect.vue'
 import { SelectConfig } from '../../../types/InputFields'

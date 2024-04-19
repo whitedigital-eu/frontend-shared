@@ -11,7 +11,7 @@
   />
 </template>
 
-<script setup lang="ts" generic="T extends string">
+<script setup lang="ts" generic="T extends string | number">
 import { computed, ref, watch } from 'vue'
 import BaseSelect from './BaseSelect.vue'
 import { DataFetchingSelectConfig } from '../../../types/InputFields'
