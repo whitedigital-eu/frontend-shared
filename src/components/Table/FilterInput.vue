@@ -47,7 +47,7 @@
     <Datepicker
       v-if="
         item.type === 'date' &&
-        (item.value === '' || !Array.isArray(item.value))
+        (item.value === '' || item.value === null || !Array.isArray(item.value))
       "
       v-model="item.value as string | null"
       class="w-full"
@@ -56,7 +56,7 @@
     <RangeDatepicker
       v-if="
         item.type === 'date-range' &&
-        (item.value === '' || Array.isArray(item.value))
+        (item.value === '' || item.value === null || Array.isArray(item.value))
       "
       v-model="item.value as string[] | null"
       class="w-full"

@@ -99,5 +99,5 @@ watch(
   { immediate: true },
 )
 
-const clearInput = () => emit('update:modelValue', null)
+const clearInput = () => emit('update:modelValue', [])
 </script>
