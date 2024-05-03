@@ -75,6 +75,7 @@ const defaultConfig: SelectConfig<T> = {
   allowDelete: true,
   openInstantly: false,
   dynamicDropDown: true,
+  dynamicDropDownMargin: 40,
   tomSelectSettings: { create: false },
 }
 
@@ -225,14 +226,22 @@ const onDropdownClose = (e: any) => {
   e.style.top = null
 }
 const onDropdownOpen = () => {
-  if (!model.value || !model.value.dropdown) {
+  if (
+    !model.value ||
+    !model.value.dropdown ||
+    !computedConfig.value.dynamicDropDownMargin
+  ) {
     return
   }
 
   const spaceBottom =
     window.innerHeight - model.value.control.getBoundingClientRect().top
 
-  if (model.value.dropdown.offsetHeight * 1.3 > spaceBottom) {
+  if (
+    model.value.dropdown.offsetHeight +
+      computedConfig.value.dynamicDropDownMargin >
+    spaceBottom
+  ) {
     model.value.dropdown.style.top = `-${model.value.dropdown.offsetHeight - 2}px`
   } else {
     model.value.dropdown.style.top = ''

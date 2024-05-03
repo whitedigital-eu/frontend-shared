@@ -25,6 +25,7 @@ export type SelectConfig<T extends string | number = string | number> =
     allowDelete: boolean
     openInstantly: boolean
     dynamicDropDown: boolean
+    dynamicDropDownMargin: number
   }>
 
 export type DataFetchingSelectConfig<
