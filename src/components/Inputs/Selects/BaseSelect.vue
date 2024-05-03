@@ -74,6 +74,7 @@ const defaultConfig: SelectConfig<T> = {
   readonly: false,
   allowDelete: true,
   openInstantly: false,
+  dynamicDropDown: true,
   tomSelectSettings: { create: false },
 }
 
@@ -220,11 +221,42 @@ const isOptionSelected = (value: string) => {
     : (props.modelValue as string) === value
 }
 
+const onDropdownClose = (e: any) => {
+  e.style.top = null
+}
+const onDropdownOpen = () => {
+  if (!model.value || !model.value.dropdown) {
+    return
+  }
+
+  const spaceBottom =
+    window.innerHeight - model.value.control.getBoundingClientRect().top
+
+  if (model.value.dropdown.offsetHeight * 1.3 > spaceBottom) {
+    model.value.dropdown.style.top = `-${model.value.dropdown.offsetHeight - 2}px`
+  } else {
+    model.value.dropdown.style.top = ''
+  }
+}
+
 const init = () => {
   if (!selectRef.value) return
   model.value = new TomSelect(selectRef.value, settings.value)
   if (computedConfig.value.openInstantly) {
     model.value.open()
+  }
+
+  if (computedConfig.value.dynamicDropDown) {
+    const events = ['dropdown_open', 'type', 'load', 'item_add', 'item_remove']
+
+    events.forEach((event) => {
+      if (!model.value) {
+        return
+      }
+      model.value.on(event, onDropdownOpen)
+    })
+
+    model.value.on('dropdown_close', onDropdownClose)
   }
 }
 
