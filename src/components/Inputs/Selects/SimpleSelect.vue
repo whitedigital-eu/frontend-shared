@@ -11,7 +11,7 @@
 </template>
 
 <script setup lang="ts" generic="T extends string | number">
-import { ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import BaseSelect from './BaseSelect.vue'
 import { SelectConfig } from '../../../types/InputFields'
 
@@ -40,14 +40,11 @@ const handleInput = (value: string | string[] | number) => {
   emit('update:modelValue', value)
 }
 
-const baseSelectKey = ref(0)
-
-watch(
-  [
-    () => props.config?.tomSelectSettings?.options,
-    () => props.config?.tomSelectSettings?.create,
-  ],
-  () => baseSelectKey.value++,
+const baseSelectKey = computed(() =>
+  JSON.stringify([
+    props.config?.tomSelectSettings?.options,
+    props.config?.tomSelectSettings?.create,
+  ]),
 )
 
 watch(

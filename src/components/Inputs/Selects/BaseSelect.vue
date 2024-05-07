@@ -250,7 +250,10 @@ const onDropdownOpen = () => {
 
 const init = () => {
   if (!selectRef.value) return
-  model.value = new TomSelect(selectRef.value, settings.value)
+  /* structuredClone would be better, but doesn't work on refs
+   * the settings need to be cloned, because they are modified inside the TomSelect instance */
+  const clonedSettings = JSON.parse(JSON.stringify(settings.value))
+  model.value = new TomSelect(selectRef.value, clonedSettings)
   if (computedConfig.value.openInstantly) {
     model.value.open()
   }

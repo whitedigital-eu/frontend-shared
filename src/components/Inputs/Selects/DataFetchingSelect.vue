@@ -67,14 +67,11 @@ const computedConfig = computed(() =>
   ),
 )
 
-const baseSelectKey = ref(0)
-
-watch(
-  [
-    () => computedConfig.value.tomSelectSettings.options,
-    () => computedConfig.value.tomSelectSettings.create,
-  ],
-  () => baseSelectKey.value++,
+const baseSelectKey = computed(() =>
+  JSON.stringify([
+    computedConfig.value.tomSelectSettings.options,
+    computedConfig.value.tomSelectSettings.create,
+  ]),
 )
 
 const value = ref<T | T[] | null>()
