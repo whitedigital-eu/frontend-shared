@@ -21,6 +21,7 @@ import {
   MultipleTextFieldListValue,
   MapCoordinateSelectorFieldValue,
 } from '../components/Inputs/ValueTypes'
+import { reactive } from 'vue'
 
 export type FormFieldValue =
   | string
@@ -130,7 +131,9 @@ class HtmlContentField extends FormField {
 
 export class SimpleSelectField<T extends string | string[]> extends FormField {
   public value: T | null | undefined
-  config: SelectConfig<T extends unknown[] ? T[number] : T>
+  config: ReturnType<
+    typeof reactive<SelectConfig<T extends unknown[] ? T[number] : T>>
+  >
 
   constructor(
     name: string,
@@ -140,7 +143,7 @@ export class SimpleSelectField<T extends string | string[]> extends FormField {
   ) {
     super('simple-select', name, label)
     this.value = value
-    this.config = config
+    this.config = reactive(config)
   }
 
   setOptions(
@@ -149,13 +152,16 @@ export class SimpleSelectField<T extends string | string[]> extends FormField {
     if (!this.config.tomSelectSettings) {
       this.config.tomSelectSettings = {}
     }
-    this.config.tomSelectSettings.options = options
+    this.config.tomSelectSettings.options =
+      options as typeof this.config.tomSelectSettings.options
   }
 }
 
 class DataFetchingSelectField<T extends string | string[]> extends FormField {
   public value: T | null | undefined
-  config: DataFetchingSelectConfig<T extends string ? T : T[number]>
+  config: ReturnType<
+    typeof reactive<DataFetchingSelectConfig<T extends string ? T : T[number]>>
+  >
 
   constructor(
     name: string,
@@ -165,7 +171,7 @@ class DataFetchingSelectField<T extends string | string[]> extends FormField {
   ) {
     super('data-fetching-select', name, label)
     this.value = value
-    this.config = config
+    this.config = reactive(config)
   }
 
   setOptions(
@@ -174,7 +180,8 @@ class DataFetchingSelectField<T extends string | string[]> extends FormField {
     if (!this.config.tomSelectSettings) {
       this.config.tomSelectSettings = {}
     }
-    this.config.tomSelectSettings.options = options
+    this.config.tomSelectSettings.options =
+      options as typeof this.config.tomSelectSettings.options
   }
 }
 

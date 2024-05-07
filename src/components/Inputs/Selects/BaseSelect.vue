@@ -164,17 +164,17 @@ const createPlugins = () => {
     plugins.clear_button = {
       title: 'Dzēst',
       html: function (data: { className: string; title: string }) {
-        return `<span class="text-xl !right-2 ${data.className}" title="${data.title}">&#10005;</span>`
+        return `<span
+            class="text-xl !right-2 !bg-white !py-2 !pl-2 ${data.className}"
+            title="${data.title}">
+            &#10005;
+          </span>`
       },
     }
   }
 
   if (multiple.value) {
     plugins.remove_button = { title: 'Noņemt vērtību' }
-  }
-
-  if (computedConfig.value.tomSelectSettings) {
-    Object.assign(plugins, computedConfig.value.tomSelectSettings.plugins)
   }
 
   return plugins
@@ -250,10 +250,15 @@ const onDropdownOpen = () => {
 
 const init = () => {
   if (!selectRef.value) return
-  /* structuredClone would be better, but doesn't work on refs
-   * the settings need to be cloned, because they are modified inside the TomSelect instance */
-  const clonedSettings = JSON.parse(JSON.stringify(settings.value))
-  model.value = new TomSelect(selectRef.value, clonedSettings)
+
+  model.value = new TomSelect(selectRef.value, {
+    ...settings.value,
+    /* the options need to be cloned, because they are modified inside the TomSelect instance */
+    options: Array.isArray(settings.value.options)
+      ? JSON.parse(JSON.stringify(settings.value.options))
+      : settings.value.options,
+  })
+
   if (computedConfig.value.openInstantly) {
     model.value.open()
   }
