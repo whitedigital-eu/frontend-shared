@@ -37,6 +37,7 @@
               :axios-instance="axiosInstance"
               :item="item"
             />
+            <slot name="after-default-filters"></slot>
             <button
               v-if="!noAdvancedFilters && toggleAdvancedFilters"
               class="btn btn-primary h-10"
@@ -150,6 +151,7 @@ defineSlots<{
     showFilters: boolean
     toggleShowFilters: () => void
   }
+  'after-default-filters': {}
 }>()
 
 const { isMobile } = useIsMobile()
