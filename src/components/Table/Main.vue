@@ -28,11 +28,7 @@
 <script
   setup
   lang="ts"
-  generic="
-    ResourceInstance extends
-      | Resource<string, string>
-      | GuidResource<string, string>
-  "
+  generic="ResourceInstance extends Record<string, unknown>"
 >
 import Tabulator from 'tabulator-tables'
 import { onMounted, ref, watch, onBeforeUnmount, nextTick } from 'vue'
@@ -42,7 +38,6 @@ import { ApiListResponse } from '../../types/ApiPlatform'
 import { COLLAPSE_ORDER, createColumn } from './Column'
 import { tableTranslations } from '../../helpers/Translations'
 import { TableProps } from './createTableConfig'
-import { GuidResource, Resource } from '../../types/Resource'
 /*
  * Since only props can be generic (in other words, it is not possible to pass just a generic, without a prop),
  * we need the fake resourceType prop which is used only to get the generic type.

@@ -1,7 +1,6 @@
 import { CheckSquare, Trash2, Eye, createElement, Move } from 'lucide'
 import { COLLAPSE_ORDER } from './Column'
 import { TableProps } from './createTableConfig'
-import { GuidResource, Resource } from '../../types/Resource'
 
 type RemoveUndefined<T> = { [K in keyof T]-?: Exclude<T[K], undefined> }
 
@@ -104,11 +103,7 @@ const computeActionColumnWidth = (props: TableProps) => {
   return res > ACTION_COLUMN_MIN_WIDTH ? res : ACTION_COLUMN_MIN_WIDTH
 }
 
-const createActionColumn = <
-  ResourceInstance extends
-    | Resource<string, string>
-    | GuidResource<string, string>,
->(
+const createActionColumn = <ResourceInstance extends Record<string, unknown>>(
   props: RemoveUndefined<TableProps>,
   clickHandlers: {
     edit: (resource: ResourceInstance) => void
