@@ -2,7 +2,7 @@
 import StartToastifyInstance from 'toastify-js/src/toastify-es'
 //@ts-ignore
 import dom from '@left4code/tw-starter/dist/js/dom'
-import { CheckCircle, createElement, XCircle } from "lucide";
+import { CheckCircle, createElement, XCircle } from 'lucide'
 
 const createToastifyConfig = (
   element: Node,
@@ -46,7 +46,10 @@ const createIcon = (icon: typeof CheckCircle, classes: string) => {
   return iconEl
 }
 
-export const showGlobalError = (description: string, options?: { iconClasses?: string }) => {
+export const showGlobalError = (
+  description: string,
+  options?: { iconClasses?: string },
+) => {
   const element = createToastifyElement(
     `
         ${createIcon(XCircle, options?.iconClasses ?? 'text-danger').outerHTML}
@@ -67,9 +70,12 @@ type ToastifyInstance = {
 
 let activeSuccessToast: ToastifyInstance | null = null
 
-export const showSuccessMessage = (successMessage: string, options?: { iconClasses?: string }) => {
+export const showSuccessMessage = (
+  successMessage: string,
+  options?: { iconClasses?: string },
+) => {
   const successElement = createToastifyElement(
-      `
+    `
         ${createIcon(CheckCircle, options?.iconClasses ?? 'text-success').outerHTML}
         <div class="ml-4 mr-4">
             <div class="font-medium">${successMessage}</div>
@@ -87,7 +93,10 @@ export const showSuccessMessage = (successMessage: string, options?: { iconClass
   activeSuccessToast.showToast()
 }
 
-export const showWriteRequestSuccess = (methodName: string, options?: { iconClasses?: string }) => {
+export const showWriteRequestSuccess = (
+  methodName: string,
+  options?: { iconClasses?: string },
+) => {
   const successMessage = getSuccessMessage(methodName)
   showSuccessMessage(successMessage, options)
 }
