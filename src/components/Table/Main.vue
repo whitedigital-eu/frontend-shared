@@ -123,6 +123,11 @@ const emit = defineEmits<{
    * @arg totalEntryCount - the total number of available items as returned by the API
    */
   'total-entry-count-changed': [totalEntryCount: number | null]
+  /**
+   * Emitted every time filters are changed
+   * @arg  - all filtered resources
+   */
+  'data-loaded': [resources: ResourceInstance[]]
 }>()
 
 defineSlots<{
