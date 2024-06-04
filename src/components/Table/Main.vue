@@ -122,7 +122,12 @@ const emit = defineEmits<{
    * Emitted every time new data is loaded into the table
    * @arg totalEntryCount - the total number of available items as returned by the API
    */
-  'total-entry-count-changed': [totalEntryCount: number | null]
+  'total-entry-count-changed': [totalEntryCount: number | null],
+  /**
+   * Emitted every time filters are changed
+   * @arg  - all filtered resources
+   */
+  'data-loaded': [resources: ResourceInstance[]]
 }>()
 
 defineSlots<{
@@ -313,13 +318,14 @@ const initTabulator = async (resetPage = false) => {
     rowSelectionChanged(selectedRowData) {
       emit('row-selection-changed', selectedRowData)
     },
-    dataLoaded: async function () {
+    dataLoaded: async function (data) {
       try {
         const toggleCollapseElements =
           await waitForToggleCollapseElementsRendered()
         toggleCollapseElements.forEach((el) =>
           el.addEventListener('click', setTableHeight, true),
         )
+        emit('data-loaded', data)
       } catch (e) {
         console.error(e)
       }
