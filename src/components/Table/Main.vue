@@ -313,13 +313,14 @@ const initTabulator = async (resetPage = false) => {
     rowSelectionChanged(selectedRowData) {
       emit('row-selection-changed', selectedRowData)
     },
-    dataLoaded: async function () {
+    dataLoaded: async function (data) {
       try {
         const toggleCollapseElements =
           await waitForToggleCollapseElementsRendered()
         toggleCollapseElements.forEach((el) =>
           el.addEventListener('click', setTableHeight, true),
         )
+        emit('data-loaded', data)
       } catch (e) {
         console.error(e)
       }
