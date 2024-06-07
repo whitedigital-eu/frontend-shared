@@ -46,6 +46,8 @@ import type {
 } from 'tom-select/src/types'
 import _ from 'lodash'
 import { SelectConfig } from '../../../types/InputFields'
+import { useI18nWithFallback } from '../../../helpers/Translations'
+import { capitalizeFirstLetter } from '../../../helpers/Global'
 
 type ModelValue = T | T[] | null
 
@@ -69,6 +71,8 @@ const emit = defineEmits<{
   'update:modelValue': [value: string | string[] | number]
   'create-new-item': [itemName: string | undefined]
 }>()
+
+const { t } = useI18nWithFallback()
 
 const defaultConfig: SelectConfig<T> = {
   readonly: false,
@@ -118,7 +122,7 @@ const renderCreateButton: TomTemplate = (
   inputTextEl.classList.add('ml-1')
   inputTextEl.innerText = escapedInput
 
-  createButton.innerText = 'Izveidot:'
+  createButton.innerText = capitalizeFirstLetter(t('project.create')) + ':'
   createButton.appendChild(inputTextEl)
 
   return createButton
@@ -157,12 +161,10 @@ const renderTextOrIcon: TomTemplate = function (data, escape) {
 }
 
 const createPlugins = () => {
-  const plugins: TomSettings['plugins'] = {
-    dropdown_input: {},
-  }
+  const plugins: TomSettings['plugins'] = { dropdown_input: {} }
   if (computedConfig.value.allowDelete) {
     plugins.clear_button = {
-      title: 'Dzēst',
+      title: capitalizeFirstLetter(t('project.delete')),
       html: function (data: { className: string; title: string }) {
         return `<span
             class="text-xl !right-2 !bg-white !py-2 !pl-2 ${data.className}"
@@ -174,7 +176,9 @@ const createPlugins = () => {
   }
 
   if (multiple.value) {
-    plugins.remove_button = { title: 'Noņemt vērtību' }
+    plugins.remove_button = {
+      title: capitalizeFirstLetter(t('project.removeValue')),
+    }
   }
 
   return plugins

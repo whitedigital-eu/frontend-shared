@@ -50,9 +50,9 @@ export type FileUploadConfig = {
 }
 
 export type LabelProps = {
-  keyLabel?: string
-  valueLabel?: string
-  addField?: string
+  keyLabel: string
+  valueLabel: string
+  addField: string
   formLabel?: string
 }
 

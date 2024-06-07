@@ -17,6 +17,18 @@
     "hideFilters": "paslēpt filtrus",
     "detailedSearch": "detalizēta meklēšana",
     "search": "meklēt",
-    "deleteFilters": "dzēst filtrus"
+    "deleteFilters": "dzēst filtrus",
+    "postSuccessMessage": "ieraksts izveidots!",
+    "putSuccessMessage": "izmaiņas saglabātas!",
+    "patchSuccessMessage": "izmaiņas paberātas!",
+    "deleteSuccessMessage": "ieraksts dzēsts!",
+    "download": "lejupielādēt",
+    "singleFileUploadMobileMessage": "spiediet šeit, lai augšupielādētu failu",
+    "multipleFileUploadMobileMessage": "spiediet šeit, lai augšupielādētu failu",
+    "singleFileUploadDesktopMessage": "nometiet failu šeit",
+    "multipleFileUploadDesktopMessage": "nometiet failus šeit",
+    "create": "izveidot",
+    "removeValue": "dzēst vērtību",
+    "close": "aizvērt"
   }
 }

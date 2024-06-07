@@ -117,7 +117,7 @@ const valuePropToValue = (n: DecimalProps['modelValue']) => {
   return transformValue(stringVal)
 }
 
-const inputRef = ref<HTMLInputElement | undefined>()
+const inputRef = ref<HTMLInputElement>()
 const value = ref(valuePropToValue(modelValue))
 const hasFocus = ref(false)
 const isEmpty = computed(() => !value.value)

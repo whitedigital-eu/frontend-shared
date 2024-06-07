@@ -1,8 +1,6 @@
 <template>
   <div class="relative">
-    <p class="mb-4">
-      {{ texts?.formLabel ?? 'Value and Key form' }}
-    </p>
+    <p v-if="texts?.formLabel" class="mb-4">{{ texts?.formLabel }}</p>
     <div class="flex gap-4 relative">
       <div v-if="modelValue?.length !== 0" class="w-full">
         <div v-for="(item, index) in modelValue" :key="index" class="relative">
@@ -22,7 +20,7 @@
                 :is-placeholder="!item.key && hasFocus !== 'key' + index"
                 @click="handleLabelClick"
               >
-                {{ texts?.keyLabel ?? 'Key' }}
+                {{ texts.keyLabel }}
               </FormFieldLabel>
               <input
                 ref="inputRef"
@@ -46,7 +44,7 @@
                 :is-placeholder="!item.value && hasFocus !== 'value' + index"
                 @click="handleLabelClick"
               >
-                {{ texts?.valueLabel ?? 'Value' }}
+                {{ texts.valueLabel }}
               </FormFieldLabel>
               <input
                 ref="inputRef"
@@ -66,7 +64,7 @@
     </div>
     <div>
       <button class="btn btn-primary me-1" type="button" @click="addField">
-        {{ texts?.addField ?? 'Add field' }}
+        {{ texts.addField }}
       </button>
     </div>
   </div>
@@ -81,12 +79,12 @@ import { LabelProps } from '../../types/InputFields'
 
 const {
   modelValue,
-  texts = null,
+  texts,
   readonly = false,
   long = false,
 } = defineProps<{
   modelValue: KeyAndValueListValue
-  texts?: LabelProps | null
+  texts: LabelProps
   readonly?: boolean
   long?: boolean
 }>()
@@ -101,7 +99,7 @@ const handleFocus = (type: string, index: number) => {
 }
 const handleBlur = () => (hasFocus.value = '')
 
-const inputRef = ref<HTMLInputElement | undefined>()
+const inputRef = ref<HTMLInputElement>()
 const value: Ref<KeyAndValueListValue> = ref([])
 const hasFocus = ref('')
 

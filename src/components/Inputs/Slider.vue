@@ -59,7 +59,7 @@ const value = ref(props.modelValue)
 watch(value, (n) => emit('update:modelValue', n))
 watch(
   () => props.modelValue,
-  (n) => (value.value = n)
+  (n) => (value.value = n),
 )
 </script>
 

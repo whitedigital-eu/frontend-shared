@@ -66,7 +66,7 @@ const handleFocus = () => {
 }
 const handleBlur = () => (hasFocus.value = false)
 
-const inputRef = ref<HTMLInputElement | undefined>()
+const inputRef = ref<HTMLInputElement>()
 const value: Ref<StringListValue> = ref([])
 const hasFocus = ref(false)
 const addValue = ref('')

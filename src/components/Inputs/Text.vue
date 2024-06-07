@@ -13,10 +13,7 @@
       {{ props.label }}
     </FormFieldLabel>
     <input
-      v-bind="{
-        type: 'text',
-        ...config.inputAttributes,
-      }"
+      v-bind="{ type: 'text', ...config.inputAttributes }"
       ref="inputRef"
       v-model="value"
       class="form-control sm:min-w-[200px] w-full"
@@ -52,7 +49,7 @@ const handleFocus = () => {
 }
 const handleBlur = () => (hasFocus.value = false)
 
-const inputRef = ref<HTMLInputElement | undefined>()
+const inputRef = ref<HTMLInputElement>()
 const value = ref('')
 const hasFocus = ref(false)
 const isEmpty = computed(() => !value.value)

@@ -31,7 +31,11 @@
 <script setup lang="ts" generic="T extends string | string[]">
 import { ref, onMounted, watch, computed } from 'vue'
 import Dropzone, { DropzoneOptions } from 'dropzone'
-import { dropzoneTranslations } from '../../../helpers/Translations'
+import {
+  dropzoneTranslations,
+  getVueCurrentLocale,
+  useI18nWithFallback,
+} from '../../../helpers/Translations'
 import FormFieldLabel from '../../FormFieldLabel.vue'
 import FilePreview from './FilePreview.vue'
 import getLoadResourceFunctions from '../../../helpers/DataFetching'
@@ -41,6 +45,7 @@ import defaultPreviewTemplate from './preview-template.html?raw'
 import { FileUploadConfig } from '../../../types/InputFields'
 import _ from 'lodash'
 import useIsMobile from '../../../composables/useIsMobile'
+import { capitalizeFirstLetter } from '../../../helpers/Global'
 
 const props = withDefaults(
   defineProps<{
@@ -84,6 +89,7 @@ const { loadResource, loadAllResources } = getLoadResourceFunctions(
   // eslint-disable-next-line vue/no-ref-object-destructure
   computedConfig.value.axiosInstance,
 )
+const { t } = useI18nWithFallback()
 
 type ApiPlatformFile = Resource<string, string> & {
   id: number
@@ -114,7 +120,7 @@ const options = computed<DropzoneOptions>(() => {
     },
     addRemoveLinks: false,
     withCredentials: true,
-    ...dropzoneTranslations,
+    ...(getVueCurrentLocale() === 'lv' ? dropzoneTranslations : {}),
     previewTemplate: defaultPreviewTemplate,
     ...computedConfig.value.dropzoneOptions,
   }
@@ -166,11 +172,11 @@ const newValue = computed(() => {
 const dropFilesMessage = computed(() =>
   isMobile.value
     ? singleFileUpload.value
-      ? 'Spiediet šeit, lai augšupielādētu failu'
-      : 'Spiediet šeit, lai augšupielādētu failus'
+      ? capitalizeFirstLetter(t('project.singleFileUploadMobileMessage'))
+      : capitalizeFirstLetter(t('project.multipleFileUploadMobileMessage'))
     : singleFileUpload.value
-      ? 'Nometiet failu šeit!'
-      : 'Nometiet failus šeit!',
+      ? capitalizeFirstLetter(t('project.singleFileUploadDesktopMessage'))
+      : capitalizeFirstLetter(t('project.multipleFileUploadDesktopMessage')),
 )
 
 const anyFiles = computed(() =>

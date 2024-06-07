@@ -40,7 +40,7 @@ import { ApiListResponse } from '../../types/ApiPlatform'
 import { COLLAPSE_ORDER, createColumn } from './Column'
 import {
   getVueCurrentLocale,
-  tabulatorTranslations,
+  tabulatorLanguages,
   useI18nWithFallback,
 } from '../../helpers/Translations'
 import { TableProps } from './createTableConfig'
@@ -255,7 +255,6 @@ const waitForToggleCollapseElementsRendered = (): Promise<
     const interval = setInterval(() => {
       if (totalTimePassed > 10000) {
         clearInterval(interval)
-        reject('Total time passed exceeded 10 seconds!')
       }
 
       const elements = document.querySelectorAll(
@@ -321,7 +320,7 @@ const initTabulator = async (resetPage = false) => {
      * @see https://tabulator.info/docs/4.9/localize
      * */
     locale: currentLocale.includes('en') ? '' : currentLocale,
-    langs: tabulatorTranslations,
+    langs: tabulatorLanguages,
     columns,
     movableRows: props.movableRows,
     rowMoved: function (row) {

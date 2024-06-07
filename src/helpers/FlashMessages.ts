@@ -3,6 +3,8 @@ import StartToastifyInstance from 'toastify-js/src/toastify-es'
 //@ts-ignore
 import dom from '@left4code/tw-starter/dist/js/dom'
 import { CheckCircle, createElement, XCircle } from 'lucide'
+import { capitalizeFirstLetter } from './Global'
+import { useI18nWithFallback } from './Translations'
 
 const createToastifyConfig = (
   element: Node,
@@ -26,12 +28,14 @@ const createToastifyElement = (innerElement: string, dataTest = '') =>
     `)[0]
 
 const getSuccessMessage = (methodName: string) => {
+  const { t } = useI18nWithFallback()
+
   return (
     {
-      post: 'Ieraksts izveidots!',
-      put: 'Izmaiņas saglabātas!',
-      patch: 'Izmaiņas saglabātas!',
-      delete: 'Ieraksts dzēsts!',
+      post: capitalizeFirstLetter(t('project.postSuccessMessage')),
+      put: capitalizeFirstLetter(t('project.putSuccessMessage')),
+      patch: capitalizeFirstLetter(t('project.patchSuccessMessage')),
+      delete: capitalizeFirstLetter(t('project.deleteSuccessMessage')),
     }[methodName] ?? ''
   )
 }
@@ -63,10 +67,7 @@ export const showGlobalError = (
   StartToastifyInstance(createToastifyConfig(element)).showToast()
 }
 
-type ToastifyInstance = {
-  showToast(): void
-  hideToast(): void
-}
+type ToastifyInstance = { showToast(): void; hideToast(): void }
 
 let activeSuccessToast: ToastifyInstance | null = null
 

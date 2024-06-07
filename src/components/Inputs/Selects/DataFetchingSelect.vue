@@ -27,10 +27,7 @@ const props = withDefaults(
     label?: string
     axiosInstance: AxiosInstance
   }>(),
-  {
-    modelValue: null,
-    label: '',
-  },
+  { modelValue: null, label: '' },
 )
 
 const emit = defineEmits<{
@@ -39,6 +36,7 @@ const emit = defineEmits<{
 }>()
 
 const defaultMinSymbolsForSearch = 3
+//TODO: translate once it is possible to add variables to translations
 const searchInputPlaceholder = `Ievadiet vismaz ${defaultMinSymbolsForSearch} simbolus!`
 
 const computedConfig = computed(() =>

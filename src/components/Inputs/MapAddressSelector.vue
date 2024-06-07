@@ -11,7 +11,7 @@
       id="autocomplete-input"
       ref="inputRef"
       v-model="value"
-      class="form-control sm:min-w-[200px] w-full block appearance-none"
+      class="appearance-none block form-control sm:min-w-[200px] w-full"
       :class="{ 'sm:min-w-[416px]': long }"
       placeholder=""
       :readonly="readonly"
@@ -20,17 +20,19 @@
       @focus="handleFocus"
       @input="handleInput"
     />
-    <div id="map" class="w-full h-[400px]">
-      <GoogleMap ref="mapRef"
+    <div id="map" class="h-[400px] w-full">
+      <GoogleMap
+        ref="mapRef"
         :api-key="mapData?.googleApiKey"
         :center="center"
         class="h-full w-full"
         :zoom="12"
       >
         <Marker
-          :options="{ position: center, draggable: true }"
           ref="markerRef"
-          @dragend="onMarkerDragEnd" />
+          :options="{ position: center, draggable: true }"
+          @dragend="onMarkerDragEnd"
+        />
       </GoogleMap>
     </div>
   </div>
@@ -40,7 +42,7 @@
 import { computed, ref, watch } from 'vue'
 import { GoogleMap, Marker } from 'vue3-google-map'
 import FormFieldLabel from '../FormFieldLabel.vue'
-import { MapCoordinateSelectorFieldValue } from "./ValueTypes";
+import { MapCoordinateSelectorFieldValue } from './ValueTypes'
 
 const props = withDefaults(
   defineProps<{
@@ -60,18 +62,20 @@ const props = withDefaults(
     mapData: null,
     readonly: false,
     long: false,
-  }
+  },
 )
 
 const emit = defineEmits<{
   'update:modelValue': [value: MapCoordinateSelectorFieldValue]
 }>()
 
-const mapRef = ref<typeof GoogleMap|null>(null)
-const markerRef = ref<typeof Marker|null>(null)
+const mapRef = ref<typeof GoogleMap | null>(null)
+const markerRef = ref<typeof Marker | null>(null)
 
 const center = computed(() =>
-    props.mapData ? ({ lat: props.mapData.initialLat, lng: props.mapData.initialLng }) : undefined
+  props.mapData
+    ? { lat: props.mapData.initialLat, lng: props.mapData.initialLng }
+    : undefined,
 )
 
 const handleFocus = () => {
@@ -80,7 +84,7 @@ const handleFocus = () => {
 }
 const handleBlur = () => (hasFocus.value = false)
 
-const inputRef = ref<HTMLInputElement | undefined>()
+const inputRef = ref<HTMLInputElement>()
 const value = ref('')
 const hasFocus = ref(false)
 const isEmpty = computed(() => !value.value)
@@ -95,7 +99,7 @@ const handleLabelClick = () => {
 }
 
 const handleAddressAutocomplete = () => {
-  if(!markerRef.value || !mapRef.value){
+  if (!markerRef.value || !mapRef.value) {
     console.error('Marker or map not found', markerRef.value, mapRef.value)
     return
   }
@@ -103,11 +107,17 @@ const handleAddressAutocomplete = () => {
   const geocoder = new google.maps.Geocoder()
   geocoder.geocode({ address: value.value }, (results, status) => {
     if (
-      status === google.maps.GeocoderStatus.OK && results && results?.length > 0
+      status === google.maps.GeocoderStatus.OK &&
+      results &&
+      results?.length > 0
     ) {
       const location = results[0].geometry.location
       const address = results[0].formatted_address
-      const position = {address: address, lat: location.lat(), lng: location.lng() }
+      const position = {
+        address: address,
+        lat: location.lat(),
+        lng: location.lng(),
+      }
       emit('update:modelValue', position)
       markerRef.value!.marker.setPosition(location)
       mapRef.value!.map.setCenter(location)
@@ -116,32 +126,39 @@ const handleAddressAutocomplete = () => {
 }
 
 const onMarkerDragEnd = (event: google.maps.MapMouseEvent) => {
-  const coords = event.latLng?.toJSON();
-  const position = { address: value.value, lat: coords?.lat ?? 0, lng: coords?.lng ?? 0 };
-  emit('update:modelValue', position);
-};
+  const coords = event.latLng?.toJSON()
+  const position = {
+    address: value.value,
+    lat: coords?.lat ?? 0,
+    lng: coords?.lng ?? 0,
+  }
+  emit('update:modelValue', position)
+}
 
 watch(
-    () => props.modelValue?.address,
-    (n) => (value.value = n as string),
-    { immediate: true }
+  () => props.modelValue?.address,
+  (n) => (value.value = n as string),
+  { immediate: true },
 )
 
-watch(() => mapRef.value?.ready, async(n) => {
-  if(!n || !mapRef.value || !inputRef.value) return
+watch(
+  () => mapRef.value?.ready,
+  async (n) => {
+    if (!n || !mapRef.value || !inputRef.value) return
 
-  const placesApi = await mapRef.value.api.importLibrary("places")
+    const placesApi = await mapRef.value.api.importLibrary('places')
 
-  if (!placesApi) return
+    if (!placesApi) return
 
-  new placesApi.Autocomplete(inputRef.value!, {
-    types: ["address"],
-    fields: ["formatted_address", "geometry"],
-  }).addListener('place_changed', () => {
-    value.value = inputRef.value!.value
-    handleAddressAutocomplete()
-  })
-})
+    new placesApi.Autocomplete(inputRef.value!, {
+      types: ['address'],
+      fields: ['formatted_address', 'geometry'],
+    }).addListener('place_changed', () => {
+      value.value = inputRef.value!.value
+      handleAddressAutocomplete()
+    })
+  },
+)
 </script>
 
 <style lang="scss" scoped>

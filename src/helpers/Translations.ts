@@ -1,7 +1,7 @@
 import { useI18n } from 'vue-i18n'
 import defaultTranslations from '../default-translations.json'
 
-export const tabulatorTranslations = {
+export const tabulatorLanguages = {
   lv: {
     pagination: {
       page_size: 'Ierakstu skaits lapā',
@@ -16,7 +16,7 @@ export const tabulatorTranslations = {
 }
 
 export const dropzoneTranslations = {
-  dictDefaultMessage: 'Drop files here to upload',
+  dictDefaultMessage: 'Lai augšupielādētu failus, nometiet tos šeit',
   dictFileTooBig:
     'Faila izmērs ({{filesize}}MB) pārsniedz maksimālo atļauto ({{maxFilesize}}MB)!',
   dictInvalidFileType: 'Šāda tipa failus nedrīkst augšupielādēt.',

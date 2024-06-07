@@ -4,7 +4,7 @@ import { AxiosInstance, AxiosRequestConfig } from 'axios'
 const getLoadResourceFunctions = (axiosInstance: AxiosInstance) => {
   const loadResource = async <ResourceType>(
     resource: IriString<string, string> | ResourceType,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig,
   ): Promise<ResourceType> => {
     if (!resource) throw new Error('Resource must be truthy!')
 
@@ -13,7 +13,7 @@ const getLoadResourceFunctions = (axiosInstance: AxiosInstance) => {
   }
   const loadAllResources = async <ResourceType>(
     resourceSources: string[] | ResourceType[],
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig,
   ): Promise<ResourceType[]> => {
     if (!resourceSources || !resourceSources.length) return []
 
@@ -24,7 +24,7 @@ const getLoadResourceFunctions = (axiosInstance: AxiosInstance) => {
 
     const promises: Promise<{ data: ResourceType }>[] = []
     ;(resourceSources as string[]).forEach((resourceIri: string) =>
-      promises.push(axiosInstance.get(resourceIri, config))
+      promises.push(axiosInstance.get(resourceIri, config)),
     )
     const responses = await Promise.all(promises)
     return responses.map((res: { data: ResourceType }) => res.data)
@@ -32,7 +32,7 @@ const getLoadResourceFunctions = (axiosInstance: AxiosInstance) => {
 
   const loadResourceList = async <ResourceType>(
     resource: IriString<string, string>,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig,
   ): Promise<ResourceType[]> => {
     if (!resource) throw new Error('Resource must be truthy!')
     return (await axiosInstance.get(resource, config)).data['hydra:member']

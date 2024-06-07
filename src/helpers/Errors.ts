@@ -11,7 +11,7 @@ export const resetFormDataErrors = <
 }
 
 const scrollFirstIncorrectFieldIntoView = (offsetTop = -100) => {
-  nextTick(() => {
+  return nextTick(() => {
     const firstFieldWithError = document.querySelector(
       '[data-has-error="true"]',
     )

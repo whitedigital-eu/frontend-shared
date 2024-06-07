@@ -46,6 +46,8 @@ import FormFieldLabel from '../FormFieldLabel.vue'
 import { DatepickerProps } from './PropTypes'
 import _ from 'lodash'
 import useIsMobile from '../../composables/useIsMobile'
+import { capitalizeFirstLetter } from '../../helpers/Global'
+import { useI18nWithFallback } from '../../helpers/Translations'
 
 const {
   modelValue = null,
@@ -54,6 +56,8 @@ const {
 } = defineProps<DatepickerProps>()
 
 const emit = defineEmits<{ 'update:modelValue': [value: string | null] }>()
+
+const { t } = useI18nWithFallback()
 
 const computedConfig = computed(() =>
   _.merge(
@@ -135,7 +139,7 @@ const addCloseButtonToDatepicker = () => {
 
   const confirmButton = document.createElement('button')
   confirmButton.classList.add('btn', 'btn-primary', 'h-[28px]')
-  confirmButton.textContent = 'Aizvērt'
+  confirmButton.textContent = capitalizeFirstLetter(t('project.close'))
   confirmButton.type = 'button'
   confirmButton.addEventListener('click', closeCalendar)
 

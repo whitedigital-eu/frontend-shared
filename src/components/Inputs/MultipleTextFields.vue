@@ -1,7 +1,7 @@
 <template>
   <div class="relative">
-    <p class="mb-4">
-      {{ props.label ? props.label : 'Multiple text fields' }}
+    <p v-if="props.label" class="mb-4">
+      {{ props.label }}
     </p>
     <div class="gap-4 grid grid-cols-2 relative">
       <div v-for="(item, index) in props.labelArray" :key="index">
@@ -35,7 +35,7 @@
 </template>
 
 <script setup lang="ts">
-import { Ref, ref } from 'vue'
+import { ref } from 'vue'
 import FormFieldLabel from '../FormFieldLabel.vue'
 import { MultipleTextFieldListValue } from './ValueTypes'
 
@@ -52,15 +52,15 @@ const props = withDefaults(
     labelArray: null,
     readonly: false,
     long: false,
-  }
+  },
 )
 
 const emit = defineEmits<{
   'update:modelValue': [value: MultipleTextFieldListValue]
 }>()
 
-const inputRef: Ref<HTMLInputElement[]> = ref([])
-const value: Ref<MultipleTextFieldListValue> = ref(props.modelValue) // Initialize with props.modelValue
+const inputRef = ref<HTMLInputElement[]>([])
+const value = ref<MultipleTextFieldListValue>(props.modelValue) // Initialize with props.modelValue
 const hasFocus = ref(-1)
 const handleFocus = (type: string, index: number) => {
   if (props.readonly) return

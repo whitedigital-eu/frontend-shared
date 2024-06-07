@@ -47,7 +47,7 @@
           class="!cursor-pointer btn btn-outline-primary"
           download
           :href="file.sourceUrl"
-          title="Lejupielādēt"
+          :title="capitalizeFirstLetter(t('project.download'))"
         >
           <Download class="!cursor-pointer h-6 w-6" />
         </a>
@@ -60,6 +60,8 @@
 import useFileInfo from '../../../composables/useFileInfo'
 import { Download, Trash2Icon, FileEditIcon } from 'lucide-vue-next'
 import { FileUploadConfig } from '../../../types/InputFields'
+import { capitalizeFirstLetter } from '../../../helpers/Global'
+import { useI18nWithFallback } from '../../../helpers/Translations'
 
 type FileForDisplay = {
   filePath: string
@@ -77,5 +79,6 @@ const emit = defineEmits<{
   'edit-file': [file: FileForDisplay]
 }>()
 
+const { t } = useI18nWithFallback()
 const { fileExtension, isImage } = useFileInfo(props.file)
 </script>
