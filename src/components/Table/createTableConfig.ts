@@ -14,13 +14,8 @@ export type TableConfig = {
 
 const createTableConfig = (config: Partial<TableConfig> = {}): TableConfig => {
   const defaultConfig = {
-    sharedColumnNames: {
-      created: 'created',
-      updated: 'updated',
-    },
-    ajaxConfig: {
-      headers: { Accept: 'application/ld+json' },
-    },
+    sharedColumnNames: { created: 'created', updated: 'updated' },
+    ajaxConfig: { headers: { Accept: 'application/ld+json' } },
     dateTimeFormatter: (dateString: string) => dateString,
   }
 

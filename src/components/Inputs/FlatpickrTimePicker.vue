@@ -41,6 +41,7 @@ import LocalizedFormat from 'dayjs/plugin/localizedFormat'
 import FormFieldLabel from '../FormFieldLabel.vue'
 import { FlatpickrTimePickerValue } from './ValueTypes'
 import useIsMobile from '../../composables/useIsMobile'
+import {getVueCurrentLocale} from "../../helpers/Translations";
 
 const {
   modelValue = null,
@@ -86,7 +87,7 @@ const config: any = {
   dateFormat: 'Z',
   enableTime: true,
   time_24hr: true,
-  locale: locales.lv,
+  locale: getVueCurrentLocale() === 'lv' ? locales.lv : undefined,
   static: true,
   noCalendar: true,
   formatDate: (date: Date) => dayjs(date).format('H:mm'),

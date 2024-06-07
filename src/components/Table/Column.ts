@@ -1,11 +1,7 @@
-export const COLLAPSE_ORDER = {
-  never: 0,
-  first: 1,
-  second: 2,
-}
+export const COLLAPSE_ORDER = { never: 0, first: 1, second: 2 }
 
 export const createColumn = (
-  colData: Tabulator.ColumnDefinition
+  colData: Tabulator.ColumnDefinition,
 ): Tabulator.ColumnDefinition => ({
   hozAlign: 'left',
   headerHozAlign: 'left',
@@ -15,7 +11,7 @@ export const createColumn = (
 })
 
 export const createToggleCollapseColumn = (
-  colData: Partial<Tabulator.ColumnDefinition> = {}
+  colData: Partial<Tabulator.ColumnDefinition> = {},
 ): Tabulator.ColumnDefinition => {
   return createColumn({
     title: '',

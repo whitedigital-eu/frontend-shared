@@ -202,11 +202,15 @@ const updatedColumn = createTimestampColumn(
   false,
 )
 
-const actionColumn = createActionColumn<ResourceInstance>(props, {
-  edit: (resource) => emit('edit-click', resource),
-  delete: (resource) => emit('delete-click', resource),
-  view: (resource) => emit('view-click', resource),
-})
+const actionColumn = createActionColumn<ResourceInstance>(
+  props,
+  {
+    edit: (resource) => emit('edit-click', resource),
+    delete: (resource) => emit('delete-click', resource),
+    view: (resource) => emit('view-click', resource),
+  },
+  t,
+)
 
 const selectionColumn: Tabulator.ColumnDefinition = {
   title: '',
@@ -250,7 +254,7 @@ const filtersSet = ref(false)
 const waitForToggleCollapseElementsRendered = (): Promise<
   NodeListOf<Element>
 > => {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     let totalTimePassed = 0
     const interval = setInterval(() => {
       if (totalTimePassed > 10000) {

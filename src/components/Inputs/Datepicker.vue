@@ -47,7 +47,10 @@ import { DatepickerProps } from './PropTypes'
 import _ from 'lodash'
 import useIsMobile from '../../composables/useIsMobile'
 import { capitalizeFirstLetter } from '../../helpers/Global'
-import { useI18nWithFallback } from '../../helpers/Translations'
+import {
+  getVueCurrentLocale,
+  useI18nWithFallback,
+} from '../../helpers/Translations'
 
 const {
   modelValue = null,
@@ -69,7 +72,7 @@ const computedConfig = computed(() =>
         dateFormat: 'Z',
         enableTime: false,
         time_24hr: true,
-        locale: locales.lv,
+        locale: getVueCurrentLocale() === 'lv' ? locales.lv : undefined,
         static: true,
         formatDate: (date: Date) => dayjs(date).format('LL'),
       },

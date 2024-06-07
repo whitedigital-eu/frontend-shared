@@ -38,6 +38,7 @@ import FormFieldLabel from '../FormFieldLabel.vue'
 import { areStringArraysEqual } from '../../helpers/Global'
 import { X } from 'lucide-vue-next'
 import useIsMobile from '../../composables/useIsMobile'
+import {getVueCurrentLocale} from "../../helpers/Translations";
 
 const props = withDefaults(
   // TODO: remove '' from allowed values, use null instead
@@ -64,7 +65,7 @@ const config: any = {
   dateFormat: 'Z',
   enableTime: false,
   time_24hr: true,
-  locale: locales.lv,
+  locale: getVueCurrentLocale() === 'lv' ? locales.lv : undefined,
   mode: 'range',
   static: true,
   formatDate: (date: Date) => dayjs(date).format('LL'),

@@ -15,7 +15,9 @@
         :label="item.label"
       />
       <label v-if="item.toggleExact" class="flex mt-1">
-        <span>Meklēt precīzi </span>
+        <span class="first-letter:capitalize">
+          {{ t('project.searchExactly') }}
+        </span>
         <Checkbox v-model="item.exact" />
       </label>
       <span v-if="item.description && !item.exact" class="mt-2 w-full">
@@ -98,11 +100,14 @@ import { Filter } from '../../types/Filters'
 import { AxiosInstance } from 'axios'
 import { DataFetchingSelectConfig, SelectConfig } from '../../types/InputFields'
 import { computed } from 'vue'
+import { useI18nWithFallback } from '../../helpers/Translations'
 
 const { item, axiosInstance = null } = defineProps<{
   item: Filter
   axiosInstance?: AxiosInstance | null
 }>()
+
+const { t } = useI18nWithFallback()
 
 const isDataFetchingSelectConfig = (
   x: SelectConfig | DataFetchingSelectConfig | null,
