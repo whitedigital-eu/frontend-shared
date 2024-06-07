@@ -20,12 +20,27 @@ export const setQueryParam = (key: string, value: string) => {
   window.history.pushState({ path: newUrl }, '', newUrl)
 }
 
-export const fillFormDataFrom = <T extends FormData>(
+export const fillFormDataFrom = <
+  T extends FormData,
+  U extends Record<string, unknown> | null | undefined,
+>(
   formData: T,
-  apiResponseData: any,
+  apiResponseData: U,
 ) => {
   for (const key in apiResponseData) {
-    if (key in formData) formData[key].value = apiResponseData[key]
+    if (key in formData) {
+      const apiResponseItem = apiResponseData[key]
+      const isExpandedResource =
+        apiResponseItem &&
+        typeof apiResponseItem === 'object' &&
+        '@id' in apiResponseItem
+
+      if (isExpandedResource) {
+        formData[key].value = apiResponseItem['@id']
+      } else {
+        formData[key].value = apiResponseItem
+      }
+    }
   }
   return formData
 }

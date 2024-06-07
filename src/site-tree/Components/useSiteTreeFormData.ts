@@ -65,7 +65,7 @@ export default function useSiteTreeFormData(
 
   const prepareFormData = async (formData: SiteTreeFormData) => {
     if (siteTree) {
-      fillFormDataFrom(formData, siteTree)
+      fillFormDataFrom(formData, { ...siteTree })
     } else if (showParentSelector) {
       baseFormData.parent = new SimpleSelectField(
         'parent',
