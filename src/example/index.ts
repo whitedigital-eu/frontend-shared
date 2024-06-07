@@ -9,18 +9,16 @@ import isYesterday from 'dayjs/plugin/isYesterday'
 import router from './router'
 import globalComponents from './global-components/'
 import 'vue3-toastify/dist/index.css'
+import './css/app.css'
+import { TranslationConfig } from '../types/TranslationTypes'
+import { getUrlLocale, loadTranslations } from '../i18n/Language'
+import { createPinia } from 'pinia'
 
 dayjs.locale('lv')
 dayjs.extend(isSameOrBefore)
 dayjs.extend(isSameOrAfter)
 dayjs.extend(isToday)
 dayjs.extend(isYesterday)
-
-import './css/app.css'
-import translation from '../i18n/translation'
-import { TranslationConfig } from '../types/TranslationTypes'
-import { getUrlLocale, loadTranslations } from '../i18n/Language'
-import { createPinia } from 'pinia'
 
 const config: TranslationConfig = {
   translations: {},
@@ -34,14 +32,14 @@ globalComponents(app)
 
 loadTranslations(config)
   .then((translationConfig) => {
-    app.use(translation, translationConfig)
+    // app.use(translation, translationConfig)
     app.mount('#app')
   })
   .catch((e) => {
     console.warn('Could not load translations!', e)
-    app.use(translation, {
-      translations: {},
-      localeJsonUrl: '',
-    })
+    // app.use(translation, {
+    //   translations: {},
+    //   localeJsonUrl: '',
+    // })
     app.mount('#app')
   })

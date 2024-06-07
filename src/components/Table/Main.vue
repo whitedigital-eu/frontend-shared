@@ -7,7 +7,9 @@
         class="table-total-entry-count"
         data-test="table-total-entry-count"
       >
-        <span>(Kopā: {{ totalEntryCount }})</span>
+        <span class="first-letter:capitalize">
+          ({{ t('project.inTotal') }}: {{ totalEntryCount }})
+        </span>
       </div>
       <div class="flex-1">
         <slot
@@ -36,8 +38,13 @@ import { handleTableAjaxError } from '../../helpers/Errors'
 import createActionColumn from './ActionColumn'
 import { ApiListResponse } from '../../types/ApiPlatform'
 import { COLLAPSE_ORDER, createColumn } from './Column'
-import { tableTranslations } from '../../helpers/Translations'
+import {
+  getVueCurrentLocale,
+  tabulatorTranslations,
+  useI18nWithFallback,
+} from '../../helpers/Translations'
 import { TableProps } from './createTableConfig'
+import { capitalizeFirstLetter } from '../../helpers/Global'
 /*
  * Since only props can be generic (in other words, it is not possible to pass just a generic, without a prop),
  * we need the fake resourceType prop which is used only to get the generic type.
@@ -57,7 +64,7 @@ const props = withDefaults(
     movableRows: false,
     disableOrderByDateColumns: false,
     selectionColumn: false,
-    selectionCheckboxLabel: 'Atzīmē, lai veidotu darījumu',
+    selectionCheckboxLabel: null,
     columnData: null,
     page: 1,
     pageSize: 30,
@@ -122,10 +129,10 @@ const emit = defineEmits<{
    * Emitted every time new data is loaded into the table
    * @arg totalEntryCount - the total number of available items as returned by the API
    */
-  'total-entry-count-changed': [totalEntryCount: number | null],
+  'total-entry-count-changed': [totalEntryCount: number | null]
   /**
    * Emitted every time filters are changed
-   * @arg  - all filtered resources
+   * @arg resources - the data entries returned by the API
    */
   'data-loaded': [resources: ResourceInstance[]]
 }>()
@@ -137,6 +144,8 @@ defineSlots<{
     tabulator: Tabulator | undefined
   }): any
 }>()
+
+const { t } = useI18nWithFallback()
 
 const table = ref()
 const tabulator = ref()
@@ -183,12 +192,12 @@ const createTimestampColumn = (
   })
 
 const createdColumn = createTimestampColumn(
-  'IZVEIDOTS',
+  t('project.created').toUpperCase(),
   props.config.sharedColumnNames.created,
   true,
 )
 const updatedColumn = createTimestampColumn(
-  'ATJAUNOTS',
+  t('project.updated').toUpperCase(),
   props.config.sharedColumnNames.updated,
   false,
 )
@@ -210,8 +219,8 @@ const selectionColumn: Tabulator.ColumnDefinition = {
   cellClick: function (e: Event, cell: Tabulator.CellComponent) {
     cell.getRow().toggleSelect()
   },
-  tooltip: props.selectionCheckboxLabel,
-  headerTooltip: 'Atzīmēt visu',
+  tooltip: props.selectionCheckboxLabel ?? '',
+  headerTooltip: capitalizeFirstLetter(t('project.markAll')),
   vertAlign: 'middle',
 }
 
@@ -294,6 +303,8 @@ const transformSorters = (sorters: Sorter[]) => {
   return null
 }
 
+const currentLocale = getVueCurrentLocale()
+
 const initTabulator = async (resetPage = false) => {
   let options: Tabulator.Options = {
     paginationSizeSelector: props.paginationSizeSelector,
@@ -304,9 +315,13 @@ const initTabulator = async (resetPage = false) => {
     responsiveLayout: 'collapse',
     responsiveLayoutCollapseStartOpen: false,
     headerSort: true,
-    placeholder: 'Netika atrasti dati',
-    locale: 'lv',
-    langs: tableTranslations,
+    placeholder: capitalizeFirstLetter(t('project.noDataFound')),
+    /**
+     * in case of english locale, provide an empty string to use default translations
+     * @see https://tabulator.info/docs/4.9/localize
+     * */
+    locale: currentLocale.includes('en') ? '' : currentLocale,
+    langs: tabulatorTranslations,
     columns,
     movableRows: props.movableRows,
     rowMoved: function (row) {
@@ -392,10 +407,7 @@ const initTabulator = async (resetPage = false) => {
           emit('set:filters', response)
           filtersSet.value = true
         }
-        return {
-          last_page: page,
-          data: response['hydra:member'],
-        }
+        return { last_page: page, data: response['hydra:member'] }
       },
       ajaxError(error) {
         handleTableAjaxError(error, props.config.tableErrorHandler)
@@ -477,23 +489,17 @@ const initTabulator = async (resetPage = false) => {
       },
     }
   } else if (props.columnData) {
-    options = {
-      ...options,
-      data: props.columnData,
-    }
+    options = { ...options, data: props.columnData }
   }
 
   if (props.tabulatorOptions) {
-    options = {
-      ...options,
-      ...props.tabulatorOptions,
-    }
+    options = { ...options, ...props.tabulatorOptions }
   }
 
   if (props.config.axiosInstance) {
     options = {
       ...options,
-      ajaxRequestFunc: function (url, config, params) {
+      ajaxRequestFunc(url, config, params) {
         return props.config
           .axiosInstance!.get(url, { headers: config.headers, params })
           .then((response) => response.data)

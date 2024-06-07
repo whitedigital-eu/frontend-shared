@@ -168,3 +168,6 @@ export const isMobile = () => {
   })(navigator.userAgent || navigator.vendor || window.opera);
   return check;
 }
+
+export const capitalizeFirstLetter = (string: string) =>
+  string.charAt(0).toUpperCase() + string.slice(1)

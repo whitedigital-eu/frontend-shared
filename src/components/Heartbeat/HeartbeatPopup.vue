@@ -12,17 +12,21 @@
               <Icon name="AlertCircle" size="28" />
             </div>
             <div class="leading-normal text-base">
-              <p>{{ $t('common.heartbeat.textLine1') }}</p>
-              <p>{{ $t('common.heartbeat.textLine2') }}</p>
+              <p class="first-letter:capitalize">
+                {{ t('project.heartbeat.textLine1') }}
+              </p>
+              <p class="first-letter:capitalize">
+                {{ t('project.heartbeat.textLine2') }}
+              </p>
             </div>
           </div>
           <button
-            class="disabled:cursor-not-allowed disabled:opacity-50 leading-none px-5 py-3 rounded-md text-sm text-white"
+            class="disabled:cursor-not-allowed disabled:opacity-50 first-letter:capitalize leading-none px-5 py-3 rounded-md text-sm text-white"
             :class="bgClass"
             :disabled="buttonClicked"
             @click="reloadPage"
           >
-            {{ $t('common.heartbeat.buttonText') }}
+            {{ t('project.heartbeat.buttonText') }}
           </button>
         </div>
         <button
@@ -39,14 +43,12 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import Icon from '../Icons/Icon.vue'
-import { translateWithFallback } from '../../site-tree/Helpers/Translations'
 
-const { t, bgClass } = defineProps<{
-  t?: (...args: any[]) => string
-  bgClass: string
-}>()
+import { useI18nWithFallback } from '../../helpers/Translations'
 
-const $t = translateWithFallback(t)
+const { bgClass } = defineProps<{ bgClass: string }>()
+
+const { t } = useI18nWithFallback()
 
 const shouldShow = ref(true)
 

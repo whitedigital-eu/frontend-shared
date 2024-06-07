@@ -1,7 +1,9 @@
 <template>
   <div class="flex flex-wrap gap-4 mt-8">
     <form class="basis-[500px] flex flex-col gap-4">
+      <!--
       {{ $t('translation', 'test', 'Context') }}
+      -->
       <Text v-model="fullName" label="Full name" />
       <Text
         v-model="favouriteFood"

@@ -7,7 +7,9 @@
       :toggle-show-filters="toggleShowFilters"
     >
       <button class="btn btn-primary mb-4 w-full" @click="toggleShowFilters">
-        <span>{{ showFilters ? 'Paslēpt' : 'Parādīt' }} filtrus</span>
+        <span class="first-letter:capitalize">{{
+          showFilters ? t('project.hideFilters') : t('project.showFilters')
+        }}</span>
         <span v-show="showFilters">
           <i class="h-4 w-4" data-lucide="chevron-down"> </i>
         </span>
@@ -40,11 +42,11 @@
             <slot name="after-default-filters"></slot>
             <button
               v-if="!noAdvancedFilters && toggleAdvancedFilters"
-              class="btn btn-primary h-10"
+              class="btn btn-primary first-letter:capitalize h-10"
               type="button"
               @click="showAdvancedFilters = !showAdvancedFilters"
             >
-              Detalizēta meklēšana
+              {{ t('project.detailedSearch') }}
               <ChevronDown v-if="showAdvancedFilters" class="ml-2" :size="20" />
               <ChevronUp v-if="!showAdvancedFilters" class="ml-2" :size="20" />
             </button>
@@ -79,21 +81,21 @@
               class="flex gap-2 sm:w-auto w-full xl:mt-0"
             >
               <button
-                class="btn btn-primary h-[38px] mt-2 sm:mt-0 sm:w-16 w-full"
+                class="btn btn-primary first-letter:capitalize h-[38px] mt-2 sm:mt-0 sm:w-16 w-full"
                 data-test="filters-search-btn"
                 type="submit"
                 @click.prevent="filter"
               >
-                Meklēt
+                {{ t('project.search') }}
               </button>
               <button
                 id="tabulator-html-filter-reset"
-                class="btn btn-secondary h-[38px] mt-2 sm:mt-0 sm:w-32 w-full"
+                class="btn btn-secondary first-letter:capitalize h-[38px] mt-2 sm:mt-0 sm:w-32 w-full"
                 data-test="filters-reset-btn"
                 type="button"
                 @click="resetFilter"
               >
-                Dzēst filtrus
+                {{ t('project.deleteFilters') }}
               </button>
             </div>
           </slot>
@@ -117,6 +119,7 @@ import { TableConfig } from './createTableConfig'
 import { ChevronUp, ChevronDown } from 'lucide-vue-next'
 import { isNumericString } from '../../helpers/Global'
 import useIsMobile from '../../composables/useIsMobile'
+import { useI18nWithFallback } from '../../helpers/Translations'
 
 const props = withDefaults(
   defineProps<{
@@ -155,6 +158,8 @@ defineSlots<{
 }>()
 
 const { isMobile } = useIsMobile()
+const { t } = useI18nWithFallback()
+
 const showFilters = ref(!isMobile.value && props.initialShowFiltersDesktop)
 
 const filter = () => {

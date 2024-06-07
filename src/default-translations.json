@@ -1,0 +1,22 @@
+{
+  "project": {
+    "cancel": "atcelt",
+    "save": "saglabāt",
+    "delete": "dzēst",
+    "heartbeat": {
+      "textLine1": "iznākusi jauna sistēmas versija!",
+      "textLine2": "lūdzu pārlādējiet lapu!",
+      "buttonText": "pārlādēt lapu"
+    },
+    "inTotal": "kopā",
+    "created": "izveidots",
+    "updated": "atjaunots",
+    "markAll": "atzīmēt visu",
+    "noDataFound": "netika atrasti dati",
+    "showFilters": "parādīt filtrus",
+    "hideFilters": "paslēpt filtrus",
+    "detailedSearch": "detalizēta meklēšana",
+    "search": "meklēt",
+    "deleteFilters": "dzēst filtrus"
+  }
+}

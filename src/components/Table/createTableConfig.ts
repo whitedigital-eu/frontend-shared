@@ -77,7 +77,7 @@ export type TableProps = {
   /**
    * Label to show when hovering the row selection checkbox
    */
-  selectionCheckboxLabel?: string
+  selectionCheckboxLabel?: string | null
   /**
    * Static column data to display in table.
    * Alternative to using ajaxUrl, for example if data needs to be transformed before displaying in table.
