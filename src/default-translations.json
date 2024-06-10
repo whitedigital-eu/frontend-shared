@@ -20,7 +20,7 @@
     "deleteFilters": "dzēst filtrus",
     "postSuccessMessage": "ieraksts izveidots!",
     "putSuccessMessage": "izmaiņas saglabātas!",
-    "patchSuccessMessage": "izmaiņas paberātas!",
+    "patchSuccessMessage": "izmaiņas saglabātas!",
     "deleteSuccessMessage": "ieraksts dzēsts!",
     "download": "lejupielādēt",
     "singleFileUploadMobileMessage": "spiediet šeit, lai augšupielādētu failu",

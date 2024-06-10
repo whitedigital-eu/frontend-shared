@@ -16,6 +16,7 @@ export const setSelectOptions = async <T extends FormData>(
     console.error(notSelectFieldError)
   }
 }
+
 export const setSelectOptionsWithFirstAsValue = async <T extends FormData>(
   formData: T,
   fieldName: string,
