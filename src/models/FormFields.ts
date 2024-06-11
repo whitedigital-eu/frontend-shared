@@ -66,13 +66,13 @@ export type TextFieldConfig = Partial<{
 
 class TextField extends FormField {
   value: Exclude<TextValue, number>
-  config?: TextFieldConfig
+  config: TextFieldConfig
 
   constructor(
     name: string,
     label: string,
     value?: TextValue,
-    config?: TextFieldConfig,
+    config: TextFieldConfig = {},
   ) {
     super('text', name, label)
     this.value = typeof value === 'number' ? value.toString() : value
@@ -89,13 +89,13 @@ export type DecimalFieldConfig = Partial<{
 
 class DecimalField extends FormField {
   public value: Exclude<DecimalValue, string>
-  public config?: DecimalFieldConfig
+  public config: DecimalFieldConfig
 
   constructor(
     name: string,
     label: string,
     value?: Exclude<DecimalValue, string>,
-    config?: DecimalFieldConfig,
+    config: DecimalFieldConfig = {},
   ) {
     super('decimal', name, label)
     this.value = value
@@ -187,13 +187,13 @@ class DataFetchingSelectField<T extends string | string[]> extends FormField {
 
 class PhoneNumberField extends FormField {
   public value: string | null | undefined
-  config?: PhoneNumberFieldConfig
+  config: PhoneNumberFieldConfig
 
   constructor(
     name: string,
     label: string,
     value: string | null | undefined = '',
-    config?: PhoneNumberFieldConfig,
+    config: PhoneNumberFieldConfig = {},
   ) {
     super('phone-number', name, label)
     this.value = value
@@ -209,11 +209,11 @@ class DateField extends FormField {
     name: string,
     label: string,
     value?: DatepickerValue,
-    config?: DateFieldConfig,
+    config: DateFieldConfig = {},
   ) {
     super('date', name, label)
     this.value = value
-    this.config = config ?? {}
+    this.config = config
   }
 }
 
@@ -318,9 +318,7 @@ class SignatureField extends FormField {
     name: string,
     label: string,
     value = '',
-    config?: {
-      editMode?: boolean
-    },
+    config?: { editMode?: boolean },
   ) {
     super('signature', name, label)
     this.value = value

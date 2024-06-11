@@ -123,6 +123,7 @@ export const defaultReferenceInputTypes = [
   'simple-select',
   'data-fetching-select',
   'file-upload',
+  'signature',
 ]
 
 export const getFormFieldValues = <
