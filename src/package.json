@@ -1,6 +1,6 @@
 {
   "name": "@whitedigital-eu/wd-frontend-shared",
-  "version": "0.11.9",
+  "version": "0.11.11",
   "author": "Imants Liepiņš",
   "license": "MIT",
   "description": "Shared components, helpers, composables and types for vue frontend SPAs",
@@ -90,6 +90,7 @@
     "vue-flatpickr-component": "^11.0.3",
     "vue-google-autocomplete": "^1.1.4",
     "vue-i18n": "^9.13.1",
+    "vue-signature-pad": "^3.0.2",
     "vue-slider-component": "4.0.0-beta.5",
     "vue-tel-input": "^8.3.1",
     "vue3-google-map": "^0.19.0",

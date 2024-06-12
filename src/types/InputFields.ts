@@ -49,6 +49,11 @@ export type FileUploadConfig = {
   beforeUploadedFileDeletion?: ((fileIri: any) => Promise<any>) | null
 }
 
+export type SignatureConfig = {
+  editMode?: boolean
+  readonly?: boolean
+}
+
 export type LabelProps = {
   keyLabel: string
   valueLabel: string

@@ -6,6 +6,7 @@ import {
   DataFetchingSelectConfig,
   DateFieldConfig,
   FileUploadConfig,
+  SignatureConfig,
 } from '../types/InputFields'
 import dayjs from 'dayjs'
 import {
@@ -311,20 +312,18 @@ class TimeWithCurrentField extends FormField {
 }
 
 class SignatureField extends FormField {
-  public value: string | null
-  public editMode = false
+  public value: string |null | undefined
+  public config: SignatureConfig
 
   constructor(
     name: string,
     label: string,
-    value = '',
-    config?: { editMode?: boolean },
+    value?: string | null,
+    config: SignatureConfig = {},
   ) {
     super('signature', name, label)
     this.value = value
-    if (config) {
-      this.editMode = config.editMode ?? this.editMode
-    }
+    this.config = config
   }
 }
 
