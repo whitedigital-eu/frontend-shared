@@ -66,7 +66,7 @@
           </div>
         </div>
         <div
-          class="flex flex-col justify-between sm:flex-row w-full"
+          class="flex flex-col gap-4 justify-between sm:flex-row w-full"
           :class="{ 'mt-4': !showAdvancedFilters }"
         >
           <slot
@@ -99,7 +99,7 @@
               </button>
             </div>
           </slot>
-          <div>
+          <div class="flex-grow text-right">
             <slot></slot>
           </div>
         </div>

@@ -3,6 +3,7 @@
     "cancel": "atcelt",
     "save": "saglabāt",
     "delete": "dzēst",
+    "edit": "rediģēt",
     "heartbeat": {
       "textLine1": "iznākusi jauna sistēmas versija!",
       "textLine2": "lūdzu pārlādējiet lapu!",
