@@ -23,7 +23,7 @@
       <option
         v-for="(option, i) in settings.options"
         :key="i"
-        :selected="isOptionSelected(option.value ?? '')"
+        :selected="option.value && isOptionSelected(option.value)"
         :value="option.value"
       >
         {{ option.text }}
@@ -49,12 +49,10 @@ import { SelectConfig } from '../../../types/InputFields'
 import { useI18nWithFallback } from '../../../helpers/Translations'
 import { capitalizeFirstLetter } from '../../../helpers/Global'
 
-type ModelValue = T | T[] | null
-
 const props = withDefaults(
   defineProps<{
     config?: SelectConfig<T> | null
-    modelValue?: ModelValue
+    modelValue?: T | T[] | null
     id: string
     label?: string | null
     searchInputPlaceholder?: string
@@ -68,7 +66,7 @@ const props = withDefaults(
 )
 
 const emit = defineEmits<{
-  'update:modelValue': [value: string | string[] | number]
+  'update:modelValue': [value: typeof props.modelValue]
   'create-new-item': [itemName: string | undefined]
 }>()
 
@@ -93,7 +91,14 @@ const selectId = computed(() => `tom-select-${props.id}`)
 const multiple = computed(() => Array.isArray(props.modelValue))
 
 const isOpen = ref(false)
-const isEmpty = ref(false)
+
+const isEmpty = computed(
+  () =>
+    props.modelValue === null ||
+    props.modelValue === undefined ||
+    props.modelValue === '' ||
+    (Array.isArray(props.modelValue) && props.modelValue.length === 0),
+)
 
 const handleLabelClick = () => {
   if (!model.value || computedConfig.value.readonly || isOpen.value) return
@@ -107,10 +112,7 @@ const createNewItem = (e: Event) => {
   emit('create-new-item', buttonElement?.dataset.itemName)
 }
 
-const renderCreateButton: TomTemplate = (
-  data: TomOption,
-  escape: (str: string) => string,
-) => {
+const renderCreateButton: TomTemplate = (data, escape) => {
   const escapedInput = escape(data.input)
 
   const createButton = document.createElement('button')
@@ -141,7 +143,12 @@ const isKeyOfIconMapping = (
   return maybeKeyOfIconMapping in iconMapping
 }
 
+/** @depreceted - use custom render functions instead */
 const renderIcon: TomTemplate = (data, escape) => {
+  console.warn(
+    'TomSelect: data.icon is deprecated and will be removed in the future. Use a custom render functions instead.',
+  )
+
   const iconContainer = document.createElement('a')
   iconContainer.classList.add('flex', 'w-full')
   iconContainer.title = escape(data.text)
@@ -155,7 +162,7 @@ const renderIcon: TomTemplate = (data, escape) => {
   return iconContainer
 }
 
-const renderTextOrIcon: TomTemplate = function (data, escape) {
+const renderTextOrIcon: TomTemplate = (data, escape) => {
   if (!data.icon) return `<div>${escape(data.text)}</div>`
   return renderIcon(data, escape)
 }
@@ -165,7 +172,7 @@ const createPlugins = () => {
   if (computedConfig.value.allowDelete) {
     plugins.clear_button = {
       title: capitalizeFirstLetter(t('project.delete')),
-      html: function (data: { className: string; title: string }) {
+      html(data: { className: string; title: string }) {
         return `<span
             class="text-xl !right-2 !bg-white !py-2 !pl-2 ${data.className}"
             title="${data.title}">
@@ -189,14 +196,19 @@ const defaultSettings: RecursivePartial<TomSettings> = {
   maxItems: multiple.value ? undefined : 1,
   maxOptions: 250,
   allowEmptyOption: true,
-  createFilter: function (input: string) {
+  createFilter(input: string) {
     if (!this?.options) return false
     return !(input.toLowerCase() in this.options)
   },
-  onChange(selected: string | number | string[]) {
-    const newValue = Array.isArray(selected) ? [...selected] : selected
-    isEmpty.value = !(typeof selected === 'number') && selected.length === 0
-    emit('update:modelValue', newValue)
+  onChange(selected: NonNullable<typeof props.modelValue>) {
+    emit(
+      'update:modelValue',
+      Array.isArray(selected)
+        ? [...selected]
+        : selected === ''
+          ? null
+          : selected,
+    )
   },
   onDropdownOpen() {
     isOpen.value = true
@@ -208,7 +220,7 @@ const defaultSettings: RecursivePartial<TomSettings> = {
     option: renderTextOrIcon,
     item: renderTextOrIcon,
     option_create: renderCreateButton,
-    no_results: function (data: TomOption, escape: (str: string) => string) {
+    no_results(data: TomOption, escape: (str: string) => string) {
       return `<div class="no-results">Netika atrasti rezultāti vaicājumam "${escape(
         data.input,
       )}"</div>`
@@ -220,21 +232,14 @@ const settings = computed(() =>
   _.merge({ ...defaultSettings }, computedConfig.value.tomSelectSettings),
 )
 
-const isOptionSelected = (value: string) => {
-  return multiple.value
-    ? (props.modelValue as string[]).includes(value)
-    : (props.modelValue as string) === value
+const isOptionSelected = (value: T) => {
+  return Array.isArray(props.modelValue)
+    ? props.modelValue.includes(value)
+    : props.modelValue === value
 }
 
-const onDropdownClose = (e: any) => {
-  e.style.top = null
-}
 const onDropdownOpen = () => {
-  if (
-    !model.value ||
-    !model.value.dropdown ||
-    !computedConfig.value.dynamicDropDownMargin
-  ) {
+  if (!model.value?.dropdown || !computedConfig.value.dynamicDropDownMargin) {
     return
   }
 
@@ -271,13 +276,11 @@ const init = () => {
     const events = ['dropdown_open', 'type', 'load', 'item_add', 'item_remove']
 
     events.forEach((event) => {
-      if (!model.value) {
-        return
-      }
+      if (!model.value) return
       model.value.on(event, onDropdownOpen)
     })
 
-    model.value.on('dropdown_close', onDropdownClose)
+    model.value.on('dropdown_close', (e: HTMLElement) => (e.style.top = ''))
   }
 }
 
@@ -294,20 +297,12 @@ watch(
 )
 watch(
   () => props.modelValue,
-  (value) => {
+  (n) => {
     if (!model.value) return
-    value === null
+    n === null
       ? model.value.clear()
-      : model.value.setValue(value as string | string[], true)
+      : model.value.setValue(n as string | string[], true)
   },
-)
-watch(
-  () => props.modelValue,
-  () =>
-    (isEmpty.value =
-      !props.modelValue ||
-      (!!props.modelValue && (props.modelValue as string).length === 0)),
-  { immediate: true },
 )
 watch(
   () => computedConfig.value.readonly,

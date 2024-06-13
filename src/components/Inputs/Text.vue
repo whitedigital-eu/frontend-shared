@@ -1,7 +1,10 @@
 <template>
   <div
     class="relative"
-    :class="{ 'overflow-hidden': isEmpty && !hasFocus }"
+    :class="{
+      'overflow-hidden': isEmpty && !hasFocus,
+      'pointer-events-none': config.readonly,
+    }"
     v-bind="config.wrapperAttributes"
   >
     <FormFieldLabel

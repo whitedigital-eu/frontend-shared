@@ -6,8 +6,8 @@
     :config="computedConfig"
     :label="label"
     :search-input-placeholder="searchInputPlaceholder"
-    @create-new-item="(item) => emit('create-new-item', item)"
-    @update:model-value="handleInput"
+    @create-new-item="(item) => $emit('create-new-item', item)"
+    @update:model-value="(value) => $emit('update:modelValue', value)"
   />
 </template>
 
@@ -30,8 +30,8 @@ const props = withDefaults(
   { modelValue: null, label: '' },
 )
 
-const emit = defineEmits<{
-  'update:modelValue': [value: string | string[] | number]
+defineEmits<{
+  'update:modelValue': [value: typeof props.modelValue]
   'create-new-item': [itemName: string | undefined]
 }>()
 
@@ -72,11 +72,7 @@ const baseSelectKey = computed(() =>
   ]),
 )
 
-const value = ref<T | T[] | null>()
-
-const handleInput = (value: string | string[] | number) => {
-  emit('update:modelValue', value)
-}
+const value = ref<typeof props.modelValue>()
 
 watch(
   () => props.modelValue,
