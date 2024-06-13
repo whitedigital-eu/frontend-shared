@@ -42,11 +42,13 @@
             <slot name="after-default-filters"></slot>
             <button
               v-if="!noAdvancedFilters && toggleAdvancedFilters"
-              class="btn btn-primary first-letter:capitalize h-10"
+              class="btn btn-primary h-10"
               type="button"
               @click="showAdvancedFilters = !showAdvancedFilters"
             >
-              {{ t('project.detailedSearch') }}
+              <span class="first-letter:capitalize">{{
+                t('project.detailedSearch')
+              }}</span>
               <ChevronDown v-if="showAdvancedFilters" class="ml-2" :size="20" />
               <ChevronUp v-if="!showAdvancedFilters" class="ml-2" :size="20" />
             </button>
@@ -81,21 +83,25 @@
               class="flex gap-2 sm:w-auto w-full xl:mt-0"
             >
               <button
-                class="btn btn-primary first-letter:capitalize h-[38px] mt-2 sm:mt-0 sm:w-16 w-full"
+                class="btn btn-primary h-[38px] mt-2 sm:mt-0 sm:w-16 w-full"
                 data-test="filters-search-btn"
                 type="submit"
                 @click.prevent="filter"
               >
-                {{ t('project.search') }}
+                <span class="first-letter:capitalize">{{
+                  t('project.search')
+                }}</span>
               </button>
               <button
                 id="tabulator-html-filter-reset"
-                class="btn btn-secondary first-letter:capitalize h-[38px] mt-2 sm:mt-0 sm:w-32 w-full"
+                class="btn btn-secondary h-[38px] mt-2 sm:mt-0 sm:w-32 w-full"
                 data-test="filters-reset-btn"
                 type="button"
                 @click="resetFilter"
               >
-                {{ t('project.deleteFilters') }}
+                <span class="first-letter:capitalize">{{
+                  t('project.deleteFilters')
+                }}</span>
               </button>
             </div>
           </slot>

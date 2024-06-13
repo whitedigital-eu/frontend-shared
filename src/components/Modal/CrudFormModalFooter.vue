@@ -1,18 +1,18 @@
 <template>
   <div class="flex gap-2 xl:mt-0">
     <button
-      class="btn btn-outline-secondary first-letter:capitalize grow mr-1"
+      class="btn btn-outline-secondary grow mr-1"
       type="button"
       @click="emit('cancel-click')"
     >
-      {{ t('project.cancel') }}
+      <span class="first-letter:capitalize">{{ t('project.cancel') }}</span>
     </button>
     <LoadingButton
-      class="first-letter:capitalize grow"
+      class="grow"
       :loading="isLoading"
       @click="emit('proceed-click')"
     >
-      {{ buttonText }}
+      <span class="first-letter:capitalize">{{ buttonText }}</span>
     </LoadingButton>
   </div>
 </template>

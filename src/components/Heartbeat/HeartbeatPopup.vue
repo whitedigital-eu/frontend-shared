@@ -12,21 +12,27 @@
               <Icon name="AlertCircle" size="28" />
             </div>
             <div class="leading-normal text-base">
-              <p class="first-letter:capitalize">
-                {{ t('project.heartbeat.textLine1') }}
+              <p>
+                <span class="first-letter:capitalize"
+                  >{{ t('project.heartbeat.textLine1') }}
+                </span>
               </p>
-              <p class="first-letter:capitalize">
-                {{ t('project.heartbeat.textLine2') }}
+              <p>
+                <span class="first-letter:capitalize">{{
+                  t('project.heartbeat.textLine2')
+                }}</span>
               </p>
             </div>
           </div>
           <button
-            class="disabled:cursor-not-allowed disabled:opacity-50 first-letter:capitalize leading-none px-5 py-3 rounded-md text-sm text-white"
+            class="disabled:cursor-not-allowed disabled:opacity-50 leading-none px-5 py-3 rounded-md text-sm text-white"
             :class="bgClass"
             :disabled="buttonClicked"
             @click="reloadPage"
           >
-            {{ t('project.heartbeat.buttonText') }}
+            <span class="first-letter:capitalize">{{
+              t('project.heartbeat.buttonText')
+            }}</span>
           </button>
         </div>
         <button

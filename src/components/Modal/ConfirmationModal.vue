@@ -1,8 +1,10 @@
 <template>
   <Modal data-test="confirmation-modal" @close="emit('close')">
     <template #header>
-      <div class="first-letter:capitalize text-2xl">
-        {{ t('project.confirmationModalTitle') }}
+      <div class="text-2xl">
+        <span class="first-letter:capitalize">{{
+          t('project.confirmationModalTitle')
+        }}</span>
       </div>
     </template>
     <template #body>
@@ -16,21 +18,21 @@
     <template #footer>
       <div class="flex gap-4">
         <button
-          class="btn btn-outline-secondary first-letter:capitalize w-full"
+          class="btn btn-outline-secondary w-full"
           data-test="cancel-button"
           type="button"
           @click="emit('close')"
         >
-          {{ t('project.cancel') }}
+          <span class="first-letter:capitalize">{{ t('project.cancel') }}</span>
         </button>
         <button
-          class="btn btn-danger first-letter:capitalize w-full"
+          class="btn btn-danger w-full"
           data-test="delete-button"
           data-tw-dismiss="modal"
           type="button"
           @click.prevent="emit('confirm')"
         >
-          {{ t('project.delete') }}
+          <span class="first-letter:capitalize">{{ t('project.delete') }}</span>
         </button>
       </div>
     </template>
