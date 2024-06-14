@@ -334,7 +334,7 @@ const siteTreeChangedData = computed<SiteTreeChangedData | null>(() => {
 
     if (node['@id'] === draggedNode?.['@id']) {
       res = {
-        node: node,
+        node,
         position: i,
         newParent:
           parent && n && node.parent?.['@id'] !== parent['@id'] ? parent : null,

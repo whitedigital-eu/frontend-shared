@@ -116,7 +116,7 @@ watch(
   computed(() => route.path),
   () => {
     formattedMenu.value = $h.toRaw(menu)
-  }
+  },
 )
 const openMenuTitle = ref<string | null>(null)
 
@@ -126,8 +126,9 @@ onMounted(() => {
 })
 
 const getSideMenuItemHref = (menu: MenuItem) => {
-  if (!menu.subMenu)
+  if (!menu.subMenu) {
     return router.resolve({ name: menu.name as RouteRecordName }).path
+  }
   return 'javascript:;'
 }
 

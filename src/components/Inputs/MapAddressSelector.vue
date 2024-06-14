@@ -114,7 +114,7 @@ const handleAddressAutocomplete = () => {
       const location = results[0].geometry.location
       const address = results[0].formatted_address
       const position = {
-        address: address,
+        address,
         lat: location.lat(),
         lng: location.lng(),
       }

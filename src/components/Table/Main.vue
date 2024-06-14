@@ -183,8 +183,8 @@ const createTimestampColumn = (
   hideLast: boolean,
 ): Tabulator.ColumnDefinition =>
   createColumn({
-    title: title,
-    field: field,
+    title,
+    field,
     width: 150,
     formatter: (cell) => props.config.dateTimeFormatter(cell.getValue()),
     headerSort: !props.disableOrderByDateColumns,
@@ -220,7 +220,7 @@ const selectionColumn: Tabulator.ColumnDefinition = {
   headerHozAlign: 'left',
   headerSort: false,
   width: 40,
-  cellClick: function (e: Event, cell: Tabulator.CellComponent) {
+  cellClick(e: Event, cell: Tabulator.CellComponent) {
     cell.getRow().toggleSelect()
   },
   tooltip: props.selectionCheckboxLabel ?? '',
@@ -327,16 +327,16 @@ const initTabulator = async (resetPage = false) => {
     langs: tabulatorLanguages,
     columns,
     movableRows: props.movableRows,
-    rowMoved: function (row) {
+    rowMoved(row) {
       emit('move-row', row)
     },
-    cellClick: function (e, cell) {
+    cellClick(e, cell) {
       emit('cell-click', cell.getField(), cell.getData() as ResourceInstance)
     },
     rowSelectionChanged(selectedRowData) {
       emit('row-selection-changed', selectedRowData)
     },
-    dataLoaded: async function (data) {
+    async dataLoaded(data) {
       try {
         const toggleCollapseElements =
           await waitForToggleCollapseElementsRendered()
@@ -432,7 +432,7 @@ const initTabulator = async (resetPage = false) => {
         reInitTable()
       },
       ajaxSorting: true,
-      ajaxRequesting: function (
+      ajaxRequesting(
         _url,
         params: Record<string, unknown> & { sorters: Sorter[] },
       ) {

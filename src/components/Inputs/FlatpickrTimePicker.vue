@@ -41,7 +41,7 @@ import LocalizedFormat from 'dayjs/plugin/localizedFormat'
 import FormFieldLabel from '../FormFieldLabel.vue'
 import { FlatpickrTimePickerValue } from './ValueTypes'
 import useIsMobile from '../../composables/useIsMobile'
-import {getVueCurrentLocale} from "../../helpers/Translations";
+import { getVueCurrentLocale } from '../../helpers/Translations'
 
 const {
   modelValue = null,

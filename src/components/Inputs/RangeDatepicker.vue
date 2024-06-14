@@ -38,7 +38,7 @@ import FormFieldLabel from '../FormFieldLabel.vue'
 import { areStringArraysEqual } from '../../helpers/Global'
 import { X } from 'lucide-vue-next'
 import useIsMobile from '../../composables/useIsMobile'
-import {getVueCurrentLocale} from "../../helpers/Translations";
+import { getVueCurrentLocale } from '../../helpers/Translations'
 
 const props = withDefaults(
   // TODO: remove '' from allowed values, use null instead

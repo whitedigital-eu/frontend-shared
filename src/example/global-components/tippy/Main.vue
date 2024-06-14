@@ -24,7 +24,7 @@ const tippyRef = ref()
 const init = () => {
   tippy(tippyRef.value, {
     plugins: [animateFill],
-    content: content,
+    content,
     arrow: roundArrow,
     popperOptions: {
       modifiers: [

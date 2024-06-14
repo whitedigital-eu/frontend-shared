@@ -312,7 +312,7 @@ class TimeWithCurrentField extends FormField {
 }
 
 class SignatureField extends FormField {
-  public value: string |null | undefined
+  public value: string | null | undefined
   public config: SignatureConfig
 
   constructor(

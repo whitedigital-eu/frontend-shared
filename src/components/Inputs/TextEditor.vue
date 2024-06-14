@@ -43,8 +43,8 @@ const internalValue = ref(
   typeof modelValue === 'number'
     ? modelValue.toString()
     : modelValue !== null && typeof modelValue !== 'undefined'
-    ? modelValue
-    : ''
+      ? modelValue
+      : '',
 )
 watch(internalValue, (n) => emit('update:modelValue', n))
 

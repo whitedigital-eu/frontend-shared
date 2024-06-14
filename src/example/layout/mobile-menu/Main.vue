@@ -138,7 +138,7 @@ watch(
   computed(() => route.path),
   () => {
     formattedMenu.value = _.cloneDeep(mobileMenu.value)
-  }
+  },
 )
 
 onMounted(() => {

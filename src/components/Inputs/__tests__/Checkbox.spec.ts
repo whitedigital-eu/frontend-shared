@@ -30,7 +30,7 @@ describe('Checkbox', () => {
     async (modelValue, isChecked) => {
       const { getCheckbox } = renderCheckbox({ modelValue })
       expect(getCheckbox().checked).toBe(isChecked)
-    }
+    },
   )
   it('toggles state (checked attribute) and updates model value when clicked', async () => {
     const { getCheckbox, getUpdates } = renderCheckbox()

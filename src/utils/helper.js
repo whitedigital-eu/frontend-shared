@@ -81,7 +81,7 @@ const helpers = {
     const hours = Math.round((milliseconds % 86400000) / 3600000)
     let minutes = Math.round(((milliseconds % 86400000) % 3600000) / 60000)
     const seconds = Math.round(
-      (((milliseconds % 86400000) % 3600000) % 60000) / 1000
+      (((milliseconds % 86400000) % 3600000) % 60000) / 1000,
     )
 
     if (seconds < 30 && seconds >= 0) {
@@ -127,7 +127,7 @@ const helpers = {
           tempColors[key] = (opacity = 1) =>
             `rgb(${parseInt(aRgbHex[0], 16)} ${parseInt(
               aRgbHex[1],
-              16
+              16,
             )} ${parseInt(aRgbHex[2], 16)} / ${opacity})`
         }
       } else {

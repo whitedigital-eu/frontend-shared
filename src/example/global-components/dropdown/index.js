@@ -45,6 +45,16 @@ const init = (el, { props, emit }) => {
 // Dropdown wrapper
 const Dropdown = defineComponent({
   name: 'Dropdown',
+  directives: {
+    dropdown: {
+      mounted(el, { value }) {
+        init(el, value)
+      },
+      updated(el, { value }) {
+        init(el, value)
+      },
+    },
+  },
   props: {
     show: {
       type: Boolean,
@@ -57,16 +67,6 @@ const Dropdown = defineComponent({
     refKey: {
       type: String,
       default: null,
-    },
-  },
-  directives: {
-    dropdown: {
-      mounted(el, { value }) {
-        init(el, value)
-      },
-      updated(el, { value }) {
-        init(el, value)
-      },
     },
   },
   setup(props, { slots, attrs, emit }) {
@@ -99,9 +99,9 @@ const Dropdown = defineComponent({
             dismiss: () => {
               tailwind.Dropdown.getOrCreateInstance(dropdownRef.value).hide()
             },
-          })
+          }),
         ),
-        [[dropdownDirective, { props, emit }]]
+        [[dropdownDirective, { props, emit }]],
       )
   },
 })
@@ -124,7 +124,7 @@ const DropdownToggle = defineComponent({
           'aria-expanded': false,
           'data-tw-toggle': 'dropdown',
         },
-        slots.default()
+        slots.default(),
       )
   },
 })
@@ -139,7 +139,7 @@ const DropdownMenu = defineComponent({
         {
           class: 'dropdown-menu',
         },
-        slots.default()
+        slots.default(),
       )
   },
 })
@@ -160,7 +160,7 @@ const DropdownContent = defineComponent({
         {
           class: 'dropdown-content',
         },
-        slots.default()
+        slots.default(),
       )
   },
 })
@@ -186,7 +186,7 @@ const DropdownItem = defineComponent({
           {
             class: ['dropdown-item cursor-pointer', props.class],
           },
-          slots.default()
+          slots.default(),
         ),
       ])
   },
@@ -213,7 +213,7 @@ const DropdownHeader = defineComponent({
           {
             class: ['dropdown-header', props.class],
           },
-          slots.default()
+          slots.default(),
         ),
       ])
   },
@@ -240,7 +240,7 @@ const DropdownFooter = defineComponent({
           {
             class: ['dropdown-footer', props.class],
           },
-          slots.default()
+          slots.default(),
         ),
       ])
   },

@@ -15,9 +15,9 @@ const requestInterceptor = (config: InternalAxiosRequestConfig) => {
 
 const createAxiosWithInterceptors = (
   responseInterceptor: (
-    value: AxiosResponse
+    value: AxiosResponse,
   ) => AxiosResponse | Promise<AxiosResponse>,
-  errorInterceptor: ((error: any) => any) | undefined
+  errorInterceptor: ((error: any) => any) | undefined,
 ): AxiosInstance => {
   const instance = axios.create({
     withCredentials: true,
@@ -27,7 +27,7 @@ const createAxiosWithInterceptors = (
   })
   axiosRetry(instance, {
     retries: 3,
-    retryCondition: function (error) {
+    retryCondition(error) {
       return (
         isNetworkOrIdempotentRequestError(error) ||
         error.code === 'ECONNABORTED'
