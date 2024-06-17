@@ -102,7 +102,7 @@ const emit = defineEmits<{
    * Emitted when table data has been loaded for the first time
    * @arg response - the full API response of the ajax request that loads the data
    */
-  'set:filters': [response: ApiListResponse]
+  'set:filters': [response: ApiListResponse<ResourceInstance>]
   /**
    * Emitted when a row (or all rows) has been selected or deselected
    * @arg selectedRowData - the resource rendered in the selected row
@@ -140,7 +140,7 @@ const emit = defineEmits<{
 defineSlots<{
   /** a slot in the top right side of the table on desktop, which collapses on mobile */
   'header-right'(props: {
-    tableApiResponse: ApiListResponse | null
+    tableApiResponse: typeof tableApiResponse.value
     tabulator: Tabulator | undefined
   }): any
 }>()
@@ -151,9 +151,7 @@ const table = ref()
 const tabulator = ref()
 const totalEntryCount = ref<number | null>(null)
 
-const reInitTable = () => {
-  tabulator.value.redraw()
-}
+const reInitTable = () => tabulator.value.redraw()
 
 const reInitOnResizeWindow = () => {
   window.addEventListener('resize', reInitTable)
@@ -273,7 +271,7 @@ const waitForToggleCollapseElementsRendered = (): Promise<
   })
 }
 
-const setTableHeight = (): void => {
+const setTableHeight = () => {
   setTimeout(() => {
     const tabulatorTableEl = document.querySelector('.tabulator-table')
     if (!tabulatorTableEl) return
@@ -288,7 +286,7 @@ let tabulatorScrollTop = 0
 
 const PAGE_SIZE_PARAM = 'itemsPerPage' as const
 
-const tableApiResponse = ref<ApiListResponse | null>(null)
+const tableApiResponse = ref<ApiListResponse<ResourceInstance> | null>(null)
 
 /** the tabulator type for this is wrong */
 type Sorter = {
@@ -336,14 +334,13 @@ const initTabulator = async (resetPage = false) => {
     rowSelectionChanged(selectedRowData) {
       emit('row-selection-changed', selectedRowData)
     },
-    async dataLoaded(data) {
+    async dataLoaded() {
       try {
         const toggleCollapseElements =
           await waitForToggleCollapseElementsRendered()
         toggleCollapseElements.forEach((el) =>
           el.addEventListener('click', setTableHeight, true),
         )
-        emit('data-loaded', data)
       } catch (e) {
         console.error(e)
       }
@@ -397,8 +394,12 @@ const initTabulator = async (resetPage = false) => {
       ...options,
       ajaxURL: props.ajaxUrl,
       ajaxConfig: props.config.ajaxConfig,
-      ajaxResponse: (_url, _params, response: ApiListResponse) => {
-        tableApiResponse.value = response
+      ajaxResponse: (
+        _url,
+        _params,
+        response: ApiListResponse<ResourceInstance>,
+      ) => {
+        tableApiResponse.value = response as typeof tableApiResponse.value
 
         const page = response['hydra:view']['hydra:last']
           ? response['hydra:view']['hydra:last'].split('page=')[1]
@@ -410,6 +411,9 @@ const initTabulator = async (resetPage = false) => {
           emit('set:filters', response)
           filtersSet.value = true
         }
+
+        emit('data-loaded', response['hydra:member'])
+
         return { last_page: page, data: response['hydra:member'] }
       },
       ajaxError(error) {
