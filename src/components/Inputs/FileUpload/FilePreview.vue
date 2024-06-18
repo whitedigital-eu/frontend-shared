@@ -14,6 +14,7 @@
       </div>
     </div>
     <div
+      v-if="config.allowEdit || config.allowDelete"
       class="absolute bg-[rgba(0,0,0,0.5)] dz-actions flex flex-row flex-wrap gap-2 justify-end p-1.5 right-0 rounded-md text-white top-0 z-30"
     >
       <button v-if="config.allowEdit" dz-edit type="button">
