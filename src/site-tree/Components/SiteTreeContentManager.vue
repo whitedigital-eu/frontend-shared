@@ -27,7 +27,7 @@
             >
               <Icon class="mr-3" name="Save" size="15" />
               <span>
-                {{ projectSettings.global.$t('form.common.save') }}
+                {{ projectSettings.global.$t('project.save') }}
               </span>
             </button>
             <button
@@ -41,7 +41,7 @@
             >
               <Icon class="mr-3" name="Save" size="15" />
               <span>
-                {{ projectSettings.global.$t('form.common.saveAndClose') }}
+                {{ projectSettings.global.$t('project.saveAndClose') }}
               </span>
             </button>
           </div>

@@ -5,7 +5,7 @@
         <div>
           <div class="flex items-end justify-between mb-5">
             <h1 class="text-2xl">
-              {{ projectSettings.global.$t('admin.siteTree.siteTree') }}
+              {{ projectSettings.global.$t('project.siteTree') }}
             </h1>
             <div>
               <!-- TODO: implement -->
@@ -69,14 +69,14 @@
             <li v-else>
               <em>
                 {{
-                  projectSettings.global.$t('admin.menu.noSectionsAddedText')
+                  projectSettings.global.$t('project.menu.noSectionsAddedText')
                 }}!
               </em>
             </li>
           </ul>
           <Loader v-else-if="!globalStore.rootSiteTrees" />
           <em v-else>
-            {{ projectSettings.global.$t('admin.menu.noLocalesAddedText') }}!
+            {{ projectSettings.global.$t('project.menu.noLocalesAddedText') }}!
           </em>
         </div>
       </div>
@@ -88,20 +88,14 @@
             @click="siteTreeInitialParent = currentLangSiteTree"
           >
             <Icon name="Plus" />
-            <span>{{
-              projectSettings.global.$t('admin.siteTree.newSection')
-            }}</span>
+            <span>{{ projectSettings.global.$t('project.newSection') }}</span>
           </button>
         </div>
         <div class="box p-5">
           <template v-if="siteTreeToEdit">
             <p class="flex items-center justify-between">
               <span class="text-base">
-                {{
-                  projectSettings.global.$t(
-                    'admin.siteTree.editSectionSettings',
-                  )
-                }}
+                {{ projectSettings.global.$t('project.editSectionSettings') }}
               </span>
               <button
                 v-if="isClipboardSupported"
@@ -128,7 +122,7 @@
                 >
                   <Icon class="mr-2" name="X" size="15" />
                   <span>{{
-                    projectSettings.global.$t('form.common.cancelChanges')
+                    projectSettings.global.$t('project.cancelChanges')
                   }}</span>
                 </button>
                 <button
@@ -138,22 +132,20 @@
                 >
                   <Icon class="mr-2" name="Save" size="15" />
                   <span>{{
-                    projectSettings.global.$t('form.common.saveChanged')
+                    projectSettings.global.$t('project.saveChanged')
                   }}</span>
                 </button>
               </div>
             </SiteTreeForm>
           </template>
           <div v-else class="my-44 text-center w-full">
-            <span
-              >{{ projectSettings.global.$t('admin.siteTree.clickOneThe') }}
-            </span>
+            <span>{{ projectSettings.global.$t('project.clickOneThe') }} </span>
             <button class="btn btn-primary p-[2px] rounded-xs">
               <Icon name="Settings" size="10" />
             </button>
             <span>
               {{
-                projectSettings.global.$t('admin.siteTree.buttonToEditASection')
+                projectSettings.global.$t('project.buttonToEditASection')
               }}</span
             >
           </div>

@@ -31,14 +31,11 @@ export default function useSiteTreeFormData(
   const typeSelectOptions =
     projectSettings.siteTree.getSiteTreeTypeSelectOptions()
   const baseFormData: SiteTreeFormData = {
-    title: new TextField(
-      'title',
-      projectSettings.global.$t('form.table.title'),
-    ),
-    slug: new TextField('slug', projectSettings.global.$t('form.table.slug')),
+    title: new TextField('title', projectSettings.global.$t('project.title')),
+    slug: new TextField('slug', projectSettings.global.$t('project.slug')),
     type: new SimpleSelectField<SiteTreeRead['type']>(
       'type',
-      projectSettings.global.$t('form.table.type'),
+      projectSettings.global.$t('project.type'),
       typeSelectOptions[0].value,
       {
         tomSelectSettings: { options: typeSelectOptions },
@@ -47,19 +44,19 @@ export default function useSiteTreeFormData(
     ),
     metaTitle: new TextField(
       'metaTitle',
-      projectSettings.global.$t('form.table.metaTitle'),
+      projectSettings.global.$t('project.metaTitle'),
     ),
     metaDescription: new TextField(
       'metaDescription',
-      projectSettings.global.$t('form.table.metaDescription'),
+      projectSettings.global.$t('project.metaDescription'),
     ),
     isActive: new CheckboxField(
       'isActive',
-      projectSettings.global.$t('form.table.active'),
+      projectSettings.global.$t('project.active'),
     ),
     isVisible: new CheckboxField(
       'isVisible',
-      projectSettings.global.$t('form.table.visible'),
+      projectSettings.global.$t('project.visible'),
     ),
   }
 

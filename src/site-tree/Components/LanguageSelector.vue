@@ -1,7 +1,7 @@
 <template>
   <div class="flex gap-2 items-center z-[1]" v-bind="$attrs">
     <span class="text-lg uppercase whitespace-nowrap">
-      {{ projectSettings.global.$t('admin.siteTree.siteTree') }}:
+      {{ projectSettings.global.$t('project.siteTree') }}:
     </span>
     <FormInput
       v-if="languageSelectFormField && globalStore.rootSiteTrees?.length"
@@ -10,11 +10,11 @@
       :project-settings="projectSettings"
     />
     <em v-else>
-      {{ projectSettings.global.$t('admin.menu.noLocalesAddedText') }}
+      {{ projectSettings.global.$t('project.menu.noLocalesAddedText') }}
     </em>
     <button
       class="btn btn-sm"
-      :title="projectSettings.global.$t('admin.menu.addLocaleButtonText')"
+      :title="projectSettings.global.$t('project.menu.addLocaleButtonText')"
     >
       <Icon name="Plus" @click="showNewLangModal = true" />
     </button>

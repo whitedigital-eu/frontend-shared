@@ -6,7 +6,7 @@
   >
     <template #header>
       <h2 class="font-medium mr-auto text-base">
-        {{ projectSettings.global.$t('admin.siteTree.createSiteTreeItem') }}
+        {{ projectSettings.global.$t('project.createSiteTreeItem') }}
       </h2>
     </template>
     <template #body>
