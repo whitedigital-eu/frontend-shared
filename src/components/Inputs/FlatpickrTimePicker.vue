@@ -33,7 +33,6 @@ import { computed, onMounted, ref, watch } from 'vue'
 //@ts-ignore
 import flatPickr from 'vue-flatpickr-component'
 import 'flatpickr/dist/flatpickr.css'
-import locales from 'flatpickr/dist/l10n/'
 import { X } from 'lucide-vue-next'
 
 import dayjs from 'dayjs'
@@ -41,7 +40,7 @@ import LocalizedFormat from 'dayjs/plugin/localizedFormat'
 import FormFieldLabel from '../FormFieldLabel.vue'
 import { FlatpickrTimePickerValue } from './ValueTypes'
 import useIsMobile from '../../composables/useIsMobile'
-import { getVueCurrentLocale } from '../../helpers/Translations'
+import { getDefaultFlatpickrConfig } from './Flatpickr'
 
 const {
   modelValue = null,
@@ -83,12 +82,8 @@ const handleLabelClick = () => {
 }
 
 const config: any = {
-  altInput: true,
-  dateFormat: 'Z',
+  ...getDefaultFlatpickrConfig(),
   enableTime: true,
-  time_24hr: true,
-  locale: getVueCurrentLocale() === 'lv' ? locales.lv : undefined,
-  static: true,
   noCalendar: true,
   formatDate: (date: Date) => dayjs(date).format('H:mm'),
 }

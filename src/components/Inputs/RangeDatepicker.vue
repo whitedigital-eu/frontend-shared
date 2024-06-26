@@ -31,14 +31,13 @@ import { computed, ref, watch } from 'vue'
 //@ts-ignore
 import flatPickr from 'vue-flatpickr-component'
 import 'flatpickr/dist/flatpickr.css'
-import locales from 'flatpickr/dist/l10n/'
 import dayjs from 'dayjs'
 import LocalizedFormat from 'dayjs/plugin/localizedFormat'
 import FormFieldLabel from '../FormFieldLabel.vue'
 import { areStringArraysEqual } from '../../helpers/Global'
 import { X } from 'lucide-vue-next'
 import useIsMobile from '../../composables/useIsMobile'
-import { getVueCurrentLocale } from '../../helpers/Translations'
+import { getDefaultFlatpickrConfig } from './Flatpickr'
 
 const props = withDefaults(
   // TODO: remove '' from allowed values, use null instead
@@ -60,14 +59,10 @@ const isEmpty = computed(() => !value.value || value.value.length === 0)
 const isOpen = ref(false)
 
 const config: any = {
-  altInput: true,
+  ...getDefaultFlatpickrConfig(),
   altFormat: 'D-m-y',
-  dateFormat: 'Z',
   enableTime: false,
-  time_24hr: true,
-  locale: getVueCurrentLocale() === 'lv' ? locales.lv : undefined,
   mode: 'range',
-  static: true,
   formatDate: (date: Date) => dayjs(date).format('LL'),
 }
 

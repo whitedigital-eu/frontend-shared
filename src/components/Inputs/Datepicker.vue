@@ -38,7 +38,6 @@
 import { computed, onMounted, ref, watch } from 'vue'
 import FlatPickr from 'vue-flatpickr-component'
 import 'flatpickr/dist/flatpickr.css'
-import locales from 'flatpickr/dist/l10n/'
 import { X } from 'lucide-vue-next'
 import dayjs from 'dayjs'
 import LocalizedFormat from 'dayjs/plugin/localizedFormat'
@@ -47,10 +46,8 @@ import { DatepickerProps } from './PropTypes'
 import _ from 'lodash'
 import useIsMobile from '../../composables/useIsMobile'
 import { capitalizeFirstLetter } from '../../helpers/Global'
-import {
-  getVueCurrentLocale,
-  useI18nWithFallback,
-} from '../../helpers/Translations'
+import { useI18nWithFallback } from '../../helpers/Translations'
+import { getDefaultFlatpickrConfig } from './Flatpickr'
 
 const {
   modelValue = null,
@@ -67,13 +64,9 @@ const computedConfig = computed(() =>
     {
       readonly: false,
       flatpickrConfig: {
-        altInput: true,
+        ...getDefaultFlatpickrConfig(),
         altFormat: 'D-m-y',
-        dateFormat: 'Z',
         enableTime: false,
-        time_24hr: true,
-        locale: getVueCurrentLocale() === 'lv' ? locales.lv : undefined,
-        static: true,
         formatDate: (date: Date) => dayjs(date).format('LL'),
       },
     },
