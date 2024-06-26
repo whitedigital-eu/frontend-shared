@@ -132,7 +132,7 @@
                 >
                   <Icon class="mr-2" name="Save" size="15" />
                   <span>{{
-                    projectSettings.global.$t('project.saveChanged')
+                    projectSettings.global.$t('project.saveChanges')
                   }}</span>
                 </button>
               </div>
