@@ -2,12 +2,25 @@ import { nextTick } from 'vue'
 import { showGlobalError } from './FlashMessages'
 import { TableConfig } from '../components/Table/createTableConfig'
 
-export const resetFormDataErrors = <
-  T extends Record<string, { errors?: string[] }>,
->(
+type NestedObjectWithErrors = Record<
+  string,
+  { errors: string[] } | Record<string, { errors: string[] }>
+>
+
+export const resetFormDataErrors = <T extends NestedObjectWithErrors>(
   formData: T,
 ) => {
-  for (const key in formData) formData[key].errors = []
+  for (const key in formData) {
+    if (!formData[key] || typeof formData[key] !== 'object') {
+      continue
+    }
+
+    if (Array.isArray(formData[key].errors)) {
+      formData[key].errors = []
+    } else {
+      resetFormDataErrors((formData as any)[key])
+    }
+  }
 }
 
 const scrollFirstIncorrectFieldIntoView = (offsetTop = -100) => {
@@ -28,9 +41,7 @@ const scrollFirstIncorrectFieldIntoView = (offsetTop = -100) => {
   })
 }
 
-export const setFormDataErrors = <
-  T extends Record<string, { errors?: string[] }>,
->(
+export const setFormDataErrors = <T extends NestedObjectWithErrors>(
   e: any,
   formData: T,
 ) => {
@@ -52,7 +63,24 @@ export const setFormDataErrors = <
     ).violations.forEach((violation) => {
       const field = formData[violation.propertyPath]
       if (field) {
-        field.errors?.push(violation.message)
+        if (Array.isArray(field.errors)) {
+          field.errors.push(violation.message)
+        } else {
+          const locale: string | undefined =
+            e.response.config.headers['Accept-Language']
+          if (!locale) {
+            console.warn(
+              'No language header set for request with entity translations!',
+            )
+            errorsWithoutFields.push(
+              `${violation.propertyPath}: ${violation.message}`,
+            )
+            return
+          }
+          ;(field as Record<string, { errors: string[] }>)[locale].errors.push(
+            violation.message,
+          )
+        }
       } else {
         errorsWithoutFields.push(
           `${violation.propertyPath}: ${violation.message}`,

@@ -44,6 +44,7 @@ import { watch, ref, computed, Ref, UnwrapRef } from 'vue'
 import { ProjectSettings } from './shared'
 import { FormData } from '../../types/FormData'
 import { GridFormCols } from '../../types/AccordionLayout'
+import { AnyFormField } from '../../models/FormFields'
 
 const { cols = 2, ...props } = defineProps<{
   formData: FormData
@@ -66,24 +67,36 @@ const emit = defineEmits<{
 
 const formData = ref<FormData>(props.formData)
 
-const formDataInLayout = props.formLayout.map((gridItem: string[]) => {
-  return gridItem.map((key: string) => formData.value[key])
-})
+const formDataInLayout = computed(() =>
+  props.formLayout.map((gridItem) => {
+    return gridItem
+      .map((key) => {
+        if (!('value' in formData.value[key])) {
+          console.error(
+            'Entity translations are currently not supported by this component!',
+          )
+          return
+        }
+        return formData.value[key]
+      })
+      .filter(Boolean) as AnyFormField[]
+  }),
+)
 
 watch(formData, () => emit('update:modelValue', formData), { deep: true })
 
 const computedGridColsClass = computed(() => {
   switch (cols) {
     case 1:
-      return `sm:grid-cols-1`
+      return 'sm:grid-cols-1'
     case 2:
-      return `sm:grid-cols-2`
+      return 'sm:grid-cols-2'
     case 3:
-      return `sm:grid-cols-3`
+      return 'sm:grid-cols-3'
     case 4:
-      return `sm:grid-cols-4`
+      return 'sm:grid-cols-4'
     case 5:
-      return `sm:grid-cols-5`
+      return 'sm:grid-cols-5'
     default:
       return ''
   }

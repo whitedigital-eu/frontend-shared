@@ -115,7 +115,9 @@ export default function useSiteTreeFormData(
   if (showParentSelector) formLayout[0].unshift('parent')
 
   return {
-    ...useFormData(baseFormData, prepareFormData, setupWatchers),
+    ...useFormData(baseFormData, prepareFormData, {
+      setupWatchersFunction: setupWatchers,
+    }),
     formLayout,
   }
 }

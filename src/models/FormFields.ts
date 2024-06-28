@@ -36,7 +36,7 @@ export type FormFieldValue =
   | MapCoordinateSelectorFieldValue
 
 export abstract class FormField {
-  public errors?: string[]
+  public errors: string[] = []
   public readonly?: boolean
   public abstract value: FormFieldValue
 
