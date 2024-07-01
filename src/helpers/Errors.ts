@@ -18,7 +18,9 @@ export const resetFormDataErrors = <T extends NestedObjectWithErrors>(
     if (Array.isArray(formData[key].errors)) {
       formData[key].errors = []
     } else {
-      resetFormDataErrors((formData as any)[key])
+      resetFormDataErrors(
+        formData[key as keyof T] as Record<string, { errors: string[] }>,
+      )
     }
   }
 }

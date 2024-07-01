@@ -22,13 +22,13 @@ export const setQueryParam = (key: string, value: string) => {
   window.history.pushState({ path: newUrl }, '', newUrl)
 }
 
-const getFillValue = (apiResponseItem: unknown) => {
+const getFillValue = (apiResponseData: unknown) => {
   const isExpandedResource =
-    apiResponseItem &&
-    typeof apiResponseItem === 'object' &&
-    '@id' in apiResponseItem
+    apiResponseData &&
+    typeof apiResponseData === 'object' &&
+    '@id' in apiResponseData
 
-  return isExpandedResource ? apiResponseItem['@id'] : apiResponseItem
+  return isExpandedResource ? apiResponseData['@id'] : apiResponseData
 }
 
 const fillNonTranslatableFields = <
@@ -78,20 +78,14 @@ export const fillFormDataFrom = <
     apiResponseData !== null &&
     !('@id' in apiResponseData)
   ) {
+    const data = apiResponseData as Record<string, U>
     let nonTranslatableDataFilled = false
     for (const locale in apiResponseData) {
       if (!nonTranslatableDataFilled) {
-        fillNonTranslatableFields(
-          formData,
-          (apiResponseData as Record<string, U>)[locale],
-        )
+        fillNonTranslatableFields(formData, data[locale])
         nonTranslatableDataFilled = true
       }
-      fillTranslatableFields(
-        formData,
-        locale,
-        (apiResponseData as Record<string, U>)[locale],
-      )
+      fillTranslatableFields(formData, locale, data[locale])
     }
   } else {
     fillNonTranslatableFields(formData, apiResponseData)
@@ -206,9 +200,8 @@ export const getFormFieldValues = <T extends FormData>(
       ) {
         val = null
       }
-      res[key as keyof T] = val as any
+      res[key as keyof T] = val
     } else {
-      // Handle nested level
       res[key as keyof T] = {} as any
       for (const subKey in field) {
         const subField = field[subKey] as AnyFormField
