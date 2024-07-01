@@ -46,7 +46,7 @@ export const setFormDataErrors = <T extends NestedObjectWithErrors>(
   formData: T,
 ) => {
   if (!e.response) {
-    showGlobalError(e, { iconClasses: 'text-red-700' })
+    showGlobalError(e)
     return
   }
   console.info('Handling form error', e)
@@ -88,14 +88,10 @@ export const setFormDataErrors = <T extends NestedObjectWithErrors>(
       }
     })
     if (errorsWithoutFields.length) {
-      showGlobalError(errorsWithoutFields.join('; '), {
-        iconClasses: 'text-red-700',
-      })
+      showGlobalError(errorsWithoutFields.join('; '))
     }
   } else if (e.response?.data?.['hydra:description']) {
-    showGlobalError(e.response?.data?.['hydra:description'], {
-      iconClasses: 'text-red-700',
-    })
+    showGlobalError(e.response?.data?.['hydra:description'])
   }
 }
 

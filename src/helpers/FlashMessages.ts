@@ -50,13 +50,10 @@ const createIcon = (icon: typeof CheckCircle, classes: string) => {
   return iconEl
 }
 
-export const showGlobalError = (
-  description: string,
-  options?: { iconClasses?: string },
-) => {
+export const showGlobalError = (description: string) => {
   const element = createToastifyElement(
     `
-        ${createIcon(XCircle, options?.iconClasses ?? 'text-danger').outerHTML}
+        ${createIcon(XCircle, 'text-red-700').outerHTML}
         <div class="ml-4 mr-4">
             <div class="font-medium">${description}</div>
         </div>
@@ -71,13 +68,10 @@ type ToastifyInstance = { showToast(): void; hideToast(): void }
 
 let activeSuccessToast: ToastifyInstance | null = null
 
-export const showSuccessMessage = (
-  successMessage: string,
-  options?: { iconClasses?: string },
-) => {
+export const showSuccessMessage = (successMessage: string) => {
   const successElement = createToastifyElement(
     `
-        ${createIcon(CheckCircle, options?.iconClasses ?? 'text-success').outerHTML}
+        ${createIcon(CheckCircle, 'text-green-700').outerHTML}
         <div class="ml-4 mr-4">
             <div class="font-medium">${successMessage}</div>
         </div>
@@ -94,10 +88,7 @@ export const showSuccessMessage = (
   activeSuccessToast.showToast()
 }
 
-export const showWriteRequestSuccess = (
-  methodName: string,
-  options?: { iconClasses?: string },
-) => {
+export const showWriteRequestSuccess = (methodName: string) => {
   const successMessage = getSuccessMessage(methodName)
-  showSuccessMessage(successMessage, options)
+  showSuccessMessage(successMessage)
 }

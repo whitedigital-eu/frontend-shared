@@ -2,6 +2,7 @@ import { InputField } from '../types/InputFields'
 import { FormData } from '../types/FormData'
 import { resetFormDataErrors } from './Errors'
 import { AnyFormField } from '../models/FormFields'
+import { cloneDeep } from 'lodash'
 
 export const getQueryParam = (key: string) => {
   const searchParams = new URLSearchParams(window.location.search)
@@ -225,3 +226,13 @@ export const getFormFieldValues = <T extends FormData>(
 
 export const capitalizeFirstLetter = (string: string) =>
   string.charAt(0).toUpperCase() + string.slice(1)
+
+export const deepCloneClassInstance = <
+  T extends object & { constructor: Function },
+>(
+  classInstance: T,
+) => {
+  const clonedObj = cloneDeep(classInstance)
+  Object.setPrototypeOf(clonedObj, Object.getPrototypeOf(classInstance))
+  return clonedObj as T
+}
