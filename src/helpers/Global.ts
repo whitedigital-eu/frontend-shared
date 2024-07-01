@@ -1,6 +1,8 @@
 import { InputField } from '../types/InputFields'
 import { FormData } from '../types/FormData'
 import { resetFormDataErrors } from './Errors'
+import { AnyFormField } from '../models/FormFields'
+import { cloneDeep } from 'lodash'
 
 export const getQueryParam = (key: string) => {
   const searchParams = new URLSearchParams(window.location.search)
@@ -20,7 +22,16 @@ export const setQueryParam = (key: string, value: string) => {
   window.history.pushState({ path: newUrl }, '', newUrl)
 }
 
-export const fillFormDataFrom = <
+const getFillValue = (apiResponseData: unknown) => {
+  const isExpandedResource =
+    apiResponseData &&
+    typeof apiResponseData === 'object' &&
+    '@id' in apiResponseData
+
+  return isExpandedResource ? apiResponseData['@id'] : apiResponseData
+}
+
+const fillNonTranslatableFields = <
   T extends FormData,
   U extends Record<string, unknown> | null | undefined,
 >(
@@ -28,20 +39,58 @@ export const fillFormDataFrom = <
   apiResponseData: U,
 ) => {
   for (const key in apiResponseData) {
-    if (key in formData) {
-      const apiResponseItem = apiResponseData[key]
-      const isExpandedResource =
-        apiResponseItem &&
-        typeof apiResponseItem === 'object' &&
-        '@id' in apiResponseItem
-
-      if (isExpandedResource) {
-        formData[key].value = apiResponseItem['@id']
-      } else {
-        formData[key].value = apiResponseItem
-      }
+    if (!(key in formData) || !('value' in formData[key])) {
+      continue
     }
+
+    formData[key].value = getFillValue(apiResponseData[key])
   }
+}
+
+const fillTranslatableFields = <
+  T extends FormData,
+  U extends Record<string, unknown> | null | undefined,
+>(
+  formData: T,
+  locale: string,
+  apiResponseData: U,
+) => {
+  for (const key in apiResponseData) {
+    const item = formData[key]
+    if (!item || 'value' in item || !(locale in item)) {
+      continue
+    }
+
+    item[locale].value = getFillValue(apiResponseData[key])
+  }
+}
+
+export const fillFormDataFrom = <
+  T extends FormData,
+  U extends Record<string, unknown>,
+  V extends U | Record<string, U> | null | undefined,
+>(
+  formData: T,
+  apiResponseData: V,
+) => {
+  if (
+    typeof apiResponseData === 'object' &&
+    apiResponseData !== null &&
+    !('@id' in apiResponseData)
+  ) {
+    const data = apiResponseData as Record<string, U>
+    let nonTranslatableDataFilled = false
+    for (const locale in apiResponseData) {
+      if (!nonTranslatableDataFilled) {
+        fillNonTranslatableFields(formData, data[locale])
+        nonTranslatableDataFilled = true
+      }
+      fillTranslatableFields(formData, locale, data[locale])
+    }
+  } else {
+    fillNonTranslatableFields(formData, apiResponseData)
+  }
+
   return formData
 }
 
@@ -126,26 +175,43 @@ export const defaultReferenceInputTypes = [
   'signature',
 ]
 
-export const getFormFieldValues = <
-  T extends Record<string, { value: any; type: string }>,
->(
+export const getFormFieldValues = <T extends FormData>(
   formData: T,
   referenceInputTypes = defaultReferenceInputTypes,
   propertiesToExclude: Array<keyof T> = [],
 ) => {
   const res = {} as {
-    [K in keyof T]: T[K] extends { name: string; value: infer V } ? V : never
+    [K in keyof T]: T[K] extends { value: infer V } | undefined
+      ? V
+      : {
+          [K2 in keyof T[K]]: T[K][K2] extends { value: infer V2 } ? V2 : never
+        }
   }
 
   for (const key in formData) {
     if (propertiesToExclude.includes(key)) continue
-    let val = formData[key].value as any
+    const field = formData[key]
 
-    if (referenceInputTypes.includes(formData[key].type) && val === '') {
-      val = null
+    if ('value' in field) {
+      let val = field.value
+      if (
+        referenceInputTypes.includes((field as AnyFormField).type) &&
+        val === ''
+      ) {
+        val = null
+      }
+      res[key as keyof T] = val
+    } else {
+      res[key as keyof T] = {} as any
+      for (const subKey in field) {
+        const subField = field[subKey] as AnyFormField
+        let val = subField.value
+        if (referenceInputTypes.includes(subField.type) && val === '') {
+          val = null
+        }
+        ;(res[key as keyof T] as any)[subKey] = val
+      }
     }
-
-    res[key as keyof T] = val
   }
 
   return res
@@ -153,3 +219,13 @@ export const getFormFieldValues = <
 
 export const capitalizeFirstLetter = (string: string) =>
   string.charAt(0).toUpperCase() + string.slice(1)
+
+export const deepCloneClassInstance = <
+  T extends object & { constructor: Function },
+>(
+  classInstance: T,
+) => {
+  const clonedObj = cloneDeep(classInstance)
+  Object.setPrototypeOf(clonedObj, Object.getPrototypeOf(classInstance))
+  return clonedObj as T
+}
