@@ -45,6 +45,7 @@ import {
 } from '../../helpers/Translations'
 import { TableProps } from './createTableConfig'
 import { capitalizeFirstLetter } from '../../helpers/Global'
+import { HTTPError } from 'ky'
 /*
  * Since only props can be generic (in other words, it is not possible to pass just a generic, without a prop),
  * we need the fake resourceType prop which is used only to get the generic type.
@@ -417,7 +418,7 @@ const initTabulator = async (resetPage = false) => {
         return { last_page: page, data: response['hydra:member'] }
       },
       ajaxError(error) {
-        handleTableAjaxError(error, props.config.tableErrorHandler)
+        handleTableAjaxError(error as HTTPError, props.config.tableErrorHandler)
       },
       pageLoaded: (pageno: number) => {
         if (!tabulator.value) return
@@ -503,13 +504,20 @@ const initTabulator = async (resetPage = false) => {
     options = { ...options, ...props.tabulatorOptions }
   }
 
-  if (props.config.axiosInstance) {
+  if (props.config.kyInstance) {
     options = {
       ...options,
-      ajaxRequestFunc(url, config, params) {
+      ajaxRequestFunc(url, config, params: Record<string, string>) {
+        const urlObject = new URL(url)
+        Object.entries(params).forEach(([key, value]) => {
+          urlObject.searchParams.append(key, value)
+        })
         return props.config
-          .axiosInstance!.get(url, { headers: config.headers, params })
-          .then((response) => response.data)
+          .kyInstance!.get(urlObject.href, {
+            headers: config.headers,
+            prefixUrl: '',
+          })
+          .then((response) => response.json())
       },
     }
   }

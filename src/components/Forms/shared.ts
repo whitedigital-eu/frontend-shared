@@ -1,6 +1,6 @@
 import { SiteTreeRead } from '../../site-tree/Types/SiteTree'
-import { AxiosRequestConfig } from 'axios'
 import { SelectOption } from '../../models/FormFields'
+import { KyInstance } from 'ky'
 
 export type ProjectSettings = {
   global: {
@@ -13,42 +13,27 @@ export type ProjectSettings = {
     }
     $t: (...args: any[]) => string
     defaultLocale: string
+    kyInstance: KyInstance
   }
   siteTree: {
     siteTreeRepository: {
-      get: (
-        iriOrId: string | number,
-        config?: AxiosRequestConfig,
-      ) => Promise<SiteTreeRead>
-      create: (
-        data: Record<string, any>,
-        config?: AxiosRequestConfig,
-      ) => Promise<SiteTreeRead>
+      get: (id: string) => Promise<SiteTreeRead | undefined>
+      create: (data: Record<string, any>) => Promise<SiteTreeRead | undefined>
       update: (
-        iriOrId: string | number,
+        iri: string,
         data: Record<string, any>,
-        config?: AxiosRequestConfig,
-      ) => Promise<SiteTreeRead>
-      delete: (iriOrId: string | number) => Promise<void>
-      createOrUpdate: (
-        iriOrId: string | number | null | undefined,
-        data: Record<string, any>,
-        config?: AxiosRequestConfig,
-      ) => Promise<SiteTreeRead>
+      ) => Promise<SiteTreeRead | undefined>
       moveToPosition: (
-        iriOrId: string | number,
-        position: number,
-        config?: AxiosRequestConfig,
-      ) => Promise<SiteTreeRead>
+        id: string,
+        position: string,
+      ) => Promise<SiteTreeRead | undefined>
     }
     siteTreeTypeToLabel: (...args: any[]) => string
     getSiteTreeTypeSelectOptions: (...args: any[]) => SelectOption<any, any>[]
     getSiteTreeSelectOptions: (
       ...args: any[]
     ) => Promise<SelectOption<string, SiteTreeRead['@id']>[]>
-    siteTreeTypeToRepository: (...args: any[]) => {
-      list: (...args: any[]) => Promise<any>
-    } | null
+    siteTreeTypeToApiPath: (...args: any[]) => string | null
     siteTreeTypeToComponent: (...args: any[]) => any
   }
   form: {

@@ -1,6 +1,6 @@
 import { ProjectSettings } from '../../components/Forms/shared'
-import { AxiosRequestConfig } from 'axios'
 import { SiteTreeRead } from '../Types/SiteTree'
+import ky from 'ky'
 
 export const mockSiteTreeRead: SiteTreeRead = {
   '@context': 'context',
@@ -79,31 +79,18 @@ export const mockProjectSettings: ProjectSettings = {
     }),
     $t: (...args: any[]) => 'Translated string',
     defaultLocale: 'en-US',
+    kyInstance: ky.create({}),
   },
   siteTree: {
     siteTreeRepository: {
-      get: async (iriOrId: string | number, config?: AxiosRequestConfig) =>
+      get: async (id: string) =>
         new Promise((resolve) => resolve(mockSiteTreeRead)),
-      create: async (data: Record<string, any>, config?: AxiosRequestConfig) =>
+      create: async (data: Record<string, any>) =>
         new Promise((resolve) => resolve(mockSiteTreeRead)),
-      update: async (
-        iriOrId: string | number,
-        data: Record<string, any>,
-        config?: AxiosRequestConfig,
-      ) => new Promise((resolve) => resolve(mockSiteTreeRead)),
-      delete: async (iriOrId: string | number) => {
-        console.log('delete called')
-      },
-      createOrUpdate: async (
-        iriOrId: string | number | null | undefined,
-        data: Record<string, any>,
-        config?: AxiosRequestConfig,
-      ) => new Promise((resolve) => resolve(mockSiteTreeRead)),
-      moveToPosition: async (
-        iriOrId: string | number,
-        position: number,
-        config?: AxiosRequestConfig,
-      ) => new Promise((resolve) => resolve(mockSiteTreeRead)),
+      update: async (iri: string, data: Record<string, any>) =>
+        new Promise((resolve) => resolve(mockSiteTreeRead)),
+      moveToPosition: async (id: string, position: string) =>
+        new Promise((resolve) => resolve(mockSiteTreeRead)),
     },
     siteTreeTypeToLabel: (...args: any[]) => 'Mock Label',
     getSiteTreeTypeSelectOptions: (...args: any[]) => [
@@ -126,9 +113,7 @@ export const mockProjectSettings: ProjectSettings = {
         value: mockSiteTreeRead['@id'],
       },
     ],
-    siteTreeTypeToRepository: (...args: any[]) => ({
-      list: async (...args: any[]) => [],
-    }),
+    siteTreeTypeToApiPath: (...args: any[]) => '/api/htmls',
     siteTreeTypeToComponent: (...args: any[]) => ({
       componentName: 'MockComponent',
     }),

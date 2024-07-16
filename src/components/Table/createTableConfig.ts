@@ -1,6 +1,6 @@
-import { AxiosInstance } from 'axios'
 import Tabulator from 'tabulator-tables'
 import { CustomAction } from './ActionColumn'
+import { KyInstance } from 'ky'
 
 type SharedColumnNames = { created: string; updated: string }
 
@@ -9,7 +9,7 @@ export type TableConfig = {
   ajaxConfig: Tabulator.Options['ajaxConfig']
   dateTimeFormatter: (dateString: string) => string
   tableErrorHandler?: (status: number, errorData: any) => Promise<void>
-  axiosInstance?: AxiosInstance
+  kyInstance?: KyInstance
 }
 
 const createTableConfig = (config: Partial<TableConfig> = {}): TableConfig => {

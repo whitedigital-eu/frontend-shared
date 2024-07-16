@@ -56,7 +56,7 @@ const { formData, formLayout } = useSiteTreeFormData(
 )
 
 const isLoading = ref(false)
-const internalSiteTree = ref(siteTree)
+const internalSiteTree = ref<typeof siteTree | undefined>(siteTree)
 
 const createOrUpdate = async () => {
   if (!formData.value) {
@@ -92,11 +92,12 @@ const createOrUpdate = async () => {
   }
 
   try {
-    internalSiteTree.value =
-      await projectSettings.siteTree.siteTreeRepository.createOrUpdate(
-        internalSiteTree.value?.['@id'],
-        data,
-      )
+    internalSiteTree.value = await (internalSiteTree.value?.['@id']
+      ? projectSettings.siteTree.siteTreeRepository.update(
+          internalSiteTree.value['@id'],
+          data,
+        )
+      : projectSettings.siteTree.siteTreeRepository.create(data))
     emit(
       'success',
       internalSiteTree.value as SiteTreeRead,
@@ -104,7 +105,7 @@ const createOrUpdate = async () => {
       formData.value.isVisible.value,
     )
   } catch (e: any) {
-    setFormDataErrors(e, formData.value)
+    await setFormDataErrors(e, formData.value)
   } finally {
     isLoading.value = false
     emit('finished')

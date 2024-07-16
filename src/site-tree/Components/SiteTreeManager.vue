@@ -264,6 +264,7 @@ const duplicateSiteTree = async (
   try {
     const newSiteTree =
       await props.projectSettings.siteTree.siteTreeRepository.create(clone)
+    if (!newSiteTree) return
     siteTreeToEdit.value = new SiteTreeNode(
       newSiteTree.id,
       newSiteTree['@id'],
@@ -287,7 +288,7 @@ const duplicateSiteTree = async (
 
 const onDeletionConfirmed = async () => {
   try {
-    await props.projectSettings.siteTree.siteTreeRepository.delete(
+    await props.projectSettings.global.kyInstance.delete(
       siteTreeToDelete.value!['@id'],
     )
   } catch (e) {
@@ -360,8 +361,8 @@ const saveSiteTreeChanges = async () => {
     }
 
     await props.projectSettings.siteTree.siteTreeRepository.moveToPosition(
-      siteTreeChangedData.value.node['@id'],
-      siteTreeChangedData.value.position,
+      siteTreeChangedData.value.node.id.toString(),
+      siteTreeChangedData.value.position.toString(),
     )
   } catch (e) {
     console.error(e)

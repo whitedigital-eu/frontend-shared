@@ -70,22 +70,15 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-  'site-tree-item-loaded': [siteTreeItem: SiteTreeRead | null]
+  'site-tree-item-loaded': [siteTreeItem: SiteTreeRead | null | undefined]
 }>()
 
 const router = useRouter()
 
-const siteTreeItem = ref<SiteTreeRead | null>(null)
+const siteTreeItem = ref<SiteTreeRead>()
 const contentTypeItem = ref<Record<string, unknown> | null>(null)
 const contentTypeItemLoaded = ref(false)
 const loadingState = ref(false)
-
-const siteTreeContentRepository = computed(() => {
-  if (!siteTreeItem.value) return null
-  return props.projectSettings.siteTree.siteTreeTypeToRepository(
-    siteTreeItem.value.type,
-  )
-})
 
 const componentToRender = computed<any>(() => {
   if (!siteTreeItem.value) return null
@@ -97,14 +90,22 @@ const componentToRender = computed<any>(() => {
 const loadData = async () => {
   try {
     siteTreeItem.value =
-      await props.projectSettings.siteTree.siteTreeRepository.get(props.id)
+      await props.projectSettings.siteTree.siteTreeRepository.get(
+        props.id.toString(),
+      )
+    if (!siteTreeItem.value) return
 
-    if (!siteTreeContentRepository.value) {
-      throw new Error('Repository not found')
-    }
-    const matchingContentTypeItems = await siteTreeContentRepository.value.list(
-      { params: { 'node.id': siteTreeItem.value.id } },
+    const apiPath = props.projectSettings.siteTree.siteTreeTypeToApiPath(
+      siteTreeItem.value.type,
     )
+    if (!apiPath) {
+      throw new Error('Api path not found')
+    }
+    const matchingContentTypeItems = (await (
+      await props.projectSettings.global.kyInstance.get(apiPath, {
+        searchParams: { 'node.id': siteTreeItem.value.id },
+      })
+    ).json()) as any
     contentTypeItem.value = matchingContentTypeItems.length
       ? matchingContentTypeItems[0]
       : null
@@ -143,7 +144,7 @@ const updateSiteTreeItem = async () => {
     if (siteTreeItem.value) {
       siteTreeItem.value =
         await props.projectSettings.siteTree.siteTreeRepository.update(
-          siteTreeItem.value.id,
+          siteTreeItem.value['@id'],
           {
             isActive: siteTreeForm.value?.siteTreeActive.value,
             isVisible: siteTreeForm.value?.siteTreeVisible.value,

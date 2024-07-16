@@ -1,6 +1,7 @@
 import { nextTick } from 'vue'
 import { showGlobalError } from './FlashMessages'
 import { TableConfig } from '../components/Table/createTableConfig'
+import { HTTPError } from 'ky'
 
 type NestedObjectWithErrors = Record<
   string,
@@ -43,7 +44,7 @@ const scrollFirstIncorrectFieldIntoView = (offsetTop = -100) => {
   })
 }
 
-export const setFormDataErrors = <T extends NestedObjectWithErrors>(
+export const setFormDataErrors = async <T extends NestedObjectWithErrors>(
   e: any,
   formData: T,
 ) => {
@@ -52,24 +53,37 @@ export const setFormDataErrors = <T extends NestedObjectWithErrors>(
     return
   }
   console.info('Handling form error', e)
+
+  const data = (
+    !('data' in e.response)
+      ? await (e as HTTPError).response.json()
+      : e.response?.data
+        ? e.response.data
+        : null
+  ) as
+    | { violations?: Array<{ propertyPath: string; message: string }> }
+    | undefined
+
+  const headers =
+    'headers' in e.response
+      ? e.response.headers
+      : 'headers' in e.response.config
+        ? e.response.config.headers
+        : null
+
   if (e.response.status !== 422) return formData
   resetFormDataErrors(formData)
 
   const errorsWithoutFields: string[] = []
 
-  if (e.response?.data.violations) {
-    ;(
-      e.response.data as {
-        violations: Array<{ propertyPath: string; message: string }>
-      }
-    ).violations.forEach((violation) => {
+  if (data?.violations) {
+    data.violations.forEach((violation) => {
       const field = formData[violation.propertyPath]
       if (field) {
         if (Array.isArray(field.errors)) {
           field.errors.push(violation.message)
         } else {
-          const locale: string | undefined =
-            e.response.config.headers['Accept-Language']
+          const locale: string | undefined = headers?.['Accept-Language']
           if (!locale) {
             console.warn(
               'No language header set for request with entity translations!',
@@ -97,41 +111,24 @@ export const setFormDataErrors = <T extends NestedObjectWithErrors>(
   }
 }
 
-export const handleTableAjaxError = (
-  error: any,
+export const handleTableAjaxError = async (
+  error: HTTPError,
   apiErrorHandler?: TableConfig['tableErrorHandler'],
 ) => {
-  const reader = error.body.getReader()
+  const errorData = await error.response.json()
 
-  new ReadableStream({
-    start(controller) {
-      function push() {
-        reader.read().then(({ done, value }: { done: any; value: any }) => {
-          if (done) {
-            controller.close()
-            return
-          }
-          controller.enqueue(value)
-          const string = new TextDecoder().decode(value)
-          const errorData = JSON.parse(string)
-          if (errorData) {
-            if (
-              errorData['@context'] === '/api/contexts/Error' &&
-              apiErrorHandler &&
-              typeof apiErrorHandler === 'function'
-            ) {
-              apiErrorHandler(error.status, errorData)
-            } else {
-              showGlobalError(errorData.message)
-            }
-          }
-          push()
-        })
-      }
+  if (errorData) {
+    if (
+      errorData['@context'] === '/api/contexts/Error' &&
+      apiErrorHandler &&
+      typeof apiErrorHandler === 'function'
+    ) {
+      apiErrorHandler(error.response.status, errorData)
+    } else {
+      showGlobalError(error.message)
+    }
+  }
 
-      push()
-    },
-  })
   Promise.reject(error)
 }
 

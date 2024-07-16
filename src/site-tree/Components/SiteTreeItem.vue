@@ -18,7 +18,7 @@
         class="inline-block max-w-[300px] overflow-hidden text-ellipsis whitespace-nowrap"
         :class="{
           'opacity-50 pointer-events-none cursor-default':
-            !siteTreeContentRepository,
+            !siteTreeContentApiPath,
         }"
         :to="{ name: 'SITE_TREE_CONTENT', params: { id: node.id } }"
       >
@@ -101,10 +101,9 @@ const emit = defineEmits<{
   'click:delete': []
 }>()
 
-const siteTreeContentRepository = computed(() => {
-  if (!props.node) return null
-  return props.projectSettings.siteTree.siteTreeTypeToRepository(
-    props.node.type,
-  )
-})
+const siteTreeContentApiPath = computed(
+  () =>
+    props.node &&
+    props.projectSettings.siteTree.siteTreeTypeToApiPath(props.node.type),
+)
 </script>
