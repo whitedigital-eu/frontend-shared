@@ -68,15 +68,17 @@ const createOrUpdate = async () => {
 
   isLoading.value = true
 
-  const data: SiteTreeWrite = getFormFieldValues(
+  const data: Partial<SiteTreeWrite> = getFormFieldValues(
     formData.value,
     projectSettings.form.referenceInputTypes,
-  )
+  ) as any
   if (!internalSiteTree.value && !showParentSelector && parent) {
     data.parent = parent
   }
   if (!internalSiteTree.value) {
+    //@ts-ignore
     delete data.isVisible
+    //@ts-ignore
     delete data.isActive
   }
   if (internalSiteTree.value) {

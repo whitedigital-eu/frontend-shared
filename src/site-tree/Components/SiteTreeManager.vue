@@ -249,17 +249,15 @@ const duplicateSiteTree = async (
   stat: { parent?: { data: SiteTreeNode } },
 ) => {
   if (!currentLangSiteTree.value) return
-  const clone: SiteTreeWrite = {
+  const clone: Partial<SiteTreeWrite> = {
     parent:
       stat.parent?.data['@id'] ??
       (currentLangSiteTree.value as SiteTreeNode)['@id'],
     title: st.title,
     type: st.type,
-    isActive: st.isActive,
-    isVisible: st.isVisible,
     slug: createSlugCopy(st.slug),
-    metaTitle: st.metaTitle,
-    metaDescription: st.metaDescription,
+    metaTitle: st.metaTitle ?? '',
+    metaDescription: st.metaDescription ?? '',
   }
   try {
     const newSiteTree =
@@ -275,7 +273,7 @@ const duplicateSiteTree = async (
       newSiteTree.isVisible,
       newSiteTree.metaTitle,
       newSiteTree.metaDescription,
-      newSiteTree.parent,
+      (newSiteTree as any).parent,
     )
 
     siteTreeFormKey.value++

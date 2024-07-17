@@ -1,38 +1,38 @@
-import { Modify, NotNullableOptional, NullableOptional } from './Shared'
-
-export type SiteTreeWrite = NullableOptional<{
-  root: SiteTreeRead['@id']
-  parent: SiteTreeRead['@id']
-  children: SiteTreeRead['@id'][]
+export type SiteTreeWrite = {
+  root: SiteTreeRead['@id'] | SiteTreeRead
+  level: number
+  parent?: SiteTreeRead['@id'] | SiteTreeRead
+  title: string
+  slug: string
+  metaTitle: string
+  metaDescription: string
   type: string
+  /** @example [
+   *       "/api/site_trees/1"
+   *     ] */
+  children: unknown
+}
+
+export type SiteTreeRead = {
+  /** @example /api/site_trees/1 */
+  readonly '@id': '/api/site_trees/{id}'
+  id: number
+  root: SiteTreeRead['@id']
+  level: number
+  left: number
   isActive: boolean
   isVisible: boolean
   title: string
   slug: string
   metaTitle: string
   metaDescription: string
-}>
-
-export type SiteTreeRead = {
-  '@context': string
-  '@id': string
-  '@type': string
-  id: number
-  createdAt: string
-  updatedAt: string
-} & Modify<
-  NotNullableOptional<SiteTreeWrite>,
-  {
-    title: string
-    slug: string
-    type: string
-    root: undefined
-    parent: undefined
-    children: SiteTreeRead[]
-    isActive: boolean
-    isVisible: boolean
-  }
-> & {
-    level: number
-    left: number
-  }
+  type: string
+  /** @example [
+   *       "/api/site_trees/1"
+   *     ] */
+  children: unknown
+  /** Format: date-time */
+  createdAt?: string | null
+  /** Format: date-time */
+  updatedAt?: string | null
+}

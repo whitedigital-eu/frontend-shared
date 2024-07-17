@@ -3,12 +3,10 @@ import { SiteTreeRead } from '../Types/SiteTree'
 import ky from 'ky'
 
 export const mockSiteTreeRead: SiteTreeRead = {
-  '@context': 'context',
   id: 1,
-  '@type': 'site_tree',
   createdAt: '2023-01-01T00:00:00+00:00',
   updatedAt: '2023-01-01T00:00:00+00:00',
-  '@id': '/api/site_trees/1',
+  '@id': '/api/site_trees/{id}',
   title: 'Root Node',
   slug: 'root-node',
   type: 'html',
@@ -16,8 +14,7 @@ export const mockSiteTreeRead: SiteTreeRead = {
   isVisible: true,
   metaTitle: 'Root Meta Title',
   metaDescription: 'Root Meta Description',
-  root: undefined,
-  parent: undefined,
+  root: '/api/site_trees/{id}',
   level: 0,
   left: 0,
   children: [
@@ -31,7 +28,6 @@ export const mockSiteTreeRead: SiteTreeRead = {
       metaTitle: 'Child Meta Title',
       metaDescription: 'Child Meta Description',
       root: undefined,
-      parent: undefined,
       children: [],
       level: 1,
       left: 0,
@@ -52,7 +48,6 @@ export const mockSiteTreeRead: SiteTreeRead = {
       metaTitle: 'Child Meta Title 2',
       metaDescription: 'Child Meta Description 2',
       root: undefined,
-      parent: undefined,
       children: [],
       level: 1,
       left: 0,

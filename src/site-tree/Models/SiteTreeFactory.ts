@@ -6,7 +6,7 @@ export default class SiteTreeFactory {
     st: SiteTreeRead,
     node: SiteTreeNode,
   ): SiteTreeNode {
-    for (const childSt of st.children) {
+    for (const childSt of st.children as SiteTreeRead[]) {
       const childNode = new SiteTreeNode(
         childSt.id,
         childSt['@id'],
