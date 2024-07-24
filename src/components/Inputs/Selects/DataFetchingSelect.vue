@@ -6,8 +6,10 @@
     :config="computedConfig"
     :label="label"
     :search-input-placeholder="searchInputPlaceholder"
-    @create-new-item="(item) => $emit('create-new-item', item)"
-    @update:model-value="(value) => $emit('update:modelValue', value)"
+    @create-new-item="
+      (item: string | undefined) => $emit('create-new-item', item)
+    "
+    @update:model-value="(v) => $emit('update:modelValue', v)"
   />
 </template>
 
