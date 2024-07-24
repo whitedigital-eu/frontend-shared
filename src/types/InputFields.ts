@@ -1,6 +1,9 @@
 import { SelectOption } from '../models/FormFields'
 import { Modify } from '../site-tree/Types/Shared'
-import { RecursivePartial, TomSettings } from 'tom-select/src/types'
+import {
+  RecursivePartial,
+  TomSettings,
+} from 'whitedigital-eu-tom-select/src/types'
 import { VueTelInputProps } from 'vue-tel-input'
 import { AxiosInstance } from 'axios'
 import { DropzoneOptions } from 'dropzone'

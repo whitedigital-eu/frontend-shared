@@ -1,6 +1,6 @@
 {
   "name": "@whitedigital-eu/wd-frontend-shared",
-  "version": "0.14.2",
+  "version": "0.14.3",
   "author": "Imants Liepiņš",
   "license": "MIT",
   "description": "Shared components, helpers, composables and types for vue frontend SPAs",
@@ -86,7 +86,6 @@
     "slugify": "^1.6.6",
     "tabulator-tables": "^4.9",
     "toastify-js": "^1.9.3",
-    "tom-select": "^2.3.1",
     "ts-node": "^10.9.1",
     "vue": "^3.4.27",
     "vue-flatpickr-component": "^11.0.3",
@@ -96,7 +95,8 @@
     "vue-slider-component": "4.0.0-beta.5",
     "vue-tel-input": "^8.3.1",
     "vue3-google-map": "^0.19.0",
-    "vue3-toastify": "^0.2.1"
+    "vue3-toastify": "^0.2.1",
+    "whitedigital-eu-tom-select": "^2.3.4"
   },
   "devDependencies": {
     "@ckeditor/vite-plugin-ckeditor5": "^0.1.1",
@@ -129,7 +129,7 @@
     "tailwindcss": "^3.1.8",
     "tippy.js": "^6.3.7",
     "type-coverage": "^2.21.1",
-    "typescript": "~5.4",
+    "typescript": "^5.5.4",
     "vite": "^4.4.7",
     "vite-plugin-mkcert": "^1.6.0",
     "vitest": "^0.34.6",

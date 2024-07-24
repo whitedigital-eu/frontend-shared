@@ -22,7 +22,7 @@
 
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from 'vue'
-import TomSelect from 'tom-select'
+import TomSelect from 'whitedigital-eu-tom-select'
 import { SelectOption } from '../../models/FormFields'
 
 const props = defineProps<{

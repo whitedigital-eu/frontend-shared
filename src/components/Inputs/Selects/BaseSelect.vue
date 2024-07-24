@@ -34,8 +34,8 @@
 
 <script setup lang="ts" generic="T extends string | number">
 import { computed, ref, onMounted, watch, onBeforeUnmount } from 'vue'
-import TomSelect from 'tom-select'
-import 'tom-select/dist/css/tom-select.css'
+import TomSelect from 'whitedigital-eu-tom-select'
+import 'whitedigital-eu-tom-select/dist/css/tom-select.css'
 import FormFieldLabel from '../../FormFieldLabel.vue'
 import { createElement, Users, Phone, Video, Mail } from 'lucide'
 import type {
@@ -43,7 +43,7 @@ import type {
   TomOption,
   TomSettings,
   TomTemplate,
-} from 'tom-select/src/types'
+} from 'whitedigital-eu-tom-select/src/types'
 import _ from 'lodash'
 import { SelectConfig } from '../../../types/InputFields'
 import { useI18nWithFallback } from '../../../helpers/Translations'
