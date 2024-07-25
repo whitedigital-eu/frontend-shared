@@ -17,7 +17,6 @@
 import { computed, ref, watch } from 'vue'
 import BaseSelect from './BaseSelect.vue'
 import { DataFetchingSelectConfig } from '../../../types/InputFields'
-import { AxiosInstance } from 'axios'
 import { SelectOption } from '../../../models/FormFields'
 import _ from 'lodash'
 
@@ -27,7 +26,6 @@ const props = withDefaults(
     config: DataFetchingSelectConfig<T>
     modelValue?: T | T[] | null
     label?: string
-    axiosInstance: AxiosInstance
   }>(),
   { modelValue: null, label: '' },
 )
@@ -53,12 +51,7 @@ const computedConfig = computed(() =>
           searchValue: string,
           callback: (options: SelectOption[]) => void,
         ) {
-          const requestUrl = props.config.requestUrlGenerator(searchValue)
-          const res = await props.axiosInstance.get(requestUrl)
-          const options: { value: string; text: string }[] = res.data[
-            'hydra:member'
-          ].map(props.config.responseMapFunction)
-          callback(options)
+          callback(await props.config.loadOptionsFunction(searchValue))
         },
         options: [],
       },

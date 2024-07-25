@@ -79,7 +79,6 @@
       <DataFetchingSelect
         id="user-select"
         v-model="user"
-        :axios-instance="axiosInstance"
         :config="userSelectConfig"
         label="Select user"
       />
@@ -89,7 +88,7 @@
       <FileUpload
         v-model="profilePicture"
         :config="{
-          axiosInstance: axios,
+          kyInstance: kyInstance,
           hostUrl: 'www.example.com',
           allowDownload: true,
           allowEdit: true,
@@ -159,7 +158,6 @@
 
 <script setup lang="ts">
 import { ref, watch } from 'vue'
-import axios from 'axios'
 import Text from '../../components/Inputs/Text.vue'
 import Decimal from '../../components/Inputs/Decimal.vue'
 import TextEditor from '../../components/Inputs/TextEditor.vue'
@@ -186,6 +184,7 @@ import {
   showSuccessMessage,
 } from '../../helpers/FlashMessages'
 import DataFetchingSelect from '../../components/Inputs/Selects/DataFetchingSelect.vue'
+import ky from 'ky'
 
 const fullName = ref('')
 const favouriteFood = ref('Pasta')
@@ -235,7 +234,7 @@ watch(showSelect, (n) => {
   if (!n) role2.value = ''
 })
 
-const axiosInstance = axios.create()
+const kyInstance = ky.create({})
 
 const roleOptions: SelectOption[] = [
   new SelectOption('User', 'ROLE_USER'),
@@ -253,9 +252,13 @@ const otherRoleOptions: SelectOption[] = [
 const roleSelectConfig = ref({ tomSelectSettings: { options: roleOptions } })
 
 const userSelectConfig: DataFetchingSelectConfig = {
-  requestUrlGenerator: (searchValue: string) =>
-    `https://randomuser.me/api?name=${searchValue}`,
-  responseMapFunction: () => new SelectOption('test', 'test'),
+  async loadOptionsFunction(searchValue) {
+    return (
+      (await (
+        await kyInstance.get(`https://randomuser.me/api?name=${searchValue}`)
+      ).json()) as unknown[]
+    ).map(() => new SelectOption('test', 'test'))
+  },
 }
 
 const htmlContent = ref(`

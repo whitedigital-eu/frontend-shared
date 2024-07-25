@@ -1,5 +1,5 @@
 import { TranslationConfig } from '../types/TranslationTypes'
-import axios from 'axios'
+import ky from 'ky'
 
 export const getUrlLocale = (
   availableLocales: string[],
@@ -39,12 +39,13 @@ export const switchLocale = (
 export const loadTranslations = (
   config: TranslationConfig,
 ): Promise<TranslationConfig> => {
-  return axios
-    .get(config.localeJsonUrl, {
-      headers: { accept: 'application/ld+json' },
-    })
-    .then((response) => {
-      config.translations = response.data.translations
+  return ky
+    .get(config.localeJsonUrl, { headers: { accept: 'application/ld+json' } })
+    .then((res) => res.json())
+    .then((data) => {
+      config.translations = (
+        data as { translations: Record<string, string> }
+      ).translations
       return config
     })
 }

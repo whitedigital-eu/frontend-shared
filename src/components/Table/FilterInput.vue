@@ -36,12 +36,10 @@
     <DataFetchingSelect
       v-if="
         item.type === 'data-fetching-select' &&
-        axiosInstance &&
         isDataFetchingSelectConfig(item.config)
       "
       :id="`filter-${item.label}`"
       v-model="item.value"
-      :axios-instance="axiosInstance"
       class="w-full"
       :config="item.config"
       :label="item.label"
@@ -97,15 +95,11 @@ import RangeDatepicker from '../../components/Inputs/RangeDatepicker.vue'
 import DataFetchingSelect from '../../components/Inputs/Selects/DataFetchingSelect.vue'
 import Checkbox from '../../components/Inputs/Checkbox.vue'
 import { Filter } from '../../types/Filters'
-import { AxiosInstance } from 'axios'
 import { DataFetchingSelectConfig, SelectConfig } from '../../types/InputFields'
 import { computed } from 'vue'
 import { useI18nWithFallback } from '../../helpers/Translations'
 
-const { item, axiosInstance = null } = defineProps<{
-  item: Filter
-  axiosInstance?: AxiosInstance | null
-}>()
+const { item } = defineProps<{ item: Filter }>()
 
 const { t } = useI18nWithFallback()
 
@@ -114,10 +108,8 @@ const isDataFetchingSelectConfig = (
 ): x is DataFetchingSelectConfig => {
   return (
     x !== null &&
-    'requestUrlGenerator' in x &&
-    typeof x.requestUrlGenerator === 'function' &&
-    'responseMapFunction' in x &&
-    typeof x.responseMapFunction === 'function'
+    'loadOptionsFunction' in x &&
+    typeof x.loadOptionsFunction === 'function'
   )
 }
 

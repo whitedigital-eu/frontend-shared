@@ -5,8 +5,8 @@ import {
   TomSettings,
 } from 'whitedigital-eu-tom-select/src/types'
 import { VueTelInputProps } from 'vue-tel-input'
-import { AxiosInstance } from 'axios'
 import { DropzoneOptions } from 'dropzone'
+import { KyInstance } from 'ky'
 
 export type InputField = {
   type: string
@@ -35,12 +35,11 @@ export type DataFetchingSelectConfig<
   T extends string | number = string | number,
 > = SelectConfig<T> & {
   minSymbols?: number
-  requestUrlGenerator: (searchValue: string) => string
-  responseMapFunction: (resource: any) => SelectOption
+  loadOptionsFunction: (_searchValue: string) => Promise<SelectOption[]>
 }
 
 export type FileUploadConfig = {
-  axiosInstance: AxiosInstance
+  kyInstance: KyInstance
   hostUrl: string
   setPublic?: boolean
   endpointUrl?: string

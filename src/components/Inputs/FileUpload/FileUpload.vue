@@ -38,7 +38,6 @@ import {
 } from '../../../helpers/Translations'
 import FormFieldLabel from '../../FormFieldLabel.vue'
 import FilePreview from './FilePreview.vue'
-import getLoadResourceFunctions from '../../../helpers/DataFetching'
 import { Resource } from '../../../types/Resource'
 //@ts-ignore
 import defaultPreviewTemplate from './preview-template.html?raw'
@@ -85,10 +84,6 @@ const computedConfig = computed(() =>
 )
 
 const { isMobile } = useIsMobile()
-const { loadResource, loadAllResources } = getLoadResourceFunctions(
-  // eslint-disable-next-line vue/no-ref-object-destructure
-  computedConfig.value.axiosInstance,
-)
 const { t } = useI18nWithFallback()
 
 type ApiPlatformFile = Resource<string, string> & {
@@ -107,9 +102,7 @@ const deletingFileIri = ref<string | null>(null)
 
 const options = computed<DropzoneOptions>(() => {
   const res: DropzoneOptions = {
-    url:
-      (computedConfig.value.axiosInstance.defaults.baseURL ?? '') +
-      computedConfig.value.endpointUrl,
+    url: computedConfig.value.hostUrl + computedConfig.value.endpointUrl,
     thumbnailWidth: 150,
     maxFilesize: 50,
     // these headers are set to null to fix a CORS issue; source: https://github.com/dropzone/dropzone/pull/685
@@ -142,7 +135,7 @@ const removeInitialFile = async (fileIri: string) => {
     deletingFileIri.value = fileIri
 
     try {
-      await computedConfig.value.axiosInstance.delete(fileIri)
+      await computedConfig.value.kyInstance.delete(fileIri.slice(1))
     } catch (e) {
       console.warn(e)
     } finally {
@@ -163,7 +156,7 @@ const newValue = computed(() => {
   if (singleFileUpload.value) {
     return initialFileIris.length
       ? initialFileIris[0]
-      : uploadedFileIris.value[0] ?? ''
+      : (uploadedFileIris.value[0] ?? '')
   }
 
   return [...uploadedFileIris.value, ...initialFileIris]
@@ -259,13 +252,15 @@ const initDropzone = () => {
 const loadInitialFiles = async () => {
   if (!props.modelValue) return
   try {
-    if (singleFileUpload.value) {
-      initialFiles.value = [await loadResource<any>(props.modelValue as string)]
-    } else {
-      initialFiles.value = await loadAllResources<any>(
-        props.modelValue as string[],
-      )
-    }
+    initialFiles.value = await Promise.all(
+      (Array.isArray(props.modelValue)
+        ? props.modelValue
+        : [props.modelValue]
+      ).map(
+        async (f) =>
+          await (await computedConfig.value.kyInstance.get(f.slice(1))).json(),
+      ),
+    )
   } catch (e) {
     console.error(e)
   }
@@ -296,7 +291,7 @@ const removeFileEvent = async (
   }
 
   try {
-    await computedConfig.value.axiosInstance.delete(removedFileIri)
+    await computedConfig.value.kyInstance.delete(removedFileIri.slice(1))
 
     // File successfully deleted, remove it from the uploadedFileIris array.
     uploadedFileIris.value = uploadedFileIris.value.filter(

@@ -36,7 +36,6 @@
             <FilterInput
               v-for="(item, i) in filters.default"
               :key="i"
-              :axios-instance="axiosInstance"
               :item="item"
             />
             <slot name="after-default-filters"></slot>
@@ -62,7 +61,6 @@
             <FilterInput
               v-for="(item, i) in filters.advanced"
               :key="i"
-              :axios-instance="axiosInstance"
               :item="item"
             />
           </div>
@@ -120,7 +118,6 @@ import FilterInput from './FilterInput.vue'
 import 'flatpickr/dist/flatpickr.css'
 import { Filters } from '../../types/Filters'
 import dayjs from 'dayjs'
-import { AxiosInstance } from 'axios'
 import { TableConfig } from './createTableConfig'
 import { ChevronUp, ChevronDown } from 'lucide-vue-next'
 import { isNumericString } from '../../helpers/Global'
@@ -130,7 +127,6 @@ import { useI18nWithFallback } from '../../helpers/Translations'
 const props = withDefaults(
   defineProps<{
     filters: Filters
-    axiosInstance?: AxiosInstance
     config?: TableConfig | null
     toggleAdvancedFilters?: boolean
     initialShowFiltersDesktop?: boolean
