@@ -101,11 +101,13 @@ const loadData = async () => {
     if (!apiPath) {
       throw new Error('Api path not found')
     }
-    const matchingContentTypeItems = (await (
-      await props.projectSettings.global.kyInstance.get(apiPath, {
-        searchParams: { 'node.id': siteTreeItem.value.id },
-      })
-    ).json()) as any
+    const matchingContentTypeItems = (
+      (await (
+        await props.projectSettings.global.kyInstance.get(apiPath.slice(1), {
+          searchParams: { 'node.id': siteTreeItem.value.id },
+        })
+      ).json()) as { 'hydra:member': Array<typeof contentTypeItem.value> }
+    )['hydra:member']
     contentTypeItem.value = matchingContentTypeItems.length
       ? matchingContentTypeItems[0]
       : null

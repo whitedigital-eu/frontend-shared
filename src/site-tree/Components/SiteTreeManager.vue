@@ -287,7 +287,7 @@ const duplicateSiteTree = async (
 const onDeletionConfirmed = async () => {
   try {
     await props.projectSettings.global.kyInstance.delete(
-      siteTreeToDelete.value!['@id'],
+      siteTreeToDelete.value!['@id'].slice(1),
     )
   } catch (e) {
     console.error(e)
