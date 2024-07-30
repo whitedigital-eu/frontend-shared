@@ -115,7 +115,7 @@ export const handleTableAjaxError = async (
   error: HTTPError,
   apiErrorHandler?: TableConfig['tableErrorHandler'],
 ) => {
-  const errorData = await error.response.json()
+  const errorData = (await error.response.json()) as { '@context': string }
 
   if (errorData) {
     if (

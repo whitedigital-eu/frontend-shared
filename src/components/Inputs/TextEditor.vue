@@ -8,7 +8,7 @@
       {{ label }}
     </FormFieldLabel>
     <CKEditorComponent
-      v-model="internalValue"
+      v-model="modelValue"
       :editor="TextEditor"
       @blur="isFocused = false"
       @focus="isFocused = true"
@@ -18,35 +18,20 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { ref } from 'vue'
 import FormFieldLabel from '../FormFieldLabel.vue'
 import { TextEditor } from './ckeditor/htmlEditors'
 import CKEditor from '@ckeditor/ckeditor5-vue'
 
 const {
-  modelValue,
   label = '',
   small = false,
   readonly = false,
-} = defineProps<{
-  modelValue: string | number | null | undefined
-  label?: string
-  small?: boolean
-  readonly?: boolean
-}>()
+} = defineProps<{ label?: string; small?: boolean; readonly?: boolean }>()
 
-const emit = defineEmits<{ 'update:modelValue': [value: string] }>()
+const modelValue = defineModel<string | undefined>()
 
 const CKEditorComponent = CKEditor.component
-
-const internalValue = ref(
-  typeof modelValue === 'number'
-    ? modelValue.toString()
-    : modelValue !== null && typeof modelValue !== 'undefined'
-      ? modelValue
-      : '',
-)
-watch(internalValue, (n) => emit('update:modelValue', n))
 
 const isFocused = ref(false)
 </script>
