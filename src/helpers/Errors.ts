@@ -65,11 +65,18 @@ export const setFormDataErrors = async <T extends NestedObjectWithErrors>(
     | undefined
 
   const headers =
-    'headers' in e.response
-      ? e.response.headers
-      : 'headers' in e.response.config
-        ? e.response.config.headers
-        : null
+    'headers' in e.request
+      ? e.request.headers
+      : 'headers' in e.response
+        ? e.response.headers
+        : 'headers' in e.response.config
+          ? e.response.config.headers
+          : null
+  const locale: string | undefined = headers
+    ? headers instanceof Headers
+      ? headers.get('accept-language')
+      : headers['accept-language']
+    : undefined
 
   if (e.response.status !== 422) return formData
   resetFormDataErrors(formData)
@@ -83,7 +90,6 @@ export const setFormDataErrors = async <T extends NestedObjectWithErrors>(
         if (Array.isArray(field.errors)) {
           field.errors.push(violation.message)
         } else {
-          const locale: string | undefined = headers?.['Accept-Language']
           if (!locale) {
             console.warn(
               'No language header set for request with entity translations!',
