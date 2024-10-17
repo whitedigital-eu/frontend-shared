@@ -1,6 +1,9 @@
 <template>
   <div class="overflow-x-auto relative scrollbar-hidden" data-test="table">
-    <div class="flex flex-wrap gap-x-4 gap-y-2 items-baseline mb-2">
+    <div
+      v-if="showTopPagination"
+      class="flex flex-wrap gap-x-4 gap-y-2 items-baseline mb-2"
+    >
       <div class="tabulator tabulator-top-pagination-placeholder"></div>
       <div
         v-if="totalEntryCount"
@@ -73,6 +76,7 @@ const props = withDefaults(
     customActions: null,
     paginationSizeSelector: () => [10, 30, 100],
     resourceType: undefined,
+    showTopPagination: true,
   },
 )
 

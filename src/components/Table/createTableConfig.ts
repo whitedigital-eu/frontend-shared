@@ -110,4 +110,9 @@ export type TableProps = {
    * @see https://tabulator.info/docs/4.9/page
    */
   paginationSizeSelector?: Array<number | boolean>
+
+  /**
+   * Whether to show the top pagination
+   */
+  showTopPagination?: boolean
 }
