@@ -15,7 +15,7 @@
     "i18n",
     "default-translations.json"
   ],
-  "module": "./dist/wd-frontend-shared.es.js",
+  "module": "./dist/wd-frontend-shared.es.js",d
   "types": "index.d.ts",
   "scripts": {
     "dev": "vite",
