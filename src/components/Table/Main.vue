@@ -253,39 +253,6 @@ const columns = [...columnsBefore, ...props.columns, ...columnsAfter]
 
 const filtersSet = ref(false)
 
-const waitForToggleCollapseElementsRendered = (): Promise<
-  NodeListOf<Element>
-> => {
-  return new Promise((resolve) => {
-    let totalTimePassed = 0
-    const interval = setInterval(() => {
-      if (totalTimePassed > 10000) {
-        clearInterval(interval)
-      }
-
-      const elements = document.querySelectorAll(
-        '.tabulator-responsive-collapse-toggle',
-      )
-      if (!elements.length) totalTimePassed += 100
-      else {
-        clearInterval(interval)
-        resolve(elements)
-      }
-    }, 100)
-  })
-}
-
-const setTableHeight = () => {
-  setTimeout(() => {
-    const tabulatorTableEl = document.querySelector('.tabulator-table')
-    if (!tabulatorTableEl) return
-    const headerHeight = 170 // tried calculating on the fly but it was flaky. 120 is the normal height, but headers can span multiple rows and 170 accommodates 3 header rows...
-    const heightInPx = window.getComputedStyle(tabulatorTableEl).height
-    const newTabulatorHeight = parseInt(heightInPx) + headerHeight
-    tabulator.value.setHeight(newTabulatorHeight)
-  }, 50)
-}
-
 let tabulatorScrollTop = 0
 
 const PAGE_SIZE_PARAM = 'itemsPerPage' as const
@@ -312,6 +279,7 @@ const currentLocale = getVueCurrentLocale()
 
 const initTabulator = async (resetPage = false) => {
   let options: Tabulator.Options = {
+    height: '100%',
     paginationSizeSelector: props.paginationSizeSelector,
     paginationInitialPage: resetPage ? 1 : props.page,
     paginationSize: props.pageSize,
@@ -339,16 +307,6 @@ const initTabulator = async (resetPage = false) => {
       emit('row-selection-changed', selectedRowData)
     },
     async dataLoaded() {
-      try {
-        const toggleCollapseElements =
-          await waitForToggleCollapseElementsRendered()
-        toggleCollapseElements.forEach((el) =>
-          el.addEventListener('click', setTableHeight, true),
-        )
-      } catch (e) {
-        console.error(e)
-      }
-
       if (tabulator.value) {
         tabulator.value.rowManager.element.scrollTop = tabulatorScrollTop
       }
