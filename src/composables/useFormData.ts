@@ -30,11 +30,11 @@ export default function useFormData<
   const firstLocaleWithError = computed(() => {
     if (!formData.value) return
     return Object.values(formData.value).reduce<AnyLocale | null>(
-      (foundLocale, field) => {
+      (foundLocale, field: any) => {
         if (foundLocale || 'value' in field) return foundLocale
         return Object.entries(field).reduce<AnyLocale | null>(
           (localeWithError, [locale, subField]) => {
-            if (localeWithError || !subField.errors.length) {
+            if (localeWithError || !(subField as any).errors.length) {
               return localeWithError
             }
             return locale as AnyLocale
