@@ -71,41 +71,24 @@ export const setFormDataErrors = <
   }
 }
 
-export const handleTableAjaxError = (
+export const handleTableAjaxError = async (
   error: any,
   apiErrorHandler?: TableConfig['tableErrorHandler'],
 ) => {
-  const reader = error.body.getReader()
+  const errorData = (await error.response.json()) as { '@context': string }
 
-  new ReadableStream({
-    start(controller) {
-      function push() {
-        reader.read().then(({ done, value }: { done: any; value: any }) => {
-          if (done) {
-            controller.close()
-            return
-          }
-          controller.enqueue(value)
-          const string = new TextDecoder().decode(value)
-          const errorData = JSON.parse(string)
-          if (errorData) {
-            if (
-              errorData['@context'] === '/api/contexts/Error' &&
-              apiErrorHandler &&
-              typeof apiErrorHandler === 'function'
-            ) {
-              apiErrorHandler(error.status, errorData)
-            } else {
-              showGlobalError(errorData.message)
-            }
-          }
-          push()
-        })
-      }
+  if (errorData) {
+    if (
+      errorData['@context'] === '/api/contexts/Error' &&
+      apiErrorHandler &&
+      typeof apiErrorHandler === 'function'
+    ) {
+      apiErrorHandler(error.response.status, errorData)
+    } else {
+      showGlobalError(error.message)
+    }
+  }
 
-      push()
-    },
-  })
   Promise.reject(error)
 }
 
