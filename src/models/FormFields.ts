@@ -7,6 +7,7 @@ import {
   DateFieldConfig,
   FileUploadConfig,
   SignatureConfig,
+  DateRangeFieldConfig,
 } from '../types/InputFields'
 import dayjs from 'dayjs'
 import {
@@ -21,6 +22,7 @@ import {
   KeyAndValueListValue,
   MultipleTextFieldListValue,
   MapCoordinateSelectorFieldValue,
+  RangeDatepickerValue,
 } from '../components/Inputs/ValueTypes'
 import { reactive } from 'vue'
 
@@ -213,6 +215,22 @@ class DateField extends FormField {
     config: DateFieldConfig = {},
   ) {
     super('date', name, label)
+    this.value = value
+    this.config = config
+  }
+}
+
+class DateRangeField extends FormField {
+  public value: RangeDatepickerValue
+  config: DateRangeFieldConfig
+
+  constructor(
+    name: string,
+    label: string,
+    value?: RangeDatepickerValue,
+    config: DateRangeFieldConfig = {},
+  ) {
+    super('date-range', name, label)
     this.value = value
     this.config = config
   }
@@ -442,6 +460,7 @@ export {
   DataFetchingSelectField,
   PhoneNumberField,
   DateField,
+  DateRangeField,
   TimeField,
   DateTimeField,
   FileUploadField,

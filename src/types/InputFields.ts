@@ -77,3 +77,8 @@ export type DateFieldConfig = {
   readonly?: boolean
   flatpickrConfig?: Partial<import('flatpickr/dist/types/options').BaseOptions>
 }
+
+export type DateRangeFieldConfig = {
+  readonly?: boolean
+  flatpickrConfig?: Partial<import('flatpickr/dist/types/options').BaseOptions>
+}

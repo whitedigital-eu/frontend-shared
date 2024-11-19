@@ -13,7 +13,12 @@
       ref="datepickerRef"
       v-model="value"
       class="form-control input"
-      :config="config"
+      :class="{
+        '!bg-[#f3f5f6]': computedConfig.readonly,
+        'cursor-not-allowed': computedConfig.readonly,
+      }"
+      :config="computedConfig.flatpickrConfig"
+      :disabled="computedConfig.readonly"
       @on-change="handleChange"
       @on-close="handleClose"
       @on-open="handleOpen"
@@ -28,8 +33,7 @@
 
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
-//@ts-ignore
-import flatPickr from 'vue-flatpickr-component'
+import FlatPickr from 'vue-flatpickr-component'
 import 'flatpickr/dist/flatpickr.css'
 import dayjs from 'dayjs'
 import LocalizedFormat from 'dayjs/plugin/localizedFormat'
@@ -38,12 +42,14 @@ import { areStringArraysEqual } from '../../helpers/Global'
 import { X } from 'lucide-vue-next'
 import useIsMobile from '../../composables/useIsMobile'
 import { getDefaultFlatpickrConfig } from './Flatpickr'
+import { RangeDatepickerProps } from './PropTypes'
+import _ from 'lodash'
 
-const props = withDefaults(
-  // TODO: remove '' from allowed values, use null instead
-  defineProps<{ modelValue?: string[] | null | ''; label?: string }>(),
-  { modelValue: () => [], label: '' },
-)
+const {
+  modelValue = null,
+  label = null,
+  config,
+} = defineProps<RangeDatepickerProps>()
 
 const emit = defineEmits<{ 'update:modelValue': [value: string[] | null] }>()
 
@@ -53,18 +59,26 @@ const { isMobile } = useIsMobile()
 
 const datepickerRef = ref(null)
 
-const value = ref<typeof props.modelValue>(null)
+const value = ref<typeof modelValue>(null)
 
 const isEmpty = computed(() => !value.value || value.value.length === 0)
 const isOpen = ref(false)
 
-const config: any = {
-  ...getDefaultFlatpickrConfig(),
-  altFormat: 'D-m-y',
-  enableTime: false,
-  mode: 'range',
-  formatDate: (date: Date) => dayjs(date).format('LL'),
-}
+const computedConfig = computed(() =>
+  _.merge(
+    {
+      readonly: false,
+      flatpickrConfig: {
+        ...getDefaultFlatpickrConfig(),
+        altFormat: 'D-m-y',
+        enableTime: false,
+        mode: 'range',
+        formatDate: (date: Date) => dayjs(date).format('LL'),
+      },
+    },
+    config,
+  ),
+)
 
 const handleChange = (selectedDates: Date[]) => {
   const newVal = selectedDates.map((date: Date) =>
@@ -72,7 +86,7 @@ const handleChange = (selectedDates: Date[]) => {
   )
   if (
     newVal.length < 2 ||
-    (props.modelValue && areStringArraysEqual(newVal, props.modelValue))
+    (modelValue && areStringArraysEqual(newVal, modelValue))
   ) {
     return
   }
@@ -89,7 +103,7 @@ const handleOpen = () => (isOpen.value = true)
 const handleClose = () => (isOpen.value = false)
 
 watch(
-  () => props.modelValue,
+  () => modelValue,
   (n) => (value.value = n),
   { immediate: true },
 )

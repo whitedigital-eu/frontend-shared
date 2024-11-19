@@ -10,6 +10,7 @@ export type MapCoordinateSelectorFieldValue =
   | undefined
 export type KeyAndValueListValue = { key: string; value: string }[]
 export type DatepickerValue = string | null | undefined
+export type RangeDatepickerValue = string[] | null | undefined
 export type DateTimePickerValue = string | null | undefined
 export type FileUploadValue = string | string[] | undefined
 export type SliderValue = number | undefined

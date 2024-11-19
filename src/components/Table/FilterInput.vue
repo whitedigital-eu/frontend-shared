@@ -45,19 +45,13 @@
       :label="item.label"
     />
     <Datepicker
-      v-if="
-        item.type === 'date' &&
-        (item.value === '' || item.value === null || !Array.isArray(item.value))
-      "
+      v-if="item.type === 'date'"
       v-model="item.value as string | null"
       class="w-full"
       :label="item.label"
     />
     <RangeDatepicker
-      v-if="
-        item.type === 'date-range' &&
-        (item.value === '' || item.value === null || Array.isArray(item.value))
-      "
+      v-if="item.type === 'date-range'"
       v-model="item.value as string[] | null"
       class="w-full"
       :label="item.label"

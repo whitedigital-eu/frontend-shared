@@ -1,6 +1,11 @@
-import { DatepickerValue, DecimalValue, TextValue } from './ValueTypes'
+import {
+  DatepickerValue,
+  DecimalValue,
+  RangeDatepickerValue,
+  TextValue,
+} from './ValueTypes'
 import { DecimalFieldConfig, TextFieldConfig } from '../../models/FormFields'
-import { DateFieldConfig } from '../../types/InputFields'
+import { DateFieldConfig, DateRangeFieldConfig } from '../../types/InputFields'
 
 export type DecimalProps = {
   modelValue?: DecimalValue
@@ -31,4 +36,10 @@ export type DatepickerProps = {
   modelValue?: DatepickerValue
   label?: string | null
   config?: DateFieldConfig
+}
+
+export type RangeDatepickerProps = {
+  modelValue?: RangeDatepickerValue
+  label?: string | null
+  config?: DateRangeFieldConfig
 }

@@ -49,6 +49,7 @@ export const setFormDataErrors = async <T extends NestedObjectWithErrors>(
   formData: T,
 ) => {
   if (!e.response) {
+    console.error(e)
     showGlobalError(e)
     return
   }
