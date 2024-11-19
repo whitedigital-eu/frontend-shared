@@ -32,21 +32,14 @@ import { computed, ref, watch } from 'vue'
 import FormFieldLabel from '../FormFieldLabel.vue'
 import { DecimalProps } from './PropTypes'
 import _ from 'lodash'
+import { defaultDecimalFieldConfig } from '../../models/FormFields'
 
 const { modelValue = '', label = null, config } = defineProps<DecimalProps>()
 
 const emit = defineEmits<{ 'update:modelValue': [value: number | null] }>()
 
 const computedConfig = computed(() =>
-  _.merge(
-    {
-      maxDecimals: 2,
-      wrapperAttributes: {},
-      labelAttributes: {},
-      inputAttributes: {},
-    },
-    config,
-  ),
+  _.merge({}, defaultDecimalFieldConfig, config),
 )
 
 const decSeparator = ','

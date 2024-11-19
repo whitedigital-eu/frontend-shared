@@ -25,6 +25,7 @@ import {
   RangeDatepickerValue,
 } from '../components/Inputs/ValueTypes'
 import { reactive } from 'vue'
+import _ from 'lodash'
 
 export type FormFieldValue =
   | string
@@ -82,12 +83,19 @@ class TextField extends FormField {
   }
 }
 
-export type DecimalFieldConfig = Partial<{
-  maxDecimals: number
+export type DecimalFieldConfig = {
+  maxDecimals?: number
   wrapperAttributes: Record<string, unknown>
   labelAttributes: Record<string, unknown>
   inputAttributes: Record<string, unknown>
-}>
+}
+
+export const defaultDecimalFieldConfig = {
+  maxDecimals: 2,
+  wrapperAttributes: {},
+  labelAttributes: {},
+  inputAttributes: {},
+} satisfies DecimalFieldConfig
 
 class DecimalField extends FormField {
   public value: Exclude<DecimalValue, string>
@@ -97,11 +105,11 @@ class DecimalField extends FormField {
     name: string,
     label: string,
     value?: Exclude<DecimalValue, string>,
-    config: DecimalFieldConfig = {},
+    config: Partial<DecimalFieldConfig> = {},
   ) {
     super('decimal', name, label)
     this.value = value
-    this.config = config
+    this.config = _.merge({}, defaultDecimalFieldConfig, config)
   }
 }
 
