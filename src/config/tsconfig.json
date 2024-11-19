@@ -11,5 +11,6 @@
     "strict": true,
     "verbatimModuleSyntax": false,
     "types": ["vite/client", "vitest", "jest"],
-  },
+    "allowImportingTsExtensions": true
+  }
 }

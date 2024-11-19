@@ -31,6 +31,7 @@
 import { computed, ref, watch } from 'vue'
 import FormFieldLabel from '../FormFieldLabel.vue'
 import { DecimalProps } from './PropTypes'
+import { defaultDecimalFieldConfig } from '../../models/FormFields'
 import _ from 'lodash'
 
 const { modelValue = '', label = null, config } = defineProps<DecimalProps>()
@@ -38,20 +39,12 @@ const { modelValue = '', label = null, config } = defineProps<DecimalProps>()
 const emit = defineEmits<{ 'update:modelValue': [value: number | null] }>()
 
 const computedConfig = computed(() =>
-  _.merge(
-    {
-      maxDecimals: 2,
-      wrapperAttributes: {},
-      labelAttributes: {},
-      inputAttributes: {},
-    },
-    config,
-  ),
+  _.merge({}, defaultDecimalFieldConfig, config),
 )
 
 const decSeparator = ','
 
-const inputTextSelected = (el: HTMLInputElement): boolean => {
+const inputTextSelected = (el: HTMLInputElement) => {
   return el.selectionStart !== el.selectionEnd
 }
 const isCaretBeforeDecSeparator = (el: HTMLInputElement) => {

@@ -82,7 +82,7 @@ const defaultConfig: SelectConfig<T> = {
 }
 
 const computedConfig = computed(() =>
-  _.merge({ ...defaultConfig }, props.config ?? {}),
+  _.merge({}, defaultConfig, props.config ?? {}),
 )
 
 const selectRef = ref<HTMLSelectElement>()
@@ -229,7 +229,7 @@ const defaultSettings: RecursivePartial<TomSettings> = {
 }
 
 const settings = computed(() =>
-  _.merge({ ...defaultSettings }, computedConfig.value.tomSelectSettings),
+  _.merge({}, defaultSettings, computedConfig.value.tomSelectSettings),
 )
 
 const isOptionSelected = (value: T) => {
