@@ -39,7 +39,6 @@ export type FormFieldValue =
 
 export abstract class FormField {
   public errors: string[] = []
-  public readonly?: boolean
   public abstract value: FormFieldValue
 
   public formatter: (x: this['value']) => any
@@ -237,6 +236,8 @@ class DateRangeField extends FormField {
 }
 
 class TimeField extends FormField {
+  public readonly?: boolean
+
   constructor(
     name: string,
     label: string,
@@ -253,9 +254,7 @@ class DateTimeField extends FormField {
     name: string,
     label: string,
     public value: DateTimePickerValue = dayjs().toISOString(),
-    public config:
-      | { hoursStep?: number; minutesStep?: number }
-      | undefined = undefined,
+    public config?: { hoursStep?: number; minutesStep?: number },
   ) {
     super('date-time', name, label)
   }
@@ -316,6 +315,7 @@ const isSelectField = (
 
 class TimeWithCurrentField extends FormField {
   public value: FlatpickrTimePickerValue
+  public readonly?: boolean
 
   constructor(
     name: string,
@@ -347,6 +347,7 @@ class SignatureField extends FormField {
 
 class GovernmentIdField extends FormField {
   value: string | null
+  public readonly?: boolean
 
   constructor(name: string, label: string, value = '', readonly = false) {
     super('government-id', name, label)
@@ -426,8 +427,10 @@ class MapCoordinateSelectorField extends FormField {
   }
 }
 
-export class PlainTextareaField extends FormField {
+class PlainTextareaField extends FormField {
   value: Exclude<TextValue, number>
+  public readonly?: boolean
+
   constructor(
     name: string,
     label: string,
@@ -443,6 +446,7 @@ export class PlainTextareaField extends FormField {
 class CollectionField<ValueType> extends FormField {
   //@ts-ignore
   value: ValueType[] | null | undefined
+
   constructor(
     name: string,
     label: string,
@@ -476,6 +480,7 @@ export {
   KeyAndValueArrayField,
   MultipleTextFields,
   MapCoordinateSelectorField,
+  PlainTextareaField,
   CollectionField,
 }
 
