@@ -160,9 +160,13 @@ export const snakeToCamelCase = (str: string) =>
       group.toUpperCase().replace('-', '').replace('_', ''),
     )
 
-// source: https://stackoverflow.com/questions/175739/how-can-i-check-if-a-string-is-a-valid-number
-export const isNumericString = (maybeNumber: string) => {
-  return !isNaN(parseFloat(maybeNumber))
+export const isNumericString = (maybeNumericString: string) => {
+  return (
+    !isNaN(Number(maybeNumericString)) &&
+    !isNaN(parseFloat(maybeNumericString)) &&
+    maybeNumericString.trim() !== '' &&
+    /^-?(\d+\.?\d*|\.\d+)$/.test(maybeNumericString)
+  )
 }
 
 export const createRandomNumber = (min = 1000, max = 10000) =>
