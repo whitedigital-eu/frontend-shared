@@ -1,6 +1,5 @@
 import {
   SelectConfig,
-  LabelProps,
   MapProps,
   PhoneNumberFieldConfig,
   DataFetchingSelectConfig,
@@ -8,6 +7,7 @@ import {
   FileUploadConfig,
   SignatureConfig,
   DateRangeFieldConfig,
+  KeyAndValueArrayFieldConfig,
 } from '../types/InputFields'
 import dayjs from 'dayjs'
 import {
@@ -50,7 +50,6 @@ export abstract class FormField {
     public label: string,
     public labelArray?: string[],
     public mapData?: MapProps,
-    public text?: LabelProps,
   ) {
     this.formatter = (x) => x
   }
@@ -388,16 +387,17 @@ class TextArrayField extends FormField {
 
 class KeyAndValueArrayField extends FormField {
   public value: KeyAndValueListValue = []
+  public config: KeyAndValueArrayFieldConfig
 
   constructor(
     name: string,
     label: string,
-    text: LabelProps,
     value: KeyAndValueListValue = [],
+    config: KeyAndValueArrayFieldConfig = {},
   ) {
     super('key-and-value-list', name, label)
     this.value = value
-    this.text = text
+    this.config = config
   }
 }
 

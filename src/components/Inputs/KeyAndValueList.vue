@@ -1,6 +1,8 @@
 <template>
   <div class="relative">
-    <p v-if="texts?.formLabel" class="mb-4">{{ texts?.formLabel }}</p>
+    <p v-if="config.labels?.formLabel" class="mb-4">
+      {{ config.labels?.formLabel }}
+    </p>
     <div class="flex gap-4 relative">
       <div v-if="modelValue?.length !== 0" class="w-full">
         <div v-for="(item, index) in modelValue" :key="index" class="relative">
@@ -10,61 +12,48 @@
             @click="removeFields(index)"
           />
           <div class="gap-x-4 grid grid-cols-2 mb-4 w-full">
-            <div
-              class="relative"
-              :class="{
-                'overflow-hidden': !item.key && hasFocus !== 'key' + index,
-              }"
-            >
-              <FormFieldLabel
-                :is-placeholder="!item.key && hasFocus !== 'key' + index"
-                @click="handleLabelClick"
-              >
-                {{ texts.keyLabel }}
-              </FormFieldLabel>
-              <input
-                ref="inputRef"
-                v-model="item.key"
-                class="form-control sm:min-w-[200px] w-full"
-                :class="{ 'sm:min-w-[416px]': long }"
-                :readonly="readonly"
-                type="text"
-                @blur="handleBlur"
-                @focus="handleFocus('key', index)"
-                @input="handleInput('key', index, $event)"
-              />
-            </div>
-            <div
-              class="relative"
-              :class="{
-                'overflow-hidden': !item.value && hasFocus !== 'value' + index,
-              }"
-            >
-              <FormFieldLabel
-                :is-placeholder="!item.value && hasFocus !== 'value' + index"
-                @click="handleLabelClick"
-              >
-                {{ texts.valueLabel }}
-              </FormFieldLabel>
-              <input
-                ref="inputRef"
-                v-model="item.value"
-                class="form-control sm:min-w-[200px] w-full"
-                :class="{ 'sm:min-w-[416px]': long }"
-                :readonly="readonly"
-                type="text"
-                @blur="handleBlur"
-                @focus="handleFocus('value', index)"
-                @input="handleInput('value', index, $event)"
-              />
-            </div>
+            <TextEditor
+              v-if="config.keyInputType === 'textarea'"
+              :label="config.labels?.keyLabel"
+              :model-value="item.key"
+              :readonly="config.readonly"
+              @update:model-value="
+                (newValue) => handleInput('key', index, newValue)
+              "
+            />
+            <Text
+              :config="{ readonly: config.readonly }"
+              :label="config.labels?.keyLabel"
+              :model-value="item.key"
+              @update:model-value="
+                (newValue) => handleInput('key', index, newValue)
+              "
+            />
+            <TextEditor
+              v-if="config.valueInputType === 'textarea'"
+              :label="config.labels?.valueLabel"
+              :model-value="item.value"
+              :readonly="config.readonly"
+              @update:model-value="
+                (newValue) => handleInput('value', index, newValue)
+              "
+            />
+            <Text
+              v-else
+              :config="{ readonly: config.readonly }"
+              :label="config.labels?.valueLabel"
+              :model-value="item.value"
+              @update:model-value="
+                (newValue) => handleInput('value', index, newValue)
+              "
+            />
           </div>
         </div>
       </div>
     </div>
     <div>
       <button class="btn btn-primary me-1" type="button" @click="addField">
-        {{ texts.addField }}
+        {{ config.labels?.addField }}
       </button>
     </div>
   </div>
@@ -72,50 +61,29 @@
 
 <script setup lang="ts">
 import { Ref, ref, watch } from 'vue'
-import FormFieldLabel from '../FormFieldLabel.vue'
 import { KeyAndValueListValue } from './ValueTypes'
 import { X } from 'lucide-vue-next'
-import { LabelProps } from '../../types/InputFields'
+import { KeyAndValueArrayFieldConfig } from '../../types/InputFields'
+import Text from './Text.vue'
+import TextEditor from './TextEditor.vue'
 
-const {
-  modelValue,
-  texts,
-  readonly = false,
-  long = false,
-} = defineProps<{
+const { modelValue, config } = defineProps<{
   modelValue: KeyAndValueListValue
-  texts: LabelProps
-  readonly?: boolean
-  long?: boolean
+  config: KeyAndValueArrayFieldConfig
 }>()
 
 const emit = defineEmits<{
   'update:modelValue': [value: KeyAndValueListValue]
 }>()
 
-const handleFocus = (type: string, index: number) => {
-  if (readonly) return
-  hasFocus.value = type + index
-}
-const handleBlur = () => (hasFocus.value = '')
-
-const inputRef = ref<HTMLInputElement>()
 const value: Ref<KeyAndValueListValue> = ref([])
-const hasFocus = ref('')
-
-const handleLabelClick = (event: Event) => {
-  if (readonly) return
-  ;((event.target as HTMLElement).nextElementSibling as HTMLElement).focus()
-}
 
 const handleInput = (
   type: keyof KeyAndValueListValue[number],
   index: keyof KeyAndValueListValue,
-  event: Event,
+  newValue = '',
 ) => {
-  ;(modelValue[index] as KeyAndValueListValue[number])[type] = (
-    event.target as HTMLInputElement
-  ).value
+  ;(modelValue[index] as KeyAndValueListValue[number])[type] = newValue
   emit('update:modelValue', modelValue)
 }
 

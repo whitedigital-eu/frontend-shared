@@ -56,13 +56,6 @@ export type SignatureConfig = {
   readonly?: boolean
 }
 
-export type LabelProps = {
-  keyLabel: string
-  valueLabel: string
-  addField: string
-  formLabel?: string
-}
-
 export type MapProps = {
   googleApiKey?: string
   initialLat?: number
@@ -82,3 +75,15 @@ export type DateRangeFieldConfig = {
   readonly?: boolean
   flatpickrConfig?: Partial<import('flatpickr/dist/types/options').BaseOptions>
 }
+
+export type KeyAndValueArrayFieldConfig = Partial<{
+  labels: {
+    keyLabel: string
+    valueLabel: string
+    addField: string
+    formLabel?: string
+  }
+  readonly: boolean
+  keyInputType?: 'text' | 'textarea'
+  valueInputType?: 'text' | 'textarea'
+}>
