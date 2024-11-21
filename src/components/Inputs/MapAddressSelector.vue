@@ -113,11 +113,7 @@ const handleAddressAutocomplete = () => {
     ) {
       const location = results[0].geometry.location
       const address = results[0].formatted_address
-      const position = {
-        address,
-        lat: location.lat(),
-        lng: location.lng(),
-      }
+      const position = { address, lat: location.lat(), lng: location.lng() }
       emit('update:modelValue', position)
       markerRef.value!.marker.setPosition(location)
       mapRef.value!.map.setCenter(location)
