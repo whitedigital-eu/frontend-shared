@@ -21,8 +21,8 @@ export const ACTION_ICON_MR = 12
 export const ACTION_ICON_TOTAL_WIDTH = ACTION_ICON_SIZE + ACTION_ICON_MR
 export const ACTION_COLUMN_MIN_WIDTH = 90
 
-const getIconSettings = (t: (key: string) => string) => {
-  return {
+const getIconSettings = (t: (key: string) => string) =>
+  ({
     edit: {
       wrapperClasses: [...iconWrapperClasses, 'wd-table-btn-edit'],
       title: capitalizeFirstLetter(t('project.edit')),
@@ -60,8 +60,7 @@ const getIconSettings = (t: (key: string) => string) => {
         return icon
       },
     },
-  } satisfies Record<string, IconSettings>
-}
+  }) satisfies Record<string, IconSettings>
 
 /** either object of settings, or function that renders the action icon */
 export type CustomAction =
@@ -114,84 +113,82 @@ const createActionColumn = <ResourceInstance extends Record<string, unknown>>(
     view: (resource: ResourceInstance) => void
   },
   t: (key: string) => string,
-): Tabulator.ColumnDefinition => {
-  return {
-    title: t('project.actions').toUpperCase(),
-    field: 'actions',
-    width: computeActionColumnWidth(props),
-    headerSort: false,
-    vertAlign: 'middle',
-    hozAlign: 'right',
-    headerHozAlign: 'right',
-    responsive: COLLAPSE_ORDER.never,
-    formatter(cell: Tabulator.CellComponent) {
-      const data = cell.getData() as ResourceInstance
-      const iconSettings = getIconSettings(t)
+): Tabulator.ColumnDefinition => ({
+  title: t('project.actions').toUpperCase(),
+  field: 'actions',
+  width: computeActionColumnWidth(props),
+  headerSort: false,
+  vertAlign: 'middle',
+  hozAlign: 'right',
+  headerHozAlign: 'right',
+  responsive: COLLAPSE_ORDER.never,
+  formatter(cell: Tabulator.CellComponent) {
+    const data = cell.getData() as ResourceInstance
+    const iconSettings = getIconSettings(t)
 
-      const wrapper = document.createElement('div')
-      wrapper.classList.add('flex', 'lg:justify-start', 'items-center')
+    const wrapper = document.createElement('div')
+    wrapper.classList.add('flex', 'lg:justify-start', 'items-center')
 
-      if (props.movableRows) {
-        const moveIcon = createElement(Move)
-        moveIcon.setAttribute('stroke-width', (1.5).toString())
-        moveIcon.style.height = `${ACTION_ICON_SIZE}px`
-        moveIcon.style.width = `${ACTION_ICON_SIZE}px`
-        moveIcon.classList.add('mr-2')
-        wrapper.appendChild(moveIcon)
-      }
+    if (props.movableRows) {
+      const moveIcon = createElement(Move)
+      moveIcon.setAttribute('stroke-width', (1.5).toString())
+      moveIcon.style.height = `${ACTION_ICON_SIZE}px`
+      moveIcon.style.width = `${ACTION_ICON_SIZE}px`
+      moveIcon.classList.add('mr-2')
+      wrapper.appendChild(moveIcon)
+    }
 
-      if (props.edit && props.canUpdateRecordFunc(cell)) {
-        wrapper.appendChild(
-          createIconButton(
-            () => clickHandlers.edit(data),
-            iconSettings.edit,
-            'table-edit-btn',
-          ),
-        )
-      }
+    if (props.edit && props.canUpdateRecordFunc(cell)) {
+      wrapper.appendChild(
+        createIconButton(
+          () => clickHandlers.edit(data),
+          iconSettings.edit,
+          'table-edit-btn',
+        ),
+      )
+    }
 
-      if (props.delete && props.canUpdateRecordFunc(cell)) {
-        wrapper.appendChild(
-          createIconButton(
-            () => clickHandlers.delete(data),
-            iconSettings.delete,
-            'table-delete-btn',
-          ),
-        )
-      }
+    if (props.delete && props.canUpdateRecordFunc(cell)) {
+      wrapper.appendChild(
+        createIconButton(
+          () => clickHandlers.delete(data),
+          iconSettings.delete,
+          'table-delete-btn',
+        ),
+      )
+    }
 
-      if (props.view) {
-        wrapper.appendChild(
-          createIconButton(
-            () => clickHandlers.view(data),
-            iconSettings.view,
-            'table-view-btn',
-          ),
-        )
-      }
+    if (props.view) {
+      wrapper.appendChild(
+        createIconButton(
+          () => clickHandlers.view(data),
+          iconSettings.view,
+          'table-view-btn',
+        ),
+      )
+    }
 
-      if (props.customActions) {
-        props.customActions.forEach((a) => {
-          if (typeof a === 'function') {
-            const actionIcon = a(data)
-            if (actionIcon) wrapper.append(actionIcon)
-          } else {
-            if (a.shouldShow(data)) {
-              wrapper.appendChild(
-                createIconButton(
-                  () => a.clickHandler(data),
-                  a.settings,
-                  a.dataTest,
-                ),
-              )
-            }
+    if (props.customActions) {
+      props.customActions.forEach((a) => {
+        if (typeof a === 'function') {
+          const actionIcon = a(data)
+          if (actionIcon) wrapper.append(actionIcon)
+        } else {
+          if (a.shouldShow(data)) {
+            wrapper.appendChild(
+              createIconButton(
+                () => a.clickHandler(data),
+                a.settings,
+                a.dataTest,
+              ),
+            )
           }
-        })
-      }
+        }
+      })
+    }
 
-      return wrapper
-    },
-  }
-}
+    return wrapper
+  },
+})
 
 export default createActionColumn

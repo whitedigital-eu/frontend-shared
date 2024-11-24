@@ -12,8 +12,8 @@ export const createColumn = (
 
 export const createToggleCollapseColumn = (
   colData: Partial<Tabulator.ColumnDefinition> = {},
-): Tabulator.ColumnDefinition => {
-  return createColumn({
+): Tabulator.ColumnDefinition =>
+  createColumn({
     title: '',
     formatter: 'responsiveCollapse',
     width: 24,
@@ -24,4 +24,3 @@ export const createToggleCollapseColumn = (
     vertAlign: 'middle',
     ...colData,
   })
-}

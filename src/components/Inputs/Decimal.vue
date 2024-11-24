@@ -44,9 +44,8 @@ const computedConfig = computed(() =>
 
 const decSeparator = ','
 
-const inputTextSelected = (el: HTMLInputElement): boolean => {
-  return el.selectionStart !== el.selectionEnd
-}
+const inputTextSelected = (el: HTMLInputElement): boolean =>
+  el.selectionStart !== el.selectionEnd
 const isCaretBeforeDecSeparator = (el: HTMLInputElement) => {
   const caretPos =
     el.selectionDirection == 'backward' ? el.selectionStart : el.selectionEnd

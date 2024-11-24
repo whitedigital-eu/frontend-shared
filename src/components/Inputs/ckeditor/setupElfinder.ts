@@ -30,8 +30,8 @@ export const setupElfinder = (editor: ClassicEditor, connectorUrl: string) => {
       editor.execute('imageInsert', { source: urls })
     },
     // To get elFinder instance
-    getfm = (open?: string) => {
-      return new Promise((resolve, reject) => {
+    getfm = (open?: string) =>
+      new Promise((resolve, reject) => {
         // Execute when the elFinder instance is created
         const done = () => {
           if (open) {
@@ -146,7 +146,6 @@ export const setupElfinder = (editor: ClassicEditor, connectorUrl: string) => {
           done()
         }
       })
-    }
 
   // elFinder instance
   let _fm: any
@@ -253,8 +252,7 @@ export const setupElfinder = (editor: ClassicEditor, connectorUrl: string) => {
   }
 
   // Set up image uploader
-  fileRepo.createUploadAdapter = (loader) => {
+  fileRepo.createUploadAdapter = (loader) =>
     //@ts-ignore
-    return new uploder(loader)
-  }
+    new uploder(loader)
 }

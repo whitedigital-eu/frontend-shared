@@ -20,9 +20,8 @@ const props = withDefaults(
   },
 )
 
-const removeWhitespace = (value: string | null) => {
-  return value ? value.replace(/\s/g, '') : value
-}
+const removeWhitespace = (value: string | null) =>
+  value ? value.replace(/\s/g, '') : value
 
 const modelValue = defineModel<string | null>({ required: true })
 

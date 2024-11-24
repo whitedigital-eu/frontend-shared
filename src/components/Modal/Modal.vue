@@ -76,9 +76,9 @@ const footer = ref<HTMLElement>()
 const bodyHeight = useModalBodyHeight(header, footer)
 
 const isMob = isMobile()
-const computedBodyStyle = computed(() => {
-  return isMob ? `height: ${bodyHeight.value}px;` : ''
-})
+const computedBodyStyle = computed(() =>
+  isMob ? `height: ${bodyHeight.value}px;` : '',
+)
 
 const sizeClass = computed(() => {
   switch (props.size) {

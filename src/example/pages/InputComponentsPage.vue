@@ -22,11 +22,13 @@
       <TextList v-model="textArrayList" label="Text List" />
       <KeyAndValueList
         v-model="keyAndValueArrayList"
-        :texts="{
-          keyLabel: 'title',
-          valueLabel: 'value',
-          addField: 'Add field',
-          formLabel: 'Forma',
+        :config="{
+          labels: {
+            keyLabel: 'title',
+            valueLabel: 'value',
+            addField: 'Add field',
+            formLabel: 'Forma',
+          },
         }"
       />
       <MultipleTextFields
@@ -42,7 +44,16 @@
           'sunday',
         ]"
       />
-      <Decimal v-model="price" :config="{ maxDecimals: 2 }" label="Price" />
+      <Decimal
+        v-model="price"
+        :config="{
+          maxDecimals: 2,
+          wrapperAttributes: {},
+          inputAttributes: {},
+          labelAttributes: {},
+        }"
+        label="Price"
+      />
     </form>
     <form class="basis-[500px] flex flex-col gap-4">
       <TextEditor v-model="notes" label="Notes" />

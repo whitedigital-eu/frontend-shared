@@ -28,6 +28,5 @@ const noText = (domain: string, text: string, context: string): string => {
   if (context === '') return `${domain}.${text}`
   return `${domain}.${text}.${context}`
 }
-const debugText = (domain: string, text: string, context: string): string => {
-  return `\`${noText(domain, text, context)}\``
-}
+const debugText = (domain: string, text: string, context: string): string =>
+  `\`${noText(domain, text, context)}\``

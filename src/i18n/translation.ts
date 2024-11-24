@@ -14,6 +14,4 @@ export const hashText = (
   domain: string,
   text: string,
   context: string,
-): string => {
-  return MD5(domain + text + context).toString()
-}
+): string => MD5(domain + text + context).toString()

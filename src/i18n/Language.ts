@@ -38,8 +38,8 @@ export const switchLocale = (
 
 export const loadTranslations = (
   config: TranslationConfig,
-): Promise<TranslationConfig> => {
-  return ky
+): Promise<TranslationConfig> =>
+  ky
     .get(config.localeJsonUrl, { headers: { accept: 'application/ld+json' } })
     .then((res) => res.json())
     .then((data) => {
@@ -48,4 +48,3 @@ export const loadTranslations = (
       ).translations
       return config
     })
-}

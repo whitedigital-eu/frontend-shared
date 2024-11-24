@@ -1,4 +1,3 @@
-import { nextTick } from 'vue'
 import { showGlobalError } from './FlashMessages'
 import { TableConfig } from '../components/Table/createTableConfig'
 import { HTTPError } from 'ky'
@@ -24,24 +23,6 @@ export const resetFormDataErrors = <T extends NestedObjectWithErrors>(
       )
     }
   }
-}
-
-const scrollFirstIncorrectFieldIntoView = (offsetTop = -100) => {
-  return nextTick(() => {
-    const firstFieldWithError = document.querySelector(
-      '[data-has-error="true"]',
-    )
-
-    if (firstFieldWithError) {
-      window.scrollTo({
-        top:
-          window.scrollY +
-          firstFieldWithError.getBoundingClientRect().top +
-          offsetTop,
-        behavior: 'smooth',
-      })
-    }
-  })
 }
 
 export const setFormDataErrors = async <T extends NestedObjectWithErrors>(
@@ -137,16 +118,4 @@ export const handleTableAjaxError = async (
   }
 
   Promise.reject(error)
-}
-
-export type TableXhrErrRes = {
-  body: ReadableStream
-  bodyUsed: boolean
-  headers: Headers
-  ok: boolean
-  redirected: boolean
-  status: number
-  statusText: string
-  type: string
-  url: string
 }

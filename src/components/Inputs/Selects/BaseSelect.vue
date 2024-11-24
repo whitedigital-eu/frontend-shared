@@ -139,9 +139,8 @@ const iconMapping = {
 
 const isKeyOfIconMapping = (
   maybeKeyOfIconMapping: string,
-): maybeKeyOfIconMapping is keyof typeof iconMapping => {
-  return maybeKeyOfIconMapping in iconMapping
-}
+): maybeKeyOfIconMapping is keyof typeof iconMapping =>
+  maybeKeyOfIconMapping in iconMapping
 
 /** @depreceted - use custom render functions instead */
 const renderIcon: TomTemplate = (data, escape) => {
@@ -232,11 +231,10 @@ const settings = computed(() =>
   _.merge({}, defaultSettings, computedConfig.value.tomSelectSettings),
 )
 
-const isOptionSelected = (value: T) => {
-  return Array.isArray(props.modelValue)
+const isOptionSelected = (value: T) =>
+  Array.isArray(props.modelValue)
     ? props.modelValue.includes(value)
     : props.modelValue === value
-}
 
 const onDropdownOpen = () => {
   if (!model.value?.dropdown || !computedConfig.value.dynamicDropDownMargin) {

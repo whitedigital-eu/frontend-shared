@@ -1,9 +1,7 @@
 export const getCompStyle = (
   el: Element | null | undefined,
   key: 'height' | 'width', // add keys as needed!
-): number | null => {
-  return el ? parseInt(window.getComputedStyle(el)[key]) : null
-}
+) => (el ? parseInt(window.getComputedStyle(el)[key]) : null)
 
 export const observeEl = (obj: Element | undefined, callback: () => void) => {
   if (!obj || obj.nodeType !== 1) return

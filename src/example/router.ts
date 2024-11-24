@@ -13,11 +13,6 @@ const routes = [
     component: () => import('./pages/InputComponentsPage.vue'),
   },
   {
-    name: 'table-component',
-    path: '/table-component',
-    component: () => import('./pages/TableComponentPage.vue'),
-  },
-  {
     path: '/:catchAll(.*)',
     redirect: { name: 'login' },
   },

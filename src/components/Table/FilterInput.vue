@@ -99,13 +99,10 @@ const { t } = useI18nWithFallback()
 
 const isDataFetchingSelectConfig = (
   x: SelectConfig | DataFetchingSelectConfig | null,
-): x is DataFetchingSelectConfig => {
-  return (
-    x !== null &&
-    'loadOptionsFunction' in x &&
-    typeof x.loadOptionsFunction === 'function'
-  )
-}
+): x is DataFetchingSelectConfig =>
+  x !== null &&
+  'loadOptionsFunction' in x &&
+  typeof x.loadOptionsFunction === 'function'
 
 const isDateRangeInput = computed(() => item.type === 'date-range')
 const isMultisearchInput = computed(() => item.name === 'multisearch')

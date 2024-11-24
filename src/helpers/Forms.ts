@@ -41,11 +41,10 @@ export const createTranslatableField = <
 >(
   field: T,
   options: { availableLocales: Array<AnyLocale> | ReadonlyArray<AnyLocale> },
-) => {
-  return Object.fromEntries(
+) =>
+  Object.fromEntries(
     options.availableLocales.map((locale) => [
       locale,
       deepCloneClassInstance(field),
     ]),
   ) as Record<AnyLocale, T>
-}

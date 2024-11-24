@@ -126,9 +126,7 @@ const mainColors = {
 }
 
 const install = (app) => {
-  app.config.globalProperties.$c = () => {
-    return mainColors
-  }
+  app.config.globalProperties.$c = () => mainColors
 }
 
 export { install as default, mainColors as colors }

@@ -4,24 +4,6 @@ import { resetFormDataErrors } from './Errors'
 import { AnyFormField } from '../models/FormFields'
 import { cloneDeep } from 'lodash'
 
-export const getQueryParam = (key: string) => {
-  const searchParams = new URLSearchParams(window.location.search)
-  return searchParams.get(key)
-}
-
-export const setQueryParam = (key: string, value: string) => {
-  const params = new URLSearchParams(window.location.search)
-  params.set(key, value)
-  const newUrl =
-    window.location.protocol +
-    '//' +
-    window.location.host +
-    window.location.pathname +
-    '?' +
-    params.toString()
-  window.history.pushState({ path: newUrl }, '', newUrl)
-}
-
 const getFillValue = (apiResponseData: unknown) => {
   const isExpandedResource =
     apiResponseData &&
@@ -127,12 +109,12 @@ export const isIriString = (string: string) => {
 export const areStringArraysEqual = (a: string[], b: string[]) =>
   a.length === b.length && a.every((value, index) => value === b[index])
 
-export const syntaxHighlight = (object: any) => {
+export const syntaxHighlight = (object: Record<string, unknown>) => {
   let json = JSON.stringify(object, null, 4)
   json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
   return json.replace(
     /("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g,
-    (match: any) => {
+    (match) => {
       let cls = 'number'
       if (/^"/.test(match)) {
         if (/:$/.test(match)) {
@@ -150,9 +132,8 @@ export const syntaxHighlight = (object: any) => {
   )
 }
 
-export const camelToSnakeCase = (str: string) => {
-  return str.replace(/[A-Z]/g, (letter) => `_${letter.toLowerCase()}`)
-}
+export const camelToSnakeCase = (str: string) =>
+  str.replace(/[A-Z]/g, (letter) => `_${letter.toLowerCase()}`)
 export const snakeToCamelCase = (str: string) =>
   str
     .toLowerCase()
@@ -160,14 +141,11 @@ export const snakeToCamelCase = (str: string) =>
       group.toUpperCase().replace('-', '').replace('_', ''),
     )
 
-export const isNumericString = (maybeNumericString: string) => {
-  return (
-    !isNaN(Number(maybeNumericString)) &&
-    !isNaN(parseFloat(maybeNumericString)) &&
-    maybeNumericString.trim() !== '' &&
-    /^-?(\d+\.?\d*|\.\d+)$/.test(maybeNumericString)
-  )
-}
+export const isNumericString = (maybeNumericString: string) =>
+  !isNaN(Number(maybeNumericString)) &&
+  !isNaN(parseFloat(maybeNumericString)) &&
+  maybeNumericString.trim() !== '' &&
+  /^-?(\d+\.?\d*|\.\d+)$/.test(maybeNumericString)
 
 export const createRandomNumber = (min = 1000, max = 10000) =>
   Math.floor(min + Math.random() * (max - min))

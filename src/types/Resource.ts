@@ -1,7 +1,3 @@
-// not an ideal solution - numbers should be of fixed lengths!!!
-export type IsoDateString =
-  `${number}-${number}-${number}T${number}:${number}:${number}.${number}Z`
-
 export type IriString<
   AnyResourceString extends string,
   ResourceString extends AnyResourceString,

@@ -68,19 +68,20 @@ const emit = defineEmits<{
 const formData = ref<FormData>(props.formData)
 
 const formDataInLayout = computed(() =>
-  props.formLayout.map((gridItem) => {
-    return gridItem
-      .map((key) => {
-        if (!('value' in formData.value[key])) {
-          console.error(
-            'Entity translations are currently not supported by this component!',
-          )
-          return
-        }
-        return formData.value[key]
-      })
-      .filter(Boolean) as AnyFormField[]
-  }),
+  props.formLayout.map(
+    (gridItem) =>
+      gridItem
+        .map((key) => {
+          if (!('value' in formData.value[key])) {
+            console.error(
+              'Entity translations are currently not supported by this component!',
+            )
+            return
+          }
+          return formData.value[key]
+        })
+        .filter(Boolean) as AnyFormField[],
+  ),
 )
 
 watch(formData, () => emit('update:modelValue', formData), { deep: true })

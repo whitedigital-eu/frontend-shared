@@ -311,14 +311,9 @@ class SliderField extends FormField {
 
 const isSelectField = (
   maybeSelectField: any,
-): maybeSelectField is
-  | DataFetchingSelectField<any>
-  | SimpleSelectField<any> => {
-  return (
-    maybeSelectField.type === 'simple-select' ||
-    maybeSelectField.type === 'data-fetching-select'
-  )
-}
+): maybeSelectField is DataFetchingSelectField<any> | SimpleSelectField<any> =>
+  maybeSelectField.type === 'simple-select' ||
+  maybeSelectField.type === 'data-fetching-select'
 
 class TimeWithCurrentField extends FormField {
   public value: FlatpickrTimePickerValue
