@@ -69,9 +69,9 @@ const handleFocus = (type: string, index: number) => {
 
 const handleBlur = () => (hasFocus.value = -1)
 
-const handleLabelClick = function (event: any) {
+const handleLabelClick = function (e: PointerEvent) {
   if (props.readonly) return
-  event.target.nextElementSibling.focus()
+  ;((e.target as HTMLElement).nextElementSibling as HTMLElement).focus()
 }
 
 const handleInput = () => {

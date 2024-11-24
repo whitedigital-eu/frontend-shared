@@ -10,10 +10,9 @@ module.exports = defineConfig({
     alias: {
       '@': path.resolve(__dirname, './src'),
     },
-    dedupe: ['vue'],
   },
   plugins: [
-    vue({ script: { propsDestructure: true, defineModel: true } }),
+    vue(),
     mkcert(),
     ckeditor5({ theme: require.resolve('@ckeditor/ckeditor5-theme-lark') }),
   ],

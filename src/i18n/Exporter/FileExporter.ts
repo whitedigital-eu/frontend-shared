@@ -14,7 +14,7 @@ export class FileExporter {
 
   private exportKeys() {
     const g3 = new Glob(this.pattern, { withFileTypes: true })
-    g3.walkSync().forEach((path: any) => {
+    g3.walkSync().forEach((path) => {
       const fileParser = new FileParser(path.fullpath())
       fileParser.parseFile().forEach((tr) => {
         if (tr != null) {

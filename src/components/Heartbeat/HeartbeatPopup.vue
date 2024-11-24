@@ -49,7 +49,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import Icon from '../Icons/Icon.vue'
-
 import { useI18nWithFallback } from '../../helpers/Translations'
 
 const { bgClass } = defineProps<{ bgClass: string }>()

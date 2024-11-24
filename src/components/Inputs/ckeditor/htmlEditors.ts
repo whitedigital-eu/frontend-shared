@@ -199,7 +199,6 @@ HtmlEditor.defaultConfig = {
     ],
   },
   /** @see https://ckeditor.com/docs/ckeditor5/latest/api/module_html-embed_htmlembedconfig-HtmlEmbedConfig.html */
-  //@ts-ignore
   htmlEmbed: {
     showPreviews: true,
   },

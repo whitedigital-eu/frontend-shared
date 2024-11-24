@@ -4,7 +4,7 @@
     <div class="flex flex-1 flex-nowrap gap-4">
       <TimePicker
         v-model="hoursValue"
-        :disabled="!value && (value as unknown as number) !== 0"
+        :disabled="!value && !(typeof value === 'number' && value === 0)"
         :step="config?.hoursStep"
         type="hours"
       />

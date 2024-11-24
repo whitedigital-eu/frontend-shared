@@ -20,7 +20,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import LoadingButton from '../LoadingButton.vue'
-
 import { useI18nWithFallback } from '../../helpers/Translations'
 
 const { isLoading, iri = null } = defineProps<{

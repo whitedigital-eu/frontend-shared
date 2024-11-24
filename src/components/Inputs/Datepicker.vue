@@ -110,7 +110,9 @@ const handleChange = (selectedDates: Date[]) => {
 
 const handleLabelClick = () => {
   if (!datepickerRef.value) return
-  ;(datepickerRef.value as any).$el.nextSibling.focus()
+  ;(
+    (datepickerRef.value as { $el: HTMLElement }).$el.nextSibling as HTMLElement
+  ).focus()
 }
 
 const handleOpen = () => (isOpen.value = true)
@@ -125,7 +127,12 @@ watch(
 )
 
 const closeCalendar = () => {
-  ;(datepickerRef.value as any).fp.close()
+  if (!datepickerRef.value) return
+  ;(
+    datepickerRef.value as {
+      fp: { close: (...args: unknown[]) => unknown }
+    }
+  ).fp.close()
 }
 
 const addCloseButtonToDatepicker = () => {

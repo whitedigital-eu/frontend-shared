@@ -53,8 +53,7 @@ const props = withDefaults(
     config: FileUploadConfig
   }>(),
   {
-    //@ts-ignore
-    modelValue: [] as string[],
+    modelValue: [] as any,
     label: '',
   },
 )
@@ -242,7 +241,11 @@ const initDropzone = () => {
   if (computedConfig.value.setPublic) {
     model.value.on(
       'sending',
-      async (_file: Dropzone.DropzoneFile, _xhr: any, formData: FormData) => {
+      async (
+        _file: Dropzone.DropzoneFile,
+        _xhr: unknown,
+        formData: FormData,
+      ) => {
         formData.append('isPublic', Boolean(true).toString())
       },
     )

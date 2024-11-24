@@ -60,7 +60,7 @@ const handleBlur = (e: FocusEvent) => {
   emitUpdate()
 }
 
-const selectSettings: any = {
+const selectSettings = {
   onChange(selected: string) {
     value.value = formatTimeInput(selected)
     emitUpdate()

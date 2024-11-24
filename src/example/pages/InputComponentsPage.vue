@@ -72,7 +72,7 @@
           id="role-select"
           v-model="role"
           class="basis-[200px]"
-          :config="roleSelectConfig"
+          :config="roleSelectConfig1"
           label="Select role"
         />
         <button
@@ -80,7 +80,7 @@
           type="button"
           @click="
             () => {
-              roleSelectConfig.tomSelectSettings.options = otherRoleOptions
+              roleSelectConfig1.tomSelectSettings.options = otherRoleOptions
             }
           "
         >
@@ -136,7 +136,7 @@
           <SimpleSelect
             id="role-select-2"
             v-model="role2"
-            :config="{ tomSelectSettings: { options: roleOptions } }"
+            :config="roleSelectConfig2"
             label="Select role"
           />
         </div>
@@ -232,11 +232,7 @@ const attendanceTime = ref('12:34')
 const textArrayList = ref(['test', 'test2', 'test3'])
 const keyAndValueArrayList = ref([{ key: 'test', value: 'test2' }])
 const multipleTextArrayList = ref(['12:30', '13:30', '14:40'])
-const mapDataArray = ref({
-  address: 'Slokas iela 193',
-  lat: 10.0,
-  lng: 10.0,
-})
+const mapDataArray = ref({ address: 'Slokas iela 193', lat: 10.0, lng: 10.0 })
 
 const { t } = useTranslation()
 
@@ -260,7 +256,12 @@ const otherRoleOptions: SelectOption[] = [
   new SelectOption('Test role', 'ROLE_TEST'),
 ]
 
-const roleSelectConfig = ref({ tomSelectSettings: { options: roleOptions } })
+const createRoleSelectConfig = () => ({
+  tomSelectSettings: { options: roleOptions },
+})
+
+const roleSelectConfig1 = createRoleSelectConfig()
+const roleSelectConfig2 = createRoleSelectConfig()
 
 const userSelectConfig: DataFetchingSelectConfig = {
   async loadOptionsFunction(searchValue) {

@@ -96,7 +96,9 @@ const handleChange = (selectedDates: Date[]) => {
 
 const handleLabelClick = () => {
   if (!datepickerRef.value) return
-  ;(datepickerRef.value as any).$el.nextSibling.focus()
+  ;(
+    (datepickerRef.value as { $el: HTMLElement }).$el.nextSibling as HTMLElement
+  ).focus()
 }
 
 const handleOpen = () => (isOpen.value = true)

@@ -1,5 +1,6 @@
 import { getVueCurrentLocale } from '../../helpers/Translations'
 import locales from 'flatpickr/dist/l10n'
+import flatpickr from 'flatpickr'
 
 export const getDefaultFlatpickrConfig = () => {
   const vueLocale = getVueCurrentLocale()
@@ -12,7 +13,7 @@ export const getDefaultFlatpickrConfig = () => {
     altInput: true,
     dateFormat: 'Z',
     time_24hr: true,
-    locale,
+    locale: locale as Partial<flatpickr.CustomLocale>,
     static: true,
   }
 }

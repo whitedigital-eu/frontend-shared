@@ -15,8 +15,8 @@
         :class="inputClass"
         :config="config"
         step="60"
-        @on-close="handleClose"
-        @on-open="handleOpen"
+        @on-close="() => (isOpen = false)"
+        @on-open="() => (isOpen = true)"
       />
       <X
         v-if="!isMobile"
@@ -34,7 +34,6 @@ import { computed, onMounted, ref, watch } from 'vue'
 import flatPickr from 'vue-flatpickr-component'
 import 'flatpickr/dist/flatpickr.css'
 import { X } from 'lucide-vue-next'
-
 import dayjs from 'dayjs'
 import LocalizedFormat from 'dayjs/plugin/localizedFormat'
 import FormFieldLabel from '../FormFieldLabel.vue'
@@ -78,18 +77,17 @@ const inputClass = 'form-control input w-full'
 
 const handleLabelClick = () => {
   if (!flatpickr.value) return
-  ;(flatpickr.value as any).$el.nextSibling.focus()
+  ;(
+    (flatpickr.value as { $el: HTMLElement }).$el.nextSibling as HTMLElement
+  ).focus()
 }
 
-const config: any = {
+const config = {
   ...getDefaultFlatpickrConfig(),
   enableTime: true,
   noCalendar: true,
   formatDate: (date: Date) => dayjs(date).format('H:mm'),
 }
-
-const handleOpen = () => (isOpen.value = true)
-const handleClose = () => (isOpen.value = false)
 
 const clearInput = () => (value.value = '')
 
