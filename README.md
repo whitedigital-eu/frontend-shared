@@ -4,6 +4,34 @@ Shared components, helpers, composables and types for vue frontend SPAs that use
 (e.g. <a href="http://enigma-vue.left4code.com/" target="_blank">enigma</a>)
 and <a href="https://api-platform.com/" target="_blank">API platform</a> powered API
 
+# Publishing
+
+This package uses GitHub Actions for automated versioning and publishing to npm. The workflow can be triggered in two ways:
+
+1. **Commit Message Tags**: When pushing to the main branch with specific version bump tags in your commit message:
+   - `[major]`: Bumps the major version (e.g., 1.0.0 → 2.0.0)
+   - `[minor]`: Bumps the minor version (e.g., 1.0.0 → 1.1.0)
+   - `[patch]`: Bumps the patch version (e.g., 1.0.0 → 1.0.1)
+
+2. **Manual Workflow Dispatch**: You can manually trigger the workflow from GitHub Actions and specify the release type (patch, minor, major).
+
+When the workflow runs, it will:
+1. Automatically bump the version according to the specified type
+2. Run tests to ensure everything works
+3. Build the package
+4. Publish to npm with public access
+5. Push the version changes back to the repository
+6. Create a GitHub release
+
+**Note**: Commits without specific version tags will still trigger the publishing process but will create a prerelease version with a beta tag (e.g., 1.0.0-beta.0). These prerelease versions are published to npm with the `next` tag instead of `latest`.
+
+Example commit messages:
+```
+feat: add new component [minor]
+fix: resolve bug in existing component [patch]
+BREAKING CHANGE: refactor API [major]
+```
+
 # Usage
 
 This package can only be used in an ES module environment.

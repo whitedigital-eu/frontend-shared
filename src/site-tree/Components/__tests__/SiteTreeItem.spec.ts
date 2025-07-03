@@ -1,6 +1,22 @@
 import { render } from '@testing-library/vue'
 import SiteTreeItem from '../SiteTreeItem.vue'
 import { mockProjectSettings } from '../../TestUtils/mocks'
+import { vi } from 'vitest'
+
+// Mock router-link component
+vi.mock('vue-router', () => ({
+  RouterLink: vi.fn()
+}))
+
+// Add global component
+import { config } from '@vue/test-utils'
+config.global.components = {
+  'router-link': {
+    name: 'RouterLink',
+    props: ['to'],
+    template: '<a><slot /></a>'
+  }
+}
 
 describe('SiteTreeItem', () => {
   it('correctly renders a hidden, invisible item', () => {
@@ -15,6 +31,7 @@ describe('SiteTreeItem', () => {
         },
         hasChildren: false,
         isOpen: false,
+        isSelected: false,
         projectSettings: mockProjectSettings,
       },
     })
@@ -36,6 +53,7 @@ describe('SiteTreeItem', () => {
         },
         hasChildren: false,
         isOpen: false,
+        isSelected: false,
         projectSettings: mockProjectSettings,
       },
     })
@@ -57,6 +75,7 @@ describe('SiteTreeItem', () => {
         },
         hasChildren: false,
         isOpen: false,
+        isSelected: false,
         projectSettings: mockProjectSettings,
       },
     })
