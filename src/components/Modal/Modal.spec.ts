@@ -1,6 +1,26 @@
 import { mount } from '@vue/test-utils'
 import Modal from './Modal.vue'
+import { h } from 'vue'
 import { vi } from 'vitest'
+
+// Mock helper-js isMobile function
+vi.mock('helper-js', () => ({
+  isMobile: () => false
+}))
+
+// Mock Teleport component
+vi.mock('vue', async () => {
+  const actual = await vi.importActual('vue')
+  const h = actual.h
+
+  return {
+    ...actual,
+    Teleport: (props, { slots }) => {
+      // Use a functional component that returns the slot content
+      return slots.default ? h('div', slots.default()) : null
+    }
+  }
+})
 
 vi.mock('@left4code/tw-starter/dist/js/dom', () => vi.fn())
 

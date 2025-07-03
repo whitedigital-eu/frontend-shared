@@ -1,4 +1,18 @@
 const colors = require('tailwindcss/colors')
+
+// Remove deprecated color names
+delete colors.lightBlue
+delete colors.warmGray
+delete colors.trueGray
+delete colors.coolGray
+delete colors.blueGray
+
+// Use the new color names
+colors.sky = colors.sky || {}
+colors.stone = colors.stone || {}
+colors.neutral = colors.neutral || {}
+colors.gray = colors.gray || {}
+colors.slate = colors.slate || {}
 const {
   toRGB,
   withOpacityValue,

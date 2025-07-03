@@ -198,7 +198,7 @@ describe('Decimal', () => {
     ['1', '1,00'],
     ['1,2', '1,20'],
   ]
-  test.only.each(focusoutTestCases)(
+  test.each(focusoutTestCases)(
     'when focusing out, if all decimal places are not entered, they are filled with zeros',
     async (valueToType, inputValue) => {
       const { getInput } = renderDecimal()
@@ -210,7 +210,7 @@ describe('Decimal', () => {
   )
 
   test('underlying input is readonly if readonly prop is true', async () => {
-    const { getInput } = renderDecimal({ config: { readonly: true } })
+    const { getInput } = renderDecimal({ config: { inputAttributes: { readonly: true } } })
     expect(getInput().readOnly).toBe(true)
   })
 })

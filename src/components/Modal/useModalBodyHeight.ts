@@ -23,13 +23,17 @@ export default function useModalBodyHeight(
   onMounted(() => {
     computeHeight()
     window.addEventListener('resize', computeHeight)
-    screen.orientation.addEventListener('change', computeHeight)
+    if (screen.orientation && typeof screen.orientation.addEventListener === 'function') {
+      screen.orientation.addEventListener('change', computeHeight)
+    }
     observeEl(header.value, computeHeight)
     observeEl(footer.value, computeHeight)
   })
   onBeforeUnmount(() => {
     window.removeEventListener('resize', computeHeight)
-    screen.orientation.removeEventListener('change', computeHeight)
+    if (screen.orientation && typeof screen.orientation.removeEventListener === 'function') {
+      screen.orientation.removeEventListener('change', computeHeight)
+    }
   })
 
   return bodyHeight

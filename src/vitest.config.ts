@@ -8,7 +8,11 @@ export default defineConfig({
     globals: true,
     environment: 'jsdom',
     deps: {
-      inline: ['tom-select'],
+      optimizer: {
+        web: {
+          include: ['tom-select']
+        }
+      }
     },
     setupFiles: [resolve(__dirname, 'test-setup.ts')],
   },

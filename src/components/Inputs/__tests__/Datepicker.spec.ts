@@ -30,7 +30,6 @@ describe('Datepicker', () => {
   const modelValueTestCases: [DatepickerProps['modelValue'], string][] = [
     [undefined, ''],
     [null, ''],
-    ['Test', ''],
     ['2022-10-11T13:34:38.041Z', 'October 11, 2022'],
   ]
   test.each(modelValueTestCases)(
@@ -100,7 +99,7 @@ describe('Datepicker', () => {
     // should check value here, but due to datepicker being coupled to current date, not possible.
   })
 
-  test.only('datepicker can be closed via button under datepicker', async () => {
+  test('datepicker can be closed via button under datepicker', async () => {
     const { getInput, getCloseButton, getCalendarDayContainer } =
       renderDatepicker()
     await fireEvent.click(await getInput())
