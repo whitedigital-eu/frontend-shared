@@ -176,7 +176,15 @@ const anyFiles = computed(() =>
 )
 
 watch(newValue, (n, o) => {
-  if (n.length === o.length) return
+  // Check if both are strings first
+  if (typeof n === 'string' && typeof o === 'string') {
+    if (n === o) return
+  }
+
+  // Then check if both are arrays
+  if (Array.isArray(n) && Array.isArray(o)) {
+    if (n.length === o.length) return
+  }
 
   emit('update:modelValue', n)
 })
