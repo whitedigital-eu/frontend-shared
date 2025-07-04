@@ -115,6 +115,7 @@ jobs:
 
       - name: Push version changes
         run: |
+          git remote set-url origin https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/${{ github.repository }}.git
           git push
           git push --tags
         env:
