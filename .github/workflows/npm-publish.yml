@@ -28,6 +28,11 @@ jobs:
           node-version: '22'
           registry-url: 'https://registry.npmjs.org'
 
+      - name: Configure Git User
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
       - name: Validate dispatch branch
         if: github.event_name == 'workflow_dispatch'
         run: |
@@ -52,7 +57,7 @@ jobs:
         run: |
           INPUT_TYPE="${{ github.event.inputs.release_type }}"
           COMMIT_MSG="${{ steps.commit_message.outputs.message }}"
-
+          
           if [[ "$INPUT_TYPE" != "" ]]; then
             case "$INPUT_TYPE" in
               patch|minor|major)
@@ -82,23 +87,35 @@ jobs:
         working-directory: ./src
         run: yarn test
 
-      - name: Bump version
-        working-directory: ./src
+      - name: Bump version, commit, and tag
+        id: tag_version
         run: |
-          git config --global user.name "GitHub Actions"
-          git config --global user.email "actions@github.com"
+          # Step 1: Bump the version in package.json only
           if [[ "${{ steps.version_bump.outputs.pre }}" == "true" ]]; then
-            npm version prerelease --preid=beta -m "prerelease: %s [skip ci]"
+            npm --prefix ./src --no-git-tag-version version prerelease --preid=beta
           else
-            npm version ${{ steps.version_bump.outputs.type }} -m "release: %s [skip ci]"
+            npm --prefix ./src --no-git-tag-version version ${{ steps.version_bump.outputs.type }}
           fi
+          
+          # Step 2: Get the new version for use in messages and outputs
+          NEW_VERSION=$(node -p "require('./src/package.json').version")
+          echo "version=$NEW_VERSION" >> $GITHUB_OUTPUT
+          
+          # Step 3: Determine the correct prefix for commit and tag messages
+          if [[ "${{ steps.version_bump.outputs.pre }}" == "true" ]]; then
+            MESSAGE_PREFIX="prerelease:"
+          else
+            MESSAGE_PREFIX="release:"
+          fi
+          
+          # Step 4: Stage, commit, and tag the change using the correct prefix
+          git add ./src/package.json ./src/yarn.lock
+          git commit -m "$MESSAGE_PREFIX v${NEW_VERSION} [skip ci]"
+          git tag -a "v${NEW_VERSION}" -m "$MESSAGE_PREFIX v${NEW_VERSION}"
 
       - name: Get new version
         id: get_version
-        working-directory: ./src
-        run: |
-          VERSION=$(node -p "require('./package.json').version")
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
+        run: echo "version=${{ steps.tag_version.outputs.version }}" >> $GITHUB_OUTPUT
 
       - name: Build package
         working-directory: ./src
