@@ -6,7 +6,8 @@ const uploadTargetHash = 'l1_Lw'
 
 const removeOriginFromURL = (url: string) => {
   const parsedUrl = new URL(url)
-  return parsedUrl.pathname
+  // return parsedUrl.pathname
+  return parsedUrl.href
 }
 
 export const setupElfinder = (editor: ClassicEditor, connectorUrl: string) => {
